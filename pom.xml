@@ -30,6 +30,7 @@
         <module>comet-sequence</module>
         <module>comet-rpc</module>
         <module>comet-batch</module>
+        <module>comet-base</module>
     </modules>
 
 
