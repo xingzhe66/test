@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!--父类-->
+    <parent>
+        <groupId>com.dcits</groupId>
+        <artifactId>comet-boot-dependencies</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>./comet-boot-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dcits</groupId>
+    <artifactId>comet</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>little star</name>
+
+    <modules>
+        <module>comet-dao</module>
+        <module>comet-dbsharding</module>
+        <module>comet-test</module>
+        <module>comet-boot-dependencies</module>
+        <module>comet-commons</module>
+        <module>comet-cache</module>
+        <module>comet-mq</module>
+        <module>comet-sequence</module>
+        <module>comet-rpc</module>
+        <module>comet-batch</module>
+    </modules>
+
+
+</project>
