@@ -33,7 +33,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableBatchProcessing
+/**
+ *
+ * 以后可以一个批量任务，建立一个BatchConfig
+ * 每个BatchConfig里声明一套batch所需的内容。
+ *
+ */
 public class BatchAConfig {
     @Bean
     public ItemReader<Person> reader() throws Exception {
