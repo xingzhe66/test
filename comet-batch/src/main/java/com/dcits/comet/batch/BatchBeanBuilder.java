@@ -32,7 +32,13 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
 
+
+/**
+ * 动态注入batch相关bean
+ *
+ */
 @Configuration
+
 public class BatchBeanBuilder implements BeanFactoryPostProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(BatchBeanBuilder.class);
