@@ -43,10 +43,6 @@ import static java.lang.String.format;
 public class BatchApplication {
 
     public static void main(String[] args) {
-//        new SpringApplicationBuilder(BatchApplication.class)
-//                .web(WebApplicationType.NONE)
-//                .run(args);
-        String jobName = "";
 
         try {
             ConfigurableApplicationContext context = SpringApplication.run(BatchApplication.class, args);
@@ -55,89 +51,11 @@ public class BatchApplication {
             for (String name : names) {
 
                 BatchExecutor batchExecutor = (BatchExecutor) context.getBean("batchExecutor");
-                batchExecutor.exe(context,name);
-                Job job = (Job) context.getBean("job_"+name);
-
-                JobLauncher jobLauncher = context.getBean(JobLauncher.class);
-                JobExecution jobExecution = jobLauncher.run(job, createJobParams());
-                if (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED)) {
-                    throw new RuntimeException(format("%s Job execution failed.", jobName));
-                }
-
-
-//
-//
-//
-//
-//              //  if(name.equals("cBatch")) continue;
-//                IBatch batch = (IBatch) context.getBean(name);
-//
-//                DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) context.getBeanFactory();
-//
-//                BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(Reader.class);
-//                //向里面的属性注入值，提供get set方法
-//                readerBuider.addPropertyValue("batch", batch);
-//                //dataSourceBuider.setParentName("");  同配置 parent
-//                readerBuider.setScope("step");   //同配置 scope
-//                //将实例注册spring容器中   bs 等同于  id配置
-//                dbf.registerBeanDefinition("reader_" + name, readerBuider.getBeanDefinition());
-//
-//                BeanDefinitionBuilder writerBuider = BeanDefinitionBuilder.genericBeanDefinition(Writer.class);
-//                //向里面的属性注入值，提供get set方法
-//                writerBuider.addPropertyValue("batch", batch);
-//                //dataSourceBuider.setParentName("");  同配置 parent
-//                writerBuider.setScope("step");  // 同配置 scope
-//                //将实例注册spring容器中   bs 等同于  id配置
-//                dbf.registerBeanDefinition("writer_" + name, writerBuider.getBeanDefinition());
-//
-//
-//                BeanDefinitionBuilder processorBuider = BeanDefinitionBuilder.genericBeanDefinition(Processor.class);
-//                //向里面的属性注入值，提供get set方法
-//                processorBuider.addPropertyValue("batch", batch);
-//                //dataSourceBuider.setParentName("");  同配置 parent
-//                processorBuider.setScope("step");   //同配置 scope
-//                //将实例注册spring容器中   bs 等同于  id配置
-//                dbf.registerBeanDefinition("processor_" + name, processorBuider.getBeanDefinition());
-//
-//
-//                StepSynchronizationManager.register(new StepExecution("step_" + name, new JobExecution(123L)));
-//
-//                JobRepository jobRegistry = (JobRepository) context.getBean("jobRepository");
-//                SimpleJob job = new SimpleJob();
-//                job.setName("job_" + name);
-//                job.setJobRepository(jobRegistry);
-//
-//                StepBuilderFactory stepBuilders = (StepBuilderFactory) context.getBean("stepBuilders");
-//
-//                ItemReader reader = (ItemReader) context.getBean("reader_" + name);
-//                ItemWriter writer = (ItemWriter) context.getBean("writer_" + name);
-//                ItemProcessor processor = (ItemProcessor) context.getBean("processor_" + name);
-//
-//                Step step = stepBuilders.get("step_" + name)
-//                        .<SysLog, SysLog>chunk(500)
-//                        .reader(reader).faultTolerant().skip(JsonParseException.class).skipLimit(1)
-//                        //    .listener(new MessageItemReadListener(errorWriter))
-//                        .writer(writer).faultTolerant().skip(Exception.class).skipLimit(1)
-//                        //    .listener(new MessageWriteListener())
-//                        .processor(processor)
-//                        .build();
-//              //  dbf.registerSingleton("step_" + name,step);
-//
-//                job.addStep(step);
-//               // dbf.registerSingleton("job_" + name,job);
-//
-//
-//                //Job job = jobRegistry.getJob("job1");
-//                //Job job = (Job) context.getBean("job1");
-//                JobLauncher jobLauncher = context.getBean(JobLauncher.class);
-//                JobExecution jobExecution = jobLauncher.run(job, createJobParams());
-//                if (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED)) {
-//                    throw new RuntimeException(format("%s Job execution failed.", jobName));
-//                }
+                batchExecutor.exe(name,createJobParams());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(format("%s Job execution failed.", jobName));
+            throw new RuntimeException(format("%s Job execution failed."));
         }
     }
 

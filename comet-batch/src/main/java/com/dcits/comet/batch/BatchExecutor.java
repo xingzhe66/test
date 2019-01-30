@@ -1,12 +1,15 @@
 package com.dcits.comet.batch;
 
+import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.fasterxml.jackson.core.JsonParseException;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.SimpleJob;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -16,10 +19,21 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
+import static java.lang.String.format;
+
 @Component
 public class BatchExecutor {
 
-    public void exe(ConfigurableApplicationContext context,String jobname){
+    @Resource
+    private SpringContextHolder springContextHolder;
+
+
+    public void exe(String jobname,JobParameters jobParameters){
+
+        ConfigurableApplicationContext context= (ConfigurableApplicationContext) springContextHolder.getApplicationContext();
+
         DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) context.getBeanFactory();
         JobRepository jobRegistry = (JobRepository) context.getBean("jobRepository");
         SimpleJob job = new SimpleJob();
@@ -46,6 +60,28 @@ public class BatchExecutor {
 
         job.addStep(step);
         dbf.registerSingleton("job_" + jobname,job);
+
+
+        JobLauncher jobLauncher = context.getBean(JobLauncher.class);
+
+        JobExecution jobExecution = null;
+        try {
+            jobExecution = jobLauncher.run(job, jobParameters);
+        } catch (JobExecutionAlreadyRunningException e) {
+            e.printStackTrace();
+        } catch (JobRestartException e) {
+            e.printStackTrace();
+        } catch (JobInstanceAlreadyCompleteException e) {
+            e.printStackTrace();
+        } catch (JobParametersInvalidException e) {
+            e.printStackTrace();
+        }
+
+        if (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED)) {
+            throw new RuntimeException(format("%s Job execution failed.", jobname));
+        }
+
+
 
     }
 }
