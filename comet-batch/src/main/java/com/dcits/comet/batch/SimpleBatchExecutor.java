@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 import static java.lang.String.format;
 
 @Component
-public class BatchExecutor {
+public class SimpleBatchExecutor {
 
     @Resource
     private SpringContextHolder springContextHolder;
