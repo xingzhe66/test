@@ -22,7 +22,7 @@ public class Reader extends AbstractPagingReader {
         } else {
             results.clear();
         }
-        results.addAll(batch.getChunk(offset, pageSize));
+        results.addAll(batch.getPageData(offset, pageSize));
     }
 
 

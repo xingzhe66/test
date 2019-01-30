@@ -15,7 +15,7 @@ public class  AbstractBatch<T,O> implements IBatch<T,O> {
     }
 
     @Override
-    public List getChunk(int offset, int pageSize) {
+    public List getPageData(int offset, int pageSize) {
         List<T> list = new ArrayList();
         list.add((T)null);
         return list;

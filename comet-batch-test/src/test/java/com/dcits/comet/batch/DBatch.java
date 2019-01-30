@@ -23,7 +23,7 @@ public class DBatch extends AbstractBatch<SysLog,SysLog> {
 
 
     @Override
-    public List getChunk(int offset, int pageSize) {
+    public List getPageData(int offset, int pageSize) {
         SysLog sysLog=new SysLog();
         sysLog.setId(2000000000002l);
         List list=new ArrayList();

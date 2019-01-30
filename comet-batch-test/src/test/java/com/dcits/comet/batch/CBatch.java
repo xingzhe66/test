@@ -17,7 +17,7 @@ public class CBatch extends AbstractBatch<SysLog,SysLog> {
     @Resource
     public DaoSupport daoSupport;
     @Override
-    public List getChunk(int offset, int pageSize) {
+    public List getPageData(int offset, int pageSize) {
         SysLog sysLog=new SysLog();
         List list=daoSupport.selectList(SysLog.class.getName()+".extendSelect",sysLog,offset/pageSize+1, pageSize);
         return list;
