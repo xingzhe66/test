@@ -9,44 +9,23 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>comet-batch</artifactId>
+    <artifactId>comet-batch-test</artifactId>
 
 <dependencies>
     <dependency>
         <groupId>com.dcits</groupId>
-        <artifactId>comet-dao</artifactId>
+        <artifactId>comet-batch</artifactId>
         <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>com.dcits</groupId>
-        <artifactId>comet-dbsharding</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-jdbc</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.batch</groupId>
-        <artifactId>spring-batch-core</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-validator</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <scope>test</scope>
     </dependency>
     <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
+        <version>2.4</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
         <scope>test</scope>
     </dependency>
     <dependency>

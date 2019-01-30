@@ -31,6 +31,7 @@
         <module>comet-rpc</module>
         <module>comet-batch</module>
         <module>comet-base</module>
+        <module>comet-batch-test</module>
     </modules>
 
 
