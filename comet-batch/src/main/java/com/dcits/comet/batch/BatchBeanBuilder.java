@@ -1,6 +1,5 @@
 package com.dcits.comet.batch;
 
-import com.dcits.comet.batch.configration.BatchConfig;
 import com.dcits.comet.batch.processor.Processor;
 import com.dcits.comet.batch.reader.AbstractPagingReader;
 import com.dcits.comet.batch.reader.Reader;
