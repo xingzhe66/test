@@ -1,7 +1,9 @@
 package com.dcits;
 
+import com.dcits.comet.batch.ITaskletStep;
 import com.dcits.comet.batch.SimpleBatchExecutor;
-import com.dcits.comet.batch.IBatch;
+import com.dcits.comet.batch.IBatchStep;
+import com.dcits.comet.batch.SimpleTaskletStepExecutor;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
@@ -22,13 +24,24 @@ public class BatchApplication {
 
         try {
             ConfigurableApplicationContext context = SpringApplication.run(BatchApplication.class, args);
-            String[] names = context.getBeanNamesForType(IBatch.class);
+            String[] names = context.getBeanNamesForType(IBatchStep.class);
 
             for (String name : names) {
 
                 SimpleBatchExecutor batchExecutor = (SimpleBatchExecutor) context.getBean("simpleBatchExecutor");
                 batchExecutor.exe(name,createJobParams());
             }
+
+            String[] taskletnames = context.getBeanNamesForType(ITaskletStep.class);
+
+            for (String name : taskletnames) {
+
+                SimpleTaskletStepExecutor batchExecutor = (SimpleTaskletStepExecutor) context.getBean("simpleTaskletStepExecutor");
+                batchExecutor.exe(name,createJobParams());
+            }
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(format("%s Job execution failed."));

@@ -28,7 +28,7 @@ public class MybatisConfig {
         return bean.getObject();
     }
 
-    @Bean(name = "shardTransactionManager")
+    @Bean(name = "dbTransactionManager")
     public DataSourceTransactionManager shardTransactionManager(@Qualifier("dataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Service("dBatch")
+@Service("dBatchStep")
 //@StepScope
-public class DBatch extends AbstractBatch<SysLog,SysLog> {
+public class DBatchStep extends AbstractBatchStep<SysLog,SysLog> {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(DBatch.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(DBatchStep.class);
 
     @Resource
     public DaoSupport daoSupport;
@@ -23,7 +23,7 @@ public class DBatch extends AbstractBatch<SysLog,SysLog> {
 
 
     @Override
-    public List getPageData(int offset, int pageSize) {
+    public List getPageList(int offset, int pageSize) {
         SysLog sysLog=new SysLog();
         sysLog.setId(2000000000002l);
         List list=new ArrayList();
@@ -38,7 +38,7 @@ public class DBatch extends AbstractBatch<SysLog,SysLog> {
     }
 
     @Override
-    public void write(List<SysLog> item) {
+    public void writeChunk(List<SysLog> item) {
         LOGGER.info("write D....."+item.get(0));
       //  LOGGER.info("write D....."+name);
     }

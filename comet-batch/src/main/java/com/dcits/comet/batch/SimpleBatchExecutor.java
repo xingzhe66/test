@@ -2,6 +2,8 @@ package com.dcits.comet.batch;
 
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.fasterxml.jackson.core.JsonParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.SimpleJob;
@@ -11,12 +13,14 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.core.scope.context.StepSynchronizationManager;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -25,6 +29,7 @@ import static java.lang.String.format;
 
 @Component
 public class SimpleBatchExecutor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleBatchExecutor.class);
 
     @Resource
     private SpringContextHolder springContextHolder;
@@ -48,7 +53,15 @@ public class SimpleBatchExecutor {
         ItemWriter writer = (ItemWriter) context.getBean("writer_" + jobname);
         ItemProcessor processor = (ItemProcessor) context.getBean("processor_" + jobname);
 
+        DataSourceTransactionManager dataSourceTransactionManager= context.getBean(DataSourceTransactionManager.class);
+
+        if(null==dataSourceTransactionManager){
+            LOGGER.warn("请配置数据库事务管理器！");
+        }
+
         Step step = stepBuilders.get("step_" + jobname)
+                //.tasklet(tasklet)
+                .transactionManager(dataSourceTransactionManager)
                 .chunk(5)
                 .reader(reader).faultTolerant().skip(JsonParseException.class).skipLimit(1)
                 //    .listener(new MessageItemReadListener(errorWriter))

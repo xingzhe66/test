@@ -4,18 +4,18 @@ package com.dcits.comet.batch;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  AbstractBatch<T,O> implements IBatch<T,O> {
+public class AbstractBatchStep<T,O> implements IBatchStep<T,O> {
 
 
     @Override
-    public List getNodes() {
+    public List getNodeList() {
         List<String> list = new ArrayList();
         list.add((String)null);
         return list;
     }
 
     @Override
-    public List getPageData(int offset, int pageSize) {
+    public List getPageList(int offset, int pageSize) {
         List<T> list = new ArrayList();
         list.add((T)null);
         return list;
@@ -32,7 +32,7 @@ public class  AbstractBatch<T,O> implements IBatch<T,O> {
     }
 
     @Override
-    public void write(List<O> item) {
+    public void writeChunk(List<O> item) {
 
     }
 }
