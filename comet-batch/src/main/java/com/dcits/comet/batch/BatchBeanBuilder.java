@@ -43,7 +43,9 @@ public class BatchBeanBuilder implements BeanFactoryPostProcessor {
             BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(Reader.class);
             //向里面的属性注入值，提供get set方法
             readerBuider.addPropertyReference("batchStep",name); //因为实例还未生成，所以只定义引用；
-                    //.addPropertyValue("batch", batch);
+            readerBuider.addPropertyValue("pageSize","1000");
+
+            //.addPropertyValue("batch", batch);
             readerBuider.setScope("step");   //作用域为step，为了让jobParameters注解生效
             //将实例注册spring容器中   bs 等同于  id配置
             dbf.registerBeanDefinition("reader_" + name, readerBuider.getBeanDefinition());

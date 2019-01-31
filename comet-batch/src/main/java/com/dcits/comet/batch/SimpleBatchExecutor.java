@@ -62,7 +62,7 @@ public class SimpleBatchExecutor {
         Step step = stepBuilders.get("step_" + jobname)
                 //.tasklet(tasklet)
                 .transactionManager(dataSourceTransactionManager)
-                .chunk(5)
+                .chunk(500)
                 .reader(reader).faultTolerant().skip(JsonParseException.class).skipLimit(1)
                 //    .listener(new MessageItemReadListener(errorWriter))
                 .writer(writer).faultTolerant().skip(Exception.class).skipLimit(1)

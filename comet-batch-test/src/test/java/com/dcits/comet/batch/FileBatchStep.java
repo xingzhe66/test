@@ -26,7 +26,7 @@ public class FileBatchStep extends AbstractBatchStep<FileLog,SysLog> {
     @Override
     public List getPageList(int offset, int pageSize) {
         List<FileLog> listdata =
-                FileUtil.readFileToList("C:\\javaprojects\\microservice\\comet\\comet-batch-test\\src\\test\\resources\\a.txt", FileLog.class, offset, pageSize);
+                FileUtil.readFileToList("C:\\javaprojects\\microservice\\comet\\comet-batch-test\\src\\test\\resources\\file.log", FileLog.class, offset, pageSize);
         return listdata;
     }
 
