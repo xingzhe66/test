@@ -1,5 +1,7 @@
 package com.dcits.comet.batch;
 
+import com.dcits.comet.batch.helper.JobParameterHelper;
+import com.dcits.comet.batch.holder.JobContextHolder;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.yunyun.entity.SysLog;
 import org.slf4j.Logger;
@@ -15,6 +17,12 @@ public class CBatchStep extends AbstractBatchStep<SysLog,SysLog> {
     protected static final Logger LOGGER = LoggerFactory.getLogger(CBatchStep.class);
     @Resource
     public DaoSupport daoSupport;
+
+    @Override
+    public void preBatchStep(){
+        LOGGER.info("preBatchStep.......cBatchStep");
+    }
+
     @Override
     public List getPageList(int offset, int pageSize) {
         SysLog sysLog=new SysLog();
@@ -28,6 +36,11 @@ public class CBatchStep extends AbstractBatchStep<SysLog,SysLog> {
     @Override
     public void writeChunk(List<SysLog> item) {
         LOGGER.info("write C....."+item.get(0));
+        JobContextHolder.getInstance().put("1","hahaha","1111111");
+    }
+    @Override
+    public void afterBatchStep(){
+        LOGGER.info("afterBatchStep.......cBatchStep");
     }
 
 }

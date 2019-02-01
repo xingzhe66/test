@@ -35,7 +35,7 @@ public class SimpleBatchExecutor {
     private SpringContextHolder springContextHolder;
 
 
-    public void exe(String jobname,JobParameters jobParameters){
+    public JobExecution exe(String jobname,JobParameters jobParameters){
 
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) springContextHolder.getApplicationContext();
 
@@ -49,6 +49,8 @@ public class SimpleBatchExecutor {
         //todo 因为reader等的scope设置为step，所以必须在reader等实例化之前，有一个Step，否则报错。spring batch的坑！
         StepSynchronizationManager.register(new StepExecution("step_" + jobname, new JobExecution(123L)));
 
+
+        IBatchStep batchStep = (IBatchStep) context.getBean(jobname);
         ItemReader reader = (ItemReader) context.getBean("reader_" + jobname);
         ItemWriter writer = (ItemWriter) context.getBean("writer_" + jobname);
         ItemProcessor processor = (ItemProcessor) context.getBean("processor_" + jobname);
@@ -69,17 +71,24 @@ public class SimpleBatchExecutor {
                 //    .listener(new MessageWriteListener())
                 .processor(processor)
                 .build();
-        dbf.registerSingleton("step_" + jobname,step);
+       // dbf.registerSingleton("step_" + jobname,step);
 
         job.addStep(step);
-        dbf.registerSingleton("job_" + jobname,job);
+      //  dbf.registerSingleton("job_" + jobname,job);
 
 
         JobLauncher jobLauncher = context.getBean(JobLauncher.class);
 
         JobExecution jobExecution = null;
         try {
+            //todo 增加前处理
+            batchStep.preBatchStep();
+
             jobExecution = jobLauncher.run(job, jobParameters);
+
+            //todo 增加后处理
+            batchStep.afterBatchStep();
+
         } catch (JobExecutionAlreadyRunningException e) {
             e.printStackTrace();
         } catch (JobRestartException e) {
@@ -94,6 +103,7 @@ public class SimpleBatchExecutor {
             throw new RuntimeException(format("%s Job execution failed.", jobname));
         }
 
+        return jobExecution;
 
 
     }

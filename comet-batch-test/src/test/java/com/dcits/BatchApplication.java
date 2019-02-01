@@ -25,11 +25,12 @@ public class BatchApplication {
         try {
             ConfigurableApplicationContext context = SpringApplication.run(BatchApplication.class, args);
             String[] names = context.getBeanNamesForType(IBatchStep.class);
-
+            JobParameters jobParameters=createJobParams();
             for (String name : names) {
 
                 SimpleBatchExecutor batchExecutor = (SimpleBatchExecutor) context.getBean("simpleBatchExecutor");
-                batchExecutor.exe(name,createJobParams());
+                JobExecution a = batchExecutor.exe(name, jobParameters);
+                jobParameters=a.getJobParameters();
             }
 
             String[] taskletnames = context.getBeanNamesForType(ITaskletStep.class);
@@ -37,7 +38,7 @@ public class BatchApplication {
             for (String name : taskletnames) {
 
                 SimpleTaskletStepExecutor batchExecutor = (SimpleTaskletStepExecutor) context.getBean("simpleTaskletStepExecutor");
-                batchExecutor.exe(name,createJobParams());
+                batchExecutor.exe(name,jobParameters);
             }
 
 

@@ -1,5 +1,7 @@
 package com.dcits.comet.batch;
 
+import com.dcits.comet.batch.helper.JobParameterHelper;
+import com.dcits.comet.batch.holder.JobContextHolder;
 import com.dcits.comet.batch.util.FileUtil;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.yunyun.entity.FileLog;
@@ -42,5 +44,6 @@ public class FileBatchStep extends AbstractBatchStep<FileLog,SysLog> {
     public void writeChunk(List<SysLog> item) {
         LOGGER.info("write D....."+item.get(0));
         //  LOGGER.info("write D....."+name);
+        LOGGER.info("write JobParameterHelper....."+ JobContextHolder.getInstance().get("1","hahaha"));
     }
 }

@@ -1,5 +1,7 @@
 package com.dcits.comet.batch;
 
+import com.dcits.comet.batch.helper.JobParameterHelper;
+import com.dcits.comet.batch.holder.JobContextHolder;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.yunyun.entity.SysLog;
 import org.slf4j.Logger;
@@ -40,6 +42,8 @@ public class DBatchStep extends AbstractBatchStep<SysLog,SysLog> {
     @Override
     public void writeChunk(List<SysLog> item) {
         LOGGER.info("write D....."+item.get(0));
+       // JobContextHolder.getInstance().put("1","hahaha","1");
+        LOGGER.info("write JobParameterHelper....."+ JobContextHolder.getInstance().get("1","hahaha"));
       //  LOGGER.info("write D....."+name);
     }
 

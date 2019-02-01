@@ -8,6 +8,14 @@ public interface IBatchStep<T,O> {
      * todo
      */
     public List getNodeList();
+
+    /**
+     * 在BatchStep执行之前执行
+     * 每个BatchStep只执行一次
+     */
+    public void preBatchStep();
+
+
     /**
      *获得一个page的数据
      * 具体大小根据pagesize确定
@@ -27,5 +35,15 @@ public interface IBatchStep<T,O> {
      *对一个chunksize进行写处理，并且提交事务
      * 注意chunksize和pagesize可以不同
      */
-    public void  writeChunk(List<O> item);
+    public void writeChunk(List<O> item);
+
+    /**
+     * 在BatchStep执行之后执行
+     * 每个BatchStep只执行一次
+     */
+    public void afterBatchStep();
+
+
+
+
 }

@@ -1,10 +1,14 @@
 package com.dcits.comet.batch;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AbstractBatchStep<T,O> implements IBatchStep<T,O> {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractBatchStep.class);
 
 
     @Override
@@ -12,6 +16,11 @@ public class AbstractBatchStep<T,O> implements IBatchStep<T,O> {
         List<String> list = new ArrayList();
         list.add((String)null);
         return list;
+    }
+
+    @Override
+    public void preBatchStep() {
+        logger.debug("preBatchStep");
     }
 
     @Override
@@ -35,4 +44,11 @@ public class AbstractBatchStep<T,O> implements IBatchStep<T,O> {
     public void writeChunk(List<O> item) {
 
     }
+
+    @Override
+    public void afterBatchStep() {
+
+    }
+
+
 }

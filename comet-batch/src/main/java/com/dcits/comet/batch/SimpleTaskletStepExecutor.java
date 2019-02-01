@@ -34,7 +34,7 @@ public class SimpleTaskletStepExecutor {
     private SpringContextHolder springContextHolder;
 
 
-    public void exe(String jobname, JobParameters jobParameters) {
+    public JobExecution exe(String jobname, JobParameters jobParameters) {
 
         ConfigurableApplicationContext context = (ConfigurableApplicationContext) springContextHolder.getApplicationContext();
 
@@ -90,6 +90,6 @@ public class SimpleTaskletStepExecutor {
             throw new RuntimeException(format("%s Job execution failed.", jobname));
         }
 
-
+        return jobExecution;
     }
 }
