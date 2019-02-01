@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service("dBatchStep")
 //@StepScope
-public class DBatchStep extends AbstractBatchStep<SysLog,SysLog> {
+public class DBatchStep extends AbstractBatchStep<SysLog, SysLog> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(DBatchStep.class);
 
@@ -23,12 +23,11 @@ public class DBatchStep extends AbstractBatchStep<SysLog,SysLog> {
     public DaoSupport daoSupport;
 
 
-
     @Override
     public List getPageList(int offset, int pageSize) {
-        SysLog sysLog=new SysLog();
+        SysLog sysLog = new SysLog();
         sysLog.setId(2000000000002l);
-        List list=new ArrayList();
+        List list = new ArrayList();
         list.add(daoSupport.selectByPrimaryKey(sysLog));
         return list;
     }
@@ -41,10 +40,10 @@ public class DBatchStep extends AbstractBatchStep<SysLog,SysLog> {
 
     @Override
     public void writeChunk(List<SysLog> item) {
-        LOGGER.info("write D....."+item.get(0));
-       // JobContextHolder.getInstance().put("1","hahaha","1");
-        LOGGER.info("write JobParameterHelper....."+ JobContextHolder.getInstance().get("1","hahaha"));
-      //  LOGGER.info("write D....."+name);
+        LOGGER.info("write D....." + item.get(0));
+        // JobContextHolder.getInstance().put("1","hahaha","1");
+        LOGGER.info("write JobParameterHelper....." + JobContextHolder.getInstance().get("1", "hahaha"));
+        //  LOGGER.info("write D....."+name);
     }
 
 }

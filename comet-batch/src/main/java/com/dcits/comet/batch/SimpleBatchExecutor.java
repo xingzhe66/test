@@ -55,6 +55,7 @@ public class SimpleBatchExecutor {
         ItemWriter writer = (ItemWriter) context.getBean("writer_" + jobname);
         ItemProcessor processor = (ItemProcessor) context.getBean("processor_" + jobname);
 
+        //todo 把相关配置放在接口中传入
         DataSourceTransactionManager dataSourceTransactionManager= context.getBean(DataSourceTransactionManager.class);
 
         if(null==dataSourceTransactionManager){
@@ -64,6 +65,7 @@ public class SimpleBatchExecutor {
         Step step = stepBuilders.get("step_" + jobname)
                 //.tasklet(tasklet)
                 .transactionManager(dataSourceTransactionManager)
+                //todo 把相关配置放在接口中传入
                 .chunk(500)
                 .reader(reader).faultTolerant().skip(JsonParseException.class).skipLimit(1)
                 //    .listener(new MessageItemReadListener(errorWriter))

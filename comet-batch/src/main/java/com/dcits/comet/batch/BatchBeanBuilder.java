@@ -43,6 +43,7 @@ public class BatchBeanBuilder implements BeanFactoryPostProcessor {
             BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(Reader.class);
             //向里面的属性注入值，提供get set方法
             readerBuider.addPropertyReference("batchStep",name); //因为实例还未生成，所以只定义引用；
+            //todo 把相关配置放在接口中传入
             readerBuider.addPropertyValue("pageSize","1000");
 
             //.addPropertyValue("batch", batch);
