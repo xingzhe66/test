@@ -32,6 +32,7 @@
         <module>comet-batch</module>
         <module>comet-base</module>
         <module>comet-batch-test</module>
+        <module>comet-registry</module>
     </modules>
 
 
