@@ -14,11 +14,11 @@
     </resultMap>
 
     <sql id="Table_Name">
-        SysLog
+        Sys_Log
     </sql>
 
     <sql id="Base_Column">
-        sysLogId,id,username,operation,method,params,time,ip,create_date
+        id,username,operation,method,params,time,ip,create_date
     </sql>
 
     <sql id="Base_Where">
