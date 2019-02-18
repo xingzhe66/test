@@ -43,12 +43,12 @@ public class Appmain implements CommandLineRunner {
         DaoSupport daoSupport= (DaoSupport) applicationContext.getBean("daoSupport");
         SysLog sysLog=new SysLog();
         sysLog.setId(1000000000001l);
-        sysLog=daoSupport.selectByPrimaryKey(sysLog);
+        sysLog=daoSupport.selectOne(sysLog);
         LOGGER.info(sysLog.toString());
 
         sysLog=new SysLog();
         sysLog.setId(2000000000002l);
-        sysLog=daoSupport.selectByPrimaryKey(sysLog);
+        sysLog=daoSupport.selectOne(sysLog);
         LOGGER.info(sysLog.toString());
 
         sysLog=new SysLog();
