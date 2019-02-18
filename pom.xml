@@ -33,6 +33,7 @@
         <module>comet-base</module>
         <module>comet-batch-test</module>
         <module>comet-registry</module>
+        <module>comet-mybatis-generator</module>
     </modules>
 
 
