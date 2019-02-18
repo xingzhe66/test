@@ -28,7 +28,7 @@ public class DBatchStep extends AbstractBatchStep<SysLog, SysLog> {
         SysLog sysLog = new SysLog();
         sysLog.setId(2000000000002l);
         List list = new ArrayList();
-        list.add(daoSupport.selectByPrimaryKey(sysLog));
+        list.add(daoSupport.selectOne(sysLog));
         return list;
     }
 

@@ -1,139 +1,254 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dcits.yunyun.entity.SysLog" >
-  <resultMap id="BaseResultMap" type="com.dcits.yunyun.entity.SysLog" >
-    <!--<id column="id" property="id" jdbcType="BIGINT" />-->
-    <id column="id" property="id"  />
-    <result column="username" property="username" jdbcType="VARCHAR" />
-    <result column="operation" property="operation" jdbcType="VARCHAR" />
-    <result column="method" property="method" jdbcType="VARCHAR" />
-    <result column="params" property="params" jdbcType="VARCHAR" />
-    <result column="time" property="time" jdbcType="BIGINT" />
-    <result column="ip" property="ip" jdbcType="VARCHAR" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, username, operation, method, params, time, ip, create_date
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from sys_log
-    where id = #{id,jdbcType=BIGINT}
-  </select>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.comet.mybatis.generator.showcase.SysLog">
+    <resultMap id="BaseResultMap" type="com.dcits.comet.mybatis.generator.showcase.SysLog">
+            <result column="id" property="id"  jdbcType="Long" />
+            <result column="username" property="username"  jdbcType="String" />
+            <result column="operation" property="operation"  jdbcType="String" />
+            <result column="method" property="method"  jdbcType="String" />
+            <result column="params" property="params"  jdbcType="String" />
+            <result column="time" property="time"  jdbcType="Long" />
+            <result column="ip" property="ip"  jdbcType="String" />
+            <result column="create_date" property="createDate"  jdbcType="Date" />
+    </resultMap>
 
-  <select id="selectById" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    -- hahahahaha
-    select
-    <include refid="Base_Column_List" />
-    from sys_log
-    where id = #{id,jdbcType=BIGINT}
-  </select>
+    <sql id="Table_Name">
+        SysLog
+    </sql>
+
+    <sql id="Base_Column">
+        sysLogId,id,username,operation,method,params,time,ip,create_date
+    </sql>
+
+    <sql id="Base_Where">
+        <trim suffixOverrides="AND">
+                <if test="id != null and id != ''">
+                   id = #{id} AND
+                </if>
+                <if test="username != null and username != ''">
+                   username = #{username} AND
+                </if>
+                <if test="operation != null and operation != ''">
+                   operation = #{operation} AND
+                </if>
+                <if test="method != null and method != ''">
+                   method = #{method} AND
+                </if>
+                <if test="params != null and params != ''">
+                   params = #{params} AND
+                </if>
+                <if test="time != null and time != ''">
+                   time = #{time} AND
+                </if>
+                <if test="ip != null and ip != ''">
+                   ip = #{ip} AND
+                </if>
+                <if test="createDate != null and createDate != ''">
+                   create_date = #{createDate} AND
+                </if>
+        </trim>
+    </sql>
+
+    <sql id="Base_Select">
+        select
+        <include refid="Base_Column" />
+        from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </sql>
 
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from sys_log
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.dcits.yunyun.entity.SysLog" >
-    insert into sys_log (id, username, operation, 
-      method, params, time, 
-      ip, create_date)
-    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{operation,jdbcType=VARCHAR}, 
-      #{method,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR}, #{time,jdbcType=BIGINT}, 
-      #{ip,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.dcits.yunyun.entity.SysLog" >
-    insert into sys_log
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="username != null" >
-        username,
-      </if>
-      <if test="operation != null" >
-        operation,
-      </if>
-      <if test="method != null" >
-        method,
-      </if>
-      <if test="params != null" >
-        params,
-      </if>
-      <if test="time != null" >
-        time,
-      </if>
-      <if test="ip != null" >
-        ip,
-      </if>
-      <if test="createDate != null" >
-        create_date,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="username != null" >
-        #{username,jdbcType=VARCHAR},
-      </if>
-      <if test="operation != null" >
-        #{operation,jdbcType=VARCHAR},
-      </if>
-      <if test="method != null" >
-        #{method,jdbcType=VARCHAR},
-      </if>
-      <if test="params != null" >
-        #{params,jdbcType=VARCHAR},
-      </if>
-      <if test="time != null" >
-        #{time,jdbcType=BIGINT},
-      </if>
-      <if test="ip != null" >
-        #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null" >
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.dcits.yunyun.entity.SysLog" >
-    update sys_log
-    <set >
-      <if test="username != null" >
-        username = #{username,jdbcType=VARCHAR},
-      </if>
-      <if test="operation != null" >
-        operation = #{operation,jdbcType=VARCHAR},
-      </if>
-      <if test="method != null" >
-        method = #{method,jdbcType=VARCHAR},
-      </if>
-      <if test="params != null" >
-        params = #{params,jdbcType=VARCHAR},
-      </if>
-      <if test="time != null" >
-        time = #{time,jdbcType=BIGINT},
-      </if>
-      <if test="ip != null" >
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null" >
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.dcits.yunyun.entity.SysLog" >
-    update sys_log
-    set username = #{username,jdbcType=VARCHAR},
-      operation = #{operation,jdbcType=VARCHAR},
-      method = #{method,jdbcType=VARCHAR},
-      params = #{params,jdbcType=VARCHAR},
-      time = #{time,jdbcType=BIGINT},
-      ip = #{ip,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+
+    <insert id="insert" >
+        insert into
+        <include refid="Table_Name" />
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+                <if test="id != null">
+                    id,
+                </if>
+                <if test="username != null">
+                    username,
+                </if>
+                <if test="operation != null">
+                    operation,
+                </if>
+                <if test="method != null">
+                    method,
+                </if>
+                <if test="params != null">
+                    params,
+                </if>
+                <if test="time != null">
+                    time,
+                </if>
+                <if test="ip != null">
+                    ip,
+                </if>
+                <if test="createDate != null">
+                    create_date,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    #{id},
+                </if>
+                <if test="username != null">
+                    #{username},
+                </if>
+                <if test="operation != null">
+                    #{operation},
+                </if>
+                <if test="method != null">
+                    #{method},
+                </if>
+                <if test="params != null">
+                    #{params},
+                </if>
+                <if test="time != null">
+                    #{time},
+                </if>
+                <if test="ip != null">
+                    #{ip},
+                </if>
+                <if test="createDate != null">
+                    #{createDate},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="update" >
+        update
+        <include refid="Table_Name" />
+        <set>
+                <if test="id != null">
+                    id=#{id},
+                </if>
+                <if test="username != null">
+                    username=#{username},
+                </if>
+                <if test="operation != null">
+                    operation=#{operation},
+                </if>
+                <if test="method != null">
+                    method=#{method},
+                </if>
+                <if test="params != null">
+                    params=#{params},
+                </if>
+                <if test="time != null">
+                    time=#{time},
+                </if>
+                <if test="ip != null">
+                    ip=#{ip},
+                </if>
+                <if test="createDate != null">
+                    create_date=#{createDate},
+                </if>
+        </set>
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </update>
+
+    <update id="updateByEntity" >
+        UPDATE
+        <include refid="Table_Name" />
+        <set>
+                <if test="s.id != null">
+                    id=#{s.id},
+                </if>
+                <if test="s.username != null">
+                    username=#{s.username},
+                </if>
+                <if test="s.operation != null">
+                    operation=#{s.operation},
+                </if>
+                <if test="s.method != null">
+                    method=#{s.method},
+                </if>
+                <if test="s.params != null">
+                    params=#{s.params},
+                </if>
+                <if test="s.time != null">
+                    time=#{s.time},
+                </if>
+                <if test="s.ip != null">
+                    ip=#{s.ip},
+                </if>
+                <if test="s.createDate != null">
+                    create_date=#{s.createDate},
+                </if>
+        </set>
+        <where>
+            <trim prefix="(" suffix=")" suffixOverrides="AND">
+                    <if test="w.id != null">
+                        id=#{w.id}
+                        AND
+                    </if>
+                    <if test="w.username != null">
+                        username=#{w.username}
+                        AND
+                    </if>
+                    <if test="w.operation != null">
+                        operation=#{w.operation}
+                        AND
+                    </if>
+                    <if test="w.method != null">
+                        method=#{w.method}
+                        AND
+                    </if>
+                    <if test="w.params != null">
+                        params=#{w.params}
+                        AND
+                    </if>
+                    <if test="w.time != null">
+                        time=#{w.time}
+                        AND
+                    </if>
+                    <if test="w.ip != null">
+                        ip=#{w.ip}
+                        AND
+                    </if>
+                    <if test="w.createDate != null">
+                        create_date=#{w.createDate}
+                        AND
+                    </if>
+            </trim>
+        </where>
+    </update>
+
+    <delete id="delete" >
+        delete from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </delete>
+
+    <select id="count" parameterType="java.util.Map" resultType="int">
+        select count(1) from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </select>
+
+    <select id="selectOne"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectList"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectForUpdate" resultMap="BaseResultMap" useCache="false">
+        <include refid="Base_Select" />
+        for update
+    </select>
+
+
 </mapper>
