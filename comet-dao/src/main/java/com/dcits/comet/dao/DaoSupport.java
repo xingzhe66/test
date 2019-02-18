@@ -17,10 +17,6 @@ public interface DaoSupport {
     String POSTFIX_SELECTLIST = ".selectList";
 
 
-    <T extends BasePo> T selectByPrimaryKey(T entity);
-
-
-
     <T extends BasePo> Integer count(T entity);
 
     <T extends BasePo> Integer count(String statementPostfix, T object);

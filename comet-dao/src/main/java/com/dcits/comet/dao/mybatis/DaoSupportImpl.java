@@ -53,11 +53,6 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return propertyColumnMapper;
     }
 
-    @Override
-    public <T extends BasePo> T selectByPrimaryKey(T entity) {
-        String className = entity.getClass().getName();
-        return (T)this.getSqlSession().selectOne(className + ".selectByPrimaryKey", entity);
-    }
 
     public <T extends BasePo> Integer count(T entity) {
         String className = entity.getClass().getName();
