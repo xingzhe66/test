@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dcits.comet.mybatis.generator.showcase.SysLog">
-    <resultMap id="BaseResultMap" type="com.dcits.comet.mybatis.generator.showcase.SysLog">
-            <result column="id" property="id"  jdbcType="Long" />
-            <result column="username" property="username"  jdbcType="String" />
-            <result column="operation" property="operation"  jdbcType="String" />
-            <result column="method" property="method"  jdbcType="String" />
-            <result column="params" property="params"  jdbcType="String" />
-            <result column="time" property="time"  jdbcType="Long" />
-            <result column="ip" property="ip"  jdbcType="String" />
-            <result column="create_date" property="createDate"  jdbcType="Date" />
+<mapper namespace="com.dcits.yunyun.entity.SysLog">
+    <resultMap id="BaseResultMap" type="com.dcits.yunyun.entity.SysLog">
+            <result column="id" property="id"  jdbcType="BIGINT" />
+            <result column="username" property="username"  jdbcType="VARCHAR" />
+            <result column="operation" property="operation"  jdbcType="VARCHAR" />
+            <result column="method" property="method"  jdbcType="VARCHAR" />
+            <result column="params" property="params"  jdbcType="VARCHAR" />
+            <result column="time" property="time"  jdbcType="BIGINT" />
+            <result column="ip" property="ip"  jdbcType="VARCHAR" />
+            <result column="create_date" property="createDate"  jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="Table_Name">
