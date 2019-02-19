@@ -26,7 +26,7 @@
     </sql>
 
     <sql id="Base_Column">
-        ${module.idName},${module.tableColumns}
+        ${module.tableColumns}
     </sql>
 
     <sql id="Base_Where">
