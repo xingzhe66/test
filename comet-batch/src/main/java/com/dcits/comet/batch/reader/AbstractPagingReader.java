@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 import com.dcits.comet.dao.DaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.database.AbstractPagingItemReader;
 
 
 /**
@@ -28,12 +27,6 @@ import org.springframework.batch.item.database.AbstractPagingItemReader;
 public abstract class AbstractPagingReader<T> extends AbstractPagingItemReader<T> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractPagingReader.class);
-
-
-//    public AgentProfitTranInReader() {
-//        setName(getShortName(AbstractPagingReader.class));
-//    }
-
 
     /**
      * Check mandatory properties.

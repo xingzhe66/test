@@ -19,8 +19,9 @@ import static java.lang.String.format;
  * 动态注入batch相关bean
  *
  */
-@Configuration
 
+//@Configuration
+@Deprecated
 public class BatchBeanBuilder implements BeanFactoryPostProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(BatchBeanBuilder.class);
@@ -68,7 +69,7 @@ public class BatchBeanBuilder implements BeanFactoryPostProcessor {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
-        this.buildBatchBean(configurableListableBeanFactory);
+       this.buildBatchBean(configurableListableBeanFactory);
     }
 
 

@@ -13,14 +13,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class JobContextHolder {
 
-    private ConcurrentHashMap<String,ConcurrentHashMap<String,String>> map;
+    private Map<String,Map<String,String>> map;
 
     private static volatile JobContextHolder jobContextHolder;
 
     private JobContextHolder() {
         synchronized (JobContextHolder.class) {
             if(this.map == null) {
-                this.map =new ConcurrentHashMap<String,ConcurrentHashMap<String,String>>();
+                this.map =new ConcurrentHashMap<String,Map<String,String>>();
             }
         }
     }
@@ -36,14 +36,14 @@ public class JobContextHolder {
         return jobContextHolder;
     }
 
-    public ConcurrentHashMap<String, ConcurrentHashMap<String, String>> getMap() {
+    public Map<String, Map<String, String>> getMap() {
         return this.map;
     }
     //todo 多线程执行process时会有线程安全问题
-    //todo 对于多线程执行部分，不允许put
+    //todo 对于多线程执行部分，最好不put
     public void put(String jobid,String key,String value) {
 
-        ConcurrentHashMap<String, String> submap =this.map.get(jobid);
+        Map<String, String> submap =this.map.get(jobid);
 
         if(null==submap){
 
@@ -59,7 +59,7 @@ public class JobContextHolder {
 
     public String get(String jobid,String key) {
 
-        ConcurrentHashMap<String, String> submap =this.map.get(jobid);
+        Map<String, String> submap =this.map.get(jobid);
 
         if(null==submap){
 
@@ -73,12 +73,12 @@ public class JobContextHolder {
 
     public void clear(String jobid) {
 
-        ConcurrentHashMap<String, String> submap =this.map.get(jobid);
+        Map<String, String> submap =this.map.get(jobid);
 
         if(null==submap){
             return;
         }
         submap.clear();
-
+        map.remove(jobid);
     }
 }

@@ -25,7 +25,7 @@ public class Writer implements ItemWriter {
 
         batchStep.writeChunk(list);
 
-       // LOGGER.debug("write....."+ JobParameterHelper.get("name"));
+        LOGGER.info("write....."+ JobParameterHelper.get("jobId"));
     }
 
 }

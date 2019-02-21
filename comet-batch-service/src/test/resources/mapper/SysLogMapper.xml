@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.comet.batch.service.test.entity.SysLog">
+    <resultMap id="BaseResultMap" type="com.dcits.comet.batch.service.test.entity.SysLog">
+            <result column="id" property="id"  jdbcType="BIGINT" />
+            <result column="username" property="username"  jdbcType="VARCHAR" />
+            <result column="operation" property="operation"  jdbcType="VARCHAR" />
+            <result column="method" property="method"  jdbcType="VARCHAR" />
+            <result column="params" property="params"  jdbcType="VARCHAR" />
+            <result column="time" property="time"  jdbcType="BIGINT" />
+            <result column="ip" property="ip"  jdbcType="VARCHAR" />
+            <result column="create_date" property="createDate"  jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Table_Name">
+        Sys_Log
+    </sql>
+
+    <sql id="Base_Column">
+        id,username,operation,method,params,time,ip,create_date
+    </sql>
+
+    <sql id="Base_Where">
+        <trim suffixOverrides="AND">
+                <if test="id != null and id != ''">
+                   id = #{id} AND
+                </if>
+                <if test="username != null and username != ''">
+                   username = #{username} AND
+                </if>
+                <if test="operation != null and operation != ''">
+                   operation = #{operation} AND
+                </if>
+                <if test="method != null and method != ''">
+                   method = #{method} AND
+                </if>
+                <if test="params != null and params != ''">
+                   params = #{params} AND
+                </if>
+                <if test="time != null and time != ''">
+                   time = #{time} AND
+                </if>
+                <if test="ip != null and ip != ''">
+                   ip = #{ip} AND
+                </if>
+                <if test="createDate != null and createDate != ''">
+                   create_date = #{createDate} AND
+                </if>
+        </trim>
+    </sql>
+
+    <sql id="Base_Select">
+        select
+        <include refid="Base_Column" />
+        from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </sql>
+
+
+
+    <insert id="insert" >
+        insert into
+        <include refid="Table_Name" />
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+                <if test="id != null">
+                    id,
+                </if>
+                <if test="username != null">
+                    username,
+                </if>
+                <if test="operation != null">
+                    operation,
+                </if>
+                <if test="method != null">
+                    method,
+                </if>
+                <if test="params != null">
+                    params,
+                </if>
+                <if test="time != null">
+                    time,
+                </if>
+                <if test="ip != null">
+                    ip,
+                </if>
+                <if test="createDate != null">
+                    create_date,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    #{id},
+                </if>
+                <if test="username != null">
+                    #{username},
+                </if>
+                <if test="operation != null">
+                    #{operation},
+                </if>
+                <if test="method != null">
+                    #{method},
+                </if>
+                <if test="params != null">
+                    #{params},
+                </if>
+                <if test="time != null">
+                    #{time},
+                </if>
+                <if test="ip != null">
+                    #{ip},
+                </if>
+                <if test="createDate != null">
+                    #{createDate},
+                </if>
+        </trim>
+    </insert>
+
+    <update id="update" >
+        update
+        <include refid="Table_Name" />
+        <set>
+                <if test="id != null">
+                    id=#{id},
+                </if>
+                <if test="username != null">
+                    username=#{username},
+                </if>
+                <if test="operation != null">
+                    operation=#{operation},
+                </if>
+                <if test="method != null">
+                    method=#{method},
+                </if>
+                <if test="params != null">
+                    params=#{params},
+                </if>
+                <if test="time != null">
+                    time=#{time},
+                </if>
+                <if test="ip != null">
+                    ip=#{ip},
+                </if>
+                <if test="createDate != null">
+                    create_date=#{createDate},
+                </if>
+        </set>
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </update>
+
+    <update id="updateByEntity" >
+        UPDATE
+        <include refid="Table_Name" />
+        <set>
+                <if test="s.id != null">
+                    id=#{s.id},
+                </if>
+                <if test="s.username != null">
+                    username=#{s.username},
+                </if>
+                <if test="s.operation != null">
+                    operation=#{s.operation},
+                </if>
+                <if test="s.method != null">
+                    method=#{s.method},
+                </if>
+                <if test="s.params != null">
+                    params=#{s.params},
+                </if>
+                <if test="s.time != null">
+                    time=#{s.time},
+                </if>
+                <if test="s.ip != null">
+                    ip=#{s.ip},
+                </if>
+                <if test="s.createDate != null">
+                    create_date=#{s.createDate},
+                </if>
+        </set>
+        <where>
+            <trim prefix="(" suffix=")" suffixOverrides="AND">
+                    <if test="w.id != null">
+                        id=#{w.id}
+                        AND
+                    </if>
+                    <if test="w.username != null">
+                        username=#{w.username}
+                        AND
+                    </if>
+                    <if test="w.operation != null">
+                        operation=#{w.operation}
+                        AND
+                    </if>
+                    <if test="w.method != null">
+                        method=#{w.method}
+                        AND
+                    </if>
+                    <if test="w.params != null">
+                        params=#{w.params}
+                        AND
+                    </if>
+                    <if test="w.time != null">
+                        time=#{w.time}
+                        AND
+                    </if>
+                    <if test="w.ip != null">
+                        ip=#{w.ip}
+                        AND
+                    </if>
+                    <if test="w.createDate != null">
+                        create_date=#{w.createDate}
+                        AND
+                    </if>
+            </trim>
+        </where>
+    </update>
+
+    <delete id="delete" >
+        delete from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </delete>
+
+    <select id="count" parameterType="java.util.Map" resultType="int">
+        select count(1) from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </select>
+
+    <select id="selectOne"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectList"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectForUpdate" resultMap="BaseResultMap" useCache="false">
+        <include refid="Base_Select" />
+        for update
+    </select>
+
+
+</mapper>

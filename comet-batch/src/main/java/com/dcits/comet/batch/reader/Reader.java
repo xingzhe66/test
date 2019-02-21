@@ -11,6 +11,15 @@ public class Reader extends AbstractPagingReader {
 
     private IBatchStep batchStep;
 
+    private int beginIndex;
+
+    private Object lock = new Object();
+
+
+    public void setBeginIndex(int beginIndex){
+        this.beginIndex=beginIndex;
+    }
+
     public void setBatchStep(IBatchStep batchStep) {
         this.batchStep = batchStep;
     }
@@ -25,6 +34,14 @@ public class Reader extends AbstractPagingReader {
         results.addAll(batchStep.getPageList(offset, pageSize));
     }
 
+    protected void init()  {
 
+        try {
+            jumpToItem(beginIndex);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
