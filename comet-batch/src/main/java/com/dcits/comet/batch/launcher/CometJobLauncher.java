@@ -5,6 +5,7 @@ import com.dcits.comet.batch.IBatchStep;
 import com.dcits.comet.batch.IStep;
 import com.dcits.comet.batch.ITaskletStep;
 import com.dcits.comet.batch.exception.CometBatchException;
+import com.dcits.comet.batch.listener.StepExeListener;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.param.BatchContextManager;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -87,16 +88,20 @@ public class CometJobLauncher  {
             DataSourceTransactionManager dataSourceTransactionManager = context.getBean(DataSourceTransactionManager.class);
             Step step =null;
             if(stepObj instanceof IBatchStep) {
-
+                //todo spring bean是单例可能有并发问题，后续可能改为new对象。
                 ItemReader reader = BatchBeanFactory.getReader(jobName, pageSize, beginIndex, endIndex);
                 ItemWriter writer = BatchBeanFactory.getWriter(jobName);
                 ItemProcessor processor = BatchBeanFactory.getProcessor(jobName);
+
+                StepExeListener stepListener=new StepExeListener();
+                stepListener.setBatchStep((IBatchStep)stepObj);
 
                 if (null == dataSourceTransactionManager) {
                     LOGGER.warn("请配置数据库事务管理器！");
                 }
                 step = stepBuilders.get("step_" + jobName)
                         //.tasklet(tasklet)
+                        .listener(stepListener)
                         .transactionManager(dataSourceTransactionManager)
                         //todo 把相关配置放在接口中传入
                         .chunk(chunkSize)

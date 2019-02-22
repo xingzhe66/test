@@ -56,9 +56,9 @@ public class CBatchStep extends AbstractBatchStep<SysLog,SysLog> {
     @Override
     public void afterBatchStep(){
         LOGGER.info("afterBatchStep.......cBatchStep");
-        LOGGER.info((String)BatchContextManager.getInstance().get(JobParameterHelper.get("jobId"),"context"));
-
-        BatchContextManager.getInstance().put(JobParameterHelper.get("jobId"),"context","afterBatchStep");
+//        LOGGER.info((String)BatchContextManager.getInstance().get(JobParameterHelper.get("jobId"),"context"));
+//
+//        BatchContextManager.getInstance().put(JobParameterHelper.get("jobId"),"context","afterBatchStep");
     }
 
 }
