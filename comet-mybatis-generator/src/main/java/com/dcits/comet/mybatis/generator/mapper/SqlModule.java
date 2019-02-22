@@ -76,7 +76,8 @@ public class SqlModule {
 				PropBean propBean=new PropBean();
 				propBean.setDbname(DBName);
 				//todo 数据库类型转换
-				propBean.setType(fe.getType().getSimpleName());
+				String DBType=ReflectionUtil.javaType2DBType(fe.getType().getSimpleName());
+				propBean.setType(DBType);
 				propMap.put(FeName, propBean);
 			}
 		}

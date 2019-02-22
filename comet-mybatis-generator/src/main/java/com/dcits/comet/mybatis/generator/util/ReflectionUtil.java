@@ -12,8 +12,8 @@ public class ReflectionUtil {
 
 	private static final String GETTER_PREFIX = "get";
 
-	
-	
+
+
 	/**
 	 * 判断是否为基本数据类型
 	 * @param cls
@@ -22,7 +22,7 @@ public class ReflectionUtil {
 	public static boolean isPrimitive(final Class<?> cls){
 		return cls.isPrimitive() || PrimitiveClasses.contains(cls);
 	}
-	
+
 	private final static List<Class<?>> PrimitiveClasses = new ArrayList<Class<?>>(){{
 		add(Long.class);
 		add(Integer.class);
@@ -34,7 +34,7 @@ public class ReflectionUtil {
 		add(Float.class);
 		add(BigDecimal.class);
 	}};
-	
+
 	/**
 	 * 根据Field获得它的get方法
 	 * @param fe
@@ -63,7 +63,6 @@ public class ReflectionUtil {
 		}
 		return me;
 	}
-	
 	/**
 	 * 转换fieldName的首字母到大写
 	 * @param fieldName
@@ -78,5 +77,32 @@ public class ReflectionUtil {
 		}
 		return fieldName;
 	}
-	
+	/**
+	 * 将Java数据类型转换成jdbc数据类型
+	 * @param javaType
+	 * @return
+	 */
+	public static String javaType2DBType(String javaType){
+
+		String dbTypeName=null;
+		switch(javaType){
+			case "String" :
+				dbTypeName="VARCHAR";break;
+			case "BigDecimal":
+				dbTypeName="NUMERIC";break;
+			case "boolean":
+				dbTypeName="BOOLEAN";break;
+			case "byte":
+				dbTypeName="TINYINT";break;
+			case "INTEGER":
+				dbTypeName="INTEGER";break;
+			case "Long":
+				dbTypeName="BIGINT";break;
+			case "Date":
+				dbTypeName="DATE";break;
+			case "Time":
+				dbTypeName="TIME";break;
+		}
+		return dbTypeName;
+	}
 }

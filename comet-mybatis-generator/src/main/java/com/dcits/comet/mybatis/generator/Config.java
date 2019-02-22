@@ -5,7 +5,7 @@ public class Config {
 	/**
 	 * 包名
 	 */
-	public static String packageName = "com.dcits.comet.mybatis.generator.showcase";
+	public static String packageName = "com.dcits.comet.mybatis.generator.showcase.entity";
 	
 	/**
 	 * 列名规则
