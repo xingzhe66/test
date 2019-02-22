@@ -7,6 +7,7 @@ import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.param.BatchContextManager;
 import com.dcits.comet.batch.BatchBeanFactory;
+import com.dcits.comet.batch.service.constant.BatchServiceConstant;
 import com.dcits.comet.batch.service.model.ExeInput;
 import com.dcits.comet.batch.service.model.ExeOutput;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -70,12 +71,14 @@ public class ExecutionController {
                 exeOutput.setStatus(jobExeResult.getJobExecution().getStatus());
             }
 
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(format("Job execution failed."));
         } finally {
 
         }
+        exeOutput.setServiceStatus(BatchServiceConstant.SERVICE_STATUS_SUCCESS);
         return exeOutput;
     }
 

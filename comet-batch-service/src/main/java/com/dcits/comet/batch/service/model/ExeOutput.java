@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class ExeOutput implements Serializable {
+public class ExeOutput extends BaseOutput implements Serializable {
 
     private String jobName;
 
