@@ -3,27 +3,27 @@ package com.dcits.comet.batch.exception;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-public class CometBatchException extends RuntimeException{
+public class BatchException extends RuntimeException{
     private String exceptionCode;
     private String exceptionMsg;
 
-    public CometBatchException() {
+    public BatchException() {
         super();
     }
 
-    public CometBatchException(String message) {
+    public BatchException(String message) {
         super(message);
     }
 
-    public CometBatchException(String message, Throwable cause) {
+    public BatchException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CometBatchException(Throwable cause) {
+    public BatchException(Throwable cause) {
         super(cause);
     }
 
-    protected CometBatchException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected BatchException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

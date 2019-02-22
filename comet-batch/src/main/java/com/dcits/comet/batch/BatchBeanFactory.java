@@ -13,7 +13,11 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class BatchBeanFactory {
-//todo 多线程对同一个job并发时，需要用new对象，不能用spring bean
+    /**
+     * todo 多线程对同一个job并发时，需要用new对象，不能用spring bean
+     * 目前使用spring bean的意义在于让jobParameters注解生效。
+     */
+
     public static ItemReader getReader(String name, int pageSize, int beginIndex, int endIndex){
 
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
