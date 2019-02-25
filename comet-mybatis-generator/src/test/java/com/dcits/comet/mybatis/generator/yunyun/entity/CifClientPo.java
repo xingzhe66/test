@@ -1,4 +1,4 @@
-package yunyun.entity;
+package com.dcits.comet.mybatis.generator.yunyun.entity;
 
 import java.math.BigDecimal;
 

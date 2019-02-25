@@ -1,6 +1,6 @@
-package yunyun.mapper;
+package com.dcits.comet.mybatis.generator.yunyun.mapper;
 
-import yunyun.entity.CifClientPo;
+import com.dcits.comet.mybatis.generator.yunyun.entity.CifClientPo;
 
 public interface CifClientPoMapper {
     /**

@@ -2,8 +2,7 @@ package com.dcits.comet.mybatis.generator;
 
 import com.dcits.comet.mybatis.generator.mapper.FreemarkerUtil;
 import com.dcits.comet.mybatis.generator.mapper.SqlModule;
-import com.dcits.comet.mybatis.generator.showcase.entity.SysLog;
-import yunyun.entity.CifClientPo;
+import com.dcits.comet.mybatis.generator.yunyun.entity.CifClientPo;
 
 import java.io.File;
 import java.util.HashMap;
