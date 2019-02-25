@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="${mouldName}.entity.${className}">
+<mapper namespace="${mouldName}.${entityPackage}.${className}">
     <#--结果集-->
-	<resultMap id="BaseResultMap" type="${mouldName}.entity.${className}" >
+	<resultMap id="BaseResultMap" type="${mouldName}.${entityPackage}.${className}" >
 		<#list cloums as c>
 				<result column="${c.columnNameL}" property="${c.columnName}"  jdbcType="${c.jdbcType}"/>
 		</#list>
@@ -47,8 +47,6 @@
 		</where>
 	</sql>
 
-
-
 	<insert id="insert" >
 		insert into
 		<include refid="Table_Name" />
@@ -81,8 +79,6 @@
 			<include refid="Base_Where" />
 		</where>
 	</update>
-
-
 
 	<update id="updateByEntity" >
 		UPDATE
@@ -133,6 +129,4 @@
 		<include refid="Base_Select" />
 		for update
 	</select>
-
-
 </mapper>

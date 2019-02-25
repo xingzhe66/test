@@ -58,7 +58,7 @@ public class CodeGeneratorService {
     public void createXml() throws Exception {
         String ftlName = "/MybatisMapper.ftl";
         // 生成文件的路径和名称
-        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/mapper/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Mapper.xml";
+        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Mapper.xml";
         TemplateHelp.creatTemplate(getTemplateData(getTableComumnModel()), ftlName, fileName);
     }
 
@@ -70,7 +70,7 @@ public class CodeGeneratorService {
     public void creatModel() throws Exception {
         String ftlName = "/entity.ftl";
         // 生成文件的路径和名称
-        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/entity/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + ".java";
+        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getEntityPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + ".java";
         TemplateHelp.creatTemplate(getTemplateData(getTableComumnModel()), ftlName, fileName);
     }
 
@@ -97,6 +97,7 @@ public class CodeGeneratorService {
         params.put("tableName", generatorEntity.getTableName());// 表名称
         params.put("dbName", generatorEntity.getDbName());// 数据库名称
         params.put("dbType", generatorEntity.getDbType());//数据库类型
+
         String tableComment = codeDao.getTableComment(params);
         return tableComment;
     }
@@ -168,6 +169,7 @@ public class CodeGeneratorService {
         if (clList != null && clList.size() > 0) {
             data.put("className", PbUtils.convertToCamelCase(generatorEntity.getTableName()));// 类名称
             data.put("mouldName", generatorEntity.getBasePackage());// 基本包名称
+            data.put("entityPackage", generatorEntity.getEntityPackage());//entity包名称
             data.put("functionComment", generatorEntity.getEntityDescription());// 功能说明
             data.put("tableName", generatorEntity.getTableName().toUpperCase());// 表名称
             data.put("cloums", clList);// 属性
