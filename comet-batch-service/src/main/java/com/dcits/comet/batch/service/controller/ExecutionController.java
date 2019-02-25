@@ -1,7 +1,7 @@
 package com.dcits.comet.batch.service.controller;
 
 import com.dcits.comet.batch.IBatchStep;
-import com.dcits.comet.batch.launcher.CometJobLauncher;
+import com.dcits.comet.batch.launcher.CommonJobLauncher;
 import com.dcits.comet.batch.launcher.JobExeResult;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
@@ -41,7 +41,7 @@ public class ExecutionController {
     @Autowired
     ConfigurableApplicationContext context;
     @Autowired
-    CometJobLauncher cometJobLauncher;
+    CommonJobLauncher commonJobLauncher;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionController.class);
@@ -61,7 +61,7 @@ public class ExecutionController {
             BeanCopier beanCopier2 = BeanCopier.create(ExeInput.class, ExeOutput.class, false);
             beanCopier2.copy(exeInput,exeOutput,null);
 
-            jobExeResult=cometJobLauncher.run(exeInput.getJobName(),jobParam);
+            jobExeResult=commonJobLauncher.run(exeInput.getJobName(),jobParam);
             if(null!=jobExeResult) {
                 exeOutput.setBatchContext(jobExeResult.getBatchContext());
                 exeOutput.setCreateTime(jobExeResult.getJobExecution().getCreateTime());

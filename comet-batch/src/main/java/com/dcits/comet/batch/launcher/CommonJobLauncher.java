@@ -4,7 +4,7 @@ import com.dcits.comet.batch.BatchBeanFactory;
 import com.dcits.comet.batch.IBatchStep;
 import com.dcits.comet.batch.IStep;
 import com.dcits.comet.batch.ITaskletStep;
-import com.dcits.comet.batch.exception.CometBatchException;
+import com.dcits.comet.batch.exception.BatchException;
 import com.dcits.comet.batch.listener.StepExeListener;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.param.BatchContextManager;
@@ -23,27 +23,21 @@ import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.core.task.TaskRejectedException;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 import static java.lang.String.format;
 
 /**
 
  */
-@Component("cometJobLauncher")
-public class CometJobLauncher  {
+@Component("commonJobLauncher")
+public class CommonJobLauncher implements IJobLauncher {
 
-    protected static final Log LOGGER = LogFactory.getLog(CometJobLauncher.class);
+    protected static final Log LOGGER = LogFactory.getLog(CommonJobLauncher.class);
     @Autowired
     private JobRepository jobRepository;
     @Autowired
@@ -69,12 +63,7 @@ public class CometJobLauncher  {
                 batchContext = new BatchContext();
             }
 
-
             JobParameters jobParameters = createJobParams(jobId, jobName);
-
-            SimpleJob job = new SimpleJob();
-            job.setName("job_" + jobName);
-            job.setJobRepository(jobRepository);
 
             StepBuilderFactory stepBuilders = (StepBuilderFactory) context.getBean("stepBuilders");
 
@@ -103,7 +92,6 @@ public class CometJobLauncher  {
                         //.tasklet(tasklet)
                         .listener(stepListener)
                         .transactionManager(dataSourceTransactionManager)
-                        //todo 把相关配置放在接口中传入
                         .chunk(chunkSize)
                         .reader(reader).faultTolerant().skip(JsonParseException.class).skipLimit(1)
                         //    .listener(new MessageItemReadListener(errorWriter))
@@ -111,7 +99,7 @@ public class CometJobLauncher  {
                         //    .listener(new MessageWriteListener())
                         .processor(processor)
                         .build();
-                // dbf.registerSingleton("step_" + jobname,step);
+
             } else if(stepObj instanceof ITaskletStep) {
 
                 ITaskletStep taskletStep = (ITaskletStep) stepObj;
@@ -121,43 +109,40 @@ public class CometJobLauncher  {
                         .tasklet(taskletStep)
                         .build();
             } else {
-                throw new CometBatchException("不支持的Step类型");
+                throw new BatchException("不支持的Step类型");
 
             }
-            job.addStep(step);
-            //  dbf.registerSingleton("job_" + jobname,job);
 
+            SimpleJob job = new SimpleJob();
+            job.setName("job_" + jobName);
+            job.setJobRepository(jobRepository);
+
+            job.addStep(step);
 
             JobLauncher jobLauncher = context.getBean(JobLauncher.class);
-
 
             try {
 
                 BatchContextManager.getInstance().putBatchContext(jobId, batchContext);
-                //todo 增加前处理
-//                batchStep.preBatchStep();
-
                 jobExecution = jobLauncher.run(job, jobParameters);
 
-                //todo 增加后处理
-//                batchStep.afterBatchStep();
 
             } catch (JobExecutionAlreadyRunningException e) {
-                e.printStackTrace();
+                throw new BatchException(e.getMessage());
             } catch (JobRestartException e) {
-                e.printStackTrace();
+                throw new BatchException(e.getMessage());
             } catch (JobInstanceAlreadyCompleteException e) {
-                e.printStackTrace();
+                throw new BatchException(e.getMessage());
             } catch (JobParametersInvalidException e) {
-                e.printStackTrace();
+                throw new BatchException(e.getMessage());
             }
 
             if ((null != jobExecution) && (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED))) {
-                throw new RuntimeException(format("%s Job execution failed.", jobName));
+                throw new BatchException(format("%s Job execution failed.", jobName));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(format("Job execution failed."));
+            throw new BatchException(format("Job execution failed."));
         } finally {
 
         }
@@ -170,6 +155,8 @@ public class CometJobLauncher  {
 
         return jobExeResult;
     }
+
+
     private JobParameters createJobParams(String jobId, String jobName) {
         return new JobParametersBuilder()
 //                    .addDate("date", new Date())

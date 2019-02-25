@@ -16,6 +16,26 @@ public class JobParam {
 
     private int endIndex;
 
+    public String getRunType() {
+        return runType;
+    }
+
+    public void setRunType(String runType) {
+        this.runType = runType;
+    }
+
+    public int getThreadNum() {
+        return threadNum;
+    }
+
+    public void setThreadNum(int threadNum) {
+        this.threadNum = threadNum;
+    }
+
+    private String runType;
+
+    private int threadNum;
+
     private BatchContext batchContext;
 
     public String getJobName() {
