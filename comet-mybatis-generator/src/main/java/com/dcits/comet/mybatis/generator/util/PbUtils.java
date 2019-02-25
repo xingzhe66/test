@@ -191,8 +191,13 @@ public class PbUtils {
             int num = sb.indexOf("_", count);
             count = num + 1;
             if (num != -1) {
-                char ss = sb.charAt(count);
-                char ia = (char) (ss - 32);
+                char ia;
+                if(Character.isDigit(sb.charAt(count))){
+                    ia = sb.charAt(count);
+                }else{
+                    char ss = sb.charAt(count);
+                    ia = (char) (ss - 32);
+                }
                 sb.replace(count, count + 1, ia + "");
             }
         }
