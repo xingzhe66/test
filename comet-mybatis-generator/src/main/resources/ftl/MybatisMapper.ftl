@@ -31,7 +31,7 @@
 		<trim suffixOverrides="AND">
 		<#list cloums as c>
 		   <if test="${c.columnName} != null and ${c.columnName} != '' ">
-		       ${ c.columnNameL} = ${r"#{"}${ c.columnName}, jdbcType=${c.jdbcType}${r"}"}  AND
+		       ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
 			</if>
 		</#list>
 		</trim>
@@ -60,7 +60,7 @@
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<#list cloums as c>
 			<if test="${c.columnName} != null ">
-				${r"#{"}${c.columnName}, jdbcType=${c.jdbcType}${r"}"},
+				${r"#{"}${c.columnName}},
 			</if>
 			</#list>
 		</trim>
@@ -71,7 +71,7 @@
 		<set>
 		   <#list cloums as c>
 					<if test="${ c.columnName} != null and ${ c.columnName} != ''">
-					    ${ c.columnNameL} = ${r"#{"}${ c.columnName}, jdbcType=${c.jdbcType}${r"}"},
+					    ${ c.columnNameL} = ${r"#{"}${ c.columnName}},
 					</if>
 		   </#list>
 		</set>
@@ -86,7 +86,7 @@
 		<set>
 			<#list cloums as c>
 		    	<if test="s.${c.columnName} != null ">
-			    	${c.columnNameL} = ${r"#{"}s.${ c.columnName}, jdbcType=${c.jdbcType}${r"}"},
+			    	${c.columnNameL} = ${r"#{"}s.${ c.columnName}},
 				</if>
 			</#list>
 		</set>
@@ -94,7 +94,7 @@
 			<trim prefix="(" suffix=")" suffixOverrides="AND">
 				<#list cloums as c>
 					<if test="w.${c.columnName} != null ">
-					${c.columnNameL} = ${r"#{"}w.${ c.columnName}, jdbcType=${c.jdbcType}${r"}"}
+					${c.columnNameL} = ${r"#{"}w.${ c.columnName}}
 					AND
 					</if>
 				</#list>
