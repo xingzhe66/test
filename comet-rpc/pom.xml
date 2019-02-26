@@ -11,23 +11,13 @@
 
     <artifactId>comet-rpc</artifactId>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
+    <modules>
+        <module>comet-rpc-consumer</module>
+        <module>comet-rpc-provider</module>
+    </modules>
 
-    <dependencies>
-        <!---->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-    </dependencies>
+
 
     <!--<build>-->
         <!--<finalName>${project.artifactId}</finalName>-->

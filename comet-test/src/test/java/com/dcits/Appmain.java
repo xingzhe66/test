@@ -31,11 +31,6 @@ public class Appmain implements CommandLineRunner {
                 .web(WebApplicationType.NONE)
                 .run(args);
 
-
-//        SpringApplication app =new SpringApplication(Appmain.class);
-//        app.setWebApplicationType(WebApplicationType.NONE);
-//        app.run(args);
-
     }
 
     @Override

@@ -1,0 +1,17 @@
+#  设置服务名
+spring:
+  application:
+    name: comsumer
+#  设置注册中心地址
+server:
+  port: 18182
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+    lease-expiration-duration-in-seconds: 90
+    lease-renewal-interval-in-seconds: 30
