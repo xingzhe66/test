@@ -1,37 +1,38 @@
-package ${mouldName}.entity;
+package ${mouldName}.${entityPackage};
 
-import com.dcits.comet.dao.model.BasePo;
+import com.dcits.ensemble.cloud.cif.common.base.BaseCifPo;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
- * @功能说明：${functionComment}
- * @作者： ${author}
- * @创建日期：${date}
+ * @Author ${author}
+ * @Description ${functionComment}
+ * @Date ${date}
+ * @Version 1.0
  */
-public class ${className} extends BasePo{
+@Data
+@EqualsAndHashCode(callSuper=false)
+public class ${className} extends BaseCifPo{
 
-	//字段
-	<#list cloums as c>
-	private ${c.javaType} ${ c.columnName};//${ c.columnComment}
-	</#list>
-	
-	//构造方法
-	public ${className}() {
-	}
-	
-	//get和set方法
 	<#list cloums as c>
 	/**
-	* @return ${ c.columnName}
+	* This field corresponds to the database column ${tableName}.${ c.columnNameL}
+	* @Description  ${ c.columnComment}
 	*/
-	public ${c.javaType} get${ c.UpUmnName}() {
-		return  ${ c.columnName};
-	}
-	/**
-	* @param ${ c.columnName}
-	*/
-	public void set${ c.UpUmnName}(${c.javaType} ${ c.columnName}) {
-		this.${ c.columnName} = ${ c.columnName};
-	}
-
+	private ${c.javaType} ${ c.columnName};
 	</#list>
-	
+
+
+    public void insert(${className}  ${objectName}) {
+        daoSupport.insert(${objectName});
+    }
+
+    public void updateById(${className}  ${objectName}) {
+        daoSupport.update(${objectName});
+    }
+
+    public void deleteById(${className}  ${objectName}) {
+        daoSupport.delete(${objectName});
+    }
+
 }

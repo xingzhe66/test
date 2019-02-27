@@ -289,47 +289,39 @@ public class PbUtils {
      */
 
     public static String convertJavaType(String type) {
-        String javaType = "";
+        String javaType = "String";
         type = type.toUpperCase();
         if (type.contains("CHAR") || type.contains("VARCHAR") || type.contains("LONGVARCHAR")) {
             javaType = "String";
-        }
-        if (type.contains("NUMERIC") || type.contains("DECIMAL")) {
+        } else if (type.contains("NUMERIC") || type.contains("DECIMAL")) {
             javaType = "java.math.BigDecimal";
-        }
-        if (type.contains("BIT") || type.contains("BOOLEAN")) {
+        }else if (type.contains("BIT") || type.contains("BOOLEAN")) {
             javaType = "boolean";
-        }
-        if (type.contains("BINARY") || type.contains("VARBINARY") || type.contains("LONGVARBINARY")) {
+        }else if(type.contains("BINARY") || type.contains("VARBINARY") || type.contains("LONGVARBINARY")) {
             javaType = "byte[]";
-        }
-        if (type.contains("BIGINT")) {
+        }else if (type.contains("BIGINT")) {
             javaType = "Long";
-        }
-        if (type.contains("DOUBLE") || type.contains("FLOAT")) {
+        }else if (type.contains("DOUBLE") || type.contains("FLOAT")) {
             javaType = "double";
-        }
-        if (type.contains("DATE")) {
+        }else if (type.contains("DATE")) {
             javaType = "java.sql.Date";
-        }
-        if (type.contains("INTEGER")) {
+        }else if (type.contains("INTEGER")) {
             javaType = "INTEGER";
         }
         return javaType;
     }
 
     public static String convertJdbcType(String type) {
-        String javaType = "";
-        if (type.contains("long") || type.contains("interval") || type.contains("blob") || type.contains("varchar") || type.contains("char")) {
+        String javaType = "VARCHAR";
+        if (type.contains("interval") || type.contains("blob") || type.contains("varchar") || type.contains("char")) {
             javaType = "VARCHAR";
-        }
-        if (type.contains("decimal") || type.contains("float") || type.contains("double") || type.contains("integer") || type.contains("longtext")) {
+        } else if (type.contains("long")) {
+            javaType = "BIGINT";
+        }else if (type.contains("decimal") || type.contains("float") || type.contains("double") || type.contains("integer") || type.contains("longtext")) {
             javaType = "NUMERIC";
-        }
-        if (type.contains("date") || type.contains("datetime")) {
-            javaType = "DATE";
-        }
-        if (type.contains("int")) {
+        }else if (type.contains("date") || type.contains("datetime")) {
+            javaType = "TIMESTAMP";
+        } else if (type.contains("int")) {
             javaType = "INTEGER";
         }
         return javaType;

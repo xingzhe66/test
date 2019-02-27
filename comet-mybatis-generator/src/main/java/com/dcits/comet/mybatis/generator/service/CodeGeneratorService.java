@@ -70,7 +70,7 @@ public class CodeGeneratorService {
     public void creatModel() throws Exception {
         String ftlName = "/entity.ftl";
         // 生成文件的路径和名称
-        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getEntityPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + ".java";
+        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getEntityPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Po.java";
         TemplateHelp.creatTemplate(getTemplateData(getTableComumnModel()), ftlName, fileName);
     }
 
@@ -167,14 +167,16 @@ public class CodeGeneratorService {
     public Map<String, Object> getTemplateData(List<Map<String, Object>> clList) {
         Map<String, Object> data = new HashMap<String, Object>();
         if (clList != null && clList.size() > 0) {
-            data.put("className", PbUtils.convertToCamelCase(generatorEntity.getTableName()));// 类名称
+            String className=PbUtils.convertToCamelCase(generatorEntity.getTableName())+"Po";
+            data.put("className", className);// 类名称
+            data.put("objectName", PbUtils.fristStrToLowerCase(className));// 类名首字母小写
             data.put("mouldName", generatorEntity.getBasePackage());// 基本包名称
             data.put("entityPackage", generatorEntity.getEntityPackage());//entity包名称
             data.put("functionComment", generatorEntity.getEntityDescription());// 功能说明
             data.put("tableName", generatorEntity.getTableName().toUpperCase());// 表名称
             data.put("cloums", clList);// 属性
             data.put("author", generatorEntity.getAuthor());// 作者
-            data.put("date", PbUtils.getCurrentDate());// 日期
+            data.put("date", PbUtils.getCurrentDateTime());// 日期
         }
         return data;
     }
