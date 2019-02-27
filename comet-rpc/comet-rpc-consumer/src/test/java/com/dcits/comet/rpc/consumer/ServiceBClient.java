@@ -9,10 +9,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@RpcClient(name = "hello-service", fallback = ServiceBClient.ServiceBClientFallback.class)
+@RpcClient(name = "ENSEMBLE-CLOUD-CIF-SERVICE", fallback = ServiceBClient.ServiceBClientFallback.class)
 public interface ServiceBClient {
 
-    @RpcMethod(value = "/hello")
+    @RpcMethod(value = "/cif/client/create")
     String hello();
 
     @Component
