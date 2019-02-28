@@ -21,18 +21,4 @@ public class ${className} extends BaseCifPo{
 	*/
 	private ${c.javaType} ${ c.columnName};
 	</#list>
-
-
-    public void insert(${className}  ${objectName}) {
-        daoSupport.insert(${objectName});
-    }
-
-    public void updateById(${className}  ${objectName}) {
-        daoSupport.update(${objectName});
-    }
-
-    public void deleteById(${className}  ${objectName}) {
-        daoSupport.delete(${objectName});
-    }
-
 }
