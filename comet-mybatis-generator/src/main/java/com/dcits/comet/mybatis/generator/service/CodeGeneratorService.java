@@ -26,6 +26,7 @@ public class CodeGeneratorService {
 
     /**
      * 生成代码入口
+     *    需判断一次生成全部表还是指定一张表
      *
      * @return
      * @throws Exception
@@ -33,50 +34,74 @@ public class CodeGeneratorService {
     public void createCode() throws Exception {
         String isCrateAllTable = generatorEntity.getIsCrateAllTable();
         //生成所有表
-        if (!PbUtils.isEmpty(isCrateAllTable) && "true".equals(isCrateAllTable.toLowerCase())) {
-            List<Map<String, Object>> listTables = getTablesList();
-            for (int i = 0; i < listTables.size(); i++) {
-                generatorEntity.setTableName((String) listTables.get(i).get("TABLE_NAME"));
-                generatorEntity.setEntityDescription((String) listTables.get(i).get("TABLE_COMMENT"));
-                creatModel();
-                createXml();
-                LOGGER.info((String) listTables.get(i).get("TABLE_NAME") + "表对应的JavaBean和Mapper文件生成");
+            if (!PbUtils.isEmpty(isCrateAllTable) && "true".equals(isCrateAllTable.toLowerCase())) {
+                List<Map<String, Object>> listTables = getTablesList();
+                if(listTables.size()>0){
+                    for (int i = 0; i < listTables.size(); i++) {
+                        generatorEntity.setTableName((String) listTables.get(i).get("TABLE_NAME"));
+                        generatorEntity.setEntityDescription((String) listTables.get(i).get("TABLE_COMMENT"));
+                        createCodeFolw();
+                    }
+                }else{
+                    LOGGER.info("数据库不存在,请确认generator.properties配置文件的generator.dbName配置是否正确");
+                }
+            } else {
+                generatorEntity.setEntityDescription(getTableComment());
+                createCodeFolw();
             }
-        } else {
-            generatorEntity.setEntityDescription(getTableComment());
-            creatModel();
-            createXml();
+    }
+    /**
+     *生成对应文件
+     */
+    public void createCodeFolw()throws Exception{
+        Map<String, Object> modelDate= getTemplateData(getTableComumnModel());
+        if(!modelDate.isEmpty()){
+            //生成entity
+            createEntity(modelDate);
+            //生成Mapper.Xml
+            createMapperXml(modelDate);
+            //生成Mapper_ext.Xml
+            createMapperExt(modelDate);
             LOGGER.info(generatorEntity.getTableName() + "表对应的JavaBean和Mapper文件生成");
+        }else{
+            LOGGER.info("generator.properties配置文件的generator.dbName或者generator.tableName不存在");
         }
     }
 
     /**
      * 生成mybatis mapper文件
-     *
      * @throws Exception
      */
-    public void createXml() throws Exception {
+    public void createMapperXml(Map<String, Object> modelDate) throws Exception {
         String ftlName = "/MybatisMapper.ftl";
         // 生成文件的路径和名称
         String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Mapper.xml";
-        TemplateHelp.creatTemplate(getTemplateData(getTableComumnModel()), ftlName, fileName);
+        TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
+    }
+    /**
+     * 生成mybatis mapper_ext文件
+     * @throws Exception
+     */
+    public void  createMapperExt(Map<String, Object> modelDate)throws Exception {
+        String ftlName = "/MybatisMapper_ext.ftl";
+        // 生成文件的路径和名称
+        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Mapper_ext.xml";
+        TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
 
     /**
      * 生成JavaBean 实体类
-     *
      * @throws Exception
      */
-    public void creatModel() throws Exception {
+    public void createEntity(Map<String, Object> modelDate) throws Exception {
         String ftlName = "/entity.ftl";
         // 生成文件的路径和名称
         String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getEntityPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Po.java";
-        TemplateHelp.creatTemplate(getTemplateData(getTableComumnModel()), ftlName, fileName);
+        TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
 
     /**
-     * 获取所有的表名称
-     *
+     * 获取所有的表名称及描述
      * @return
      */
     public List<Map<String, Object>> getTablesList() throws Exception {
@@ -91,19 +116,20 @@ public class CodeGeneratorService {
         }
         return maps;
     }
-
+    /**
+     * 获取表的描述信息
+     */
     public String getTableComment() {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("tableName", generatorEntity.getTableName());// 表名称
         params.put("dbName", generatorEntity.getDbName());// 数据库名称
         params.put("dbType", generatorEntity.getDbType());//数据库类型
-
         String tableComment = codeDao.getTableComment(params);
         return tableComment;
     }
 
     /**
-     * 获取列数据信息
+     * 获取数据表的列信息
      *
      * @return
      */
@@ -118,7 +144,6 @@ public class CodeGeneratorService {
 
     /**
      * 处理数据表列信息
-     *
      * @return
      */
     public List<Map<String, Object>> getTableComumnModel() {
@@ -164,6 +189,11 @@ public class CodeGeneratorService {
         return clList;
     }
 
+    /**
+     * 组装模板文件中所需的变量信息
+     * @param clList
+     * @return
+     */
     public Map<String, Object> getTemplateData(List<Map<String, Object>> clList) {
         Map<String, Object> data = new HashMap<String, Object>();
         if (clList != null && clList.size() > 0) {

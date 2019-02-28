@@ -25,7 +25,6 @@ public class CometMybaitsGeneratorApplication implements CommandLineRunner {
     public void run(String... args) {
         try {
             codeGeneratorService.createCode();
-            LOGGER.info("生成代码成功");
         } catch (Exception e) {
             LOGGER.info("生成代码失败");
             e.printStackTrace();
