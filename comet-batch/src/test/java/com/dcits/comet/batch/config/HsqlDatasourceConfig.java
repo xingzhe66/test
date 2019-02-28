@@ -1,4 +1,4 @@
-package com.dcits.comet.batch.configration;
+package com.dcits.comet.batch.config;
 
 
 import org.springframework.context.annotation.Configuration;
