@@ -74,7 +74,7 @@ public class CommonJobLauncher implements IJobLauncher {
 
             IStep stepObj = (IStep) context.getBean(jobName);
             //todo 把相关配置放在接口中传入
-            DataSourceTransactionManager dataSourceTransactionManager = context.getBean(DataSourceTransactionManager.class);
+            DataSourceTransactionManager dataSourceTransactionManager = (DataSourceTransactionManager) context.getBean("batchTransactionManager");
             Step step =null;
             if(stepObj instanceof IBatchStep) {
                 //todo spring bean是单例可能有并发问题，后续可能改为new对象。

@@ -32,9 +32,10 @@ public class BatchContextManager {
     public Map<String, BatchContext> getMap() {
         return this.map;
     }
+
     //todo 多线程执行process时会有线程安全问题
     //todo 对于多线程执行部分，最好不put
-    public void put(String jobId,String key,String value) {
+    public void put(String jobId,String key,Object value) {
 
         BatchContext batchContext =this.map.get(jobId);
 
