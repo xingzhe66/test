@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!ELEMENT comet:errorCode (errorCode*)>
+<!ATTLIST comet:errorCode xmlns:comet CDATA #FIXED "http://www.dcits.com/comet/">
+<!ATTLIST comet:errorCode externalSysIndicate CDATA #REQUIRED>
+
+<!ELEMENT errorCode (property*)>
+<!ATTLIST errorCode code CDATA #REQUIRED>
+<!ATTLIST errorCode message CDATA #REQUIRED>
+<!ATTLIST errorCode outCode CDATA #REQUIRED>
+<!ATTLIST errorCode outMessage CDATA #IMPLIED>

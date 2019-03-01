@@ -51,13 +51,15 @@ public class CommonJobLauncher implements IJobLauncher {
         JobExecution jobExecution = null;
         JobExeResult jobExeResult =new JobExeResult();
 
+        int pageSize = jobParam.getPageSize();
+        int chunkSize = jobParam.getChunkSize();
+        String jobId = jobParam.getJobId();
+        int beginIndex = jobParam.getBeginIndex();
+        int endIndex = jobParam.getEndIndex();
+        BatchContext batchContext = jobParam.getBatchContext();
+
         try {
-            int pageSize = jobParam.getPageSize();
-            int chunkSize = jobParam.getChunkSize();
-            String jobId = jobParam.getJobId();
-            int beginIndex = jobParam.getBeginIndex();
-            int endIndex = jobParam.getEndIndex();
-            BatchContext batchContext = jobParam.getBatchContext();
+
 
             if (null == batchContext) {
                 batchContext = new BatchContext();
@@ -140,16 +142,19 @@ public class CommonJobLauncher implements IJobLauncher {
             if ((null != jobExecution) && (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED))) {
                 throw new BatchException(format("%s Job execution failed.", jobName));
             }
+            jobExeResult.setJobExecution(jobExecution);
+            jobExeResult.setJobId(jobParam.getJobId());
+            jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getJobId()));
+            jobExeResult.setJobName(jobParam.getJobName());
+
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new BatchException(format("Job execution failed."));
         } finally {
-
+            //清理context
+            BatchContextManager.getInstance().clear(jobId);
         }
-        jobExeResult.setJobExecution(jobExecution);
-        jobExeResult.setJobId(jobParam.getJobId());
-        jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getJobId()));
-        jobExeResult.setJobName(jobParam.getJobName());
 
         BatchContextManager.getInstance().clear(jobParam.getJobId());
 
