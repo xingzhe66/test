@@ -12,6 +12,11 @@ public class AbstractBatchStep<T,O> implements IBatchStep<T,O> {
 
 
     @Override
+    public int getCountNum() {
+        return 0;
+    }
+
+    @Override
     public List getNodeList() {
         List<String> list = new ArrayList();
         list.add((String)null);

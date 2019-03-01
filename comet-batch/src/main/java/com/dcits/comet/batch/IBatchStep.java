@@ -3,6 +3,14 @@ package com.dcits.comet.batch;
 import java.util.List;
 
 public interface IBatchStep<T,O> extends IStep{
+
+    /**
+     * 获取数据数量
+     * todo
+     */
+    public int getCountNum();
+
+
     /**
      * 获取数据节点
      * todo
