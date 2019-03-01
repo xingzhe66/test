@@ -42,7 +42,7 @@ public class AbstractBatchStep<T,O> implements IBatchStep<T,O> {
 
     @Override
     public O process(T item) {
-        return null;
+        return (O)item;
     }
 
     @Override
