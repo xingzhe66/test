@@ -31,18 +31,13 @@ public abstract class BasePo implements Serializable {
         this.tendId = tendId;
     }
 
-
-
-
     public final List<Order> getOrderBy() {
         return orderBy;
     }
 
-
     final void setOrderBy(List<Order> orderBy) {
         this.orderBy = orderBy;
     }
-
 
     public void addOrder(Order order) {
         if (orderBy == null) {
@@ -51,11 +46,9 @@ public abstract class BasePo implements Serializable {
         orderBy.add(order);
     }
 
-
     public Map<String, Object> getAdditionalParameter() {
         return additionalParameter;
     }
-
 
     public void putAdditionalParameter(String key, Object parameterValue) {
         if (additionalParameter == null) {
