@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * @author wangyun
+ */
 public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     static final Logger LOGGER = LoggerFactory.getLogger(DaoSupportImpl.class);
     private static Map<String, Map<String, String>> propertyColumnMapper = new HashMap();
@@ -25,7 +28,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         Collection<ResultMap> rms = this.getSqlSession().getConfiguration().getResultMaps();
         Iterator iter = rms.iterator();
 
-        while(true) {
+        while (true) {
             Object object;
             do {
                 if (!iter.hasNext()) {
@@ -33,15 +36,15 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
                 }
 
                 object = iter.next();
-            } while(!(object instanceof ResultMap));
+            } while (!(object instanceof ResultMap));
 
-            ResultMap rm = (ResultMap)object;
+            ResultMap rm = (ResultMap) object;
             List<ResultMapping> list = rm.getResultMappings();
-            Map<String, String> map = new HashMap();
-            Iterator i$ = list.iterator();
+            Map<String, String> map = new HashMap(10);
+            Iterator it = list.iterator();
 
-            while(i$.hasNext()) {
-                ResultMapping r = (ResultMapping)i$.next();
+            while (it.hasNext()) {
+                ResultMapping r = (ResultMapping) it.next();
                 map.put(r.getProperty(), r.getColumn());
             }
 
@@ -54,32 +57,39 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     }
 
 
+    @Override
     public <T extends BasePo> Integer count(T entity) {
         String className = entity.getClass().getName();
-        return (Integer)this.getSqlSession().selectOne(className + ".count", entity);
+        return (Integer) this.getSqlSession().selectOne(className + ".count", entity);
     }
 
+    @Override
     public <T extends BasePo> Integer count(String statementPostfix, T object) {
-        return (Integer)this.getSqlSession().selectOne(statementPostfix, object);
+        return (Integer) this.getSqlSession().selectOne(statementPostfix, object);
     }
 
+    @Override
     public Integer count(String statementPostfix, Map<String, Object> parameter) {
-        return (Integer)this.getSqlSession().selectOne(statementPostfix, parameter);
+        return (Integer) this.getSqlSession().selectOne(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> T selectOne(T entity) {
         String className = entity.getClass().getName();
-        return (T)this.getSqlSession().selectOne(className + ".selectOne", entity);
+        return (T) this.getSqlSession().selectOne(className + ".selectOne", entity);
     }
 
+    @Override
     public <T extends BasePo> T selectOne(String statementPostfix, T object) {
-        return (T)this.getSqlSession().selectOne(statementPostfix, object);
+        return (T) this.getSqlSession().selectOne(statementPostfix, object);
     }
 
+    @Override
     public <T extends BasePo> T selectOne(String statementPostfix, Map<String, Object> parameter) {
-        return (T)this.getSqlSession().selectOne(statementPostfix, parameter);
+        return (T) this.getSqlSession().selectOne(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> T selectForUpdate(T parameter) {
         BasePo result;
         try {
@@ -92,6 +102,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return (T) result;
     }
 
+    @Override
     public <T extends BasePo> T selectForUpdate(String statementPostfix, T parameter) {
         BasePo result;
         try {
@@ -104,78 +115,93 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return (T) result;
     }
 
+    @Override
     public <T extends BasePo> int insert(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().insert(className + ".insert", entity);
     }
 
+    @Override
     public <T extends BasePo> int insert(List<T> list) {
         int i = 0;
 
         BasePo bp;
-        for(Iterator i$ = list.iterator(); i$.hasNext(); i += this.insert(bp)) {
-            bp = (BasePo)i$.next();
+        for (Iterator it = list.iterator(); it.hasNext(); i += this.insert(bp)) {
+            bp = (BasePo) it.next();
         }
 
         return i;
     }
 
+    @Override
     public <T extends BasePo> int update(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().update(className + ".update", entity);
     }
 
+    @Override
     public <T extends BasePo> int update(T setParameter, T whereParameter) {
         String className = setParameter.getClass().getName();
         return this.update(className + ".updateByEntity", setParameter, whereParameter);
     }
 
+    @Override
     public <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter) {
-        Map<String, Object> parameter = new HashMap();
+        Map<String, Object> parameter = new HashMap(2);
         parameter.put("s", setParameter);
         parameter.put("w", whereParameter);
-        return this.update((String)statementPostfix, (Map)parameter);
+        return this.update(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> int update(String statementPostfix, T entity) {
         return this.getSqlSession().update(statementPostfix, entity);
     }
 
+    @Override
     public int update(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().update(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> int delete(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().delete(className + ".delete", entity);
     }
 
+    @Override
     public <T extends BasePo> int delete(String statementPostfix, T entity) {
         return this.getSqlSession().update(statementPostfix, entity);
     }
 
+    @Override
     public int delete(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().update(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> List<T> selectList(T entity) {
         String statementPostfix = entity.getClass().getName() + ".selectList";
         return this.selectList(statementPostfix, entity);
     }
 
+    @Override
     public <T extends BasePo> List<T> selectList(String statementPostfix, T entity) {
         return this.getSqlSession().selectList(statementPostfix, entity);
     }
 
+    @Override
     public <T extends BasePo> List<T> selectList(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().selectList(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> List<T> selectList(T entity, int pageIndex, int pageSize) {
         String statementPostfix = entity.getClass().getName() + ".selectList";
         return this.selectList(statementPostfix, entity, pageIndex, pageSize);
     }
 
+    @Override
     public <T extends BasePo> List<T> selectList(String statementPostfix, T entity, int pageIndex, int pageSize) {
         Boolean needTotalFlag = TotalrecordHelper.isNeadTotalRowCount();
 
@@ -190,6 +216,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return result;
     }
 
+    @Override
     public <T extends BasePo> List<T> selectList(String statementPostfix, Map<String, Object> parameter, int pageIndex, int pageSize) {
         Boolean needTotalFlag = TotalrecordHelper.isNeadTotalRowCount();
 
@@ -204,11 +231,13 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return result;
     }
 
+    @Override
     public <T extends BasePo> QueryResult<T> selectQueryResult(T entity, int pageIndex, int pageSize) {
         String statementPostfix = entity.getClass().getName() + ".selectList";
         return this.selectQueryResult(statementPostfix, entity, pageIndex, pageSize);
     }
 
+    @Override
     public <T extends BasePo> QueryResult<T> selectQueryResult(String statementPostfix, T entity, int pageIndex, int pageSize) {
         Boolean needTotalFlag = TotalrecordHelper.isNeadTotalRowCount();
 
@@ -225,6 +254,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return result;
     }
 
+    @Override
     public <T extends BasePo> QueryResult<T> selectQueryResult(String statementPostfix, Map<String, Object> parameter, int pageIndex, int pageSize) {
         Boolean needTotalFlag = TotalrecordHelper.isNeadTotalRowCount();
 
