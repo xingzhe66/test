@@ -34,9 +34,11 @@ public class BatchBeanFactory {
         readerBuider.addPropertyReference("batchStep", name); //因为实例还未生成，所以只定义引用；
         //todo 把相关配置放在接口中传入
         readerBuider.addPropertyValue("pageSize", pageSize);
-        readerBuider.addPropertyValue("beginIndex", beginIndex);
-        readerBuider.addPropertyValue("endIndex", endIndex);
-        readerBuider.setInitMethodName("init");
+        if(beginIndex>=0&&endIndex>0) {
+            readerBuider.addPropertyValue("beginIndex", beginIndex);
+            readerBuider.addPropertyValue("endIndex", endIndex);
+            readerBuider.setInitMethodName("init");
+        }
         //.addPropertyValue("batch", batch);
         readerBuider.setScope("step");   //作用域为step，为了让jobParameters注解生效
         //将实例注册spring容器中   bs 等同于  id配置

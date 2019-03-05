@@ -19,6 +19,7 @@ public class GeneratorEntity {
     private String dbName;
     private String dbType;
     private String isCrateAllTable;
+    private String iscreateMapperExt;
 
 
 
@@ -116,6 +117,14 @@ public class GeneratorEntity {
 
     public void setIsCrateAllTable(String isCrateAllTable) {
         this.isCrateAllTable = isCrateAllTable;
+    }
+
+    public String getIsCreateMapperExt() {
+        return iscreateMapperExt;
+    }
+
+    public void setIsCreateMapperExt(String iscreateMapperExt) {
+        this.iscreateMapperExt = iscreateMapperExt;
     }
 
     @Override

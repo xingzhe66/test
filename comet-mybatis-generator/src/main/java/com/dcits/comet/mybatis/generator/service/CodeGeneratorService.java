@@ -61,7 +61,10 @@ public class CodeGeneratorService {
             //生成Mapper.Xml
             createMapperXml(modelDate);
             //生成Mapper_ext.Xml
-            createMapperExt(modelDate);
+            String iscreateMapperExt = generatorEntity.getIsCreateMapperExt();
+            if (!PbUtils.isEmpty(iscreateMapperExt) && "true".equals(iscreateMapperExt.toLowerCase())) {
+                createMapperExt(modelDate);
+            }
             LOGGER.info(generatorEntity.getTableName() + "表对应的JavaBean和Mapper文件生成");
         }else{
             LOGGER.info("generator.properties配置文件的generator.dbName或者generator.tableName不存在");
