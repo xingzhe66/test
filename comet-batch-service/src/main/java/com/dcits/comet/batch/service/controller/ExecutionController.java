@@ -75,7 +75,7 @@ public class ExecutionController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BatchServiceException("批量执行异常",e);
+            throw new BatchServiceException(e.getMessage(),e);
         } finally {
 
         }

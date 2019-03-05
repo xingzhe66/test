@@ -150,7 +150,7 @@ public class CommonJobLauncher implements IJobLauncher {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BatchException(format("Job execution failed."));
+            new BatchException(e.getMessage());
         } finally {
             //清理context
             BatchContextManager.getInstance().clear(jobId);
