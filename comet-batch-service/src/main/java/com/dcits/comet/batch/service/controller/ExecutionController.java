@@ -62,6 +62,7 @@ public class ExecutionController {
             beanCopier2.copy(exeInput,exeOutput,null);
 
             jobExeResult=commonJobLauncher.run(exeInput.getJobName(),jobParam);
+
             if(null!=jobExeResult) {
                 exeOutput.setBatchContext(jobExeResult.getBatchContext());
                 exeOutput.setCreateTime(jobExeResult.getJobExecution().getCreateTime());
@@ -76,8 +77,6 @@ public class ExecutionController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BatchServiceException(e.getMessage(),e);
-        } finally {
-
         }
         exeOutput.setServiceStatus(BatchServiceConstant.SERVICE_STATUS_SUCCESS);
         return exeOutput;

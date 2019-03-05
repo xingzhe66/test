@@ -130,17 +130,19 @@ public class CommonJobLauncher implements IJobLauncher {
 
 
             } catch (JobExecutionAlreadyRunningException e) {
-                throw new BatchException(e.getMessage());
+                throw e;
             } catch (JobRestartException e) {
-                throw new BatchException(e.getMessage());
+                throw e;
             } catch (JobInstanceAlreadyCompleteException e) {
-                throw new BatchException(e.getMessage());
+                throw e;
             } catch (JobParametersInvalidException e) {
-                throw new BatchException(e.getMessage());
+                throw e;
+            } catch (Exception e) {
+                throw e;
             }
 
             if ((null != jobExecution) && (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED))) {
-                throw new BatchException(format("%s Job execution failed.", jobName));
+                throw new BatchException("job执行返回值为空，jobId："+jobId);
             }
             jobExeResult.setJobExecution(jobExecution);
             jobExeResult.setJobId(jobParam.getJobId());
@@ -150,7 +152,7 @@ public class CommonJobLauncher implements IJobLauncher {
 
         } catch (Exception e) {
             e.printStackTrace();
-            new BatchException(e.getMessage());
+            throw new BatchException(e.getMessage(),e);
         } finally {
             //清理context
             BatchContextManager.getInstance().clear(jobId);
