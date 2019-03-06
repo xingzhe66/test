@@ -6,6 +6,8 @@ import com.dcits.comet.commons.exception.BusinessException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -18,7 +20,7 @@ import java.util.Date;
  * @author wang.yq
  */
 public final class DateUtil {
-
+	private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 	public static final String PATTERN_ISO_DATE = "yyyy-MM-dd";
 	public static final String PATTERN_ISO_TIME = "HH:mm:ss";
 	public static final String PATTERN_ISO_DATETIME = "yyyy-MM-dd HH:mm:ss";
@@ -74,11 +76,20 @@ public final class DateUtil {
 	 * @return Date 解析后的日期类型
 	 * @throws ParseException
 	 */
-	public static Date parseDate(String strDate) throws ParseException {
+	public static Date parseDate(String strDate)  {
+		Date date=null;
 		if(StringUtils.isEmpty(strDate)){
 			return null;
 		}
-		return DateUtils.parseDate(strDate, PATTERNS);
+		try {
+			date= DateUtils.parseDate(strDate, PATTERNS);
+		} catch (ParseException e) {
+			if (logger.isWarnEnabled()) {
+				logger.warn(StringUtil.getStackTrace(e));
+			}
+
+		}
+		return date;
 	}
 
 	/**
@@ -88,12 +99,20 @@ public final class DateUtil {
 	 * @return Date 日期类型
 	 * @throws ParseException
 	 */
-	public static Date parseDate(String strDate, String... patterns) throws ParseException {
+	public static Date parseDate(String strDate, String... patterns)  {
+		Date date=null;
 		if(StringUtils.isEmpty(strDate)){
 			return null;
 		}
 
-		return DateUtils.parseDate(strDate, patterns);
+		try {
+			 date= DateUtils.parseDate(strDate, patterns);
+		} catch (ParseException e) {
+			if (logger.isWarnEnabled()) {
+				logger.warn(StringUtil.getStackTrace(e));
+			}
+		}
+		return date;
 	}
 
 	/**
@@ -118,13 +137,8 @@ public final class DateUtil {
 
 		Calendar calst = Calendar.getInstance();;
 		Calendar caled = Calendar.getInstance();
-		try{
-			calst.setTime(parseDate("yyyyMMdd",date1));
-			caled.setTime(parseDate("yyyyMMdd",date2));
-		}catch(ParseException e){
-			e.printStackTrace();
-			throw new BusinessException("日期转化异常");
-		}
+		calst.setTime(parseDate("yyyyMMdd",date1));
+		caled.setTime(parseDate("yyyyMMdd",date2));
 		//设置时间为0时
 		calst.set(Calendar.HOUR_OF_DAY, 0);
 		calst.set(Calendar.MINUTE, 0);
