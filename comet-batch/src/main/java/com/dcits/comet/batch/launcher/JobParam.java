@@ -4,9 +4,9 @@ import com.dcits.comet.batch.param.BatchContext;
 
 public class JobParam {
 
-    private String jobName;
+    private String stepName;
 
-    private String jobId;
+    private String exeId;
 
     private int pageSize;
 
@@ -22,20 +22,20 @@ public class JobParam {
 
     private BatchContext batchContext;
 
-    public String getJobName() {
-        return jobName;
+    public String getStepName() {
+        return stepName;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    public void setStepName(String stepName) {
+        this.stepName = stepName;
     }
 
-    public String getJobId() {
-        return jobId;
+    public String getExeId() {
+        return exeId;
     }
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
+    public void setExeId(String exeId) {
+        this.exeId = exeId;
     }
 
     public Integer getPageSize() {

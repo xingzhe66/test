@@ -8,7 +8,6 @@ import com.dcits.comet.batch.step.StepParam;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.*;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.SimpleJob;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -21,7 +20,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
-import static java.lang.String.format;
 
 /**
 
@@ -38,13 +36,13 @@ public class CommonJobLauncher implements IJobLauncher {
     ConfigurableApplicationContext context;
 
 
-    public JobExeResult run(String jobName, JobParam jobParam) {
+    public JobExeResult run(String stepName, JobParam jobParam) {
 
         JobExecution jobExecution = null;
 
         JobExeResult jobExeResult =new JobExeResult();
 
-        String jobId = jobParam.getJobId();
+        String exeId = jobParam.getExeId();
 
         BatchContext batchContext = jobParam.getBatchContext();
 
@@ -55,7 +53,7 @@ public class CommonJobLauncher implements IJobLauncher {
                 batchContext = new BatchContext();
             }
 
-            JobParameters jobParameters = createJobParams(jobId, jobName);
+            JobParameters jobParameters = createJobParams(exeId, stepName);
 
 
             //todo 因为reader等的scope设置为step，所以必须在reader等实例化之前，有一个Step，否则报错。spring batch的坑！
@@ -65,22 +63,20 @@ public class CommonJobLauncher implements IJobLauncher {
             StepParam stepParam=new StepParam();
             BeanCopier beanCopier = BeanCopier.create(JobParam.class, StepParam.class, false);
             beanCopier.copy(jobParam,stepParam,null);
-            //在springbatch中，忽略job层，一个job一个step，jobName和stepName一致
-            stepParam.setStepName(jobParam.getJobName());
 
             Step step = StepFactory.build(stepParam);
 
             SimpleJob job = new SimpleJob();
-            job.setName("job_" + jobName);
+            job.setName("job_" + stepName);
             job.setJobRepository(jobRepository);
-
             job.addStep(step);
 
             JobLauncher jobLauncher = context.getBean(JobLauncher.class);
 
             try {
 
-                BatchContextManager.getInstance().putBatchContext(jobId, batchContext);
+                BatchContextManager.getInstance().putBatchContext(exeId, batchContext);
+
                 jobExecution = jobLauncher.run(job, jobParameters);
 
 
@@ -97,12 +93,12 @@ public class CommonJobLauncher implements IJobLauncher {
             }
 
             if ((null != jobExecution) && (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED))) {
-                throw new BatchException("job执行返回值为空，jobId："+jobId);
+                throw new BatchException("执行返回值为空，exeId："+exeId);
             }
             jobExeResult.setJobExecution(jobExecution);
-            jobExeResult.setJobId(jobParam.getJobId());
-            jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getJobId()));
-            jobExeResult.setJobName(jobParam.getJobName());
+            jobExeResult.setJobId(jobParam.getExeId());
+            jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getExeId()));
+            jobExeResult.setJobName(jobParam.getStepName());
 
 
         } catch (Exception e) {
@@ -110,20 +106,20 @@ public class CommonJobLauncher implements IJobLauncher {
             throw new BatchException(e.getMessage(),e);
         } finally {
             //清理context
-            BatchContextManager.getInstance().clear(jobId);
+            BatchContextManager.getInstance().clear(exeId);
         }
 
-        BatchContextManager.getInstance().clear(jobParam.getJobId());
+        BatchContextManager.getInstance().clear(jobParam.getExeId());
 
         return jobExeResult;
     }
 
 
-    private JobParameters createJobParams(String jobId, String jobName) {
+    private JobParameters createJobParams(String exeId, String stepName) {
         return new JobParametersBuilder()
 //                    .addDate("date", new Date())
-                .addString("jobId", jobId)
-                .addString("jobName", jobName)
+                .addString("exeId", exeId)
+                .addString("stepName", stepName)
                 .toJobParameters()
                 ;
     }

@@ -37,8 +37,6 @@ public class ExecutionController {
             JobParam jobParam=new JobParam();
             BeanCopier beanCopier = BeanCopier.create(ExeInput.class, JobParam.class, false);
             beanCopier.copy(exeInput,jobParam,null);
-            jobParam.setJobId(exeInput.getExeId());
-            jobParam.setJobName(exeInput.getStepName());
 
             BeanCopier beanCopier2 = BeanCopier.create(ExeInput.class, ExeOutput.class, false);
             beanCopier2.copy(exeInput,exeOutput,null);
