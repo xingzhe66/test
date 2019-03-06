@@ -5,7 +5,7 @@ import com.dcits.comet.batch.param.BatchContextManager;
 
 public class BatchContextTool {
 
-    private static final String JOBID_NAME="jobId";
+    private static final String JOBID_NAME="exeId";
 
 //    public static void put(String jobId,String key,Object value){
 //        BatchContextManager.getInstance().put(jobId,key,value);

@@ -7,8 +7,14 @@ import com.dcits.comet.batch.service.constant.BatchServiceConstant;
 import com.dcits.comet.batch.service.exception.BatchServiceException;
 import com.dcits.comet.batch.service.model.ExeInput;
 import com.dcits.comet.batch.service.model.ExeOutput;
+import com.dcits.comet.batch.service.model.QueryInput;
+import com.dcits.comet.batch.service.model.QueryOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,6 +29,8 @@ public class ExecutionController {
     ConfigurableApplicationContext context;
     @Autowired
     CommonJobLauncher commonJobLauncher;
+    @Autowired
+    private JobRepository jobRepository;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionController.class);
@@ -62,5 +70,30 @@ public class ExecutionController {
         return exeOutput;
     }
 
+    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    public QueryOutput exe(@RequestBody QueryInput queryInput) {
+        String stepName=queryInput.getStepName();
+        String exeId=queryInput.getExeId();
+        JobParameters jobParameter= new JobParametersBuilder()
+//                    .addDate("date", new Date())
+                .addString("exeId", exeId)
+                .addString("stepName", stepName)
+                .toJobParameters()
+        ;
+        JobExecution jobExecution = jobRepository.getLastJobExecution("job_" + stepName, jobParameter);
+        if(jobExecution==null){
+            throw new BatchServiceException("step执行信息不存在");
+        }
+
+        QueryOutput queryOutput=new QueryOutput();
+
+        BeanCopier beanCopier2 = BeanCopier.create(JobExecution.class, QueryOutput.class, false);
+        beanCopier2.copy(jobExecution,queryOutput,null);
+        queryOutput.setExeId(exeId);
+        queryOutput.setStepName(queryInput.getStepName());
+        return queryOutput;
+
+
+    }
 
 }
