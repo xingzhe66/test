@@ -2,6 +2,7 @@ package com.dcits.comet.commons.utils;
 
 
 
+import com.dcits.comet.commons.exception.BusinessException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -105,6 +106,38 @@ public final class DateUtil {
 		long time = endDate.getTime() - startDate.getTime();
 		return new BigDecimal(time / 1000 / 60 / 60 / 24);
 	}
+
+     /* @param date1 <String>
+     * @param date2 <String>
+     * @return int
+     * @throws ParseException
+     */
+	public static int getDateSpace(String date1, String date2) {
+
+		int result = 0;
+
+		Calendar calst = Calendar.getInstance();;
+		Calendar caled = Calendar.getInstance();
+		try{
+			calst.setTime(parseDate("yyyyMMdd",date1));
+			caled.setTime(parseDate("yyyyMMdd",date2));
+		}catch(ParseException e){
+			e.printStackTrace();
+			throw new BusinessException("日期转化异常");
+		}
+		//设置时间为0时
+		calst.set(Calendar.HOUR_OF_DAY, 0);
+		calst.set(Calendar.MINUTE, 0);
+		calst.set(Calendar.SECOND, 0);
+		caled.set(Calendar.HOUR_OF_DAY, 0);
+		caled.set(Calendar.MINUTE, 0);
+		caled.set(Calendar.SECOND, 0);
+		//得到两个日期相差的天数
+		int days = ((int)(caled.getTime().getTime()/1000)-(int)(calst.getTime().getTime()/1000))/3600/24;
+
+		return days;
+	}
+
 
 	/**
 	 * 获取给定日期的日
