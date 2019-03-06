@@ -2,6 +2,8 @@ package com.dcits.comet.commons.utils;
 
 import com.dcits.comet.commons.exception.CometPlatformException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -540,5 +542,18 @@ public class StringUtil {
             return sb.toString();
         }
         return args[0];
+    }
+    public static String getStackTrace(Throwable t) {
+        if (t == null) {
+            return "NULL";
+        }
+        StringBuffer b = new StringBuffer();
+        b.append(t.getMessage());
+        b.append("\n");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        t.printStackTrace(ps);
+        b.append(baos.toString());
+        return b.toString();
     }
 }
