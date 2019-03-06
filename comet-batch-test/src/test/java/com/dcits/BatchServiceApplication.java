@@ -1,9 +1,6 @@
 package com.dcits;
 
-import com.dcits.comet.batch.IBatchStep;
-import com.dcits.comet.batch.ITaskletStep;
-import com.dcits.comet.batch.SimpleBatchExecutor;
-import com.dcits.comet.batch.SimpleTaskletStepExecutor;
+import com.dcits.comet.batch.IBStep;
 import com.dcits.comet.batch.processor.Processor;
 import com.dcits.comet.batch.reader.Reader;
 import com.dcits.comet.batch.writer.Writer;
@@ -42,7 +39,7 @@ public class BatchServiceApplication {
 
         try {
             ConfigurableApplicationContext context = SpringApplication.run(BatchServiceApplication.class, args);
-            String[] names = context.getBeanNamesForType(IBatchStep.class);
+            String[] names = context.getBeanNamesForType(IBStep.class);
             JobParameters jobParameters=createJobParams();
             DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) context.getBeanFactory();
 
@@ -81,7 +78,7 @@ public class BatchServiceApplication {
 
                 StepSynchronizationManager.register(new StepExecution("step_" + name, new JobExecution(123L)));
 
-                IBatchStep batchStep = (IBatchStep) context.getBean(name);
+                IBStep batchStep = (IBStep) context.getBean(name);
                 ItemReader reader = (ItemReader) context.getBean("reader_" + name);
                 ItemWriter writer = (ItemWriter) context.getBean("writer_" + name);
                 ItemProcessor processor = (ItemProcessor) context.getBean("processor_" + name);
@@ -142,7 +139,7 @@ public class BatchServiceApplication {
 //                jobParameters=a.getJobParameters();
             }
 
-//            String[] taskletnames = context.getBeanNamesForType(ITaskletStep.class);
+//            String[] taskletnames = context.getBeanNamesForType(ITStep.class);
 //
 //            for (String name : taskletnames) {
 //

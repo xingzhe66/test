@@ -1,6 +1,5 @@
 package com.dcits.comet.batch;
 
-import com.dcits.comet.batch.helper.JobParameterHelper;
 import com.dcits.comet.batch.holder.JobContextHolder;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.yunyun.entity.SysLog;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Service("dBatchStep")
 //@StepScope
-public class DBatchStep extends AbstractBatchStep<SysLog, SysLog> {
+public class DBatchStep extends AbstractBStep<SysLog, SysLog> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(DBatchStep.class);
 

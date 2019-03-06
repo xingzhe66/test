@@ -1,6 +1,6 @@
 package com.dcits.comet.batch.reader;
 
-import com.dcits.comet.batch.IBatchStep;
+import com.dcits.comet.batch.IBStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Reader extends AbstractPagingReader {
     protected static final Logger LOGGER = LoggerFactory.getLogger(Reader.class);
 
-    private IBatchStep batchStep;
+    private IBStep batchStep;
 
     private int beginIndex;
 
@@ -20,7 +20,7 @@ public class Reader extends AbstractPagingReader {
         this.beginIndex=beginIndex;
     }
 
-    public void setBatchStep(IBatchStep batchStep) {
+    public void setBatchStep(IBStep batchStep) {
         this.batchStep = batchStep;
     }
 

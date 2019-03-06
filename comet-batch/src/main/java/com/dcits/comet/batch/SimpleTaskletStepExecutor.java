@@ -1,7 +1,6 @@
 package com.dcits.comet.batch;
 
 import com.dcits.comet.batch.holder.SpringContextHolder;
-import com.fasterxml.jackson.core.JsonParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
@@ -12,10 +11,6 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.batch.core.scope.context.StepSynchronizationManager;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -58,7 +53,7 @@ public class SimpleTaskletStepExecutor {
             LOGGER.warn("数据库事务管理器未配置！！！");
         }
 
-        ITaskletStep taskletStep = (ITaskletStep) context.getBean(jobname);
+        ITStep taskletStep = (ITStep) context.getBean(jobname);
 
         Step step = stepBuilders.get("step_" + jobname)
                 .transactionManager(dataSourceTransactionManager)

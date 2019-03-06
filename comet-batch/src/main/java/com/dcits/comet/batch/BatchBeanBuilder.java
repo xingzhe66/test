@@ -10,7 +10,6 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.annotation.Configuration;
 
 import static java.lang.String.format;
 
@@ -36,7 +35,7 @@ public class BatchBeanBuilder implements BeanFactoryPostProcessor {
         //Bean的实例工厂
         DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) configurableListableBeanFactory;
         //找到IBatch的bean定义名称数组；
-        String[] names = dbf.getBeanNamesForType(IBatchStep.class);
+        String[] names = dbf.getBeanNamesForType(IBStep.class);
 
         for (String name : names) {
 

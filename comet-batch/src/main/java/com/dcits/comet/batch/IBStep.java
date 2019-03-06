@@ -2,7 +2,7 @@ package com.dcits.comet.batch;
 
 import java.util.List;
 
-public interface IBatchStep<T,O> extends IStep{
+public interface IBStep<T,O> extends IStep{
 
     /**
      * 获取数据数量

@@ -1,6 +1,6 @@
 package com.dcits.comet.batch.processor;
 
-import com.dcits.comet.batch.IBatchStep;
+import com.dcits.comet.batch.IBStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -11,9 +11,9 @@ public class Processor implements ItemProcessor{
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(Processor.class);
 
-    private IBatchStep batchStep;
+    private IBStep batchStep;
 
-    public void setBatchStep(IBatchStep batchStep) {
+    public void setBatchStep(IBStep batchStep) {
         this.batchStep = batchStep;
     }
 

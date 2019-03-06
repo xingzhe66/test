@@ -57,7 +57,7 @@ public class SimpleBatchExecutor {
 //        StepSynchronizationManager.register(new StepExecution("step_" + jobname, new JobExecution(123L)));
 //
 //
-//        IBatchStep batchStep = (IBatchStep) context.getBean(jobname);
+//        IBStep batchStep = (IBStep) context.getBean(jobname);
 //        ItemReader reader = (ItemReader) context.getBean("reader_" + jobname);
 //        ItemWriter writer = (ItemWriter) context.getBean("writer_" + jobname);
 //        ItemProcessor processor = (ItemProcessor) context.getBean("processor_" + jobname);

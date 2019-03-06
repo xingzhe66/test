@@ -1,9 +1,6 @@
 package com.dcits.comet.batch.service.test.batchstep;
 
-import com.dcits.comet.batch.AbstractBatchStep;
-import com.dcits.comet.batch.helper.JobParameterHelper;
-import com.dcits.comet.batch.holder.JobContextHolder;
-import com.dcits.comet.batch.param.BatchContextManager;
+import com.dcits.comet.batch.AbstractBStep;
 import com.dcits.comet.batch.service.test.entity.SysLog;
 import com.dcits.comet.dao.DaoSupport;
 import org.slf4j.Logger;
@@ -15,7 +12,7 @@ import java.util.List;
 
 @Service("cBatchStep")
 //@StepScope
-public class CBatchStep extends AbstractBatchStep<SysLog,SysLog> {
+public class CBatchStep extends AbstractBStep<SysLog,SysLog> {
     protected static final Logger LOGGER = LoggerFactory.getLogger(CBatchStep.class);
     @Resource
     public DaoSupport daoSupport;

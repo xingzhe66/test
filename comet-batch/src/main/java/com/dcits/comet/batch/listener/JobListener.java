@@ -1,12 +1,12 @@
 package com.dcits.comet.batch.listener;
 
-import com.dcits.comet.batch.IBatchStep;
+import com.dcits.comet.batch.IBStep;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 
 public class JobListener implements JobExecutionListener {
 
-    private IBatchStep batchStep;
+    private IBStep batchStep;
 
 
     @Override
@@ -19,7 +19,7 @@ public class JobListener implements JobExecutionListener {
 
     }
 
-    public void setBatchStep(IBatchStep batchStep) {
+    public void setBatchStep(IBStep batchStep) {
         this.batchStep = batchStep;
     }
 }

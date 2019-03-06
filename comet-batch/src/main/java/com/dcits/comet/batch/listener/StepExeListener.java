@@ -1,13 +1,13 @@
 package com.dcits.comet.batch.listener;
 
-import com.dcits.comet.batch.IBatchStep;
+import com.dcits.comet.batch.IBStep;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 
 public class StepExeListener implements StepExecutionListener {
 
-    private IBatchStep batchStep;
+    private IBStep batchStep;
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
@@ -24,7 +24,7 @@ public class StepExeListener implements StepExecutionListener {
         return stepExecution.getExitStatus();
     }
 
-    public void setBatchStep(IBatchStep batchStep) {
+    public void setBatchStep(IBStep batchStep) {
         this.batchStep = batchStep;
     }
 }

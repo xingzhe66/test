@@ -1,9 +1,9 @@
 package com.dcits.comet.batch.step;
 
 import com.dcits.comet.batch.BatchBeanFactory;
-import com.dcits.comet.batch.IBatchStep;
+import com.dcits.comet.batch.IBStep;
 import com.dcits.comet.batch.IStep;
-import com.dcits.comet.batch.ITaskletStep;
+import com.dcits.comet.batch.ITStep;
 import com.dcits.comet.batch.constant.BatchConstant;
 import com.dcits.comet.batch.exception.BatchException;
 import com.dcits.comet.batch.holder.SpringContextHolder;
@@ -13,7 +13,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.step.tasklet.TaskletStep;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -42,14 +41,14 @@ public class StepFactory {
 
         DataSourceTransactionManager dataSourceTransactionManager = (DataSourceTransactionManager) context.getBean("batchTransactionManager");
         Step step = null;
-        if (stepObj instanceof IBatchStep) {
+        if (stepObj instanceof IBStep) {
 
             ItemReader reader = BatchBeanFactory.getNewReader(stepName, pageSize, beginIndex, endIndex);
             ItemWriter writer = BatchBeanFactory.getNewWriter(stepName);
             ItemProcessor processor = BatchBeanFactory.getNewProcessor(stepName);
 
             StepExeListener stepListener = new StepExeListener();
-            stepListener.setBatchStep((IBatchStep) stepObj);
+            stepListener.setBatchStep((IBStep) stepObj);
 
             if (null == dataSourceTransactionManager) {
                 LOGGER.warn("请配置数据库事务管理器！");
@@ -88,8 +87,8 @@ public class StepFactory {
                         .build();
             }
 
-        } else if (stepObj instanceof ITaskletStep) {
-            ITaskletStep taskletStep = (ITaskletStep) stepObj;
+        } else if (stepObj instanceof ITStep) {
+            ITStep taskletStep = (ITStep) stepObj;
             step = stepBuilders.get("step_" + stepName)
                     .transactionManager(dataSourceTransactionManager)
                     .tasklet(taskletStep)

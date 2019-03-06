@@ -1,6 +1,5 @@
 package com.dcits.comet.batch;
 
-import com.dcits.comet.batch.helper.JobParameterHelper;
 import com.dcits.comet.batch.holder.JobContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EBatch implements ITaskletStep{
+public class EBatch implements ITStep {
     protected static final Logger LOGGER = LoggerFactory.getLogger(EBatch.class);
 
 

@@ -72,7 +72,7 @@ public class ABatchConfig {
 //
 //
 //    @Resource(name="cBatch")
-//    IBatchStep cBatch;
+//    IBStep cBatch;
 //    @Bean
 //    @StepScope
 //    public ItemReader reader_cBatch() {

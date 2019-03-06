@@ -7,7 +7,6 @@ import com.dcits.comet.batch.writer.Writer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -54,7 +53,7 @@ public class BatchBeanFactory {
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
 
         Reader reader=new Reader();
-        reader.setBatchStep((IBatchStep) context.getBean(stepName));
+        reader.setBatchStep((IBStep) context.getBean(stepName));
         reader.setPageSize(pageSize);
         if(beginIndex>=0&&endIndex>0) {
             reader.setBeginIndex(beginIndex);
@@ -66,14 +65,14 @@ public class BatchBeanFactory {
     public static ItemProcessor getNewProcessor(String stepName){
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
         Processor processor=new Processor();
-        processor.setBatchStep((IBatchStep) context.getBean(stepName));
+        processor.setBatchStep((IBStep) context.getBean(stepName));
         return processor;
     }
 
     public static ItemWriter getNewWriter(String stepName){
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
         Writer writer =new Writer();
-        writer.setBatchStep((IBatchStep) context.getBean(stepName));
+        writer.setBatchStep((IBStep) context.getBean(stepName));
         return writer;
     }
 

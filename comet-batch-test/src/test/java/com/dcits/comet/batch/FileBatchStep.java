@@ -1,6 +1,5 @@
 package com.dcits.comet.batch;
 
-import com.dcits.comet.batch.helper.JobParameterHelper;
 import com.dcits.comet.batch.holder.JobContextHolder;
 import com.dcits.comet.batch.util.FileUtil;
 import com.dcits.comet.dao.DaoSupport;
@@ -12,11 +11,10 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("fileBatchStep")
-public class FileBatchStep extends AbstractBatchStep<FileLog,SysLog> {
+public class FileBatchStep extends AbstractBStep<FileLog,SysLog> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(DBatchStep.class);
 

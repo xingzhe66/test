@@ -5,7 +5,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
 
-public abstract class AbstractTaskletStep implements ITaskletStep{
+public abstract class AbstractTStep implements ITStep {
 
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {

@@ -1,7 +1,6 @@
 package com.dcits.comet.batch.writer;
 
-import com.dcits.comet.batch.IBatchStep;
-import com.dcits.comet.batch.helper.JobParameterHelper;
+import com.dcits.comet.batch.IBStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
@@ -13,10 +12,10 @@ public class Writer implements ItemWriter {
     protected static final Logger LOGGER = LoggerFactory.getLogger(Writer.class);
 
 
-    private IBatchStep batchStep;
+    private IBStep batchStep;
 
 
-    public void setBatchStep(IBatchStep batchStep) {
+    public void setBatchStep(IBStep batchStep) {
         this.batchStep = batchStep;
     }
 

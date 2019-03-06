@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbstractBatchStep<T,O> implements IBatchStep<T,O> {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractBatchStep.class);
+public class AbstractBStep<T,O> implements IBStep<T,O> {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractBStep.class);
 
 
     @Override

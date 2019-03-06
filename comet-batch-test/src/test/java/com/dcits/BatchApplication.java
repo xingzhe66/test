@@ -1,8 +1,8 @@
 package com.dcits;
 
-import com.dcits.comet.batch.ITaskletStep;
+import com.dcits.comet.batch.ITStep;
 import com.dcits.comet.batch.SimpleBatchExecutor;
-import com.dcits.comet.batch.IBatchStep;
+import com.dcits.comet.batch.IBStep;
 import com.dcits.comet.batch.SimpleTaskletStepExecutor;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -24,7 +24,7 @@ public class BatchApplication {
 
         try {
             ConfigurableApplicationContext context = SpringApplication.run(BatchApplication.class, args);
-            String[] names = context.getBeanNamesForType(IBatchStep.class);
+            String[] names = context.getBeanNamesForType(IBStep.class);
             JobParameters jobParameters=createJobParams();
             for (String name : names) {
 
@@ -33,7 +33,7 @@ public class BatchApplication {
                 jobParameters=a.getJobParameters();
             }
 
-            String[] taskletnames = context.getBeanNamesForType(ITaskletStep.class);
+            String[] taskletnames = context.getBeanNamesForType(ITStep.class);
 
             for (String name : taskletnames) {
 
