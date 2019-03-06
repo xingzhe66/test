@@ -1,6 +1,5 @@
 package com.dcits.comet.batch.service.model;
 
-import com.dcits.comet.batch.launcher.JobExeResult;
 import com.dcits.comet.batch.param.BatchContext;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
@@ -11,9 +10,9 @@ import java.util.List;
 
 public class ExeOutput extends BaseOutput implements Serializable {
 
-    private String jobName;
+    private String stepName;
 
-    private String jobId;
+    private String exeId;
 
     private BatchContext batchContext;
 
@@ -25,20 +24,20 @@ public class ExeOutput extends BaseOutput implements Serializable {
     private volatile ExitStatus exitStatus;
     private transient volatile List<Throwable> failureExceptions;
 
-    public String getJobName() {
-        return jobName;
+    public String getStepName() {
+        return stepName;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    public void setStepName(String stepName) {
+        this.stepName = stepName;
     }
 
-    public String getJobId() {
-        return jobId;
+    public String getExeId() {
+        return exeId;
     }
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
+    public void setExeId(String exeId) {
+        this.exeId = exeId;
     }
 
     public BatchContext getBatchContext() {

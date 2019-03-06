@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class ExeInput implements Serializable {
 
-    private String jobName;
+    private String stepName;
 
-    private String jobId;
+    private String exeId;
 
     private int pageSize;
 
@@ -18,22 +18,26 @@ public class ExeInput implements Serializable {
 
     private int endIndex;
 
+    private String runType;
+
+    private int threadNum;
+
     private BatchContext batchContext;
 
-    public String getJobName() {
-        return jobName;
+    public String getStepName() {
+        return stepName;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    public void setStepName(String stepName) {
+        this.stepName = stepName;
     }
 
-    public String getJobId() {
-        return jobId;
+    public String getExeId() {
+        return exeId;
     }
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
+    public void setExeId(String exeId) {
+        this.exeId = exeId;
     }
 
     public Integer getPageSize() {
@@ -74,5 +78,21 @@ public class ExeInput implements Serializable {
 
     public void setBatchContext(BatchContext batchContext) {
         this.batchContext = batchContext;
+    }
+
+    public String getRunType() {
+        return runType;
+    }
+
+    public void setRunType(String runType) {
+        this.runType = runType;
+    }
+
+    public int getThreadNum() {
+        return threadNum;
+    }
+
+    public void setThreadNum(int threadNum) {
+        this.threadNum = threadNum;
     }
 }

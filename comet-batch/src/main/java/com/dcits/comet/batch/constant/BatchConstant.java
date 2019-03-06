@@ -1,6 +1,6 @@
-package com.dcits.comet.batch.service.constant;
+package com.dcits.comet.batch.constant;
 
-public interface BatchServiceConstant {
+public interface BatchConstant {
     public String SERVICE_STATUS_SUCCESS="s";
     public String SERVICE_STATUS_ERROR="e";
     public String SERVICE_EXCEPTION_UNKNOWN="unknown";

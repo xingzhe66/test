@@ -9,6 +9,12 @@ import org.springframework.batch.item.ExecutionContext;
  */
 public class JobParameterHelper {
 
+    /**
+     * 获取启动参数；
+     * 多线程情况下禁止使用
+     * @param key
+     * @return
+     */
     public static String get(String key){
         return JobSynchronizationManager.getContext().getJobExecution().getJobParameters().getString(key);
     }

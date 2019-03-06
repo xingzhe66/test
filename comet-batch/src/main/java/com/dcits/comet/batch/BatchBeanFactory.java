@@ -47,6 +47,36 @@ public class BatchBeanFactory {
         return (ItemReader) dbf.getBean("reader_" + name);
     }
 
+    /**
+     * 多实例
+     */
+    public static ItemReader getNewReader(String stepName, int pageSize, int beginIndex, int endIndex){
+        ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
+
+        Reader reader=new Reader();
+        reader.setBatchStep((IBatchStep) context.getBean(stepName));
+        reader.setPageSize(pageSize);
+        if(beginIndex>=0&&endIndex>0) {
+            reader.setBeginIndex(beginIndex);
+            reader.setEndIndex(endIndex);
+            reader.init();
+        }
+        return reader;
+    }
+    public static ItemProcessor getNewProcessor(String stepName){
+        ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
+        Processor processor=new Processor();
+        processor.setBatchStep((IBatchStep) context.getBean(stepName));
+        return processor;
+    }
+
+    public static ItemWriter getNewWriter(String stepName){
+        ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
+        Writer writer =new Writer();
+        writer.setBatchStep((IBatchStep) context.getBean(stepName));
+        return writer;
+    }
+
     public static ItemProcessor getProcessor(String name){
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
 

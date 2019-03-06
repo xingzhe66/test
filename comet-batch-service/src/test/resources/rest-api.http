@@ -3,7 +3,7 @@ Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
 
-{"jobName": "cBatchStep" ,"jobId": "6" ,"pageSize": "100" ,"chunkSize": "2" ,"beginIndex": "2" ,"endIndex": "7"}
+{"stepName": "cBatchStep" ,"exeId": "6" ,"pageSize": "100" ,"chunkSize": "2" ,"beginIndex": "2" ,"endIndex": "7"}
 
 <> 2019-02-20T104055.200.txt
 

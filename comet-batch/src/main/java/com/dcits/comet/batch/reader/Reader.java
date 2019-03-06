@@ -34,7 +34,7 @@ public class Reader extends AbstractPagingReader {
         results.addAll(batchStep.getPageList(offset, pageSize));
     }
 
-    protected void init()  {
+    public void init()  {
 
         try {
             jumpToItem(beginIndex);
