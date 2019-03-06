@@ -11,8 +11,6 @@ import org.springframework.context.annotation.DependsOn;
 import java.sql.SQLException;
 
 @Configuration
-//@PropertySource("classpath:activemq/activemq.properties")
-//@ImportResource({ "classpath:.xml" })
 public class DaoConfig {
 
     @DependsOn({ "shardSqlSessionTemplate"})

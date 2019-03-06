@@ -1,6 +1,5 @@
 package com.dcits.comet.commons.utils;
 
-import com.dcits.comet.commons.exception.BusinessException;
 import com.dcits.comet.commons.exception.CometPlatformException;
 
 import java.io.UnsupportedEncodingException;
