@@ -16,14 +16,24 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.9.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-commons</artifactId>
         </dependency>
     </dependencies>
 </project>
