@@ -23,7 +23,6 @@ public class DateUtil {
 
     private DateUtil() {
     }
-    //todo 事务不安全。
 
     public static String getCurrentStr() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
