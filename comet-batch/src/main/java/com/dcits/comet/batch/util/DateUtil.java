@@ -19,13 +19,14 @@ public class DateUtil {
     private static final String YYYYMMDDHHMMSSSSS = "yyyyMMddHHmmssSSS";
     private static final String YYYYMMDD = "yyyy-MM-dd";
     private static final String HHMMSS = "HH:mm:ss";
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+   // private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private DateUtil() {
     }
     //todo 事务不安全。
 
     public static String getCurrentStr() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         return sdf.format(new Date());
     }
 
