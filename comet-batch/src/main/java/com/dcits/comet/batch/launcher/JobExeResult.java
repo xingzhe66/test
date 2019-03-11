@@ -5,29 +5,14 @@ import org.springframework.batch.core.JobExecution;
 
 public class JobExeResult {
 
-    private String jobName;
+    private String stepName;
 
-    private String jobId;
+    private String exeId;
 
     private BatchContext batchContext;
 
     private JobExecution jobExecution;
 
-    public String getJobName() {
-        return jobName;
-    }
-
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
-    }
-
-    public String getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
-    }
 
     public BatchContext getBatchContext() {
         return batchContext;
@@ -43,5 +28,21 @@ public class JobExeResult {
 
     public void setJobExecution(JobExecution jobExecution) {
         this.jobExecution = jobExecution;
+    }
+
+    public String getStepName() {
+        return stepName;
+    }
+
+    public void setStepName(String stepName) {
+        this.stepName = stepName;
+    }
+
+    public String getExeId() {
+        return exeId;
+    }
+
+    public void setExeId(String exeId) {
+        this.exeId = exeId;
     }
 }

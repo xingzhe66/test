@@ -1,6 +1,8 @@
 package com.dcits.comet.batch.reader;
 
 import com.dcits.comet.batch.IBStep;
+import com.dcits.comet.batch.param.BatchContext;
+import com.dcits.comet.batch.util.BatchContextTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,8 @@ public class Reader extends AbstractPagingReader {
 
     private int beginIndex;
 
+    private String node;
+
     private Object lock = new Object();
 
 
@@ -24,6 +28,9 @@ public class Reader extends AbstractPagingReader {
         this.batchStep = batchStep;
     }
 
+    public void setNode(String node) {
+        this.node = node;
+    }
     @Override
     protected void doReadPage(int offset, int pageSize) {
         if (results == null) {
@@ -31,7 +38,8 @@ public class Reader extends AbstractPagingReader {
         } else {
             results.clear();
         }
-        results.addAll(batchStep.getPageList(offset, pageSize));
+        BatchContext batchContext= BatchContextTool.getBatchContext();
+        results.addAll(batchStep.getPageList(batchContext,offset, pageSize,node));
     }
 
     public void init()  {
@@ -43,5 +51,6 @@ public class Reader extends AbstractPagingReader {
         }
 
     }
+
 
 }

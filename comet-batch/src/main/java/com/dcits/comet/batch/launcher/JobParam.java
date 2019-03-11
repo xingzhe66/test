@@ -7,6 +7,17 @@ public class JobParam {
     private String stepName;
 
     private String exeId;
+    /**
+     异步标示
+     0 同步。
+     1 异步。
+
+     */
+    private String async;
+    /**
+     节点
+     */
+    private String node;
 
     private int pageSize;
 
@@ -92,5 +103,22 @@ public class JobParam {
 
     public void setThreadNum(int threadNum) {
         this.threadNum = threadNum;
+    }
+
+
+    public String getNode() {
+        return node;
+    }
+
+    public void setNode(String node) {
+        this.node = node;
+    }
+
+    public String getAsync() {
+        return async;
+    }
+
+    public void setAsync(String async) {
+        this.async = async;
     }
 }

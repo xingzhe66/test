@@ -1,6 +1,8 @@
 package com.dcits.comet.batch.processor;
 
 import com.dcits.comet.batch.IBStep;
+import com.dcits.comet.batch.param.BatchContext;
+import com.dcits.comet.batch.util.BatchContextTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -20,7 +22,8 @@ public class Processor implements ItemProcessor{
     @Nullable
     @Override
     public Object process(Object o) throws Exception {
-        return batchStep.process(o);
+        BatchContext batchContext= BatchContextTool.getBatchContext();
+        return batchStep.process(batchContext,o);
     }
 
 

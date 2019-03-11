@@ -1,6 +1,8 @@
 package com.dcits.comet.batch.writer;
 
 import com.dcits.comet.batch.IBStep;
+import com.dcits.comet.batch.param.BatchContext;
+import com.dcits.comet.batch.util.BatchContextTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
@@ -21,8 +23,8 @@ public class Writer implements ItemWriter {
 
     @Override
     public void write(List list) throws Exception {
-
-        batchStep.writeChunk(list);
+        BatchContext batchContext= BatchContextTool.getBatchContext();
+        batchStep.writeChunk(batchContext,list);
 
         LOGGER.info("write.....执行完毕");
     }

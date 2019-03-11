@@ -22,7 +22,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.checkstyle.version>2.17</maven.checkstyle.version>
         <mybatis.version>3.4.6</mybatis.version>
-        <sharding-sphere.version>3.0.0</sharding-sphere.version>
+        <sharding-sphere.version>3.1.0</sharding-sphere.version>
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
     </properties>
 

@@ -6,22 +6,57 @@ import java.io.Serializable;
 
 public class ExeInput implements Serializable {
 
+    /**
+    step名称
+     */
     private String stepName;
-
+    /**
+     执行id，全局唯一
+     */
     private String exeId;
-
+    /**
+     节点
+     */
+    private String node;
+    /**
+    分页大小，确定每次读出多少条到内存
+     */
     private int pageSize;
-
+    /**
+     chunk大小，确定多少行提交一次事务
+     */
     private int chunkSize;
-
+    /**
+     从第几条开始读，不包含当前条
+     */
     private int beginIndex;
-
+    /**
+     到第几条开结束，包含当前条
+     */
     private int endIndex;
 
+    /**
+     异步标示
+     0 同步。
+     1 异步。
+
+     */
+    private String async;
+
+    /**
+     执行类型
+     1 单线程。
+     2 多线程。
+
+     */
     private String runType;
-
+    /**
+     线程数
+     */
     private int threadNum;
-
+    /**
+     上下文
+     */
     private BatchContext batchContext;
 
     public String getStepName() {
@@ -94,5 +129,21 @@ public class ExeInput implements Serializable {
 
     public void setThreadNum(int threadNum) {
         this.threadNum = threadNum;
+    }
+
+    public String getNode() {
+        return node;
+    }
+
+    public void setNode(String node) {
+        this.node = node;
+    }
+
+    public String getAsync() {
+        return async;
+    }
+
+    public void setAsync(String async) {
+        this.async = async;
     }
 }

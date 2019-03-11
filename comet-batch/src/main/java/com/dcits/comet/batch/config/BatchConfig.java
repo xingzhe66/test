@@ -20,10 +20,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 public class BatchConfig {
@@ -42,6 +45,25 @@ public class BatchConfig {
     @Value("${batch.jdbc.validationQuery}")
     String validationQuery;
 
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        // 设置核心线程数
+        executor.setCorePoolSize(5);
+        // 设置最大线程数
+        executor.setMaxPoolSize(10);
+        // 设置队列容量
+        executor.setQueueCapacity(20);
+        // 设置线程活跃时间（秒）
+        executor.setKeepAliveSeconds(60);
+        // 设置默认线程名称
+        executor.setThreadNamePrefix("comet-");
+        // 设置拒绝策略
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        // 等待所有任务结束后再关闭线程池
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        return executor;
+    }
 
     @Bean
     public static StepScope stepScope() {
@@ -62,10 +84,11 @@ public class BatchConfig {
     public DataSourceTransactionManager batchTransactionManager(@Qualifier("batchDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
+
     @Bean
     public JobRepository jobRepository(@Qualifier("batchDataSource") DataSource dataSource,
                                        @Qualifier("batchTransactionManager") PlatformTransactionManager transactionManager)
-            throws Exception{
+            throws Exception {
 
         JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
         jobRepositoryFactoryBean.setDataSource(dataSource);
@@ -75,14 +98,15 @@ public class BatchConfig {
         return jobRepositoryFactoryBean.getObject();
 
     }
+
     @Bean
     public SimpleJobLauncher jobLauncher(
             @Qualifier("jobRepository") JobRepository jobRepository
-    ) throws Exception{
+    ) throws Exception {
 
         SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
-
+        //jobLauncher.setTaskExecutor();
         return jobLauncher;
     }
 
@@ -90,16 +114,16 @@ public class BatchConfig {
     public StepBuilderFactory stepBuilders(
             @Qualifier("jobRepository") JobRepository jobRepository,
             @Qualifier("batchTransactionManager") DataSourceTransactionManager batchTransactionManager
-    ) throws Exception{
+    ) throws Exception {
 
-        StepBuilderFactory stepBuilderFactory = new StepBuilderFactory(jobRepository,batchTransactionManager);
+        StepBuilderFactory stepBuilderFactory = new StepBuilderFactory(jobRepository, batchTransactionManager);
         return stepBuilderFactory;
     }
 
     @Bean(name = "jobBuilders")
     public JobBuilderFactory jobBuilders(
             @Qualifier("jobRepository") JobRepository jobRepository
-    ) throws Exception{
+    ) throws Exception {
 
         JobBuilderFactory jobBuilders = new JobBuilderFactory(jobRepository);
         return jobBuilders;
@@ -112,9 +136,7 @@ public class BatchConfig {
             @Qualifier("jobLauncher") JobLauncher jobLauncher,
             @Qualifier("jobRegistry") JobRegistry jobRegistry,
             @Qualifier("jobRepository") JobRepository jobRepository
-
-
-    ) throws Exception{
+    ) throws Exception {
 
         SimpleJobOperator batchJobOperator = new SimpleJobOperator();
         batchJobOperator.setJobExplorer(jobExplorer);
@@ -129,7 +151,7 @@ public class BatchConfig {
     @Bean(name = "jobExplorer")
     public JobExplorerFactoryBean jobExplorer(
             @Qualifier("batchDataSource") DataSource dataSource
-    ) throws Exception{
+    ) throws Exception {
 
         JobExplorerFactoryBean jobExplorer = new JobExplorerFactoryBean();
         jobExplorer.setDataSource(dataSource);
@@ -139,7 +161,7 @@ public class BatchConfig {
 
     @Bean(name = "batchDataSource")
     public DataSource dataSource(
-    ) throws Exception{
+    ) throws Exception {
 
         BasicDataSource dataSource = new BasicDataSource();
 
@@ -153,18 +175,20 @@ public class BatchConfig {
 
         return dataSource;
     }
+
     @Bean(name = "jobParametersConverter")
     public JsrJobParametersConverter jobParametersConverter(
             @Qualifier("batchDataSource") DataSource dataSource
-    ) throws Exception{
+    ) throws Exception {
 
         JsrJobParametersConverter jobParametersConverter = new JsrJobParametersConverter(dataSource);
 
         return jobParametersConverter;
     }
+
     @Bean(name = "jobRegistry")
     public MapJobRegistry jobRegistry(
-    ) throws Exception{
+    ) throws Exception {
 
         MapJobRegistry jobRegistry = new MapJobRegistry();
 

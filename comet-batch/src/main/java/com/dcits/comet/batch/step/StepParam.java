@@ -6,6 +6,11 @@ public class StepParam {
 
     private String StepName;
 
+    /**
+     节点
+     */
+    private String node;
+
     private int pageSize;
 
     private int chunkSize;
@@ -82,5 +87,13 @@ public class StepParam {
 
     public void setThreadNum(int threadNum) {
         this.threadNum = threadNum;
+    }
+
+    public String getNode() {
+        return node;
+    }
+
+    public void setNode(String node) {
+        this.node = node;
     }
 }

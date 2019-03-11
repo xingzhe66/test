@@ -1,6 +1,7 @@
 package com.dcits.comet.batch;
 
 import com.dcits.comet.batch.holder.JobContextHolder;
+import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.yunyun.entity.SysLog;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class DBatchStep extends AbstractBStep<SysLog, SysLog> {
 
 
     @Override
-    public List getPageList(int offset, int pageSize) {
+    public List getPageList(BatchContext batchContext,int offset, int pageSize,String node) {
         SysLog sysLog = new SysLog();
         sysLog.setId(2000000000002l);
         List list = new ArrayList();
@@ -32,17 +33,22 @@ public class DBatchStep extends AbstractBStep<SysLog, SysLog> {
     }
 
     @Override
-    public SysLog process(SysLog item) {
+    public SysLog process(BatchContext batchContext,SysLog item) {
         return item;
 
     }
 
     @Override
-    public void writeChunk(List<SysLog> item) {
+    public void writeChunk(BatchContext batchContext,List<SysLog> item) {
         LOGGER.info("write D....." + item.get(0));
         // JobContextHolder.getInstance().put("1","hahaha","1");
         LOGGER.info("write JobParameterHelper....." + JobContextHolder.getInstance().get("1", "hahaha"));
         //  LOGGER.info("write D....."+name);
+    }
+
+    @Override
+    public void writeOne(BatchContext batchContext, SysLog item) {
+
     }
 
 }

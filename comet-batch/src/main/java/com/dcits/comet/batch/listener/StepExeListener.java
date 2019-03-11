@@ -1,6 +1,8 @@
 package com.dcits.comet.batch.listener;
 
 import com.dcits.comet.batch.IBStep;
+import com.dcits.comet.batch.param.BatchContext;
+import com.dcits.comet.batch.util.BatchContextTool;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -11,15 +13,15 @@ public class StepExeListener implements StepExecutionListener {
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-
-        batchStep.preBatchStep();
+        BatchContext batchContext= BatchContextTool.getBatchContext();
+        batchStep.preBatchStep(batchContext);
 
     }
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
-
-        batchStep.afterBatchStep();
+        BatchContext batchContext= BatchContextTool.getBatchContext();
+        batchStep.afterBatchStep(batchContext);
 
         return stepExecution.getExitStatus();
     }

@@ -49,12 +49,13 @@ public class BatchBeanFactory {
     /**
      * 多实例
      */
-    public static ItemReader getNewReader(String stepName, int pageSize, int beginIndex, int endIndex){
+    public static ItemReader getNewReader(String stepName, int pageSize, int beginIndex, int endIndex, String node){
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
 
         Reader reader=new Reader();
         reader.setBatchStep((IBStep) context.getBean(stepName));
         reader.setPageSize(pageSize);
+        reader.setNode(node);
         if(beginIndex>=0&&endIndex>0) {
             reader.setBeginIndex(beginIndex);
             reader.setEndIndex(endIndex);

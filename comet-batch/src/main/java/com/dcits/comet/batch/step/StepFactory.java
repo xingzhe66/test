@@ -16,8 +16,10 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 public class StepFactory {
@@ -32,9 +34,10 @@ public class StepFactory {
         int endIndex = stepParam.getEndIndex();
         int threadNum = stepParam.getThreadNum();
         String stepName = stepParam.getStepName();
+        String node = stepParam.getNode();
 
         ApplicationContext context = SpringContextHolder.getApplicationContext();
-
+        TaskExecutor taskExecutor= context.getBean(TaskExecutor.class);
         StepBuilderFactory stepBuilders = context.getBean(StepBuilderFactory.class);
 
         IStep stepObj = (IStep) context.getBean(stepName);
@@ -43,7 +46,7 @@ public class StepFactory {
         Step step = null;
         if (stepObj instanceof IBStep) {
 
-            ItemReader reader = BatchBeanFactory.getNewReader(stepName, pageSize, beginIndex, endIndex);
+            ItemReader reader = BatchBeanFactory.getNewReader(stepName, pageSize, beginIndex, endIndex,node);
             ItemWriter writer = BatchBeanFactory.getNewWriter(stepName);
             ItemProcessor processor = BatchBeanFactory.getNewProcessor(stepName);
 
@@ -55,7 +58,7 @@ public class StepFactory {
             }
             if (BatchConstant.RUN_TYPE_MULTI_THREAD.equals(stepParam.getRunType())) {
 
-                SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
+               // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
                 step = stepBuilders.get("step_" + stepName)
                         .listener(stepListener)
                         .transactionManager(dataSourceTransactionManager)
@@ -66,7 +69,7 @@ public class StepFactory {
                         .writer(writer)//.faultTolerant().skip(Exception.class).skipLimit(1)
                         //    .listener(new MessageWriteListener())
                         .processor(processor)
-                        .taskExecutor(simpleAsyncTaskExecutor)
+                        .taskExecutor(taskExecutor)
                         .throttleLimit(threadNum)
                         .build();
 

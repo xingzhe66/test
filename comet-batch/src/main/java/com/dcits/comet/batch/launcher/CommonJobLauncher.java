@@ -1,5 +1,6 @@
 package com.dcits.comet.batch.launcher;
 
+import com.dcits.comet.batch.constant.BatchConstant;
 import com.dcits.comet.batch.exception.BatchException;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.param.BatchContextManager;
@@ -10,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.SimpleJob;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
@@ -17,12 +19,14 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 
 /**
-
+job执行器
  */
 @Component("commonJobLauncher")
 public class CommonJobLauncher implements IJobLauncher {
@@ -32,6 +36,7 @@ public class CommonJobLauncher implements IJobLauncher {
     private JobRepository jobRepository;
     @Autowired
     private TaskExecutor taskExecutor;
+
     @Autowired
     ConfigurableApplicationContext context;
 
@@ -41,6 +46,8 @@ public class CommonJobLauncher implements IJobLauncher {
         JobExecution jobExecution = null;
 
         JobExeResult jobExeResult =new JobExeResult();
+        jobExeResult.setStepName(jobParam.getStepName());
+        jobExeResult.setExeId(jobParam.getExeId());
 
         String exeId = jobParam.getExeId();
 
@@ -56,7 +63,7 @@ public class CommonJobLauncher implements IJobLauncher {
             JobParameters jobParameters = createJobParams(exeId, stepName);
 
 
-            //todo 因为reader等的scope设置为step，所以必须在reader等实例化之前，有一个Step，否则报错。spring batch的坑！
+            //因为reader等的scope设置为step，所以必须在reader等实例化之前，有一个Step，否则报错。spring batch的坑！
 
 //            StepSynchronizationManager.register(new StepExecution("step_" + jobName, new JobExecution(123L)));
 
@@ -71,7 +78,20 @@ public class CommonJobLauncher implements IJobLauncher {
             job.setJobRepository(jobRepository);
             job.addStep(step);
 
-            JobLauncher jobLauncher = context.getBean(JobLauncher.class);
+            SimpleJobLauncher jobLauncher = (SimpleJobLauncher) context.getBean(JobLauncher.class);
+            /**
+             * SimpleAsyncTaskExecutor这个实现不重用任何线程，或者说它每次调用都启动一个新线程。
+            // 但是，它还是支持对并发总数设限，当超过线程并发总数限制时
+            // ，阻塞新的调用，直到有位置被释放。
+
+             * 默认SyncTaskExecutor类这个实现不会异步执行。相反，每次调用都在发起调用的线程中执行。它的主要用处是在不需要多线程的时候。
+            */
+            if(BatchConstant.ASYNC_TYPE_ASYNC.equals(jobParam.getAsync())) {
+               // ThreadPoolTaskExecutor threadPoolTaskExecutor=new ThreadPoolTaskExecutor();
+
+               // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
+                jobLauncher.setTaskExecutor(taskExecutor);
+            }
 
             try {
 
@@ -92,19 +112,20 @@ public class CommonJobLauncher implements IJobLauncher {
                 throw e;
             }
 
-            if ((null != jobExecution) && (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED))) {
-                throw new BatchException("执行返回值为空，exeId："+exeId);
+//            if ((null != jobExecution) && (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED))) {
+//                throw new BatchException("执行返回值为空，exeId："+exeId);
+//            }
+            if (null != jobExecution) {
+                jobExeResult.setJobExecution(jobExecution);
+                //todo 异步情况下，batchcontext需要在query到执行成功时返回
+                jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getExeId()));
             }
-            jobExeResult.setJobExecution(jobExecution);
-            jobExeResult.setJobId(jobParam.getExeId());
-            jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getExeId()));
-            jobExeResult.setJobName(jobParam.getStepName());
-
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new BatchException(e.getMessage(),e);
         } finally {
+//            jobExecution.setExecutionContext();
+//            jobRepository.update(jobExecution);
             //清理context
             BatchContextManager.getInstance().clear(exeId);
         }
