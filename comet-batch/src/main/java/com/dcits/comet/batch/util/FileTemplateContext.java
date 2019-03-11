@@ -133,14 +133,14 @@ public class FileTemplateContext {
                 }
 
                 String regex = col.getRegex();
-                if (regex != null && !regex.trim().equals("")) {
+                if (regex != null && !"".equals(regex.trim())) {
                     col.setPattern(Pattern.compile(regex));
                 }
 
                 String tranSrc = col.getTranSrc();
-                if (tranSrc != null && !tranSrc.trim().equals("")) {
+                if (tranSrc != null && !"".equals(tranSrc.trim())) {
                     String tranDest = col.getTranDest();
-                    if (tranDest == null || tranDest.trim().equals("") || tranDest.split(",").length != tranSrc.split(",").length) {
+                    if (tranDest == null || "".equals(tranDest.trim()) || tranDest.split(",").length != tranSrc.split(",").length) {
                         throw new RuntimeException("the template file " + subFile + " tran source [" + tranSrc + "] not match tran dest [" + tranDest + "]");
                     }
 
@@ -196,7 +196,7 @@ public class FileTemplateContext {
                                     entryName = entry.getName();
                                     logger.debug("Current entry name is {}", entryName);
                                 } while(!entryName.startsWith(path));
-                            } while(extensions != null && !extensions.trim().equals("") && !entryName.toUpperCase().endsWith(extensions.toUpperCase()));
+                            } while(extensions != null && !"".equals(extensions.trim()) && !entryName.toUpperCase().endsWith(extensions.toUpperCase()));
 
                             fileNameLists.add(entryName);
                         }
@@ -208,8 +208,9 @@ public class FileTemplateContext {
                         file = new File(temp.getFile());
                         logger.debug(file.getAbsolutePath());
                         String[] files = file.list(new FilenameFilter() {
+                            @Override
                             public boolean accept(File dir, String name) {
-                                return extensions == null || extensions.trim().equals("") || name.toUpperCase().endsWith(extensions.toUpperCase());
+                                return extensions == null || "".equals(extensions.trim()) || name.toUpperCase().endsWith(extensions.toUpperCase());
                             }
                         });
                         String[] arr$ = files;

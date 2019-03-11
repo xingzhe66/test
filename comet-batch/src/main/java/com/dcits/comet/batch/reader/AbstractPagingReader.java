@@ -33,6 +33,7 @@ public abstract class AbstractPagingReader<T> extends AbstractPagingItemReader<T
      *
      * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
+    @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
 

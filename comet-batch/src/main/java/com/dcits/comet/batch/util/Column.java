@@ -111,7 +111,7 @@ class Column {
     }
 
     public String getNumMultiple() {
-        return this.numMultiple != null && !this.numMultiple.trim().equals("") ? this.numMultiple : null;
+        return this.numMultiple != null && !"".equals(this.numMultiple.trim()) ? this.numMultiple : null;
     }
 
     public void setNumMultiple(String numMultiple) {

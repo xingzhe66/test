@@ -20,10 +20,10 @@ public class ReflectionUtil {
 	 * @return
 	 */
 	public static boolean isPrimitive(final Class<?> cls){
-		return cls.isPrimitive() || PrimitiveClasses.contains(cls);
+		return cls.isPrimitive() || P_C.contains(cls);
 	}
 
-	private final static List<Class<?>> PrimitiveClasses = new ArrayList<Class<?>>(){{
+	private final static List<Class<?>> P_C = new ArrayList<Class<?>>(){{
 		add(Long.class);
 		add(Integer.class);
 		add(String.class);
@@ -86,6 +86,7 @@ public class ReflectionUtil {
 
 		String dbTypeName=null;
 		switch(javaType){
+
 			case "String" :
 				dbTypeName="VARCHAR";break;
 			case "BigDecimal":
@@ -102,6 +103,7 @@ public class ReflectionUtil {
 				dbTypeName="DATE";break;
 			case "Time":
 				dbTypeName="TIME";break;
+			default: dbTypeName="VARCHAR";break;
 		}
 		return dbTypeName;
 	}

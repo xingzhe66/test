@@ -25,13 +25,10 @@ public class SimpleTaskletStepExecutor {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleTaskletStepExecutor.class);
 
 
-    @Resource
-    private SpringContextHolder springContextHolder;
-
 
     public JobExecution exe(String jobname, JobParameters jobParameters) {
 
-        ConfigurableApplicationContext context = (ConfigurableApplicationContext) springContextHolder.getApplicationContext();
+        ConfigurableApplicationContext context = (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
 
         DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) context.getBeanFactory();
         JobRepository jobRegistry = (JobRepository) context.getBean("jobRepository");

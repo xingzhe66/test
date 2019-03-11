@@ -16,6 +16,9 @@ import java.util.*;
  * @author Chengliang
  */
     public class BusiUtil {
+    public static final String R = "R";
+    public static final String T = "T";
+    public static final int END = 31;
     private static Logger logger = LoggerFactory.getLogger(BusiUtil.class);
     private static String context = "context";
     private static final String AFTER_OPER = "|ALL$'";
@@ -662,10 +665,10 @@ import java.util.*;
             locScale = 0;
         }
         BigDecimal result = null;
-        if (isEquals("R", type)) {
+        if (isEquals(R, type)) {
             result = amt.setScale(locScale, BigDecimal.ROUND_HALF_UP);
         }
-        if (isEquals("T", type)) {
+        if (isEquals(T, type)) {
             result = amt.setScale(locScale, BigDecimal.ROUND_FLOOR);
         }
         return result;
@@ -697,7 +700,7 @@ import java.util.*;
             if (isNull(day)) {
                 day = DateUtil.getDayOfMonth(startDate);
             }
-            if (day <= 0 || day > 31) {
+            if (day <= 0 || day > END) {
                 //计息天数为空
                 throw BusiUtil.createBusinessException("LI4017");
             }
@@ -787,8 +790,9 @@ import java.util.*;
      * @update 2015年2月4日 上午11:03:04
      */
     public static String convertDate2Str(Date date, String pattern) {
-        if (null == date)
+        if (null == date) {
             return null;
+        }
         return DateUtil.formatDate(date, pattern);
     }
 

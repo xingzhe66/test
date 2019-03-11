@@ -52,8 +52,9 @@ public class StringUtil {
 
 
     public static boolean isBlank(String str) {
-        if (str == null || str.length() == 0)
+        if (str == null || str.length() == 0) {
             return true;
+        }
         return false;
     }
 
@@ -75,10 +76,12 @@ public class StringUtil {
      * @return equals
      */
     public static boolean isEquals(String s1, String s2) {
-        if (s1 == null && s2 == null)
+        if (s1 == null && s2 == null) {
             return true;
-        if (s1 == null || s2 == null)
+        }
+        if (s1 == null || s2 == null) {
             return false;
+        }
         return s1.equals(s2);
     }
 
@@ -89,14 +92,16 @@ public class StringUtil {
      * @return is integer
      */
     public static boolean isInteger(String str) {
-        if (str == null || str.length() == 0)
+        if (str == null || str.length() == 0) {
             return false;
+        }
         return INT_PATTERN.matcher(str).matches();
     }
 
     public static int parseInteger(String str) {
-        if (!isInteger(str))
+        if (!isInteger(str)) {
             return 0;
+        }
         return Integer.parseInt(str);
     }
 
@@ -157,8 +162,9 @@ public class StringUtil {
      * @return String.
      */
     public static String translat(String src, String from, String to) {
-        if (isEmpty(src))
+        if (isEmpty(src)) {
             return src;
+        }
         StringBuilder sb = null;
         int ix;
         char c;
@@ -166,15 +172,17 @@ public class StringUtil {
             c = src.charAt(i);
             ix = from.indexOf(c);
             if (ix == -1) {
-                if (sb != null)
+                if (sb != null) {
                     sb.append(c);
+                }
             } else {
                 if (sb == null) {
                     sb = new StringBuilder(len);
                     sb.append(src, 0, i);
                 }
-                if (ix < to.length())
+                if (ix < to.length()) {
                     sb.append(to.charAt(ix));
+                }
             }
         }
         return sb == null ? src : sb.toString();
@@ -193,8 +201,9 @@ public class StringUtil {
         for (int i = 0; i < len; i++) {
             c = str.charAt(i);
             if (c == ch) {
-                if (list == null)
+                if (list == null) {
                     list = new ArrayList<String>();
+                }
                 list.add(str.substring(ix, i));
                 ix = i + 1;
             }
@@ -213,11 +222,13 @@ public class StringUtil {
      * @return String.
      */
     public static String join(String[] array) {
-        if (array.length == 0)
+        if (array.length == 0) {
             return "";
+        }
         StringBuilder sb = new StringBuilder();
-        for (String s : array)
+        for (String s : array) {
             sb.append(s);
+        }
         return sb.toString();
     }
 
@@ -229,12 +240,14 @@ public class StringUtil {
      * @return String.
      */
     public static String join(String[] array, char split) {
-        if (array.length == 0)
+        if (array.length == 0) {
             return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
-            if (i > 0)
+            if (i > 0) {
                 sb.append(split);
+            }
             sb.append(array[i]);
         }
         return sb.toString();
@@ -248,28 +261,32 @@ public class StringUtil {
      * @return String.
      */
     public static String join(String[] array, String split) {
-        if (array.length == 0)
+        if (array.length == 0) {
             return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
-            if (i > 0)
+            if (i > 0) {
                 sb.append(split);
+            }
             sb.append(array[i]);
         }
         return sb.toString();
     }
 
     public static String join(Collection<String> coll, String split) {
-        if (coll.isEmpty())
+        if (coll.isEmpty()) {
             return "";
+        }
 
         StringBuilder sb = new StringBuilder();
         boolean isFirst = true;
         for (String s : coll) {
-            if (isFirst)
+            if (isFirst) {
                 isFirst = false;
-            else
+            } else {
                 sb.append(split);
+            }
             sb.append(s);
         }
         return sb.toString();
@@ -288,8 +305,9 @@ public class StringUtil {
         Map<String, String> map = new HashMap<String, String>(tmp.length);
         for (int i = 0; i < tmp.length; i++) {
             Matcher matcher = KVP_PATTERN.matcher(tmp[i]);
-            if (matcher.matches() == false)
+            if (matcher.matches() == false) {
                 continue;
+            }
             map.put(matcher.group(1), matcher.group(2));
         }
         return map;
@@ -307,8 +325,9 @@ public class StringUtil {
      * @return Parameters instance.
      */
     public static Map<String, String> parseQueryString(String qs) {
-        if (qs == null || qs.length() == 0)
+        if (qs == null || qs.length() == 0) {
             return new HashMap<String, String>();
+        }
         return parseKeyValuePair(qs, "\\&");
     }
 
@@ -395,7 +414,7 @@ public class StringUtil {
      * @return
      */
     public static boolean isNotApplicable(String str) {
-        if (!isBlank(str) && str.equalsIgnoreCase("N/A")) {
+        if (!isBlank(str) && "N/A".equalsIgnoreCase(str)) {
             return true;
         }
         return false;
@@ -439,10 +458,12 @@ public class StringUtil {
             throw new CometPlatformException("补位字符只能为一个字符");
         }
         int strLength = str.length();
-        if (strLength > length)
+        if (strLength > length) {
             throw new CometPlatformException("字符串长度超过指定长度");
-        if (length == strLength)
+        }
+        if (length == strLength) {
             return str;
+        }
         int pdCount = length - strLength;
         StringBuffer sb = new StringBuffer();
         if ("R".equals(lr)) {
@@ -458,13 +479,15 @@ public class StringUtil {
     }
 
     public static char[] getBr(String br) {
-        if ("\\r".equals(br))
+        if ("\\r".equals(br)) {
             return new char[]{'\r'};
-        else if ("\\r\\n".equals(br)) {
+        } else if ("\\r\\n".equals(br)) {
             return new char[]{'\r', '\n'};
-        } else if ("\\n".equals(br))
+        } else if ("\\n".equals(br)) {
             return new char[]{'\n'};
-        else throw new CometPlatformException("换行符定义不正确");
+        } else {
+            throw new CometPlatformException("换行符定义不正确");
+        }
     }
 
     public static ByteBuffer getBytesByChars(char[] chars, String encoding) {
@@ -478,9 +501,9 @@ public class StringUtil {
     }
 
     public static int getByteLength(String str, String encoding) {
-        if (str == null)
+        if (str == null) {
             return 0;
-        else {
+        } else {
             byte[] bytes = new byte[0];
             try {
                 bytes = str.getBytes(encoding);
@@ -501,8 +524,9 @@ public class StringUtil {
     }
 
     public static String byteSubString(String str, String encoding, int length) {
-        if (str == null || str.length() == 0)
+        if (str == null || str.length() == 0) {
             return str;
+        }
         byte[] bytes = new byte[0];
         try {
             bytes = str.getBytes(encoding);
@@ -510,17 +534,19 @@ public class StringUtil {
             e.printStackTrace();
         }
         int strLeng = bytes.length;
-        if (length >= strLeng)
+        if (length >= strLeng) {
             return str;
-        else {
+        } else {
             String newString = null;
             try {
                 newString = new String(bytes, 0, length, encoding);
                 int splitLength = newString.length();
                 if (str.charAt(splitLength - 1) != newString.charAt(splitLength - 1)) {
-                    if (splitLength < 2)
+                    if (splitLength < 2) {
                         newString = "";
-                    else newString = newString.substring(0, splitLength - 1);
+                    } else {
+                        newString = newString.substring(0, splitLength - 1);
+                    }
                 }
 
             } catch (UnsupportedEncodingException e) {

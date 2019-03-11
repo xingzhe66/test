@@ -240,7 +240,7 @@ public final class DateUtil {
 		if (StringUtils.isNotEmpty(rollDay)) {
 			rollDayInt = Integer.parseInt(rollDay);
 		}
-		if(datMth.equals("Y")){//年
+		if("Y".equals(datMth)){//年
 			year = year + rollFreq;
 			day = rollDayInt;
 			Date newDateMoth = parseDate(year+"-"+month+"-"+monthFirstDay);//增加相频率后当月同一天
@@ -249,7 +249,7 @@ public final class DateUtil {
 				day = monthEndDay;
 			}
 			return parseDate(year+"-"+month+"-"+day);
-		}else if(datMth.equals("M")){//月
+		}else if("M".equals(datMth)){//月
 			int mm = month + rollFreq;
 			int residue = mm/12;//取月份除以12的余数
 			int mod = mm%12;//取月份除以12的模
@@ -266,9 +266,9 @@ public final class DateUtil {
 				day = monthEndDay;
 			}
 			return parseDate(year+"-"+month+"-"+day);//得到变更后的日期
-		}else if(datMth.equals("W")){//周
+		}else if("W".equals(datMth)){//周
 			return addDate(date,rollFreq*7);
-		}else if(datMth.equals("D")){//日
+		}else if("D".equals(datMth)){//日
 			return addDate(date,rollFreq);
 		}
 		return null;

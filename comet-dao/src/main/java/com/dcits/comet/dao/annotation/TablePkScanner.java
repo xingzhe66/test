@@ -20,12 +20,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TablePkScanner {
 
-    private final static Map<String, String[]> pks = new ConcurrentHashMap<>();
+    private final static Map<String, String[]> PKS = new ConcurrentHashMap<>();
 
     public static <T extends BasePo> String[] pkColsScanner(T mapper) {
         String key = mapper.getClass().getName();
-        if (pks.containsKey(key)) {
-            return pks.get(key);
+        if (PKS.containsKey(key)) {
+            return PKS.get(key);
         }
         List<String> colsName = new ArrayList<>();
         List<Integer> index = new ArrayList<>();
@@ -57,7 +57,7 @@ public class TablePkScanner {
                 }
             }
         }
-        pks.put(key, cols);
+        PKS.put(key, cols);
         return cols;
     }
 }

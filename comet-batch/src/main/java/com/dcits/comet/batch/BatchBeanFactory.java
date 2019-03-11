@@ -1,5 +1,6 @@
 package com.dcits.comet.batch;
 
+import com.dcits.comet.batch.constant.BatchConstant;
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.processor.Processor;
 import com.dcits.comet.batch.reader.Reader;
@@ -11,7 +12,17 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import static com.dcits.comet.batch.constant.BatchConstant.PROCESSOR_NAME_PEX;
+import static com.dcits.comet.batch.constant.BatchConstant.WRITER_NAME_PEX;
+
 public class BatchBeanFactory {
+
+    public static final String END_INDEX = "endIndex";
+    public static final String INIT = "init";
+    public static final String BEGIN_INDEX = "beginIndex";
+    public static final String BATCH_STEP = "batchStep";
+    public static final String STEP = "step";
+
     /**
      * todo 多线程对同一个job并发时，需要用new对象，不能用spring bean
      * 目前使用spring bean的意义在于让jobParameters注解生效。
@@ -23,27 +34,27 @@ public class BatchBeanFactory {
 
         DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) context.getBeanFactory();
 
-        if(dbf.containsBean("reader_" + name)){
-            dbf.removeBeanDefinition("reader_" + name);
-            dbf.destroySingleton("reader_" + name);
+        if(dbf.containsBean(BatchConstant.READER_NAME_PEX + name)){
+            dbf.removeBeanDefinition(BatchConstant.READER_NAME_PEX + name);
+            dbf.destroySingleton(BatchConstant.READER_NAME_PEX + name);
         }
         //Bean构建
         BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(Reader.class);
         //向里面的属性注入值，提供get set方法
-        readerBuider.addPropertyReference("batchStep", name); //因为实例还未生成，所以只定义引用；
+        readerBuider.addPropertyReference(BatchConstant.BATCH_STEP_NAME, name); //因为实例还未生成，所以只定义引用；
         //todo 把相关配置放在接口中传入
-        readerBuider.addPropertyValue("pageSize", pageSize);
+        readerBuider.addPropertyValue(BatchConstant.PAGE_SIZE_NAME, pageSize);
         if(beginIndex>=0&&endIndex>0) {
-            readerBuider.addPropertyValue("beginIndex", beginIndex);
-            readerBuider.addPropertyValue("endIndex", endIndex);
-            readerBuider.setInitMethodName("init");
+            readerBuider.addPropertyValue(BEGIN_INDEX, beginIndex);
+            readerBuider.addPropertyValue(END_INDEX, endIndex);
+            readerBuider.setInitMethodName(INIT);
         }
         //.addPropertyValue("batch", batch);
         readerBuider.setScope("step");   //作用域为step，为了让jobParameters注解生效
         //将实例注册spring容器中   bs 等同于  id配置
-        dbf.registerBeanDefinition("reader_" + name, readerBuider.getBeanDefinition());
+        dbf.registerBeanDefinition(BatchConstant.READER_NAME_PEX + name, readerBuider.getBeanDefinition());
 
-        return (ItemReader) dbf.getBean("reader_" + name);
+        return (ItemReader) dbf.getBean(BatchConstant.READER_NAME_PEX + name);
     }
 
     /**
@@ -82,15 +93,15 @@ public class BatchBeanFactory {
 
         DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) context.getBeanFactory();
 
-        if(dbf.containsBean("processor_" + name)){
-            dbf.removeBeanDefinition("processor_" + name);
-            dbf.destroySingleton("processor_" + name);
+        if(dbf.containsBean(PROCESSOR_NAME_PEX + name)){
+            dbf.removeBeanDefinition(PROCESSOR_NAME_PEX + name);
+            dbf.destroySingleton(PROCESSOR_NAME_PEX + name);
         }
         BeanDefinitionBuilder processorBuider = BeanDefinitionBuilder.genericBeanDefinition(Processor.class);
-        processorBuider.addPropertyReference("batchStep", name);
-        processorBuider.setScope("step");
-        dbf.registerBeanDefinition("processor_" + name, processorBuider.getBeanDefinition());
-        return (ItemProcessor) dbf.getBean("processor_" + name);
+        processorBuider.addPropertyReference(BATCH_STEP, name);
+        processorBuider.setScope(STEP);
+        dbf.registerBeanDefinition(PROCESSOR_NAME_PEX + name, processorBuider.getBeanDefinition());
+        return (ItemProcessor) dbf.getBean(PROCESSOR_NAME_PEX + name);
     }
 
     public static ItemWriter getWriter(String name){
@@ -98,16 +109,16 @@ public class BatchBeanFactory {
 
         DefaultListableBeanFactory dbf = (DefaultListableBeanFactory) context.getBeanFactory();
 
-        if(dbf.containsBean("writer_" + name)){
-            dbf.removeBeanDefinition("writer_" + name);
-            dbf.destroySingleton("writer_" + name);
+        if(dbf.containsBean(WRITER_NAME_PEX + name)){
+            dbf.removeBeanDefinition(WRITER_NAME_PEX + name);
+            dbf.destroySingleton(WRITER_NAME_PEX + name);
         }
 
         BeanDefinitionBuilder writerBuider = BeanDefinitionBuilder.genericBeanDefinition(Writer.class);
-        writerBuider.addPropertyReference("batchStep", name);
-        writerBuider.setScope("step");
-        dbf.registerBeanDefinition("writer_" + name, writerBuider.getBeanDefinition());
+        writerBuider.addPropertyReference(BATCH_STEP, name);
+        writerBuider.setScope(STEP);
+        dbf.registerBeanDefinition(WRITER_NAME_PEX + name, writerBuider.getBeanDefinition());
 
-        return (ItemWriter) dbf.getBean("writer_" + name);
+        return (ItemWriter) dbf.getBean(WRITER_NAME_PEX + name);
     }
 }

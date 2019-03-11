@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 public class FileUtil {
     private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
+    public static final String CHAR = "char";
 
     public FileUtil() {
     }
@@ -189,7 +190,7 @@ public class FileUtil {
         int a;
         if (data.hasSplit()) {
             String[] values = null;
-            if (null != data.getSplitType() && data.getSplitType().equals("char")) {
+            if (null != data.getSplitType() && CHAR.equals(data.getSplitType())) {
                 values = charToString(lineContent + " ").split(split);
             } else {
                 values = (lineContent + " ").split(split);
@@ -230,7 +231,7 @@ public class FileUtil {
             } else if (pattern != null && !pattern.matcher(valueStr).matches()) {
                 throw new FileUtil.IllegalFileException(valueStr + " no matches " + pattern.pattern());
             } else {
-                if (valueStr != null && !valueStr.trim().equals("")) {
+                if (valueStr != null && !"".equals(valueStr.trim())) {
                     Object args = null;
                     if (Date.class.isAssignableFrom(parameterType)) {
                         if (!"0".equals(valueStr)) {
@@ -360,7 +361,7 @@ public class FileUtil {
 
                         content.append(valueStr);
                         if (data.hasSplit() && a < size - 1) {
-                            if (null != data.getSplitType() && data.getSplitType().equals("char")) {
+                            if (null != data.getSplitType() && "char".equals(data.getSplitType())) {
                                 content.append(stringToChar(data.getSplit()));
                             } else {
                                 content.append(data.getSplit());

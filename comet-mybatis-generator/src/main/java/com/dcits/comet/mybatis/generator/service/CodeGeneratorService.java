@@ -18,6 +18,7 @@ import java.util.Map;
 @Service
 @EnableConfigurationProperties(GeneratorEntity.class)
 public class CodeGeneratorService {
+    public static final String TRUE = "true";
     @Autowired
     GeneratorEntity generatorEntity;
     @Autowired
@@ -34,7 +35,7 @@ public class CodeGeneratorService {
     public void createCode() throws Exception {
         String isCrateAllTable = generatorEntity.getIsCrateAllTable();
         //生成所有表
-            if (!PbUtils.isEmpty(isCrateAllTable) && "true".equals(isCrateAllTable.toLowerCase())) {
+            if (!PbUtils.isEmpty(isCrateAllTable) && TRUE.equals(isCrateAllTable.toLowerCase())) {
                 List<Map<String, Object>> listTables = getTablesList();
                 if(listTables.size()>0){
                     for (int i = 0; i < listTables.size(); i++) {
@@ -62,7 +63,7 @@ public class CodeGeneratorService {
             createMapperXml(modelDate);
             //生成Mapper_ext.Xml
             String iscreateMapperExt = generatorEntity.getIsCreateMapperExt();
-            if (!PbUtils.isEmpty(iscreateMapperExt) && "true".equals(iscreateMapperExt.toLowerCase())) {
+            if (!PbUtils.isEmpty(iscreateMapperExt) && TRUE.equals(iscreateMapperExt.toLowerCase())) {
                 createMapperExt(modelDate);
             }
             LOGGER.info(generatorEntity.getTableName() + "表对应的JavaBean和Mapper文件生成");
@@ -160,25 +161,25 @@ public class CodeGeneratorService {
                 // 遍历map
                 for (String key : map.keySet()) {
                     // 列名称
-                    if (key.equals("COLUMNNAME")) {
+                    if ("COLUMNNAME".equals(key)) {
                         String reStr = PbUtils.strRelplacetoLowerCase(map.get(key).toString());// 列名称，首字母小写，去下划线
                         oMap.put("columnNameL", map.get(key).toString());// 列名称，首字母小写，去下划线
                         oMap.put("columnName", reStr);// 列名称，首字母小写，去下划线
 
                         // 自动判断大小写
-                        if (map.get(key).toString().substring(1, 2).equals("_")) {
+                        if ("_".equals(map.get(key).toString().substring(1, 2))) {
                             oMap.put("UpUmnName", reStr);// 列名称，首字母小写，去下划线
                         } else {
                             oMap.put("UpUmnName", PbUtils.fristStrToUpperCase(reStr));// 列名称，首字母大写，去下划线
                         }
                     }
                     // 注释
-                    if (key.equals("COLUMNCOMMENT")) {
+                    if ("COLUMNCOMMENT".equals(key)) {
                         String reStr = PbUtils.strRelplacetoLowerCase(map.get("COLUMNNAME").toString());// 列名称，首字母小写，去下划线
                         oMap.put("columnComment", map.get(key) == null ? reStr : map.get(key));// 注释
                     }
                     // 列类型
-                    if (key.equals("COLUMNTYPE")) {
+                    if ("COLUMNTYPE".equals(key)) {
                         String columnType = map.get("COLUMNTYPE").toString();// 列类型
                         oMap.put("javaType", PbUtils.convertJavaType(columnType));
                         oMap.put("dbType", columnType);

@@ -6,7 +6,7 @@ import com.dcits.comet.batch.param.BatchContextManager;
 
 public class BatchContextTool {
 
-    private static final String Id="exeId";
+    private static final String EXE_ID="exeId";
 
 //    public static void put(String jobId,String key,Object value){
 //        BatchContextManager.getInstance().put(jobId,key,value);
@@ -15,19 +15,19 @@ public class BatchContextTool {
      * 获取批量上下文
      */
     public static BatchContext getBatchContext(){
-        return BatchContextManager.getInstance().getBatchContext(JobParameterHelper.get(Id));
+        return BatchContextManager.getInstance().getBatchContext(JobParameterHelper.get(EXE_ID));
     }
     /**
      * 批量上下文put
      */
     public static void put(String key,Object value){
-        BatchContextManager.getInstance().put(JobParameterHelper.get(Id),key,value);
+        BatchContextManager.getInstance().put(JobParameterHelper.get(EXE_ID),key,value);
     }
     /**
      * 批量上下文put
      */
     public static Object get(String key){
-        return BatchContextManager.getInstance().get(JobParameterHelper.get(Id),key);
+        return BatchContextManager.getInstance().get(JobParameterHelper.get(EXE_ID),key);
     }
 
 }

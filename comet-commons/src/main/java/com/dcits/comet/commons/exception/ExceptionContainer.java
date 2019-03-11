@@ -39,6 +39,7 @@ public class ExceptionContainer implements  InitializingBean {
     private final static String DEFAULT_LANGUAGE = "zh_CN";
 
     private final static String DEFAULT_ERROR_CODE_CONFIG = "classpath*:config/*_errorCode_*.*";
+    public static final String XML = ".xml";
 
     private static boolean inited = false;
 
@@ -123,10 +124,12 @@ public class ExceptionContainer implements  InitializingBean {
 
 
     private static void init() {
-        if (locations == null)
+        if (locations == null) {
             locations = ResourceUtil.getResource(DEFAULT_ERROR_CODE_CONFIG, ResourceUtil.PREFIX_CONFIG);
-        if (locations != null && locations.length > 0)
+        }
+        if (locations != null && locations.length > 0) {
             configKeys = new ArrayList<>();
+        }
         for (Resource resource : locations) {
             configKeys.add(resource.getFilename());
             loadErrorCodeConfig(resource);
@@ -199,7 +202,7 @@ public class ExceptionContainer implements  InitializingBean {
             in = res.getInputStream();
             HashMap<String, String> map = new HashMap<String, String>();
 
-            if (res.getFilename().endsWith(".xml")) {
+            if (res.getFilename().endsWith(XML)) {
                 ErrorCodes errorCodes = parseErrorCodeXml(in);
                 for (ErrorCode ec : errorCodes.getErrorCode()) {
                     map.put(ec.getCode(), ec.getMessage());
@@ -225,8 +228,9 @@ public class ExceptionContainer implements  InitializingBean {
             throw new RuntimeException(String.format("加载%s失败!", res.getFilename()), e);
         } finally {
             try {
-                if (in != null)
+                if (in != null) {
                     in.close();
+                }
             } catch (IOException e) {
                 LOGGER.warn("", e);
             }
@@ -276,8 +280,9 @@ public class ExceptionContainer implements  InitializingBean {
 
         if (!StringUtils.hasLength(message)) {
             LOGGER.warn("未找到错误码[{}]的定义!", errorCode);
-            if (pattern != null && pattern.length > 0)
+            if (pattern != null && pattern.length > 0) {
                 message = pattern.length > 1 ? Arrays.toString(pattern) : pattern[0];
+            }
         }
 
         return MessageFormatter.arrayFormat(message, pattern).getMessage();

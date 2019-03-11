@@ -8,7 +8,7 @@ import com.dcits.comet.commons.constant.Constants.*;
  *
  */
 public class CometPlatformException extends RuntimeException {
-    private static final long serialVersionUID = 123333212566l;
+    private static final long serialVersionUID = 123333212566L;
 
     /** 内部错误码 */
     private String errorCode;

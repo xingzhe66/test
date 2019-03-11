@@ -41,6 +41,7 @@ public class CommonJobLauncher implements IJobLauncher {
     ConfigurableApplicationContext context;
 
 
+    @Override
     public JobExeResult run(String stepName, JobParam jobParam) {
 
         JobExecution jobExecution = null;
@@ -61,12 +62,6 @@ public class CommonJobLauncher implements IJobLauncher {
             }
 
             JobParameters jobParameters = createJobParams(exeId, stepName);
-
-
-            //因为reader等的scope设置为step，所以必须在reader等实例化之前，有一个Step，否则报错。spring batch的坑！
-
-//            StepSynchronizationManager.register(new StepExecution("step_" + jobName, new JobExecution(123L)));
-
             StepParam stepParam=new StepParam();
             BeanCopier beanCopier = BeanCopier.create(JobParam.class, StepParam.class, false);
             beanCopier.copy(jobParam,stepParam,null);
@@ -83,7 +78,6 @@ public class CommonJobLauncher implements IJobLauncher {
              * SimpleAsyncTaskExecutor这个实现不重用任何线程，或者说它每次调用都启动一个新线程。
             // 但是，它还是支持对并发总数设限，当超过线程并发总数限制时
             // ，阻塞新的调用，直到有位置被释放。
-
              * 默认SyncTaskExecutor类这个实现不会异步执行。相反，每次调用都在发起调用的线程中执行。它的主要用处是在不需要多线程的时候。
             */
             if(BatchConstant.ASYNC_TYPE_ASYNC.equals(jobParam.getAsync())) {

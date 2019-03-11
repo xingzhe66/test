@@ -23,6 +23,7 @@ public class DateUtil {
 
     private DateUtil() {
     }
+    //todo 事务不安全。
 
     public static String getCurrentStr() {
         return sdf.format(new Date());

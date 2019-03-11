@@ -109,7 +109,7 @@ public class PbUtils {
         if (isString) {
             if (str == null) {
                 return true;
-            } else if (String.valueOf(str).trim().equals("")) {
+            } else if ("".equals(String.valueOf(str).trim())) {
                 return true;
             }
         } else {
@@ -334,37 +334,37 @@ public class PbUtils {
         String javaType = "";
         String databaseTypeStr = databaseType.trim().toLowerCase();
         if (databaseTypeStr.startsWith("int")
-                || databaseTypeStr.equals("smallint")
-                || databaseTypeStr.equals("tinyint")
+                || "smallint".equals(databaseTypeStr)
+                || "tinyint".equals(databaseTypeStr)
         ) {
             javaType = "Integer";
-        } else if (databaseTypeStr.equals("char")) {
+        } else if ("char".equals(databaseTypeStr)) {
             javaType = "String";
-        } else if (databaseTypeStr.equals("number")
-                || databaseTypeStr.equals("numeric")
+        } else if ("number".equals(databaseTypeStr)
+                || "numeric".equals(databaseTypeStr)
         ) {
             javaType = "Integer";
         } else if (databaseTypeStr.indexOf("varchar") != -1) {
             javaType = "String";
-        } else if (databaseTypeStr.equals("blob")) {
+        } else if ("blob".equals(databaseTypeStr)) {
             javaType = "Byte[]";
-        } else if (databaseTypeStr.equals("float")) {
+        } else if ("float".equals(databaseTypeStr)) {
             javaType = "Float";
-        } else if (databaseTypeStr.equals("double")) {
+        } else if ("double".equals(databaseTypeStr)) {
             javaType = "Double";
-        } else if (databaseTypeStr.equals("decimal")) {
+        } else if ("decimal".equals(databaseTypeStr)) {
             javaType = "java.math.BigDecimal";
         } else if (databaseTypeStr.startsWith("bigint")) {
             javaType = "Long";
-        } else if (databaseTypeStr.equals("date")) {
+        } else if ("date".equals(databaseTypeStr)) {
             javaType = "java.util.Date";
-        } else if (databaseTypeStr.equals("time")) {
+        } else if ("time".equals(databaseTypeStr)) {
             javaType = "java.util.Date";
-        } else if (databaseTypeStr.equals("datetime")) {
+        } else if ("datetime".equals(databaseTypeStr)) {
             javaType = "java.util.Date";
         } else if (databaseTypeStr.startsWith("timestamp")) {
             javaType = "java.util.Date";
-        } else if (databaseTypeStr.equals("year")) {
+        } else if ("year".equals(databaseTypeStr)) {
             javaType = "java.util.Date";
         } else {
             javaType = "String";
