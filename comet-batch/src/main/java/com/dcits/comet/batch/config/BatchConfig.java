@@ -45,23 +45,38 @@ public class BatchConfig {
     @Value("${batch.jdbc.validationQuery}")
     String validationQuery;
 
+    @Value("${batch.threadPool.corePoolSize}")
+    int corePoolSize;
+    @Value("${batch.threadPool.maxPoolSize}")
+    int maxPoolSize;
+    @Value("${batch.threadPool.queueCapacity}")
+    int queueCapacity;
+    @Value("${batch.threadPool.keepAliveSeconds}")
+    int keepAliveSeconds;
+    @Value("${batch.threadPool.threadNamePrefix}")
+    String threadNamePrefix;
+    @Value("${batch.threadPool.waitForTasksToCompleteOnShutdown}")
+    boolean waitForTasksToCompleteOnShutdown;
+
+
+
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 设置核心线程数
-        executor.setCorePoolSize(5);
+        executor.setCorePoolSize(corePoolSize);
         // 设置最大线程数
-        executor.setMaxPoolSize(10);
+        executor.setMaxPoolSize(maxPoolSize);
         // 设置队列容量
-        executor.setQueueCapacity(20);
+        executor.setQueueCapacity(queueCapacity);
         // 设置线程活跃时间（秒）
-        executor.setKeepAliveSeconds(60);
+        executor.setKeepAliveSeconds(keepAliveSeconds);
         // 设置默认线程名称
-        executor.setThreadNamePrefix("comet-");
+        executor.setThreadNamePrefix(threadNamePrefix);
         // 设置拒绝策略
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         // 等待所有任务结束后再关闭线程池
-        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setWaitForTasksToCompleteOnShutdown(waitForTasksToCompleteOnShutdown);
         return executor;
     }
 
