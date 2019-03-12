@@ -13,8 +13,15 @@ public interface BatchConstant {
     public static final String PROCESSOR_NAME_PEX="processor_";
     public static final String BATCH_STEP_NAME="batchStep";
     public static final String PAGE_SIZE_NAME="pageSize";
-
-
+    public static final String END_INDEX = "endIndex";
+    public static final String INIT = "init";
+    public static final String BEGIN_INDEX = "beginIndex";
+    public static final String BATCH_STEP = "batchStep";
+    public static final String STEP = "step";
+    public static final String EXE_ID = "exeId";
+    public static final String JOB_PEX = "job_";
+    public static final String STEP_NAME = "stepName";
+    public static final String STEP_PEX = "step_";
 
 
 }

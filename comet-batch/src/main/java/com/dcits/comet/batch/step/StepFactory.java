@@ -22,8 +22,11 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
+import static com.dcits.comet.batch.constant.BatchConstant.STEP_PEX;
+
 public class StepFactory {
     protected static final Log LOGGER = LogFactory.getLog(CommonJobLauncher.class);
+
 
 
     public static Step build(StepParam stepParam) {
@@ -59,7 +62,7 @@ public class StepFactory {
             if (BatchConstant.RUN_TYPE_MULTI_THREAD.equals(stepParam.getRunType())) {
 
                // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
-                step = stepBuilders.get("step_" + stepName)
+                step = stepBuilders.get(STEP_PEX + stepName)
                         .listener(stepListener)
                         .transactionManager(dataSourceTransactionManager)
                         .chunk(chunkSize)
@@ -74,7 +77,7 @@ public class StepFactory {
                         .build();
 
             } else {
-                step = stepBuilders.get("step_" + stepName)
+                step = stepBuilders.get(STEP_PEX + stepName)
                         //.tasklet(tasklet)
                         .listener(stepListener)
                         .transactionManager(dataSourceTransactionManager)
@@ -92,7 +95,7 @@ public class StepFactory {
 
         } else if (stepObj instanceof ITStep) {
             ITStep taskletStep = (ITStep) stepObj;
-            step = stepBuilders.get("step_" + stepName)
+            step = stepBuilders.get(STEP_PEX + stepName)
                     .transactionManager(dataSourceTransactionManager)
                     .tasklet(taskletStep)
                     .build();

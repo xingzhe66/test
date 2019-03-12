@@ -24,14 +24,16 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
+import static com.dcits.comet.batch.constant.BatchConstant.*;
+
 
 /**
 job执行器
  */
 @Component("commonJobLauncher")
 public class CommonJobLauncher implements IJobLauncher {
-
     protected static final Log LOGGER = LogFactory.getLog(CommonJobLauncher.class);
+
     @Autowired
     private JobRepository jobRepository;
     @Autowired
@@ -55,12 +57,9 @@ public class CommonJobLauncher implements IJobLauncher {
         BatchContext batchContext = jobParam.getBatchContext();
 
         try {
-
-
             if (null == batchContext) {
                 batchContext = new BatchContext();
             }
-
             JobParameters jobParameters = createJobParams(exeId, stepName);
             StepParam stepParam=new StepParam();
             BeanCopier beanCopier = BeanCopier.create(JobParam.class, StepParam.class, false);
@@ -69,7 +68,7 @@ public class CommonJobLauncher implements IJobLauncher {
             Step step = StepFactory.build(stepParam);
 
             SimpleJob job = new SimpleJob();
-            job.setName("job_" + stepName);
+            job.setName(JOB_PEX + stepName);
             job.setJobRepository(jobRepository);
             job.addStep(step);
 
@@ -82,7 +81,6 @@ public class CommonJobLauncher implements IJobLauncher {
             */
             if(BatchConstant.ASYNC_TYPE_ASYNC.equals(jobParam.getAsync())) {
                // ThreadPoolTaskExecutor threadPoolTaskExecutor=new ThreadPoolTaskExecutor();
-
                // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
                 jobLauncher.setTaskExecutor(taskExecutor);
             }
@@ -106,9 +104,6 @@ public class CommonJobLauncher implements IJobLauncher {
                 throw e;
             }
 
-//            if ((null != jobExecution) && (!jobExecution.getExitStatus().equals(ExitStatus.COMPLETED))) {
-//                throw new BatchException("执行返回值为空，exeId："+exeId);
-//            }
             if (null != jobExecution) {
                 jobExeResult.setJobExecution(jobExecution);
                 //todo 异步情况下，batchcontext需要在query到执行成功时返回
@@ -133,8 +128,8 @@ public class CommonJobLauncher implements IJobLauncher {
     private JobParameters createJobParams(String exeId, String stepName) {
         return new JobParametersBuilder()
 //                    .addDate("date", new Date())
-                .addString("exeId", exeId)
-                .addString("stepName", stepName)
+                .addString(EXE_ID, exeId)
+                .addString(STEP_NAME, stepName)
                 .toJobParameters()
                 ;
     }
