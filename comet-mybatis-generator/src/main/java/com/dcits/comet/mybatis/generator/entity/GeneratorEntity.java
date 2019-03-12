@@ -20,6 +20,7 @@ public class GeneratorEntity {
     private String dbType;
     private String isCrateAllTable;
     private String iscreateMapperExt;
+    private int tablePkSize;
 
 
 
@@ -125,6 +126,22 @@ public class GeneratorEntity {
 
     public void setIsCreateMapperExt(String iscreateMapperExt) {
         this.iscreateMapperExt = iscreateMapperExt;
+    }
+
+    public String getIscreateMapperExt() {
+        return iscreateMapperExt;
+    }
+
+    public void setIscreateMapperExt(String iscreateMapperExt) {
+        this.iscreateMapperExt = iscreateMapperExt;
+    }
+
+    public int getTablePkSize() {
+        return tablePkSize;
+    }
+
+    public void setTablePkSize(int tablePkSize) {
+        this.tablePkSize = tablePkSize;
     }
 
     @Override

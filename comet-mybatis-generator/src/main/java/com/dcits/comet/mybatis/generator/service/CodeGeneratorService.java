@@ -56,6 +56,7 @@ public class CodeGeneratorService {
      */
     public void createCodeFolw()throws Exception{
         List<String> tableKeys=getTableKeys();
+        generatorEntity.setTablePkSize(tableKeys.size());
         Map<String, Object> modelDate= getTemplateData(getTableComumnModel(tableKeys));
 
         if(!modelDate.isEmpty()){
@@ -238,6 +239,11 @@ public class CodeGeneratorService {
             data.put("cloums", clList);// 属性
             data.put("author", generatorEntity.getAuthor());// 作者
             data.put("date", PbUtils.getCurrentDateTime());// 日期
+            if(generatorEntity.getTablePkSize()>0){
+                data.put("tablePkSize","Y");//存在主键
+            }else{
+                data.put("tablePkSize","N");//不存在主键
+            }
         }
         return data;
     }
