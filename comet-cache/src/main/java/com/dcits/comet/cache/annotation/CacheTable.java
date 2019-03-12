@@ -13,5 +13,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface CacheTable {
 
-    String value();
+    String value() default "param";
 }
