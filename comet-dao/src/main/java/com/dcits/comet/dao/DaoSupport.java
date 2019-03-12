@@ -17,23 +17,23 @@ public interface DaoSupport extends BaseDaoSupport {
 
     Integer count(String statementPostfix, Map<String, Object> parameter);
 
-
     <T extends BasePo> T selectForUpdate(T parameter);
 
     <T extends BasePo> T selectForUpdate(String statementPostfix, T parameter);
+
+    <T extends BasePo> T selectOne(T parameter);
 
     <T extends BasePo> T selectOne(String statementPostfix, T parameter);
 
     <T extends BasePo> T selectOne(String statementPostfix, Map<String, Object> parameter);
 
-    <T extends BasePo> int update(T entity);
+    //<T extends BasePo> int update(T entity);
 
-    <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter);
+    //<T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter);
 
     <T extends BasePo> int update(String statementPostfix, T entity);
 
     int update(String statementPostfix, Map<String, Object> parameter);
-
 
     <T extends BasePo> int delete(String statementPostfix, T entity);
 
