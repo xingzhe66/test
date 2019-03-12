@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * @Date 2019-03-05 8:56
  * @Version 1.0
  **/
-@Target({ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ServiceType {
