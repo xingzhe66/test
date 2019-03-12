@@ -19,6 +19,7 @@ public class ${className} extends BaseCifPo{
 	* This field corresponds to the database column ${tableName}.${ c.columnNameL}
 	* @Description  ${ c.columnComment}
 	*/
+	${c.cloumsTop}
 	private ${c.javaType} ${ c.columnName};
 	</#list>
 }

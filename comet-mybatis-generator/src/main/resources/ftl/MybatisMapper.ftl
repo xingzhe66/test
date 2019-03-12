@@ -129,4 +129,65 @@
 		<include refid="Base_Select" />
 		for update
 	</select>
+
+	<!--根据主键查询-->
+	<sql id="selectByPrimaryKey"  resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column" />
+		FROM
+		<include refid="Table_Name" />
+		<where>
+			<trim suffixOverrides="AND">
+				<#list cloums as c>
+					<#if c.pkFlag == "Y">
+						<if test="${c.columnName} != null and ${c.columnName} != '' ">
+						${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+						</if>
+					</#if>
+				</#list>
+			</trim>
+		</where>
+	</sql>
+	<!--根据主键更新-->
+	<sql id="updateByPrimaryKey">
+		UPDATE
+		<include refid="Table_Name" />
+		<set>
+			<#list cloums as c>
+				<#if c.pkFlag == "N">
+					<if test="${c.columnName} != null ">
+					${c.columnNameL} = ${r"#{"}${ c.columnName}},
+					</if>
+				</#if>
+			</#list>
+		</set>
+		<where>
+			<trim suffixOverrides="AND">
+				<#list cloums as c>
+					<#if c.pkFlag == "Y">
+						<if test="${c.columnName} != null and ${c.columnName} != '' ">
+						${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+						</if>
+					</#if>
+				</#list>
+			</trim>
+		</where>
+	</sql>
+
+    <!--根据主键删除-->
+	<sql id="deleteByPrimaryKey">
+		DELETE FROM <include refid="Table_Name" />
+		<where>
+			<trim suffixOverrides="AND">
+				<#list cloums as c>
+					<#if c.pkFlag == "Y">
+						<if test="${c.columnName} != null and ${c.columnName} != '' ">
+						${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+						</if>
+					</#if>
+				</#list>
+			</trim>
+		</where>
+	</sql>
+
 </mapper>

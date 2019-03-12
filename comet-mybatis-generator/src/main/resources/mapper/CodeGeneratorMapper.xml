@@ -52,4 +52,26 @@
 		</if>
 	</select>
 
+
+
+	<!--获取表的主键-->
+	<select id="getTableKeys" parameterType="java.util.Map"  resultType="java.lang.String">
+		<if test="dbType == 'mysql'">
+			SELECT DISTINCT column_name  FROM INFORMATION_SCHEMA.`KEY_COLUMN_USAGE`
+			WHERE TABLE_NAME = #{tableName} AND constraint_name='PRIMARY';
+		</if>
+
+		<if test="dbType == 'oracle'">
+
+		</if>
+
+		<if test="dbName == 'mssql'">
+
+		</if>
+	</select>
+
+
+
+
+
 </mapper>
