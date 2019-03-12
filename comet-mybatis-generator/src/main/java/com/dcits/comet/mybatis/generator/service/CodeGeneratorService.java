@@ -55,7 +55,9 @@ public class CodeGeneratorService {
      *生成对应文件
      */
     public void createCodeFolw()throws Exception{
-        Map<String, Object> modelDate= getTemplateData(getTableComumnModel());
+        List<String> tableKeys=getTableKeys();
+        Map<String, Object> modelDate= getTemplateData(getTableComumnModel(tableKeys));
+
         if(!modelDate.isEmpty()){
             //生成entity
             createEntity(modelDate);
@@ -92,7 +94,6 @@ public class CodeGeneratorService {
         String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Mapper_ext.xml";
         TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
-
     /**
      * 生成JavaBean 实体类
      * @throws Exception
@@ -133,6 +134,19 @@ public class CodeGeneratorService {
     }
 
     /**
+     * 获取表得主键
+     */
+    public List<String> getTableKeys() {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("tableName", generatorEntity.getTableName());// 表名称
+        params.put("dbName", generatorEntity.getDbName());// 数据库名称
+        params.put("dbType", generatorEntity.getDbType());//数据库类型
+        List<String> tableKeys = codeDao.getTableKeys(params);
+        return tableKeys;
+
+    }
+
+    /**
      * 获取数据表的列信息
      *
      * @return
@@ -150,10 +164,11 @@ public class CodeGeneratorService {
      * 处理数据表列信息
      * @return
      */
-    public List<Map<String, Object>> getTableComumnModel() {
+    public List<Map<String, Object>> getTableComumnModel(List<String> tableKeys) {
         List<Map> list = getListMap();
         List<Map<String, Object>> clList = new ArrayList<Map<String, Object>>();
         if (list != null && list.size() > 0) {
+            int pkIndex=1;
             for (int i = 0; i < list.size(); i++) {
                 Map<String, Object> oMap = new HashMap<String, Object>();
                 // 遍历list
@@ -162,16 +177,28 @@ public class CodeGeneratorService {
                 for (String key : map.keySet()) {
                     // 列名称
                     if ("COLUMNNAME".equals(key)) {
-                        String reStr = PbUtils.strRelplacetoLowerCase(map.get(key).toString());// 列名称，首字母小写，去下划线
-                        oMap.put("columnNameL", map.get(key).toString());// 列名称，首字母小写，去下划线
+                        String columnName=map.get(key).toString();//列名称
+                        String reStr = PbUtils.strRelplacetoLowerCase(columnName);// 列名称，首字母小写，去下划线
+                        oMap.put("columnNameL", columnName);// 列名称
                         oMap.put("columnName", reStr);// 列名称，首字母小写，去下划线
-
                         // 自动判断大小写
                         if ("_".equals(map.get(key).toString().substring(1, 2))) {
                             oMap.put("UpUmnName", reStr);// 列名称，首字母小写，去下划线
                         } else {
                             oMap.put("UpUmnName", PbUtils.fristStrToUpperCase(reStr));// 列名称，首字母大写，去下划线
                         }
+                        //主键标识  用于model
+                        String cloumsTop = "";
+                        //主键标识  用于xml
+                        String pkFlag="N";
+                        //判断是否为主键
+                        if(tableKeys.size()>0 && tableKeys.contains(columnName)){
+                            cloumsTop +="@TablePK(index="+pkIndex+")";
+                            pkIndex++;
+                            pkFlag ="Y";
+                        }
+                        oMap.put("cloumsTop", cloumsTop);
+                        oMap.put("pkFlag", pkFlag);
                     }
                     // 注释
                     if ("COLUMNCOMMENT".equals(key)) {
