@@ -5,15 +5,18 @@ import com.dcits.comet.commons.constant.Constants.*;
 
 /**
  * 平台级异常基类
- *
  */
 public class CometPlatformException extends RuntimeException {
     private static final long serialVersionUID = 123333212566L;
 
-    /** 内部错误码 */
+    /**
+     * 内部错误码
+     */
     private String errorCode;
 
-    /** 异常信息 */
+    /**
+     * 异常信息
+     */
     private String errorMessage;
 
 
@@ -33,7 +36,7 @@ public class CometPlatformException extends RuntimeException {
 
     // extends RuntimeException
     protected CometPlatformException(String message, Throwable cause, boolean enableSuppression,
-                                boolean writableStackTrace) {
+                                     boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
