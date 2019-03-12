@@ -1,6 +1,9 @@
 package com.dcits.comet.dao.mybatis;
 
+import com.dcits.comet.commons.utils.BeanUtil;
+import com.dcits.comet.commons.utils.BusiUtil;
 import com.dcits.comet.dao.DaoSupport;
+import com.dcits.comet.dao.annotation.TablePkScanner;
 import com.dcits.comet.dao.interceptor.SelectForUpdateHelper;
 import com.dcits.comet.dao.interceptor.TotalrecordHelper;
 import com.dcits.comet.dao.model.BasePo;
@@ -133,19 +136,19 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return i;
     }
 
-    @Override
+    //@Override
     public <T extends BasePo> int update(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().update(className + ".update", entity);
     }
 
-    @Override
+   // @Override
     public <T extends BasePo> int update(T setParameter, T whereParameter) {
         String className = setParameter.getClass().getName();
         return this.update(className + ".updateByEntity", setParameter, whereParameter);
     }
 
-    @Override
+    //@Override
     public <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter) {
         Map<String, Object> parameter = new HashMap(2);
         parameter.put("s", setParameter);
@@ -163,7 +166,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return this.getSqlSession().update(statementPostfix, parameter);
     }
 
-    @Override
+    //@Override
     public <T extends BasePo> int delete(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().delete(className + ".delete", entity);
@@ -183,6 +186,44 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     public <T extends BasePo> List<T> selectList(T entity) {
         String statementPostfix = entity.getClass().getName() + ".selectList";
         return this.selectList(statementPostfix, entity);
+    }
+
+    /**
+     * 主键通用查询
+     *
+     * @param entity
+     * @param pkValue
+     * @return
+     */
+    @Override
+    public <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue) {
+        String className = entity.getClass().getName();
+        T po = getPkObject(entity, false, pkValue);
+        return (T) this.getSqlSession().selectOne(className + SELECT_BY_PRIMARYKEY, po);
+    }
+
+    /**
+     * 主键通用动态更新
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    public <T extends BasePo> int updateByPrimaryKey(T entity) {
+        String className = entity.getClass().getName();
+        return this.getSqlSession().update(className + UPDATE_BY_PRIMARYKEY, entity);
+    }
+
+    /**
+     * 根据主键删除记录
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    public <T extends BasePo> int deleteByPrimaryKey(T entity) {
+        String className = entity.getClass().getName();
+        return this.getSqlSession().delete(className + DELETE_BY_PRIMARYKEY, entity);
     }
 
     @Override
@@ -269,5 +310,43 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         }
 
         return result;
+    }
+
+    final private <T extends BasePo> T getPkObject(T param, boolean ignoreNullValue, Object... pkValue) {
+        String[] pks = TablePkScanner.pkColsScanner(param);
+        // 表无主键
+        if (pks.length == 0) {
+            return null;
+        }
+        // 主键值为Null
+        if (null == pkValue || pkValue.length == 0) {
+            throw BusiUtil.createBusinessException("100502");
+        }
+        // 有效value
+        boolean effectiveValue = false;
+        for (Object v : pkValue) {
+            if (null != v) {
+                effectiveValue = true;
+                break;
+            }
+        }
+        // 无有效value
+        if (!effectiveValue) {
+            throw BusiUtil.createBusinessException("100503");
+        }
+        int i = 0;
+        for (String pk : pks) {
+            if (null != pkValue[i]) {
+                try {
+                    BeanUtil.setValue(param, pk, pks[i]);
+                } catch (Exception e) {
+                    throw BusiUtil.createBusinessException("100504", new String[]{pk});
+                }
+            } else if (!ignoreNullValue) {
+                throw BusiUtil.createBusinessException("100501", new String[]{pk});
+            }
+            i++;
+        }
+        return param;
     }
 }

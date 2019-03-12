@@ -815,7 +815,7 @@ import java.util.*;
 //    public static Object getBodyFieldValue(BaseRequest request, String fieldName) {
 //
 //        try {
-//            return BeanUtils.getFieldValue(request, "body." + fieldName);
+//            return BeanUtil.getFieldValue(request, "body." + fieldName);
 //        } catch (Exception e) {
 //            return null;
 //        }
