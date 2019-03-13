@@ -63,7 +63,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     @Override
     public <T extends BasePo> Integer count(T entity) {
         String className = entity.getClass().getName();
-        return (Integer) this.getSqlSession().selectOne(className + ".count", entity);
+        return (Integer) this.getSqlSession().selectOne(className + POSTFIX_COUNT, entity);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     @Override
     public <T extends BasePo> T selectOne(T entity) {
         String className = entity.getClass().getName();
-        return (T) this.getSqlSession().selectOne(className + ".selectOne", entity);
+        return (T) this.getSqlSession().selectOne(className + POSTFIX_SELECTONE, entity);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     @Override
     public <T extends BasePo> int insert(T entity) {
         String className = entity.getClass().getName();
-        return this.getSqlSession().insert(className + ".insert", entity);
+        return this.getSqlSession().insert(className + POSTFIX_INSERT, entity);
     }
 
     @Override
@@ -136,19 +136,16 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return i;
     }
 
-    //@Override
     public <T extends BasePo> int update(T entity) {
         String className = entity.getClass().getName();
-        return this.getSqlSession().update(className + ".update", entity);
+        return this.getSqlSession().update(className + POSTFIX_UPDATE, entity);
     }
 
-   // @Override
     public <T extends BasePo> int update(T setParameter, T whereParameter) {
         String className = setParameter.getClass().getName();
-        return this.update(className + ".updateByEntity", setParameter, whereParameter);
+        return this.update(className + POSTFIX_UPDATE_BY_ENTITY, setParameter, whereParameter);
     }
 
-    //@Override
     public <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter) {
         Map<String, Object> parameter = new HashMap(2);
         parameter.put("s", setParameter);
@@ -166,10 +163,9 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return this.getSqlSession().update(statementPostfix, parameter);
     }
 
-    //@Override
     public <T extends BasePo> int delete(T entity) {
         String className = entity.getClass().getName();
-        return this.getSqlSession().delete(className + ".delete", entity);
+        return this.getSqlSession().delete(className + POSTFIX_DELETE, entity);
     }
 
     @Override
@@ -184,7 +180,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
 
     @Override
     public <T extends BasePo> List<T> selectList(T entity) {
-        String statementPostfix = entity.getClass().getName() + ".selectList";
+        String statementPostfix = entity.getClass().getName() + POSTFIX_SELECTLIST;
         return this.selectList(statementPostfix, entity);
     }
 
@@ -199,7 +195,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     public <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue) {
         String className = entity.getClass().getName();
         T po = getPkObject(entity, false, pkValue);
-        return (T) this.getSqlSession().selectOne(className + SELECT_BY_PRIMARYKEY, po);
+        return (T) this.getSqlSession().selectOne(className + POSTFIX_SELECTBYPRIMARYKEY, po);
     }
 
     /**
@@ -211,7 +207,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     @Override
     public <T extends BasePo> int updateByPrimaryKey(T entity) {
         String className = entity.getClass().getName();
-        return this.getSqlSession().update(className + UPDATE_BY_PRIMARYKEY, entity);
+        return this.getSqlSession().update(className + POSTFIX_UPDATEBYPRIMARYKEY, entity);
     }
 
     /**
@@ -223,7 +219,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     @Override
     public <T extends BasePo> int deleteByPrimaryKey(T entity) {
         String className = entity.getClass().getName();
-        return this.getSqlSession().delete(className + DELETE_BY_PRIMARYKEY, entity);
+        return this.getSqlSession().delete(className + POSTFIX_DELETEBYPRIMARYKEY, entity);
     }
 
     @Override

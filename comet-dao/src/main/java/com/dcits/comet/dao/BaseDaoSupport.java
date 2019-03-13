@@ -19,12 +19,9 @@ public interface BaseDaoSupport {
     String POSTFIX_UPDATE_BY_ENTITY = ".updateByEntity";
     String POSTFIX_DELETE = ".delete";
     String POSTFIX_SELECTLIST = ".selectList";
-
-    String UPDATE_BY_PRIMARYKEY = ".updateByPrimaryKey";
-
-    String DELETE_BY_PRIMARYKEY = ".deleteByPrimaryKey";
-
-    String SELECT_BY_PRIMARYKEY = ".selectByPrimaryKey";
+    String POSTFIX_UPDATEBYPRIMARYKEY = ".updateByPrimaryKey";
+    String POSTFIX_DELETEBYPRIMARYKEY = ".deleteByPrimaryKey";
+    String POSTFIX_SELECTBYPRIMARYKEY = ".selectByPrimaryKey";
 
 
     <T extends BasePo> Integer count(T entity);
