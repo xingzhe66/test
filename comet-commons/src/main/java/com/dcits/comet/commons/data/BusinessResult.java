@@ -1,6 +1,7 @@
 package com.dcits.comet.commons.data;
 
 import com.dcits.comet.commons.constant.Constants;
+import com.dcits.comet.commons.constant.ResponseEnum;
 import com.dcits.comet.commons.data.head.AppHead;
 import com.dcits.comet.commons.data.head.Result;
 import com.dcits.comet.commons.data.head.SysHeadOut;
@@ -13,7 +14,7 @@ import com.dcits.comet.commons.data.head.SysHeadOut;
 public class BusinessResult {
 
     public static <T extends BaseResponse> T success(T t) {
-        Result ret = new Result(Constants.ResponseCode.CODE_SUCCESS, Constants.ResponseCode.MESSAGE_SUCCESS);
+        Result ret = new Result(ResponseEnum.SUCCESS.getCode(), ResponseEnum.SUCCESS.getMessage());
         String retStatus = Constants.ResponseStatus.STATUS_SUCCESS;
         SysHeadOut sysHeadOut = new SysHeadOut(retStatus, ret);
         t.setSysHead(sysHeadOut);

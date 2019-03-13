@@ -14,23 +14,25 @@ public class Constants {
         public static final String CODE_CONNECT_ERROR = "777777";
         public static final String CODE_CONNECT_ERROR_MSG = "通讯异常";
 
-        /**
-         * 执行成功时，默认返回的RET_CODE的值
-         */
-        public static final String CODE_SUCCESS = "000000";
-        /**
-         * 执行失败时，默认返回的RET_CODE的值
-         */
-        public static final String CODE_FAILED = "999999";
+//        /**
+//         * 执行成功时，默认返回的RET_CODE的值
+//         */
+//        public static final String CODE_SUCCESS = "000000";
+//        /**
+//         * 执行成功时，默认返回的RET_MSG的值
+//         */
+//        public static final String MESSAGE_SUCCESS = "SUCCESS";
+//        /**
+//         * 执行失败时，默认返回的RET_CODE的值
+//         */
+//        public static final String CODE_FAILED = "999999";
+//
+//        public static final String MESSAGE_FAILED = "业务执行异常!";
         /**
          * RPC服务调用执行超时，默认返回的RET_CODE的值
          */
         public static final String CODE_TIMEOUT = "888888";
 
-        /**
-         * 执行成功时，默认返回的RET_MSG的值
-         */
-        public static final String MESSAGE_SUCCESS = "SUCCESS";
 
     }
 
