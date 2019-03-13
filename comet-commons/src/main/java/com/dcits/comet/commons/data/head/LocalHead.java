@@ -1,7 +1,5 @@
 package com.dcits.comet.commons.data.head;
 
-import com.dcits.comet.commons.data.Result;
-
 import java.util.List;
 
 /**

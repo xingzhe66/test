@@ -29,7 +29,7 @@ public class CometPlatformException extends RuntimeException {
     // extends RuntimeException
     public CometPlatformException(final Throwable cause) {
         super(cause);
-        setErrorCode(ResponseCode.EXCEPTION);
+        setErrorCode(ResponseCode.CODE_FAILED);
 
     }
 

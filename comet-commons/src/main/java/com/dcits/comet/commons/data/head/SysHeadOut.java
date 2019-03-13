@@ -4,6 +4,10 @@ import com.dcits.comet.commons.data.BaseData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 /**
  * @Author chengliang
  * @Description //TODO
@@ -12,7 +16,19 @@ import lombok.EqualsAndHashCode;
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SysHead extends BaseData {
+public class SysHeadOut extends BaseData {
+
+    private static final long serialVersionUID = 6187646013421072249L;
+
+    /**
+     * 返回状态
+     */
+    private String retStatus;
+
+    /**
+     * 返回结果集
+     */
+    private Results ret;
 
     /**
      * 授权柜员标识
@@ -25,10 +41,6 @@ public class SysHead extends BaseData {
 
     private String tranDate;
 
-    /**
-     * 渠道流水号<br>
-     */
-    private String seqNo;
 
     /**
      * 交易模式<br>
@@ -47,12 +59,6 @@ public class SysHead extends BaseData {
      */
 
     private String messageCode;
-
-    /**
-     * 交易录入柜员标识<br>
-     */
-
-    private String apprUserId;
 
     /**
      * 交易屏幕标识<br>
@@ -91,14 +97,6 @@ public class SysHead extends BaseData {
     private String macValue;
 
     /**
-     * 复核标志<br>
-     * E－交易录入<br>
-     * A－交易批准<br>
-     */
-
-    private String apprFlag;
-
-    /**
      * 渠道类型<br>
      */
 
@@ -117,16 +115,6 @@ public class SysHead extends BaseData {
      */
 
     private String filePath;
-
-    /**
-     * 授权标志<br>
-     * AUTH_FLAG<br>
-     * N－未授权<br>
-     * M－授权通过<br>
-     * O－确认通过<br>
-     */
-
-    private String authFlag;
 
     /**
      * 交易时间<br>
@@ -159,7 +147,7 @@ public class SysHead extends BaseData {
     private String company;
 
     /**
-     * 业务参考号 交易日期+10顺序号,顺序号每次+1
+     * 业务参考号
      */
     private String reference;
 
@@ -172,4 +160,20 @@ public class SysHead extends BaseData {
      * SCENE_ID 服务场景
      */
     private String sceneId;
+
+    public SysHeadOut(String retStatus, Results ret) {
+        this.retStatus = retStatus;
+        this.ret = ret;
+        this.tranTimestamp = getCurrentDate();
+    }
+
+    /**
+     * 获取当前的时间
+     *
+     * @return
+     */
+    private String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmmssSSS");
+        return sdf.format(new Date());
+    }
 }
