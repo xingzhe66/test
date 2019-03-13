@@ -194,7 +194,7 @@ public class CodeGeneratorService {
                         String pkFlag="N";
                         //判断是否为主键
                         if(tableKeys.size()>0 && tableKeys.contains(columnName)){
-                            cloumsTop +="@TablePK(index="+pkIndex+")";
+                            cloumsTop +="@TablePk(index="+pkIndex+")";
                             pkIndex++;
                             pkFlag ="Y";
                         }
