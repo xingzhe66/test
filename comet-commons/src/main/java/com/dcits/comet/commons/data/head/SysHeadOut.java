@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -28,7 +30,7 @@ public class SysHeadOut extends BaseData {
     /**
      * 返回结果集
      */
-    private Results ret;
+    private List<Result> ret;
 
     /**
      * 授权柜员标识
@@ -161,9 +163,13 @@ public class SysHeadOut extends BaseData {
      */
     private String sceneId;
 
-    public SysHeadOut(String retStatus, Results ret) {
+    public SysHeadOut() {
+    }
+
+    public SysHeadOut(String retStatus, Result result) {
         this.retStatus = retStatus;
-        this.ret = ret;
+        this.ret = new ArrayList<>();
+        this.ret.add(result);
         this.tranTimestamp = getCurrentDate();
     }
 
