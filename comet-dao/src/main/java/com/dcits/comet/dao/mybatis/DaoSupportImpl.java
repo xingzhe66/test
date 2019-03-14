@@ -334,7 +334,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         for (String pk : pks) {
             if (null != pkValue[i]) {
                 try {
-                    BeanUtil.setValue(param, pk, pks[i]);
+                    BeanUtil.setValue(param, pk, pkValue[i]);
                 } catch (Exception e) {
                     throw BusiUtil.createBusinessException("100504", new String[]{pk});
                 }

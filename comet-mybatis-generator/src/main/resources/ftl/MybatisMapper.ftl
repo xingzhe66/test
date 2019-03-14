@@ -133,7 +133,7 @@
 
 	<#if tablePkSize =="Y">
 	<!--根据主键查询-->
-	<sql id="selectByPrimaryKey"  resultMap="BaseResultMap">
+	<select id="selectByPrimaryKey"  resultMap="BaseResultMap">
 		SELECT
 		<include refid="Base_Column" />
 		FROM
@@ -147,12 +147,12 @@
 	        </#list>
 			</trim>
 		</where>
-	</sql>
+	</select>
 	</#if>
 
 	<#if tablePkSize =="Y">
 	<!--根据主键更新-->
-	<sql id="updateByPrimaryKey">
+	<update id="updateByPrimaryKey">
 		UPDATE
 		<include refid="Table_Name" />
 		<set>
@@ -173,12 +173,12 @@
 			</#list>
 			</trim>
 		</where>
-	</sql>
+	</update>
 	</#if>
 
 	<#if tablePkSize =="Y">
     <!--根据主键删除-->
-	<sql id="deleteByPrimaryKey">
+	<delete id="deleteByPrimaryKey">
 		DELETE FROM <include refid="Table_Name" />
 		<where>
 			<trim suffixOverrides="AND">
@@ -189,6 +189,6 @@
 			</#list>
 			</trim>
 		</where>
-	</sql>
+	</delete>
 	</#if>
 </mapper>

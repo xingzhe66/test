@@ -3,6 +3,7 @@ package ${mouldName}.${entityPackage};
 import com.dcits.ensemble.cloud.cif.common.base.BaseCifPo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import com.dcits.comet.dao.annotation.TablePk;
 
 /**
  * @Author ${author}

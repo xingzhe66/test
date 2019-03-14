@@ -1,5 +1,13 @@
-package com.dcits.comet.commons.data;
+package com.dcits.comet.commons.data.head;
 
+import lombok.Data;
+
+/**
+ * 返回对象
+ *
+ * @author ChengLiang
+ */
+@Data
 public class Result {
     private String retCode;
 

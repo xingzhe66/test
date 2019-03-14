@@ -1,7 +1,7 @@
 package com.dcits.comet.commons.exception;
 
 
-import com.dcits.comet.commons.constant.Constants.*;
+import com.dcits.comet.commons.constant.ResponseEnum;
 
 /**
  * 平台级异常基类
@@ -29,7 +29,7 @@ public class CometPlatformException extends RuntimeException {
     // extends RuntimeException
     public CometPlatformException(final Throwable cause) {
         super(cause);
-        setErrorCode(ResponseCode.EXCEPTION);
+        setErrorCode(ResponseEnum.FAILED.getCode());
 
     }
 
