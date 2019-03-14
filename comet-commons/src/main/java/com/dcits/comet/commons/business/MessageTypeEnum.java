@@ -1,11 +1,6 @@
 package com.dcits.comet.commons.business;
 
-/**
- * 服务类型定义
- *
- * @author ChengLiang
- */
-public enum ServiceTypeEnum {
+public enum MessageTypeEnum {
     /**
      * 金融服务
      */
@@ -27,21 +22,19 @@ public enum ServiceTypeEnum {
      */
     FILE("1220");
 
-    /**
-     * 服务编码
-     */
     private String messageType;
 
-    /**
-     * 私有构造,防止被外部调用
-     *
-     * @param messageType
-     */
-    private ServiceTypeEnum(String messageType) {
-        this.messageType = messageType;
+    MessageTypeEnum(String messageType){
+        this.messageType=messageType;
     }
 
     public String getMessageType() {
         return messageType;
     }
+
+//    public void setMessageType(String messageType) {
+//        this.messageType = messageType;
+//    }
+
+
 }
