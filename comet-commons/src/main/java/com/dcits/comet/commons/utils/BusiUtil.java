@@ -7,6 +7,7 @@ import com.dcits.comet.commons.exception.BusinessException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,7 +18,7 @@ import java.util.*;
  *
  * @author Chengliang
  */
-    public class BusiUtil {
+public class BusiUtil {
     public static final String R = "R";
     public static final String T = "T";
     public static final int END = 31;
@@ -40,7 +41,7 @@ import java.util.*;
      * @author chengliang
      */
     public static BusinessException createBusinessException(String errorCode, String... errorMessageParams) {
-       // return createException(BusinessException.class, ret);
+        // return createException(BusinessException.class, ret);
         return new BusinessException(errorCode, errorMessageParams);
     }
 
@@ -84,6 +85,7 @@ import java.util.*;
     public static boolean isEquals(Long s, Long t) {
         return s.equals(t);
     }
+
     /**
      * 字符类型比较是否相等
      *
@@ -94,6 +96,7 @@ import java.util.*;
     public static boolean isEquals(String s, String t) {
         return StringUtil.isEquals(s, t);
     }
+
     public static boolean isNotEquals(String s, String t) {
         return !isEquals(s, t);
     }
@@ -333,6 +336,80 @@ import java.util.*;
         return isNullObj(source) ? dest : source;
     }
 
+
+    /**
+     * 当source等于condition时，return value<br>
+     * 否则return value2
+     *
+     * @param source
+     * @param condition
+     * @param value
+     * @param value1
+     * @return
+     */
+    public static <T> T decode(String source, String condition, T value,
+                               T value1) {
+        if (condition.equals(source))
+            return value;
+        return value1;
+    }
+
+    /**
+     * 当source等于condition1时，return value1<br>
+     * 当source等于condition2时，return value2<br>
+     * 否则return value3
+     *
+     * @param source
+     * @param condition1
+     * @param value1
+     * @param condition2
+     * @param value2
+     * @param value3
+     * @return
+     */
+    public static <T> T decode(String source, String condition1, T value1,
+                               String condition2, T value2, T value3) {
+        if (condition1.equals(source))
+            return value1;
+        else if (condition2.equals(source))
+            return value2;
+        return value3;
+    }
+
+    /**
+     * 当source等于condition时，return value<br>
+     * 否则return value2
+     *
+     * @param source
+     * @param condition
+     * @param value
+     * @param value1
+     * @return
+     */
+    public static <T> T decode(int source, int condition, T value, T value1) {
+        return decode(String.valueOf(source), String.valueOf(condition), value,
+                value1);
+    }
+
+    /**
+     * 当source等于condition1时，return value1<br>
+     * 当source等于condition2时，return value2<br>
+     * 否则return value3
+     *
+     * @param source
+     * @param condition1
+     * @param value1
+     * @param condition2
+     * @param value2
+     * @param value3
+     * @return
+     */
+    public static <T> T decode(int source, int condition1, T value1,
+                               int condition2, T value2, T value3) {
+        return decode(String.valueOf(source), String.valueOf(condition1),
+                value1, String.valueOf(condition2), value2, value3);
+    }
+
     /**
      * 日期格式化
      *
@@ -492,8 +569,8 @@ import java.util.*;
                 if (BusiUtil.isNotNull(filterMap.get(key))) {
                     try {
                         Object v1 = BusiUtil.nvl(entry.getValue(), "").toString();
-                        Object v2=BusiUtil.nvl(BeanUtil.getValue(bean2,entry.getKey()),"").toString();
-                       // Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
+                        Object v2 = BusiUtil.nvl(BeanUtil.getValue(bean2, entry.getKey()), "").toString();
+                        // Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
                         if (!v1.equals(v2)) {
                             JSONObject json = new JSONObject();
                             json.put("beforeValue", v1);
@@ -510,8 +587,8 @@ import java.util.*;
                 if (BusiUtil.isNull(filterMap.get(key))) {
                     try {
                         Object v1 = BusiUtil.nvl(entry.getValue(), "").toString();
-                       // Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
-                        Object v2=BusiUtil.nvl(BeanUtil.getValue(bean2,entry.getKey()),"").toString();
+                        // Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
+                        Object v2 = BusiUtil.nvl(BeanUtil.getValue(bean2, entry.getKey()), "").toString();
                         if (!v1.equals(v2)) {
                             JSONObject json = new JSONObject();
                             json.put("beforeValue", v1);
@@ -754,6 +831,7 @@ import java.util.*;
         d = DateUtil.addDate(d, 1);
         return convertDate2Str(d);
     }
+
     /**
      * 将字符String类型转换为日期Date类型,默认转换为yyyyMMdd
      *
