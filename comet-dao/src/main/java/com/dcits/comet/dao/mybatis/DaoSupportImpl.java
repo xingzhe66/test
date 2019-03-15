@@ -27,7 +27,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     public DaoSupportImpl() {
     }
 
-    private void initPropertyColumnMapper() {
+    public void initPropertyColumnMapper() {
         Collection<ResultMap> rms = this.getSqlSession().getConfiguration().getResultMaps();
         Iterator iter = rms.iterator();
 
@@ -174,7 +174,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
 
     @Override
     public <T extends BasePo> int delete(String statementPostfix, T entity) {
-        return this.getSqlSession().update(statementPostfix, entity);
+        return this.getSqlSession().delete(statementPostfix, entity);
     }
 
     @Override
@@ -186,6 +186,11 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     public <T extends BasePo> List<T> selectList(T entity) {
         String statementPostfix = entity.getClass().getName() + POSTFIX_SELECTLIST;
         return this.selectList(statementPostfix, entity);
+    }
+
+    @Override
+    public <T extends BasePo> List<T> selectAll(T entity) {
+        return null;
     }
 
     /**

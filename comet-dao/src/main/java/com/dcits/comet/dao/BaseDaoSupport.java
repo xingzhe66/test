@@ -32,10 +32,12 @@ public interface BaseDaoSupport {
 
     <T extends BasePo> int insert(List<T> list);
 
-    <T extends BasePo> int update(T setParameter, T whereParameter);
+    <T extends BasePo> int update(T entity);
 
     <T extends BasePo> int delete(T entity);
 
     <T extends BasePo> List<T> selectList(T entity);
+
+    <T extends BasePo> List<T> selectAll(T entity);
 
 }
