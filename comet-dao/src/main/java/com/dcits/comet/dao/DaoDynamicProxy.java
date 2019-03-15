@@ -19,10 +19,16 @@ public class DaoDynamicProxy implements InvocationHandler {
 
     /**
      * 代理的真实对象
+     * 数据库访问对象
      */
     private DaoSupport daoSupport;
 
 
+    /**
+     * 代理的真实对象
+     * 业务参数访问对象
+     * 会使用cache
+     */
     private ParamSupport paramSupport;
 
     /**
@@ -56,20 +62,28 @@ public class DaoDynamicProxy implements InvocationHandler {
             }
         }
 
+        //业务参数表
         if (isParamTable) {
             //当代理对象调用真实对象的方法时
-            // 其会自动的跳转到代理对象关联的handler对象的invoke方法来进行调用
+            // 其会自动的跳转到代理对象关联的paramSupport对象的invoke方法来进行调用
             result = method.invoke(paramSupport, args);
         } else {
             //当代理对象调用真实对象的方法时
-            // 其会自动的跳转到代理对象关联的handler对象的invoke方法来进行调用
+            // 其会自动的跳转到代理对象关联的daoSupport对象的invoke方法来进行调用
             result = method.invoke(daoSupport, args);
         }
 
         return result;
     }
 
-
+    /**
+     * 判断是否为业务参数表
+     * <p>
+     * 示例：@TableType(TableTypeEnum.PARAM)
+     *
+     * @param basePo
+     * @return
+     */
     private boolean isParamTableType(BasePo basePo) {
         boolean ret = false;
         boolean hasAnnotation = basePo.getClass().isAnnotationPresent(TableType.class);

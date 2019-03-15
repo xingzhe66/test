@@ -190,42 +190,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
 
     @Override
     public <T extends BasePo> List<T> selectAll(T entity) {
-        return null;
-    }
-
-    /**
-     * 主键通用查询
-     *
-     * @param entity
-     * @param pkValue
-     * @return
-     */
-    public <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue) {
-        String className = entity.getClass().getName();
-        T po = getPkObject(entity, false, pkValue);
-        return (T) this.getSqlSession().selectOne(className + POSTFIX_SELECTBYPRIMARYKEY, po);
-    }
-
-    /**
-     * 主键通用动态更新
-     *
-     * @param entity
-     * @return
-     */
-    public <T extends BasePo> int updateByPrimaryKey(T entity) {
-        String className = entity.getClass().getName();
-        return this.getSqlSession().update(className + POSTFIX_UPDATEBYPRIMARYKEY, entity);
-    }
-
-    /**
-     * 根据主键删除记录
-     *
-     * @param entity
-     * @return
-     */
-    public <T extends BasePo> int deleteByPrimaryKey(T entity) {
-        String className = entity.getClass().getName();
-        return this.getSqlSession().delete(className + POSTFIX_DELETEBYPRIMARYKEY, entity);
+        throw new UnsupportedOperationException("The requested operation is not supported for BusinessTable !");
     }
 
     @Override
