@@ -26,42 +26,16 @@ public interface BaseDaoSupport {
 
     <T extends BasePo> Integer count(T entity);
 
+    <T extends BasePo> T selectOne(T parameter);
+
     <T extends BasePo> int insert(T entity);
 
     <T extends BasePo> int insert(List<T> list);
 
-    //<T extends BasePo> int update(T setParameter, T whereParameter);
+    <T extends BasePo> int update(T setParameter, T whereParameter);
 
-    //<T extends BasePo> int delete(T entity);
+    <T extends BasePo> int delete(T entity);
 
     <T extends BasePo> List<T> selectList(T entity);
-
-    /**
-     * 主键通用查询
-     *
-     * @param entity
-     * @param pkValue
-     * @param <T>
-     * @return
-     */
-    <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue);
-
-    /**
-     * 主键通用动态更新
-     *
-     * @param entity
-     * @param <T>
-     * @return
-     */
-    <T extends BasePo> int updateByPrimaryKey(T entity);
-
-    /**
-     * 根据主键删除记录
-     *
-     * @param entity
-     * @param <T>
-     * @return
-     */
-    <T extends BasePo> int deleteByPrimaryKey(T entity);
 
 }

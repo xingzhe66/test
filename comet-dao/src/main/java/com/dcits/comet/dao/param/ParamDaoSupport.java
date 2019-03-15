@@ -26,8 +26,8 @@ public class ParamDaoSupport {
     }
 
     @Cacheable(value = "param", key = "#cacheKey")
-    public <T extends BasePo> T selectByPrimaryKey(T parameter, String cacheKey,Object... pkValue) {
-        return daoSupport.selectByPrimaryKey(parameter,pkValue);
+    public <T extends BasePo> T selectOne(T parameter, String cacheKey) {
+        return daoSupport.selectOne(parameter);
     }
 
     @Cacheable(value = "param", key = "#cacheKey")
@@ -51,13 +51,13 @@ public class ParamDaoSupport {
     }
 
     @CacheEvict(value = "param", key = "#cacheKey")
-    public <T extends BasePo> int updateByPrimaryKey(T entity, String cacheKey) {
-        return daoSupport.updateByPrimaryKey(entity);
+    public <T extends BasePo> int update(T setParameter, T whereParameter, String cacheKey) {
+        return daoSupport.update(setParameter, whereParameter);
     }
 
     @CacheEvict(value = "param", key = "#cacheKey")
-    public <T extends BasePo> int deleteByPrimaryKey(T entity, String cacheKey) {
-        return daoSupport.deleteByPrimaryKey(entity);
+    public <T extends BasePo> int delete(T entity, String cacheKey) {
+        return daoSupport.delete(entity);
     }
 
 }

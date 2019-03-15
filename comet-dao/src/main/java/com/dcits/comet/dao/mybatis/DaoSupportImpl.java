@@ -136,16 +136,19 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return i;
     }
 
+    @Override
     public <T extends BasePo> int update(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().update(className + POSTFIX_UPDATE, entity);
     }
 
+    @Override
     public <T extends BasePo> int update(T setParameter, T whereParameter) {
         String className = setParameter.getClass().getName();
         return this.update(className + POSTFIX_UPDATE_BY_ENTITY, setParameter, whereParameter);
     }
 
+    @Override
     public <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter) {
         Map<String, Object> parameter = new HashMap(2);
         parameter.put("s", setParameter);
@@ -163,6 +166,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return this.getSqlSession().update(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> int delete(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().delete(className + POSTFIX_DELETE, entity);
@@ -191,7 +195,6 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
      * @param pkValue
      * @return
      */
-    @Override
     public <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue) {
         String className = entity.getClass().getName();
         T po = getPkObject(entity, false, pkValue);
@@ -204,7 +207,6 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
      * @param entity
      * @return
      */
-    @Override
     public <T extends BasePo> int updateByPrimaryKey(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().update(className + POSTFIX_UPDATEBYPRIMARYKEY, entity);
@@ -216,7 +218,6 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
      * @param entity
      * @return
      */
-    @Override
     public <T extends BasePo> int deleteByPrimaryKey(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().delete(className + POSTFIX_DELETEBYPRIMARYKEY, entity);

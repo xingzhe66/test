@@ -1,6 +1,8 @@
 package com.dcits.comet.dao.param;
 
 import com.dcits.comet.dao.annotation.TablePkScanner;
+import com.dcits.comet.dao.annotation.TableType;
+import com.dcits.comet.dao.annotation.TableTypeEnum;
 import com.dcits.comet.dao.model.BasePo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,22 @@ public class CacheUtil {
 
 
     public static boolean isNotParamTable(BasePo basePo) {
-        return !basePo.getClass().isAnnotationPresent(ParamTable.class);
+
+        boolean ret = false;
+
+        boolean hasAnnotation = basePo.getClass().isAnnotationPresent(TableType.class);
+
+        if (hasAnnotation) {
+            TableType[] tableTypes = basePo.getClass().getAnnotationsByType(TableType.class);
+            if (tableTypes != null) {
+                for (TableType tableType : tableTypes) {
+                    if (tableType.value().equals(TableTypeEnum.PARAM)) {
+                        ret = true;
+                    }
+                }
+            }
+        }
+        return !ret;
     }
 
     public static String getCacheKeyAll(BasePo basePo) {

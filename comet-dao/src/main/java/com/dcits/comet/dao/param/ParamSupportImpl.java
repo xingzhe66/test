@@ -34,58 +34,22 @@ public class ParamSupportImpl implements ParamSupport {
 
 
     @Override
+    public <T extends BasePo> T selectOne(T entity) {
+        if (CacheUtil.isNotParamTable(entity)) {
+            throw new ParamException(entity.getClass().getSimpleName() + "不允许缓存结果");
+        }
+        String cacheKey = CacheUtil.getCacheKey(entity);
+        return paramDaoSupport.selectOne(entity, cacheKey);
+    }
+
+
+    @Override
     public <T extends BasePo> List<T> selectList(T entity) {
         if (CacheUtil.isNotParamTable(entity)) {
             throw new ParamException(entity.getClass().getSimpleName() + "不允许缓存结果");
         }
         String cacheKey = CacheUtil.getCacheKeyAll(entity);
         return paramDaoSupport.selectList(entity, cacheKey);
-    }
-
-    /**
-     * 主键通用查询
-     *
-     * @param entity
-     * @param pkValue
-     * @return
-     */
-    @Override
-    public <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue) {
-        if (CacheUtil.isNotParamTable(entity)) {
-            throw new ParamException(entity.getClass().getSimpleName() + "不允许缓存结果");
-        }
-        String cacheKey = CacheUtil.getCacheKey(entity);
-        return paramDaoSupport.selectByPrimaryKey(entity, cacheKey, pkValue);
-    }
-
-    /**
-     * 主键通用动态更新
-     *
-     * @param entity
-     * @return
-     */
-    @Override
-    public <T extends BasePo> int updateByPrimaryKey(T entity) {
-        if (CacheUtil.isNotParamTable(entity)) {
-            throw new ParamException(entity.getClass().getSimpleName() + "不允许缓存结果");
-        }
-        String cacheKey = CacheUtil.getCacheKey(entity);
-        return paramDaoSupport.updateByPrimaryKey(entity, cacheKey);
-    }
-
-    /**
-     * 根据主键删除记录
-     *
-     * @param entity
-     * @return
-     */
-    @Override
-    public <T extends BasePo> int deleteByPrimaryKey(T entity) {
-        if (CacheUtil.isNotParamTable(entity)) {
-            throw new ParamException(entity.getClass().getSimpleName() + "不允许缓存结果");
-        }
-        String cacheKey = CacheUtil.getCacheKey(entity);
-        return paramDaoSupport.deleteByPrimaryKey(entity, cacheKey);
     }
 
 
@@ -117,4 +81,25 @@ public class ParamSupportImpl implements ParamSupport {
         String cacheKey = CacheUtil.getCacheKeyAll(list.get(0));
         return paramDaoSupport.insert(list, cacheKey);
     }
+
+
+    @Override
+    public <T extends BasePo> int update(T setParameter, T whereParameter) {
+        if (CacheUtil.isNotParamTable(whereParameter)) {
+            throw new ParamException(whereParameter.getClass().getSimpleName() + "不允许缓存结果");
+        }
+        String cacheKey = CacheUtil.getCacheKey(whereParameter);
+        return paramDaoSupport.update(setParameter, whereParameter, cacheKey);
+    }
+
+
+    @Override
+    public <T extends BasePo> int delete(T entity) {
+        if (CacheUtil.isNotParamTable(entity)) {
+            throw new ParamException(entity.getClass().getSimpleName() + "不允许缓存结果");
+        }
+        String cacheKey = CacheUtil.getCacheKey(entity);
+        return paramDaoSupport.delete(entity, cacheKey);
+    }
+
 }
