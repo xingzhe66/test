@@ -13,7 +13,7 @@ public class Reader extends AbstractPagingReader {
 
     private IBStep batchStep;
 
-    private int beginIndex;
+    private int beginIndex=0;
 
     private String node;
 
