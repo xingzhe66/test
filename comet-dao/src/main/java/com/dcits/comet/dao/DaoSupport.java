@@ -21,15 +21,13 @@ public interface DaoSupport extends BaseDaoSupport {
 
     <T extends BasePo> T selectForUpdate(String statementPostfix, T parameter);
 
-    <T extends BasePo> T selectOne(T parameter);
-
     <T extends BasePo> T selectOne(String statementPostfix, T parameter);
 
     <T extends BasePo> T selectOne(String statementPostfix, Map<String, Object> parameter);
 
-    //<T extends BasePo> int update(T entity);
+    <T extends BasePo> int update(T setParameter, T whereParameter);
 
-    //<T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter);
+    <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter);
 
     <T extends BasePo> int update(String statementPostfix, T entity);
 

@@ -37,6 +37,20 @@
 		</trim>
 	</sql>
 
+	<#--分库where条件-->
+	<#if tableType ?? && tableType =="LEVEL">
+	<sql id="Shard_Where">
+		<trim suffixOverrides="AND">
+		  <#list cloums as c>
+		    <#if c.pkFlag == "Y" ||  c.shardFlag=="Y">
+			  ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+		    </#if>
+		  </#list>
+		</trim>
+	</sql>
+	</#if>
+
+
 	<sql id="Base_Select">
 		SELECT
 		<include refid="Base_Column" />
@@ -70,13 +84,19 @@
 		UPDATE <include refid="Table_Name" />
 		<set>
 		   <#list cloums as c>
+			   <#if c.pkFlag == "N" && c.shardFlag=="N">
 					<if test="${ c.columnName} != null and ${ c.columnName} != ''">
 					    ${ c.columnNameL} = ${r"#{"}${ c.columnName}},
 					</if>
+			    </#if>
 		   </#list>
 		</set>
 		<where>
+		<#if tableType ?? && tableType =="LEVEL">
+			<include refid="Shard_Where"/>
+		<#else>
 			<include refid="Base_Where" />
+		</#if>
 		</where>
 	</update>
 
@@ -150,31 +170,31 @@
 	</select>
 	</#if>
 
-	<#if tablePkSize =="Y">
-	<!--根据主键更新-->
-	<update id="updateByPrimaryKey">
-		UPDATE
-		<include refid="Table_Name" />
-		<set>
-			<#list cloums as c>
-		    <#if c.pkFlag == "N">
-			<if test="${c.columnName} != null ">
-				${c.columnNameL} = ${r"#{"}${ c.columnName}},
-			</if>
-			</#if>
-			</#list>
-		</set>
-		<where>
-			<trim suffixOverrides="AND">
-		    <#list cloums as c>
-			<#if c.pkFlag == "Y">
-				${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
-			</#if>
-			</#list>
-			</trim>
-		</where>
-	</update>
-	</#if>
+	<#--<#if tablePkSize =="Y">-->
+	<#--<!--根据主键更新&ndash;&gt;-->
+	<#--<update id="updateByPrimaryKey">-->
+		<#--UPDATE-->
+		<#--<include refid="Table_Name" />-->
+		<#--<set>-->
+			<#--<#list cloums as c>-->
+		    <#--<#if c.pkFlag == "N">-->
+			<#--<if test="${c.columnName} != null ">-->
+				<#--${c.columnNameL} = ${r"#{"}${ c.columnName}},-->
+			<#--</if>-->
+			<#--</#if>-->
+			<#--</#list>-->
+		<#--</set>-->
+		<#--<where>-->
+			<#--<trim suffixOverrides="AND">-->
+		    <#--<#list cloums as c>-->
+			<#--<#if c.pkFlag == "Y">-->
+				<#--${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND-->
+			<#--</#if>-->
+			<#--</#list>-->
+			<#--</trim>-->
+		<#--</where>-->
+	<#--</update>-->
+	<#--</#if>-->
 
 	<#if tablePkSize =="Y">
     <!--根据主键删除-->

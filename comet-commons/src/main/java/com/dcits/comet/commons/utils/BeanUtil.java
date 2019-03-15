@@ -15,4 +15,9 @@ public class BeanUtil {
         field.setAccessible(true);
         ReflectionUtils.setField(field, targetObject, targetValue);
     }
+    public static <T> Object getValue(final T targetObject, final String fieldName) {
+        final Field field = ReflectionUtils.findField(targetObject.getClass(), fieldName);
+        field.setAccessible(true);
+       return ReflectionUtils.getField(field, targetObject);
+    }
 }

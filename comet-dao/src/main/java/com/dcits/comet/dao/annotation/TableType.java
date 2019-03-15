@@ -1,4 +1,4 @@
-package com.dcits.comet.dao.param;
+package com.dcits.comet.dao.annotation;
 
 import java.lang.annotation.*;
 
@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ParamTable {
-    String value() default "param";
+public @interface TableType {
+    TableTypeEnum value();
 }

@@ -27,7 +27,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     public DaoSupportImpl() {
     }
 
-    private void initPropertyColumnMapper() {
+    public void initPropertyColumnMapper() {
         Collection<ResultMap> rms = this.getSqlSession().getConfiguration().getResultMaps();
         Iterator iter = rms.iterator();
 
@@ -136,16 +136,19 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return i;
     }
 
+    @Override
     public <T extends BasePo> int update(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().update(className + POSTFIX_UPDATE, entity);
     }
 
+    @Override
     public <T extends BasePo> int update(T setParameter, T whereParameter) {
         String className = setParameter.getClass().getName();
         return this.update(className + POSTFIX_UPDATE_BY_ENTITY, setParameter, whereParameter);
     }
 
+    @Override
     public <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter) {
         Map<String, Object> parameter = new HashMap(2);
         parameter.put("s", setParameter);
@@ -163,6 +166,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return this.getSqlSession().update(statementPostfix, parameter);
     }
 
+    @Override
     public <T extends BasePo> int delete(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().delete(className + POSTFIX_DELETE, entity);
@@ -170,7 +174,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
 
     @Override
     public <T extends BasePo> int delete(String statementPostfix, T entity) {
-        return this.getSqlSession().update(statementPostfix, entity);
+        return this.getSqlSession().delete(statementPostfix, entity);
     }
 
     @Override
@@ -184,42 +188,9 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return this.selectList(statementPostfix, entity);
     }
 
-    /**
-     * 主键通用查询
-     *
-     * @param entity
-     * @param pkValue
-     * @return
-     */
     @Override
-    public <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue) {
-        String className = entity.getClass().getName();
-        T po = getPkObject(entity, false, pkValue);
-        return (T) this.getSqlSession().selectOne(className + POSTFIX_SELECTBYPRIMARYKEY, po);
-    }
-
-    /**
-     * 主键通用动态更新
-     *
-     * @param entity
-     * @return
-     */
-    @Override
-    public <T extends BasePo> int updateByPrimaryKey(T entity) {
-        String className = entity.getClass().getName();
-        return this.getSqlSession().update(className + POSTFIX_UPDATEBYPRIMARYKEY, entity);
-    }
-
-    /**
-     * 根据主键删除记录
-     *
-     * @param entity
-     * @return
-     */
-    @Override
-    public <T extends BasePo> int deleteByPrimaryKey(T entity) {
-        String className = entity.getClass().getName();
-        return this.getSqlSession().delete(className + POSTFIX_DELETEBYPRIMARYKEY, entity);
+    public <T extends BasePo> List<T> selectAll(T entity) {
+        throw new UnsupportedOperationException("The requested operation is not supported for BusinessTable !");
     }
 
     @Override

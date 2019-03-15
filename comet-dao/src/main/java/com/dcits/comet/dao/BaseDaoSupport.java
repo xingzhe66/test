@@ -19,49 +19,77 @@ public interface BaseDaoSupport {
     String POSTFIX_UPDATE_BY_ENTITY = ".updateByEntity";
     String POSTFIX_DELETE = ".delete";
     String POSTFIX_SELECTLIST = ".selectList";
-    String POSTFIX_UPDATEBYPRIMARYKEY = ".updateByPrimaryKey";
-    String POSTFIX_DELETEBYPRIMARYKEY = ".deleteByPrimaryKey";
-    String POSTFIX_SELECTBYPRIMARYKEY = ".selectByPrimaryKey";
 
-
+    /**
+     * 数量查询方法
+     *
+     * @param entity
+     * @param <T>
+     * @return
+     */
     <T extends BasePo> Integer count(T entity);
 
-    <T extends BasePo> int insert(T entity);
+    /**
+     * 单笔查询方法
+     *
+     * @param parameter
+     * @param <T>
+     * @return
+     */
+    <T extends BasePo> T selectOne(T parameter);
 
-    <T extends BasePo> int insert(List<T> list);
-
-    //<T extends BasePo> int update(T setParameter, T whereParameter);
-
-    //<T extends BasePo> int delete(T entity);
-
+    /**
+     * 多笔查询方法
+     *
+     * @param entity
+     * @param <T>
+     * @return
+     */
     <T extends BasePo> List<T> selectList(T entity);
 
     /**
-     * 主键通用查询
+     * 查询全部数据方法
      *
      * @param entity
-     * @param pkValue
      * @param <T>
      * @return
      */
-    <T extends BasePo> T selectByPrimaryKey(T entity, Object... pkValue);
+    <T extends BasePo> List<T> selectAll(T entity);
 
     /**
-     * 主键通用动态更新
+     * 插入方法
      *
      * @param entity
      * @param <T>
      * @return
      */
-    <T extends BasePo> int updateByPrimaryKey(T entity);
+    <T extends BasePo> int insert(T entity);
 
     /**
-     * 根据主键删除记录
+     * 数组插入方法
+     *
+     * @param list
+     * @param <T>
+     * @return
+     */
+    <T extends BasePo> int insert(List<T> list);
+
+    /**
+     * 更新方法
      *
      * @param entity
      * @param <T>
      * @return
      */
-    <T extends BasePo> int deleteByPrimaryKey(T entity);
+    <T extends BasePo> int update(T entity);
+
+    /**
+     * 删除方法
+     *
+     * @param entity
+     * @param <T>
+     * @return
+     */
+    <T extends BasePo> int delete(T entity);
 
 }

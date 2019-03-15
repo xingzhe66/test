@@ -22,11 +22,6 @@ public class CacheUtil {
     private static final String DELIMITER = "_";
     private static final String ALL = "ALL";
 
-
-    public static boolean isNotParamTable(BasePo basePo) {
-        return !basePo.getClass().isAnnotationPresent(ParamTable.class);
-    }
-
     public static String getCacheKeyAll(BasePo basePo) {
         //className_ALL
         StringBuilder sb = new StringBuilder();

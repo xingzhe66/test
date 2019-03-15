@@ -1,13 +1,13 @@
 package com.dcits.comet.dao.param;
 
-import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.model.BasePo;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.dcits.comet.dao.BaseDaoSupport.*;
 
 /**
  * @Author chengliang
@@ -15,49 +15,56 @@ import java.util.List;
  * @Date 2019-03-06 8:57
  * @Version 1.0
  **/
-@Component
-public class ParamDaoSupport {
-    @Autowired
-    private DaoSupport daoSupport;
+
+public class ParamDaoSupport extends SqlSessionDaoSupport {
 
     @Cacheable(value = "param", key = "#cacheKey")
     public <T extends BasePo> Integer count(T entity, String cacheKey) {
-        return daoSupport.count(entity);
+        String className = entity.getClass().getName();
+        return (Integer) this.getSqlSession().selectOne(className + POSTFIX_COUNT, entity);
     }
 
     @Cacheable(value = "param", key = "#cacheKey")
-    public <T extends BasePo> T selectByPrimaryKey(T parameter, String cacheKey,Object... pkValue) {
-        return daoSupport.selectByPrimaryKey(parameter,pkValue);
+    public <T extends BasePo> T selectOne(T entity, String cacheKey) {
+        String className = entity.getClass().getName();
+        return (T) this.getSqlSession().selectOne(className + POSTFIX_SELECTONE, entity);
     }
 
     @Cacheable(value = "param", key = "#cacheKey")
     public <T extends BasePo> List<T> selectList(T entity, String cacheKey) {
-        return daoSupport.selectList(entity);
+        String statementPostfix = entity.getClass().getName() + POSTFIX_SELECTLIST;
+        return this.getSqlSession().selectList(statementPostfix, entity);
     }
 
     @Cacheable(value = "param", key = "#cacheKey")
     public <T extends BasePo> List<T> selectAll(T entity, String cacheKey) {
-        return daoSupport.selectList(entity);
+        String statementPostfix = entity.getClass().getName() + POSTFIX_SELECTLIST;
+        return this.getSqlSession().selectList(statementPostfix, entity);
     }
 
     @CacheEvict(value = "param", key = "#cacheKey")
     public <T extends BasePo> int insert(T entity, String cacheKey) {
-        return daoSupport.insert(entity);
+        String className = entity.getClass().getName();
+        return this.getSqlSession().insert(className + POSTFIX_INSERT, entity);
     }
 
     @CacheEvict(value = "param", key = "#cacheKey")
     public <T extends BasePo> int insert(List<T> list, String cacheKey) {
-        return daoSupport.insert(list);
+        String className = list.get(0).getClass().getName();
+        return this.getSqlSession().insert(className + POSTFIX_INSERT, list);
     }
 
     @CacheEvict(value = "param", key = "#cacheKey")
-    public <T extends BasePo> int updateByPrimaryKey(T entity, String cacheKey) {
-        return daoSupport.updateByPrimaryKey(entity);
+    public <T extends BasePo> int update(T entity,String cacheKey) {
+        String className = entity.getClass().getName();
+        return this.getSqlSession().update(className + POSTFIX_UPDATE, entity);
     }
 
     @CacheEvict(value = "param", key = "#cacheKey")
-    public <T extends BasePo> int deleteByPrimaryKey(T entity, String cacheKey) {
-        return daoSupport.deleteByPrimaryKey(entity);
+    public <T extends BasePo> int delete(T entity, String cacheKey) {
+        String className = entity.getClass().getName();
+        return this.getSqlSession().delete(className + POSTFIX_DELETE, entity);
     }
 
 }
+

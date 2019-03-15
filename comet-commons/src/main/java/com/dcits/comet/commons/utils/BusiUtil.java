@@ -1,6 +1,8 @@
 package com.dcits.comet.commons.utils;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.dcits.comet.commons.exception.BusinessException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -462,69 +464,71 @@ import java.util.*;
         return diff;
     }
 
-//    /**
-//     * 对象比较
-//     *
-//     * @param bean1
-//     * @param bean2
-//     * @param flag   IN:include;EX:exclude
-//     * @param filter
-//     * @return key:{afterValue:"",beforeValue:""}
-//     */
-//    public static JSONObject compare(AbstractBean bean1, AbstractBean bean2, String flag, String filter) {
-//        JSONObject ret = new JSONObject();
-//
-//        String[] filters = filter.split(",");
-//        HashMap filterMap = new HashMap(10);
-//        for (int i = 0; i < filters.length; i++) {
-//            filterMap.put(filters[i], filters[i]);
-//        }
-//
-//        JSONObject t = (JSONObject) JSON.toJSON(bean1);
-//        Set<Map.Entry<String, Object>> keySet = t.entrySet();
-//        Iterator<Map.Entry<String, Object>> iter = keySet.iterator();
-//        while (iter.hasNext()) {
-//            Map.Entry<String, Object> entry = iter.next();
-//            String key = entry.getKey();
-//            if (BusiUtil.isEquals(flag, "IN")) {
-//                if (BusiUtil.isNotNull(filterMap.get(key))) {
-//                    try {
-//                        Object v1 = BusiUtil.nvl(entry.getValue(), "").toString();
-//                        Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
-//                        if (!v1.equals(v2)) {
-//                            JSONObject json = new JSONObject();
-//                            json.put("beforeValue", v1);
-//                            json.put("afterValue", v2);
-//                            ret.put(key, json);
-//                        }
-//
-//                    } catch (Exception e) {
-//                        logger.error(context, e);
-//                    }
-//                }
-//            }
-//            if (BusiUtil.isEquals(flag, "EX")) {
-//                if (BusiUtil.isNull(filterMap.get(key))) {
-//                    try {
-//                        Object v1 = BusiUtil.nvl(entry.getValue(), "").toString();
-//                        Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
-//                        if (!v1.equals(v2)) {
-//                            JSONObject json = new JSONObject();
-//                            json.put("beforeValue", v1);
-//                            json.put("afterValue", v2);
-//                            ret.put(key, json);
-//                        }
-//
-//                    } catch (Exception e) {
-//                        logger.error(context, e);
-//                    }
-//                }
-//            }
-//
-//        }
-//
-//        return ret;
-//    }
+    /**
+     * 对象比较
+     *
+     * @param bean1
+     * @param bean2
+     * @param flag   IN:include;EX:exclude
+     * @param filter
+     * @return key:{afterValue:"",beforeValue:""}
+     */
+    public static JSONObject compare(Object bean1, Object bean2, String flag, String filter) {
+        JSONObject ret = new JSONObject();
+
+        String[] filters = filter.split(",");
+        HashMap filterMap = new HashMap(10);
+        for (int i = 0; i < filters.length; i++) {
+            filterMap.put(filters[i], filters[i]);
+        }
+
+        JSONObject t = (JSONObject) JSON.toJSON(bean1);
+        Set<Map.Entry<String, Object>> keySet = t.entrySet();
+        Iterator<Map.Entry<String, Object>> iter = keySet.iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, Object> entry = iter.next();
+            String key = entry.getKey();
+            if (BusiUtil.isEquals(flag, "IN")) {
+                if (BusiUtil.isNotNull(filterMap.get(key))) {
+                    try {
+                        Object v1 = BusiUtil.nvl(entry.getValue(), "").toString();
+                        Object v2=BusiUtil.nvl(BeanUtil.getValue(bean2,entry.getKey()),"").toString();
+                       // Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
+                        if (!v1.equals(v2)) {
+                            JSONObject json = new JSONObject();
+                            json.put("beforeValue", v1);
+                            json.put("afterValue", v2);
+                            ret.put(key, json);
+                        }
+
+                    } catch (Exception e) {
+                        logger.error(context, e);
+                    }
+                }
+            }
+            if (BusiUtil.isEquals(flag, "EX")) {
+                if (BusiUtil.isNull(filterMap.get(key))) {
+                    try {
+                        Object v1 = BusiUtil.nvl(entry.getValue(), "").toString();
+                       // Object v2 = BusiUtil.nvl(bean2.readValue(entry.getKey()), "").toString();
+                        Object v2=BusiUtil.nvl(BeanUtil.getValue(bean2,entry.getKey()),"").toString();
+                        if (!v1.equals(v2)) {
+                            JSONObject json = new JSONObject();
+                            json.put("beforeValue", v1);
+                            json.put("afterValue", v2);
+                            ret.put(key, json);
+                        }
+
+                    } catch (Exception e) {
+                        logger.error(context, e);
+                    }
+                }
+            }
+
+        }
+
+        return ret;
+    }
 
 //    /**
 //     * 获取SpringBean
