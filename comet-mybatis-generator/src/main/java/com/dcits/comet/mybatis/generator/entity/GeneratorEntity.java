@@ -21,8 +21,24 @@ public class GeneratorEntity {
     private String isCrateAllTable;
     private String iscreateMapperExt;
     private int tablePkSize;
+    private String shardColumn;
+    private String tableType;
 
+    public String getTableType() {
+        return tableType;
+    }
 
+    public void setTableType(String tableType) {
+        this.tableType = tableType;
+    }
+
+    public String getShardColumn() {
+        return shardColumn;
+    }
+
+    public void setShardColumn(String shardColumn) {
+        this.shardColumn = shardColumn;
+    }
 
     public String getBasedir() {
         return basedir;

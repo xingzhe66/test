@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,14 +41,36 @@ public class CodeGeneratorService {
                 if(listTables.size()>0){
                     for (int i = 0; i < listTables.size(); i++) {
                         generatorEntity.setTableName((String) listTables.get(i).get("TABLE_NAME"));
-                        generatorEntity.setEntityDescription((String) listTables.get(i).get("TABLE_COMMENT"));
+                        String tableComment=(String) listTables.get(i).get("TABLE_COMMENT");
+                        String tableType=null;
+                        if(tableComment!=null && tableComment.toUpperCase().contains("PARAM")){
+                            tableType="PARAM";
+                        }
+                        if(tableComment!=null && tableComment.toUpperCase().contains("LEVEL")){
+                            tableType="LEVEL";
+                        }
+                        if(tableComment!=null && tableComment.toUpperCase().contains("UPRIGHT")){
+                            tableType="UPRIGHT";
+                        }
+                        generatorEntity.setTableType(tableType);
+                        generatorEntity.setEntityDescription(tableComment);
                         createCodeFolw();
                     }
                 }else{
                     LOGGER.info("数据库不存在,请确认generator.properties配置文件的generator.dbName配置是否正确");
                 }
             } else {
-                generatorEntity.setEntityDescription(getTableComment());
+                String tableComment=getTableComment();
+                if(tableComment!=null && tableComment.toUpperCase().contains("PARAM")){
+                    generatorEntity.setTableType("PARAM");
+                }
+                if(tableComment!=null && tableComment.toUpperCase().contains("LEVEL")){
+                    generatorEntity.setTableType("LEVEL");
+                }
+                if(tableComment!=null && tableComment.toUpperCase().contains("UPRIGHT")){
+                    generatorEntity.setTableType("UPRIGHT");
+                }
+                generatorEntity.setEntityDescription(tableComment);
                 createCodeFolw();
             }
     }
@@ -58,7 +81,6 @@ public class CodeGeneratorService {
         List<String> tableKeys=getTableKeys();
         generatorEntity.setTablePkSize(tableKeys.size());
         Map<String, Object> modelDate= getTemplateData(getTableComumnModel(tableKeys));
-
         if(!modelDate.isEmpty()){
             //生成entity
             createEntity(modelDate);
@@ -189,17 +211,27 @@ public class CodeGeneratorService {
                             oMap.put("UpUmnName", PbUtils.fristStrToUpperCase(reStr));// 列名称，首字母大写，去下划线
                         }
                         //主键标识  用于model
-                        String cloumsTop = "";
+                        String cloumsTop = null;
                         //主键标识  用于xml
                         String pkFlag="N";
                         //判断是否为主键
                         if(tableKeys.size()>0 && tableKeys.contains(columnName)){
-                            cloumsTop +="@TablePk(index="+pkIndex+")";
+                            cloumsTop ="@TablePk(index="+pkIndex+")";
                             pkIndex++;
                             pkFlag ="Y";
                         }
                         oMap.put("cloumsTop", cloumsTop);
                         oMap.put("pkFlag", pkFlag);
+
+                        //标识分库键
+                        String partitonKey=null;
+                        String shardFlag="N";
+                        if("LEVEL".equals(generatorEntity.getTableType()) && columnName.toUpperCase().equals(generatorEntity.getShardColumn().toUpperCase())){
+                            shardFlag="Y";
+                            partitonKey="@PartitionKey";
+                        }
+                        oMap.put("partitonKey", partitonKey);
+                        oMap.put("shardFlag",shardFlag);
                     }
                     // 注释
                     if ("COLUMNCOMMENT".equals(key)) {
@@ -244,6 +276,8 @@ public class CodeGeneratorService {
             }else{
                 data.put("tablePkSize","N");//不存在主键
             }
+            data.put("tableType",generatorEntity.getTableType());//表类型 PARAM(参数表)  LEVEL（水平分库）  UPRIGHT（垂直分库）
+
         }
         return data;
     }
