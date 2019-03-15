@@ -12,5 +12,12 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface TableType {
+    /* *
+        * 表名
+        **/
+    String name();
+    /* *
+       *表类型PARAM:参数表    LEVEL:水平分库表     UPRIGHT:垂直分库表
+        **/
     TableTypeEnum value();
 }

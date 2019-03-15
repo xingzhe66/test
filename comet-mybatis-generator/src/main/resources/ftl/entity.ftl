@@ -22,7 +22,7 @@ import com.dcits.comet.dao.annotation.PartitionKey;
  * @Version 1.0
  */
 <#if tableType ??>
-@TableType(TableTypeEnum.${tableType})
+@TableType(name="${tableName}",value=TableTypeEnum.${tableType})
 </#if>
 @Data
 @EqualsAndHashCode(callSuper=false)
