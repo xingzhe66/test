@@ -36,6 +36,7 @@
         <module>comet-mybatis-generator</module>
         <module>comet-starter</module>
         <module>comet-batch-service</module>
+        <module>comet-gateway</module>
     </modules>
     <build>
         <plugins>
