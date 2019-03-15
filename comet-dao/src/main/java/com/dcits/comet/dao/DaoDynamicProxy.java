@@ -8,6 +8,13 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+/**
+ * Dao方法代理，统一Dao方法
+ * 参数使用ParamSupport接口，封装缓存
+ * 其他使用daoSupport接口
+ *
+ * @author ChengLiang
+ */
 public class DaoDynamicProxy implements InvocationHandler {
 
     /**
