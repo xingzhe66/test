@@ -21,11 +21,12 @@ import com.dcits.comet.dao.annotation.PartitionKey;
  * @Date ${date}
  * @Version 1.0
  */
+
+@Data
+@EqualsAndHashCode(callSuper=false)
 <#if tableType ??>
 @TableType(name="${tableName}",value=TableTypeEnum.${tableType})
 </#if>
-@Data
-@EqualsAndHashCode(callSuper=false)
 public class ${className} extends BaseCifPo{
 
 	<#list cloums as c>
