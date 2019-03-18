@@ -1,14 +1,19 @@
 package com.dcits.comet.batch.launcher;
 
 import com.dcits.comet.batch.constant.BatchConstant;
+import com.dcits.comet.batch.dao.BatchContextDao;
 import com.dcits.comet.batch.exception.BatchException;
+import com.dcits.comet.batch.listener.JobListener;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.param.BatchContextManager;
 import com.dcits.comet.batch.step.StepFactory;
 import com.dcits.comet.batch.step.StepParam;
+import com.dcits.comet.batch.util.BatchContextTool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.*;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.SimpleJob;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
@@ -41,7 +46,8 @@ public class CommonJobLauncher implements IJobLauncher {
 
     @Autowired
     ConfigurableApplicationContext context;
-
+    @Autowired
+    BatchContextDao batchContextDao;
 
     @Override
     public JobExeResult run(String stepName, JobParam jobParam) {
@@ -67,10 +73,20 @@ public class CommonJobLauncher implements IJobLauncher {
 
             Step step = StepFactory.build(stepParam);
 
-            SimpleJob job = new SimpleJob();
-            job.setName(JOB_PEX + stepName);
-            job.setJobRepository(jobRepository);
-            job.addStep(step);
+            JobBuilderFactory jobBuilders = context.getBean(JobBuilderFactory.class);
+            JobListener jobListener=new JobListener();
+            jobListener.setBatchContextDao(batchContextDao);
+
+            Job job = jobBuilders.get(JOB_PEX + stepName)
+                    .repository(jobRepository)
+                    .start(step)
+                    .listener(jobListener)
+                    .build();
+//            SimpleJob job = new SimpleJob();
+//            job.setName(JOB_PEX + stepName);
+//            job.setJobRepository(jobRepository);
+//            job.addStep(step);
+//            job.setJobExecutionListeners(new JobListener());
 
             SimpleJobLauncher jobLauncher = (SimpleJobLauncher) context.getBean(JobLauncher.class);
             /**
@@ -107,19 +123,18 @@ public class CommonJobLauncher implements IJobLauncher {
             if (null != jobExecution) {
                 jobExeResult.setJobExecution(jobExecution);
                 //todo 异步情况下，batchcontext需要在query到执行成功时返回
+//                batchContextDao.saveBatchContext(jobParam.getExeId(),
+//                        String.valueOf(jobExecution.getJobId()),
+//                        BatchContextManager.getInstance().getBatchContext(jobParam.getExeId()));
                 jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getExeId()));
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new BatchException(e.getMessage(),e);
         } finally {
-//            jobExecution.setExecutionContext();
-//            jobRepository.update(jobExecution);
             //清理context
             BatchContextManager.getInstance().clear(exeId);
         }
-
-        BatchContextManager.getInstance().clear(jobParam.getExeId());
 
         return jobExeResult;
     }

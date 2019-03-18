@@ -1,5 +1,7 @@
 package com.dcits.comet.batch.config;
 
+import com.dcits.comet.batch.dao.BatchContextDao;
+import com.dcits.comet.batch.dao.BatchContextDaoImpl;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -93,7 +96,19 @@ public class BatchConfig {
         jobScope.setAutoProxy(false);
         return jobScope;
     }
+    @Bean
+    public BatchContextDao batchContextDao(@Qualifier("jdbcTemplate") JdbcTemplate jdbcTemplate) {
+        BatchContextDao batchContextDao = new BatchContextDaoImpl();
+        ((BatchContextDaoImpl) batchContextDao).setJdbcTemplate(jdbcTemplate);
+        return batchContextDao;
+    }
 
+    @Bean
+    public JdbcTemplate jdbcTemplate(@Qualifier("batchDataSource") DataSource dataSource) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(dataSource);
+        return jdbcTemplate;
+    }
 
     @Bean(name = "batchTransactionManager")
     public DataSourceTransactionManager batchTransactionManager(@Qualifier("batchDataSource") DataSource dataSource) {

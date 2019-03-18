@@ -7,22 +7,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 批量参数数据传输对象
- *
+ * Job执行成功后会返回给调用端。
  */
 public class BatchContext implements Serializable {
     private static final long serialVersionUID = 324534523453453L;
-
-    /** 执行类型,用于区分续跑还是正常执行 **/
-    private short exeType = 1;
-    /** 所属分组（业务群），需要与group对应 */
-    private String catalog;
+//
+//    private String exeId ;
+//    private String jobExecutionId;
     /** 业务自定义参数 */
     private Map<String, Object> params = new ConcurrentHashMap<String, Object>();
 
 
     public BatchContext() {
     }
-
 
     public Map<String, Object> getParams() {
         return params;
@@ -32,22 +29,20 @@ public class BatchContext implements Serializable {
         this.params = params;
     }
 
-    public String getCatalog() {
-        return catalog;
-    }
 
-
-    public void setCatalog(String catalog) {
-        this.catalog = catalog;
-    }
-
-
-    public short getExeType() {
-        return exeType;
-    }
-
-
-    public void setExeType(short exeType) {
-        this.exeType = exeType;
-    }
+//    public String getExeId() {
+//        return exeId;
+//    }
+//
+//    public void setExeId(String exeId) {
+//        this.exeId = exeId;
+//    }
+//
+//    public String getJobExecutionId() {
+//        return jobExecutionId;
+//    }
+//
+//    public void setJobExecutionId(String jobExecutionId) {
+//        this.jobExecutionId = jobExecutionId;
+//    }
 }

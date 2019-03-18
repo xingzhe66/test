@@ -16,6 +16,7 @@ public class QueryOutput  implements Serializable {
     private volatile Date endTime;
     private volatile Date lastUpdated;
     private volatile ExitStatus exitStatus;
+    private BatchContext batchContext;
 
     public String getStepName() {
         return stepName;
@@ -79,5 +80,13 @@ public class QueryOutput  implements Serializable {
 
     public void setExitStatus(ExitStatus exitStatus) {
         this.exitStatus = exitStatus;
+    }
+
+    public BatchContext getBatchContext() {
+        return batchContext;
+    }
+
+    public void setBatchContext(BatchContext batchContext) {
+        this.batchContext = batchContext;
     }
 }

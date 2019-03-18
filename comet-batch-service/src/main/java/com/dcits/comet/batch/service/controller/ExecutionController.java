@@ -1,8 +1,10 @@
 package com.dcits.comet.batch.service.controller;
 
+import com.dcits.comet.batch.dao.BatchContextDao;
 import com.dcits.comet.batch.launcher.CommonJobLauncher;
 import com.dcits.comet.batch.launcher.JobExeResult;
 import com.dcits.comet.batch.launcher.JobParam;
+import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.service.constant.BatchServiceConstant;
 import com.dcits.comet.batch.service.exception.BatchServiceException;
 import com.dcits.comet.batch.service.model.ExeInput;
@@ -31,7 +33,8 @@ public class ExecutionController {
     CommonJobLauncher commonJobLauncher;
     @Autowired
     private JobRepository jobRepository;
-
+    @Autowired
+    private BatchContextDao batchContextDao;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionController.class);
 
@@ -89,8 +92,10 @@ public class ExecutionController {
 
         BeanCopier beanCopier2 = BeanCopier.create(JobExecution.class, QueryOutput.class, false);
         beanCopier2.copy(jobExecution,queryOutput,null);
+        BatchContext batchContext=batchContextDao.getBatchContext(exeId);
         queryOutput.setExeId(exeId);
         queryOutput.setStepName(queryInput.getStepName());
+        queryOutput.setBatchContext(batchContext);
         return queryOutput;
 
 
