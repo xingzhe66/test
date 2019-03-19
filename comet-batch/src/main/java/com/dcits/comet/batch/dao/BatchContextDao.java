@@ -6,5 +6,6 @@ import org.springframework.batch.item.ExecutionContext;
 
 public interface BatchContextDao {
     public BatchContext getBatchContext(String exeId);
-    public void saveBatchContext(String exeId,String jobExecutionId,BatchContext batchContext);
+
+    public void saveBatchContext(String exeId, String jobExecutionId, BatchContext batchContext);
 }

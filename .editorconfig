@@ -1,0 +1,26 @@
+root=true
+
+[*.java]
+#字符集：utf-8
+charset = utf-8
+#缩进风格：空格
+indent_style = space
+#缩进大小：4
+indent_size = 4
+#换行符：lf
+end_of_line = lf
+#连续缩进：8
+continuation_indent_size = 8
+#是否删除行尾的空格
+trim_trailing_whitespace = true
+#是否在文件的最后插入一个空行
+insert_final_newline = true
+[*.md]
+trim_trailing_whitespace = false
+
+[*.xml]
+charset = utf-8
+indent_style = space
+indent_size = 4
+continuation_indent_size = 8
+

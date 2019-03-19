@@ -33,7 +33,7 @@ import static com.dcits.comet.batch.constant.BatchConstant.*;
 
 
 /**
-job执行器
+ * job执行器
  */
 @Component("commonJobLauncher")
 public class CommonJobLauncher implements IJobLauncher {
@@ -54,7 +54,7 @@ public class CommonJobLauncher implements IJobLauncher {
 
         JobExecution jobExecution = null;
 
-        JobExeResult jobExeResult =new JobExeResult();
+        JobExeResult jobExeResult = new JobExeResult();
         jobExeResult.setStepName(jobParam.getStepName());
         jobExeResult.setExeId(jobParam.getExeId());
 
@@ -67,14 +67,14 @@ public class CommonJobLauncher implements IJobLauncher {
                 batchContext = new BatchContext();
             }
             JobParameters jobParameters = createJobParams(exeId, stepName);
-            StepParam stepParam=new StepParam();
+            StepParam stepParam = new StepParam();
             BeanCopier beanCopier = BeanCopier.create(JobParam.class, StepParam.class, false);
-            beanCopier.copy(jobParam,stepParam,null);
+            beanCopier.copy(jobParam, stepParam, null);
 
             Step step = StepFactory.build(stepParam);
 
             JobBuilderFactory jobBuilders = context.getBean(JobBuilderFactory.class);
-            JobListener jobListener=new JobListener();
+            JobListener jobListener = new JobListener();
             jobListener.setBatchContextDao(batchContextDao);
 
             Job job = jobBuilders.get(JOB_PEX + stepName)
@@ -91,13 +91,13 @@ public class CommonJobLauncher implements IJobLauncher {
             SimpleJobLauncher jobLauncher = (SimpleJobLauncher) context.getBean(JobLauncher.class);
             /**
              * SimpleAsyncTaskExecutor这个实现不重用任何线程，或者说它每次调用都启动一个新线程。
-            // 但是，它还是支持对并发总数设限，当超过线程并发总数限制时
-            // ，阻塞新的调用，直到有位置被释放。
+             // 但是，它还是支持对并发总数设限，当超过线程并发总数限制时
+             // ，阻塞新的调用，直到有位置被释放。
              * 默认SyncTaskExecutor类这个实现不会异步执行。相反，每次调用都在发起调用的线程中执行。它的主要用处是在不需要多线程的时候。
-            */
-            if(BatchConstant.ASYNC_TYPE_ASYNC.equals(jobParam.getAsync())) {
-               // ThreadPoolTaskExecutor threadPoolTaskExecutor=new ThreadPoolTaskExecutor();
-               // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
+             */
+            if (BatchConstant.ASYNC_TYPE_ASYNC.equals(jobParam.getAsync())) {
+                // ThreadPoolTaskExecutor threadPoolTaskExecutor=new ThreadPoolTaskExecutor();
+                // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
                 jobLauncher.setTaskExecutor(taskExecutor);
             }
 
@@ -130,7 +130,7 @@ public class CommonJobLauncher implements IJobLauncher {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BatchException(e.getMessage(),e);
+            throw new BatchException(e.getMessage(), e);
         } finally {
             //清理context
             BatchContextManager.getInstance().clear(exeId);
