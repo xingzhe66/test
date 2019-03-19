@@ -2,7 +2,6 @@ package com.dcits.comet.commons.utils;
 
 import com.dcits.comet.commons.exception.BusinessException;
 import org.hibernate.validator.HibernateValidator;
-import org.hibernate.validator.HibernateValidatorConfiguration;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -22,14 +21,18 @@ public class ValidatorUtil {
             .failFast(true)
             .buildValidatorFactory().getValidator();
 
+    public static Validator getValidator() {
+        return validator;
+    }
+
     /**
      * 实体校验
      *
      * @param obj
      * @throws BusinessException
      */
-    public static <T> void validate(T obj) throws BusinessException {
-        Set<ConstraintViolation<T>> constraintViolations = validator.validate(obj, new Class[0]);
+    public static <T> void validate(T obj, Class... groups) throws BusinessException {
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(obj, groups);
         if (constraintViolations.size() > 0) {
             ConstraintViolation<T> validateInfo = constraintViolations.iterator().next();
             // validateInfo.getMessage() 校验不通过时的信息，即message对应的值
