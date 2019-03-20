@@ -17,7 +17,7 @@ import org.springframework.util.SystemPropertyUtils;
 import java.io.IOException;
 import java.util.*;
 
-@Component
+
 public class ClassScaner implements ResourceLoaderAware {
 
     //保存过滤规则要排除的注解
@@ -135,7 +135,7 @@ public class ClassScaner implements ResourceLoaderAware {
 
     public static void main(String[] args) {
         ClassScaner classScaner=new ClassScaner();
-        List<Class<?>> classNameList = classScaner.doScanPackage("com.dcits.ensemble.cloud.cif.common.entity");
+        List<Class<?>> classNameList = classScaner.doScanPackage("com.dcits");
         System.out.println(classNameList);
     }
 

@@ -1,14 +1,20 @@
 package com.dcits.comet.dbsharding;
 
+import com.dcits.comet.base.scanner.ClasspathPackageScanner;
 import com.dcits.comet.dao.annotation.TableType;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
+import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName TableTypeMapContainer
@@ -17,25 +23,62 @@ import java.util.List;
  * @Description TODO
  * @Version 1.0
  **/
-@Component
-public class TableTypeMapContainer implements InitializingBean {
+@Slf4j
+public class TableTypeMapContainer {
 
     private static Multimap<String, String> multiMap = ArrayListMultimap.create();
-    @Autowired
-    ClassScaner classScaner;
+//    @Autowired
+//    ClassScaner classScaner;
 
-    @Value("${entity.sanner.packageName}")
-    private String packageName;
+    private static List<String> packageNames;
+
+
+    public static final String COMET_YML = "comet.yml";
+
+    public static final String GATEWAY_API_PACKAGE_NAMES = "entityPackageNames";
+
+    static {
+        try {
+            Yaml yaml = new Yaml();
+            URL url = TableTypeMapContainer.class.getClassLoader().getResource(COMET_YML);
+            if (url == null) {
+                log.info(COMET_YML+"配置信息不存在！");
+            }
+            //comet.yaml文件中的配置数据，然后转换为obj，
+            Map map = yaml.load(new FileInputStream(url.getFile()));
+            if(null==map){
+                log.info(COMET_YML+"配置信息读取失败！");
+            }
+            log.info(map.toString());
+            packageNames = (List<String>) map.get(GATEWAY_API_PACKAGE_NAMES);
+
+        } catch (Exception e) {
+            log.info(COMET_YML+"配置信息读取失败！");
+            e.printStackTrace();
+        }
+        new TableTypeMapContainer();
+    }
+
+
+//
+//    @Value("${entity.sanner.packageName}")
+//    private String packageName;
 
     private TableTypeMapContainer(){
-//        init();
+        init();
     }
     private void init() {
-      //  ClassScaner classScaner=new ClassScaner();
-        List<Class<?>> classNameList=classScaner.doScanPackage(packageName);
-        if(classNameList!=null){
-            multiMap=getTableTypeMap(classNameList);
+        ClassScaner classScaner=new ClassScaner();
+        for (String packageName : packageNames) {
+            List<Class<?>> classNameList = classScaner.doScanPackage(packageName);
+            if (classNameList != null) {
+                getTableTypeMap(classNameList);
+            }
+            log.info("entity扫描包：" + packageName + "结束！");
         }
+        log.info("=============================================");
+        log.info("=========entity扫描包结束！==================");
+        log.info("=============================================");
     }
     /* *
         * @Author guihj
@@ -44,8 +87,8 @@ public class TableTypeMapContainer implements InitializingBean {
         * @Param 包下类集合
         * @return  表名和类型集合
         **/
-    private static Multimap<String, String> getTableTypeMap(List<Class<?>> classNameList) {
-        Multimap<String, String> multiMap = ArrayListMultimap.create();
+    private void getTableTypeMap(List<Class<?>> classNameList) {
+      //  Multimap<String, String> multiMap = ArrayListMultimap.create();
         for (Class className:classNameList) {
             boolean hasAnnotation = className.isAnnotationPresent(TableType.class);
             if (hasAnnotation) {
@@ -65,7 +108,7 @@ public class TableTypeMapContainer implements InitializingBean {
                 }
             }
         }
-        return multiMap;
+//        return multiMap;
     }
 
 
@@ -73,13 +116,13 @@ public class TableTypeMapContainer implements InitializingBean {
         return multiMap;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        init();
-    }
+//    @Override
+//    public void afterPropertiesSet() throws Exception {
+//        init();
+//    }
 
-    public static void main(String[] args) {
-        new TableTypeMapContainer();
-    }
+//    public static void main(String[] args) {
+//        new TableTypeMapContainer();
+//    }
 }
 

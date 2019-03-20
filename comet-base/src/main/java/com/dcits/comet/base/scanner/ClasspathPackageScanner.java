@@ -49,6 +49,10 @@ public class ClasspathPackageScanner {
     private List<String> doScan(String basePackage, List<String> nameList) throws IOException {
         String splashPath = StringUtil.dotToSplash(basePackage);
         URL url = cl.getResource(splashPath);   //file:/D:/WorkSpace/java/ScanTest/target/classes/com/scan
+        if(null==url){
+            logger.info("此包不存在:"+basePackage);
+            return null;
+        }
         String filePath = StringUtil.getRootPath(url);
         List<String> names = null; // contains the name of the class file. e.g., Apple.class will be stored as "Apple"
         if (isJarFile(filePath)) {// 先判断是否是jar包，如果是jar包，通过JarInputStream产生的JarEntity去递归查询所有类

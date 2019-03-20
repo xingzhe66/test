@@ -44,5 +44,9 @@
         <groupId>com.dcits</groupId>
         <artifactId>comet-dao</artifactId>
     </dependency>
+    <dependency>
+        <groupId>com.dcits</groupId>
+        <artifactId>comet-base</artifactId>
+    </dependency>
 </dependencies>
 </project>
