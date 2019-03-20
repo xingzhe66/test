@@ -1,11 +1,14 @@
 package com.dcits.comet.commons.exception;
 
+import com.alibaba.fastjson.JSON;
 import com.dcits.comet.commons.exception.xml.ErrorCode;
 import com.dcits.comet.commons.exception.xml.ErrorCodes;
 import com.dcits.comet.commons.utils.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
+import org.springframework.core.io.Resource;
+import org.springframework.util.StringUtils;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,24 +19,15 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.core.io.Resource;
-import org.springframework.util.StringUtils;
-
-import com.alibaba.fastjson.JSON;
-
-public class ExceptionContainer implements  InitializingBean {
+/**
+ * 错误码加载
+ *
+ * @author wangyun
+ */
+public class ExceptionContainer {
     private final static Logger LOGGER = LoggerFactory.getLogger(ExceptionContainer.class);
 
     private final static String DEFAULT_LANGUAGE = "zh_CN";
@@ -51,58 +45,35 @@ public class ExceptionContainer implements  InitializingBean {
      */
     private final static Map<String, List<Map<String, HashMap<String, String>>>> LANGUAGE_ERROR_MAPPINGS =
             new HashMap<String, List<Map<String, HashMap<String, String>>>>();
-
-    private final static Map<String/* language */, ConcurrentHashMap<String/* 内部错误码 */, ConcurrentHashMap<String/* 外部系统编号 */, ErrorCode>>> INNERCODE_OUTSIDECODE_MAPPING =
+    /**
+     * language，内部错误码，外部系统编号
+     */
+    private final static Map<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ErrorCode>>> INNERCODE_OUTSIDECODE_MAPPING =
             new HashMap<>();
 
-    private final static Map<String/* language */, ConcurrentHashMap<String/* 外部系统编号 */, ConcurrentHashMap<String/* 外部错误码 */, ErrorCode>>> OUTSIDECODE_INNERCODE_MAPPING =
+    /**
+     * language，外部系统编号，外部错误码
+     */
+    private final static Map<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ErrorCode>>> OUTSIDECODE_INNERCODE_MAPPING =
             new HashMap<>();
 
     static {
-        LANGUAGE_ERROR_MAPPINGS.put(DEFAULT_LANGUAGE, new ArrayList<Map<String, HashMap<String, String>>>());
+        LANGUAGE_ERROR_MAPPINGS.put(DEFAULT_LANGUAGE, new ArrayList<>());
         INNERCODE_OUTSIDECODE_MAPPING.put(DEFAULT_LANGUAGE,
-                new ConcurrentHashMap<String, ConcurrentHashMap<String, ErrorCode>>());
+                new ConcurrentHashMap<>());
         OUTSIDECODE_INNERCODE_MAPPING.put(DEFAULT_LANGUAGE,
-                new ConcurrentHashMap<String, ConcurrentHashMap<String, ErrorCode>>());
+                new ConcurrentHashMap<>());
     }
 
     private static List<String> configKeys;
-    private static Resource[] locations;
 
+    private static Resource[] locations;
 
     public ExceptionContainer() {
         init();
     }
 
-//
-//    @Override
-//    public void resourceChanged(String configKey, Resource configResource) {
-//        LOGGER.info("resourceChanged configKey:{}  value: {}", configKey, configResource.getFilename());
-//        loadErrorCodeConfig(configResource);
-//    }
-//
-//
-//    @Override
-//    public void configChanged(String configKey, Properties propeties) {
-//        LOGGER.info("configKey:{}  {}", configKey, propeties);
-//    }
-//
-//
-//    @Override
-//    public List<String> getConfigKeys() {
-//        return configKeys;
-//    }
 
-
-    @Override
-    public void afterPropertiesSet() {
-        init();
-    }
-
-
-    /*
-     * language fileName errorCode = message
-     */
     public static void print() {
         StringBuilder sb = new StringBuilder(200);
         String newLine = "\r\n", tab = "\t";
@@ -169,7 +140,7 @@ public class ExceptionContainer implements  InitializingBean {
         // 不存在,新增
         if (!errorFileMapExist) {
             Map<String, HashMap<String, String>> errorFileMap =
-                    new HashMap<String, HashMap<String, String>>();
+                    new HashMap<>();
             errorFileMap.put(file, loadNewConfig(res));
             errorMapList.add(errorFileMap);
         }
@@ -207,12 +178,12 @@ public class ExceptionContainer implements  InitializingBean {
                 for (ErrorCode ec : errorCodes.getErrorCode()) {
                     map.put(ec.getCode(), ec.getMessage());
                     INNERCODE_OUTSIDECODE_MAPPING.get(DEFAULT_LANGUAGE).putIfAbsent(ec.getCode(),
-                            new ConcurrentHashMap<String, ErrorCode>());
+                            new ConcurrentHashMap<>());
                     INNERCODE_OUTSIDECODE_MAPPING.get(DEFAULT_LANGUAGE).get(ec.getCode())
                             .put(errorCodes.getExternalSysIndicate(), ec);
 
                     OUTSIDECODE_INNERCODE_MAPPING.get(DEFAULT_LANGUAGE).putIfAbsent(
-                            errorCodes.getExternalSysIndicate(), new ConcurrentHashMap<String, ErrorCode>());
+                            errorCodes.getExternalSysIndicate(), new ConcurrentHashMap<>());
                     OUTSIDECODE_INNERCODE_MAPPING.get(DEFAULT_LANGUAGE)
                             .get(errorCodes.getExternalSysIndicate()).put(ec.getOutCode(), ec);
                 }
