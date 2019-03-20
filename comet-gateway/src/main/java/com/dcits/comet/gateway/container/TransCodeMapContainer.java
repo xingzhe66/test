@@ -1,10 +1,12 @@
-package com.dcits.comet.gateway;
+package com.dcits.comet.gateway.container;
 
 
 import com.dcits.comet.base.scanner.ClasspathPackageScanner;
 import com.dcits.comet.commons.business.ServiceTransfer;
+import com.dcits.comet.gateway.property.ScannerProperties;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,8 +20,11 @@ public class TransCodeMapContainer implements InitializingBean {
 
     public static final String DL = "|";
 
-    @Value("${transfer.sanner.packageName}")
-    private String packageName;
+    @Autowired
+    private ScannerProperties scannerProperties;
+
+//    @Value("${transfer.sanner.packageNames}")
+//    private List<String> packageNames;
 
 
     private final static Map<String, String> TRANS_CODE_MAP =
@@ -47,7 +52,7 @@ public class TransCodeMapContainer implements InitializingBean {
         //init();
     }
 
-    private void init() {
+    private void init(String packageName) {
         ClassLoader cl = TransCodeMapContainer.class.getClassLoader();
         ClasspathPackageScanner scan = new ClasspathPackageScanner(packageName);
         List<String> classNameList = null;
@@ -90,6 +95,8 @@ public class TransCodeMapContainer implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        init();
+        for (String packageName:scannerProperties.getPackageNames()) {
+            init(packageName);
+        }
     }
 }
