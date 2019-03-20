@@ -15,7 +15,7 @@ public class ShardingDataSourceHelper {
 
     public static LinkedHashSet getDataSourceNames(){
         ApplicationContext applicationContext= SpringContextUtil.getApplicationContext();
-        ShardingDataSource dataSource= (ShardingDataSource) applicationContext.getBean("shardingDataSource");
+        ShardingDataSource dataSource=  applicationContext.getBean(ShardingDataSource.class);
 
         if (dataSource!=null) {
             ShardingDataSourceNames shardingDataSourceNames = dataSource.getShardingContext().getShardingRule().getShardingDataSourceNames();
