@@ -11,6 +11,11 @@ import org.apache.ibatis.plugin.Signature;
 
 import java.sql.Connection;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description DB2分页
+ */
 @Intercepts({@Signature(
         type = StatementHandler.class,
         method = "prepare",

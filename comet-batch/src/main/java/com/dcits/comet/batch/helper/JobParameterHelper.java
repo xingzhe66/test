@@ -5,7 +5,9 @@ import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.springframework.batch.item.ExecutionContext;
 
 /**
- * 获取JobParameter
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 获取JobParameter
  */
 public class JobParameterHelper {
 
@@ -16,6 +18,11 @@ public class JobParameterHelper {
      * @return
      */
     public static String get(String key){
+
+        if(null==StepSynchronizationManager.getContext()) return null;
+
+        if(null==StepSynchronizationManager.getContext().getStepExecution()) return null;
+
         return StepSynchronizationManager.getContext().getStepExecution().getJobParameters().getString(key);
         //JobSynchronizationManager.getContext().getJobExecution().getJobParameters().getString(key);
     }

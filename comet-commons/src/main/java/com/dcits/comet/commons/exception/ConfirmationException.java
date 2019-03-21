@@ -1,5 +1,10 @@
 package com.dcits.comet.commons.exception;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class ConfirmationException extends BusinessException {
 
     public ConfirmationException() {

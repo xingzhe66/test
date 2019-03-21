@@ -4,6 +4,11 @@ import com.dcits.comet.batch.param.BatchContext;
 
 import java.io.Serializable;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class ExeInput implements Serializable {
 
     /**

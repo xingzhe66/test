@@ -7,6 +7,11 @@ import org.springframework.batch.core.ExitStatus;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class QueryOutput  implements Serializable {
     private String stepName;
     private String exeId;

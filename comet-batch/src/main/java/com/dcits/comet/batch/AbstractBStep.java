@@ -7,7 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description AbstractBStep抽象batch step
+ */
 public abstract class AbstractBStep<T,O> implements IBStep<T,O> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractBStep.class);
 

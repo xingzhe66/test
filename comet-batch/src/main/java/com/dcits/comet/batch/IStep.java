@@ -6,6 +6,11 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 
 //public interface IStep<T,O> extends ItemReader<T>, ItemProcessor<T,O>, ItemWriter<O>, StepExecutionListener {
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public interface IStep<T,O> {
 
 }

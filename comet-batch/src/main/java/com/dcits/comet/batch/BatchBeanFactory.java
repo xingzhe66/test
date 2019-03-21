@@ -15,6 +15,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import static com.dcits.comet.batch.constant.BatchConstant.PROCESSOR_NAME_PEX;
 import static com.dcits.comet.batch.constant.BatchConstant.WRITER_NAME_PEX;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description BatchBeanFactory
+ */
 public class BatchBeanFactory {
 
 

@@ -1,5 +1,10 @@
 package com.dcits.comet.batch.service.model;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class QueryInput {
     private String stepName;
 

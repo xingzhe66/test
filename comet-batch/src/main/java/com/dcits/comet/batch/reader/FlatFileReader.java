@@ -3,7 +3,11 @@ package com.dcits.comet.batch.reader;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 文件读取reader，todo 
+ */
 public class FlatFileReader {
 
 //    @Bean

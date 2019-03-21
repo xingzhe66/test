@@ -19,7 +19,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 import static java.lang.String.format;
-@Component
+//@Component
+@Deprecated
 public class SimpleTaskletStepExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleTaskletStepExecutor.class);

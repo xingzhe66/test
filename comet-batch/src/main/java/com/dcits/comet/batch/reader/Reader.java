@@ -7,9 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description Reader
+ */
 public class Reader extends AbstractPagingReader {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(Reader.class);
+    protected static final Logger logger = LoggerFactory.getLogger(Reader.class);
 
     private IBStep batchStep;
 
@@ -40,6 +44,7 @@ public class Reader extends AbstractPagingReader {
         }
         BatchContext batchContext= BatchContextTool.getBatchContext();
         results.addAll(batchStep.getPageList(batchContext,offset, pageSize,node));
+        logger.info("doReadPage完毕,results大小为:"+results.size());
     }
 
     public void init()  {

@@ -4,7 +4,11 @@ import io.shardingsphere.api.algorithm.sharding.PreciseShardingValue;
 import io.shardingsphere.api.algorithm.sharding.standard.PreciseShardingAlgorithm;
 
 import java.util.Collection;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 表精确分片算法
+ */
 public final class TablePreciseShardingAlgorithm implements PreciseShardingAlgorithm<Long> {
 
     @Override

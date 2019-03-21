@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 包扫描
+ */
 public class ClasspathPackageScanner {
     private Logger logger = LoggerFactory.getLogger(ClasspathPackageScanner.class);
     private String basePackage;
@@ -21,18 +26,21 @@ public class ClasspathPackageScanner {
 
     /**
      * 初始化
+     *
      * @param basePackage
      */
     public ClasspathPackageScanner(String basePackage) {
         this.basePackage = basePackage;
         this.cl = getClass().getClassLoader();
     }
+
     public ClasspathPackageScanner(String basePackage, ClassLoader cl) {
         this.basePackage = basePackage;
         this.cl = cl;
     }
+
     /**
-     *获取指定包下的所有字节码文件的全类名
+     * 获取指定包下的所有字节码文件的全类名
      */
     public List<String> getFullyQualifiedClassNameList() throws IOException {
         logger.info("开始扫描包{}下的所有类", basePackage);
@@ -40,7 +48,8 @@ public class ClasspathPackageScanner {
     }
 
     /**
-     *doScan函数
+     * doScan函数
+     *
      * @param basePackage
      * @param nameList
      * @return
@@ -49,8 +58,8 @@ public class ClasspathPackageScanner {
     private List<String> doScan(String basePackage, List<String> nameList) throws IOException {
         String splashPath = StringUtil.dotToSplash(basePackage);
         URL url = cl.getResource(splashPath);   //file:/D:/WorkSpace/java/ScanTest/target/classes/com/scan
-        if(null==url){
-            logger.info("此包不存在:"+basePackage);
+        if (null == url) {
+            logger.info("此包不存在:" + basePackage);
             return null;
         }
         String filePath = StringUtil.getRootPath(url);

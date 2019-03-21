@@ -9,8 +9,11 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.LinkedHashSet;
 import java.util.List;
-
-@Component
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description sharding配置帮助类
+ */
 public class ShardingDataSourceHelper {
 
     public static LinkedHashSet getDataSourceNames(){

@@ -24,6 +24,11 @@ import org.springframework.web.bind.annotation.*;
 
 import static java.lang.String.format;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 批量执行服务
+ */
 @RequestMapping("/batch/")
 @RestController
 public class ExecutionController {

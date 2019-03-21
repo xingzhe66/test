@@ -6,7 +6,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace = "http://www.dcits.com/comet/", name = "errorCode")
 public class ErrorCodes {

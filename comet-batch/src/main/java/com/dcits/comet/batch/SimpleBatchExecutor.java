@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 
 import static java.lang.String.format;
 
-@Component
+//@Component
 @Deprecated
 public class SimpleBatchExecutor {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleBatchExecutor.class);

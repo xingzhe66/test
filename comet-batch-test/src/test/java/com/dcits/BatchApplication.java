@@ -37,8 +37,8 @@ public class BatchApplication {
 
             for (String name : taskletnames) {
 
-                SimpleTaskletStepExecutor batchExecutor = (SimpleTaskletStepExecutor) context.getBean("simpleTaskletStepExecutor");
-                batchExecutor.exe(name,jobParameters);
+                //SimpleTaskletStepExecutor batchExecutor = (SimpleTaskletStepExecutor) context.getBean("simpleTaskletStepExecutor");
+              //  batchExecutor.exe(name,jobParameters);
             }
 
 

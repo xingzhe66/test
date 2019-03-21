@@ -24,6 +24,11 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import static com.dcits.comet.batch.constant.BatchConstant.STEP_PEX;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class StepFactory {
     protected static final Log LOGGER = LogFactory.getLog(CommonJobLauncher.class);
 

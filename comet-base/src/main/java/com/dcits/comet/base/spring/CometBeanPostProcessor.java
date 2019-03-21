@@ -4,7 +4,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
- *
+ * @author wangyun
+ * @date 2019/3/21
+ * @description BeanPostProcessor
  */
 public class CometBeanPostProcessor implements BeanPostProcessor {
 

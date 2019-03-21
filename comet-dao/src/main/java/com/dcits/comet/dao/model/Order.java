@@ -2,7 +2,12 @@
 package com.dcits.comet.dao.model;
 
 import java.io.Serializable;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 排序
+ * 可以将排序写在sql中，也可以使用此类，此类会在拦截器中转换成sql
+ */
 public class Order implements Serializable {
     private static final long serialVersionUID = -9052322409478952879L;
     private String propertyName;

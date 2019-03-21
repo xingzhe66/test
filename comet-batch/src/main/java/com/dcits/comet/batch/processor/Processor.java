@@ -8,7 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.lang.Nullable;
 
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description Processor
+ */
 public class Processor implements ItemProcessor{
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(Processor.class);

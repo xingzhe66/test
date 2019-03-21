@@ -7,7 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 精确分片算法
+ */
 public final class DatabaseShardingAlgorithm implements PreciseShardingAlgorithm<Long> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(DatabaseShardingAlgorithm.class);

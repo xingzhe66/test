@@ -3,14 +3,15 @@ package com.dcits.comet.batch.util;
 import com.dcits.comet.batch.helper.JobParameterHelper;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.param.BatchContextManager;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 只能在JOB运行时使用此工具
+ */
 public class BatchContextTool {
 
     private static final String EXE_ID="exeId";
 
-//    public static void put(String jobId,String key,Object value){
-//        BatchContextManager.getInstance().put(jobId,key,value);
-//    }
     /**
      * 获取批量上下文
      */

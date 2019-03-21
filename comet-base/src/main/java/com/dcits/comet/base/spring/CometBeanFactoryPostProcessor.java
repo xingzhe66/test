@@ -6,6 +6,9 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 /**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description BeanFactoryPostProcessor
  */
 public class CometBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 

@@ -4,6 +4,9 @@ package com.dcits.comet.commons.exception;
 import com.dcits.comet.commons.constant.ResponseEnum;
 
 /**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
  * 平台级异常基类
  */
 public class CometPlatformException extends RuntimeException {

@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *单jvm范围内的JobContext
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 单jvm范围内的JobContext
  */
 public class JobContextHolder {
 

@@ -1,5 +1,10 @@
 package com.dcits.comet.commons.business;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description  MessageTypeEnum
+ */
 public enum MessageTypeEnum {
     /**
      * 金融服务

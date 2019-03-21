@@ -2,7 +2,11 @@ package com.dcits.comet.base.scanner;
 
 
 import java.net.URL;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description string utils
+ */
 public class StringUtil {
     private StringUtil() {
 

@@ -3,6 +3,11 @@ package com.dcits.comet.batch.launcher;
 import com.dcits.comet.batch.param.BatchContext;
 import org.springframework.batch.core.JobExecution;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class JobExeResult {
 
     private String stepName;

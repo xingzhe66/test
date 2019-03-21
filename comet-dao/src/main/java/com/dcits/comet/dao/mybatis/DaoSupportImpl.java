@@ -19,6 +19,8 @@ import java.util.*;
 
 /**
  * @author wangyun
+ * @date 2019/3/21
+ * @description DaoSupport实现
  */
 public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     static final Logger LOGGER = LoggerFactory.getLogger(DaoSupportImpl.class);

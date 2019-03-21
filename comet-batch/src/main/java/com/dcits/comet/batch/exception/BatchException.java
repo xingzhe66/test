@@ -2,7 +2,11 @@ package com.dcits.comet.batch.exception;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 批量异常
+ */
 public class BatchException extends RuntimeException{
     private String exceptionCode;
     private String exceptionMsg;

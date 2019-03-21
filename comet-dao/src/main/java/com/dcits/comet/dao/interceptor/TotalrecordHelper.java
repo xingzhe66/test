@@ -13,7 +13,11 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 获取全部记录条数
+ */
 public class TotalrecordHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TotalrecordHelper.class);
     private static ThreadLocal<Long> totalRowCountHolder = new ThreadLocal();

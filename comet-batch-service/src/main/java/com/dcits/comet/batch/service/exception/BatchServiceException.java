@@ -3,6 +3,11 @@ package com.dcits.comet.batch.service.exception;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description BatchServiceException
+ */
 public class BatchServiceException extends RuntimeException{
     private String exceptionCode;
     private String exceptionMsg;

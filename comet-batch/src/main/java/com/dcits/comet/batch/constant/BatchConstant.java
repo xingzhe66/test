@@ -1,5 +1,9 @@
 package com.dcits.comet.batch.constant;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 批量常量
+ */
 public interface BatchConstant {
     public static final String SERVICE_STATUS_SUCCESS="s";
     public static final String SERVICE_STATUS_ERROR="e";

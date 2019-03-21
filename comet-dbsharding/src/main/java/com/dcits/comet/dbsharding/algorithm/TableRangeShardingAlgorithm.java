@@ -6,7 +6,11 @@ import io.shardingsphere.api.algorithm.sharding.standard.RangeShardingAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 区间分片算法
+ */
 public final class TableRangeShardingAlgorithm implements RangeShardingAlgorithm<Long> {
 
     @Override

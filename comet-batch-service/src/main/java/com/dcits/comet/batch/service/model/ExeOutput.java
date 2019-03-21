@@ -7,7 +7,11 @@ import org.springframework.batch.core.ExitStatus;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class ExeOutput extends BaseOutput implements Serializable {
 
     private String stepName;

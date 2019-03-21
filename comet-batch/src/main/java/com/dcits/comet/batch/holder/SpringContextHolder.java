@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
- * Spring Bean工具类
+ * @author wangyun
+ * @date 2019/3/21
+ * @description  Spring Bean工具类
  */
 @Component
 public class SpringContextHolder implements ApplicationContextAware, DisposableBean {

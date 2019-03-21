@@ -2,6 +2,11 @@ package com.dcits.comet.batch.step;
 
 import com.dcits.comet.batch.param.BatchContext;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
+ */
 public class StepParam {
 
     private String StepName;

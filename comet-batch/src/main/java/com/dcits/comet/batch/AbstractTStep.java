@@ -6,7 +6,11 @@ import com.dcits.comet.batch.util.BatchContextTool;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description AbstractTStep抽象tasklet step
+ */
 public abstract class AbstractTStep implements ITStep {
 
     @Override

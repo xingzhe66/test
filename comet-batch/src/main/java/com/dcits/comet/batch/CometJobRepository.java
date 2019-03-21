@@ -7,6 +7,11 @@ import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.springframework.batch.core.repository.support.SimpleJobRepository;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description CometJobRepository
+ */
 public class CometJobRepository extends SimpleJobRepository {
     private BatchContextDao batchContextDao;
 

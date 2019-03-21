@@ -19,7 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 交易码转换map容器
+ */
 @Slf4j
 public class TransCodeMapContainer {
 

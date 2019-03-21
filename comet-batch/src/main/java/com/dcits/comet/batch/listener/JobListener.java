@@ -10,6 +10,11 @@ import org.springframework.batch.core.JobExecutionListener;
 
 import static com.dcits.comet.batch.constant.BatchConstant.EXE_ID;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description job监听
+ */
 public class JobListener implements JobExecutionListener {
 
     private IBStep batchStep;
@@ -22,9 +27,11 @@ public class JobListener implements JobExecutionListener {
 
     @Override
     public void afterJob(JobExecution jobExecution) {
-        batchContextDao.saveBatchContext(jobExecution.getJobParameters().getString(EXE_ID),
+        batchContextDao.saveBatchContext(
+                jobExecution.getJobParameters().getString(EXE_ID),
                 String.valueOf(jobExecution.getJobId()),
-                BatchContextManager.getInstance().getBatchContext(jobExecution.getJobParameters().getString(EXE_ID)));
+                BatchContextManager.getInstance().getBatchContext(jobExecution.getJobParameters().getString(EXE_ID))
+        );
     }
 
     public void setBatchStep(IBStep batchStep) {

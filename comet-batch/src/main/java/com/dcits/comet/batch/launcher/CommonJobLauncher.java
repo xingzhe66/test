@@ -33,7 +33,9 @@ import static com.dcits.comet.batch.constant.BatchConstant.*;
 
 
 /**
- * job执行器
+ * @author wangyun
+ * @date 2019/3/21
+ * @description job执行器
  */
 @Component("commonJobLauncher")
 public class CommonJobLauncher implements IJobLauncher {
@@ -102,7 +104,7 @@ public class CommonJobLauncher implements IJobLauncher {
             }
 
             try {
-
+                //todo 如果启动后又再次调起，已经启动的exeid会被覆盖；
                 BatchContextManager.getInstance().putBatchContext(exeId, batchContext);
 
                 jobExecution = jobLauncher.run(job, jobParameters);

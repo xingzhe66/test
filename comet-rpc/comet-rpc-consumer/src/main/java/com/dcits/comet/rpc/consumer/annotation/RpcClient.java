@@ -6,6 +6,11 @@ import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description RPC消费client封装注解
+ */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

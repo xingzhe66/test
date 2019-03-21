@@ -31,6 +31,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 批量默认配置
+ */
 @Configuration
 public class BatchConfig {
 

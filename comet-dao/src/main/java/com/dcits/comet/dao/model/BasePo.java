@@ -8,6 +8,9 @@ import java.util.Map;
 
 
 /**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 
  * 持久化对象基类
  * 
  */

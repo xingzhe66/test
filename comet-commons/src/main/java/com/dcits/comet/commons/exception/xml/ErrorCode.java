@@ -7,6 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description
  * 错误码xml定义对应的实体对象
  *
  */

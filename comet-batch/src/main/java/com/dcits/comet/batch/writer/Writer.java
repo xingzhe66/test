@@ -9,6 +9,11 @@ import org.springframework.batch.item.ItemWriter;
 
 import java.util.List;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description Writer
+ */
 public class Writer implements ItemWriter {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(Writer.class);
@@ -26,7 +31,7 @@ public class Writer implements ItemWriter {
         BatchContext batchContext= BatchContextTool.getBatchContext();
         batchStep.writeChunk(batchContext,list);
 
-        LOGGER.info("write.....执行完毕");
+        LOGGER.info("write写chunk完毕,chunk大小为:"+list.size());
     }
 
 }

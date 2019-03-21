@@ -4,7 +4,11 @@
 //
 
 package com.dcits.comet.dao.interceptor;
-
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description Select For Update锁记录拦截器
+ */
 public class SelectForUpdateHelper {
     private static String updateSql = " FOR UPDATE ";
     private static ThreadLocal<Boolean> selectForUpdateholder = new ThreadLocal<Boolean>() {

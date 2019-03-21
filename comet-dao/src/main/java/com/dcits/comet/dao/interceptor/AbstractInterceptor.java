@@ -26,6 +26,11 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author wangyun
+ * @date 2019/3/21
+ * @description 抽象拦截器
+ */
 public abstract class AbstractInterceptor implements Interceptor {
     static final Logger LOGGER = LoggerFactory.getLogger(AbstractInterceptor.class);
     private static final String ROW_BOUNDS = "rowBounds";

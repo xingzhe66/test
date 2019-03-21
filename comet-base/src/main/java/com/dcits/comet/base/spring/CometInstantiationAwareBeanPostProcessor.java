@@ -7,9 +7,9 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import java.beans.PropertyDescriptor;
 
 /**
- * 一般情况下，当我们需要实现InstantiationAwareBeanPostProcessor接口时，是通过继承Spring框架中InstantiationAwareBeanPostProcessor接口实现类
- * InstantiationAwareBeanPostProcessorAdapter这个适配器类来简化我们实现接口的工作
- * Created by yanxiao on 2016/8/1.
+ * @author wangyun
+ * @date 2019/3/21
+ * @description InstantiationAwareBeanPostProcessorAdapter
  */
 public class CometInstantiationAwareBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter {
 
