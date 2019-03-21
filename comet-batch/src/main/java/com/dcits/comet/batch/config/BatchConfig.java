@@ -2,6 +2,7 @@ package com.dcits.comet.batch.config;
 
 import com.dcits.comet.batch.dao.BatchContextDao;
 import com.dcits.comet.batch.dao.BatchContextDaoImpl;
+import com.dcits.comet.batch.launcher.CometJobLauncher;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -134,17 +135,26 @@ public class BatchConfig {
 
     }
 
+//    @Bean
+//    public SimpleJobLauncher jobLauncher(
+//            @Qualifier("jobRepository") JobRepository jobRepository
+//    ) throws Exception {
+//
+//        SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+//        jobLauncher.setJobRepository(jobRepository);
+//        //jobLauncher.setTaskExecutor();
+//        return jobLauncher;
+//    }
     @Bean
-    public SimpleJobLauncher jobLauncher(
+    public CometJobLauncher jobLauncher(
             @Qualifier("jobRepository") JobRepository jobRepository
     ) throws Exception {
 
-        SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+        CometJobLauncher jobLauncher = new CometJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
         //jobLauncher.setTaskExecutor();
         return jobLauncher;
     }
-
     @Bean(name = "stepBuilders")
     public StepBuilderFactory stepBuilders(
             @Qualifier("jobRepository") JobRepository jobRepository,

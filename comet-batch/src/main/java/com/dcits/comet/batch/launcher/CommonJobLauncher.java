@@ -90,7 +90,7 @@ public class CommonJobLauncher implements IJobLauncher {
 //            job.addStep(step);
 //            job.setJobExecutionListeners(new JobListener());
 
-            SimpleJobLauncher jobLauncher = (SimpleJobLauncher) context.getBean(JobLauncher.class);
+            CometJobLauncher jobLauncher = (CometJobLauncher) context.getBean(CometJobLauncher.class);
             /**
              * SimpleAsyncTaskExecutor这个实现不重用任何线程，或者说它每次调用都启动一个新线程。
              // 但是，它还是支持对并发总数设限，当超过线程并发总数限制时
@@ -105,9 +105,9 @@ public class CommonJobLauncher implements IJobLauncher {
 
             try {
                 //todo 如果启动后又再次调起，已经启动的exeid会被覆盖；
-                BatchContextManager.getInstance().putBatchContext(exeId, batchContext);
+              //  BatchContextManager.getInstance().putBatchContext(exeId, batchContext);
 
-                jobExecution = jobLauncher.run(job, jobParameters);
+                jobExecution = jobLauncher.run(job, jobParameters,exeId, batchContext);
 
 
             } catch (JobExecutionAlreadyRunningException e) {
