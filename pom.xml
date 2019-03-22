@@ -19,6 +19,8 @@
     <packaging>pom</packaging>
     <name>little star</name>
 
+
+
     <modules>
         <module>comet-dao</module>
         <module>comet-dbsharding</module>
