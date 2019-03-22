@@ -44,7 +44,7 @@ public interface IBStep<T,O> extends IStep<T,O>{
      */
 //    public T read();
     /**
-     *对单条进行处理
+     *对read到的单条进行转换处理
      */
     public O process(BatchContext batchContext,T item);
     /**
