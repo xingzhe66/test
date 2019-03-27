@@ -1,6 +1,7 @@
 package com.dcits.comet.dbsharding;
 
 import com.dcits.comet.base.scanner.ClasspathPackageScanner;
+import com.dcits.comet.commons.utils.YamlUtil;
 import com.dcits.comet.dao.annotation.TableType;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -39,18 +40,7 @@ public class TableTypeMapContainer {
 
     static {
         try {
-            Yaml yaml = new Yaml();
-            URL url = TableTypeMapContainer.class.getClassLoader().getResource(COMET_YML);
-            if (url == null) {
-                log.info(COMET_YML+"配置信息不存在！");
-            }
-            //comet.yaml文件中的配置数据，然后转换为obj，
-            Map map = yaml.load(new FileInputStream(url.getFile()));
-            if(null==map){
-                log.info(COMET_YML+"配置信息读取失败！");
-            }
-            log.info(map.toString());
-            packageNames = (List<String>) map.get(GATEWAY_API_PACKAGE_NAMES);
+            packageNames = YamlUtil.getListProperty(COMET_YML,GATEWAY_API_PACKAGE_NAMES);
 
         } catch (Exception e) {
             log.info(COMET_YML+"配置信息读取失败！");
@@ -77,7 +67,7 @@ public class TableTypeMapContainer {
             log.info("entity扫描包：" + packageName + "结束！");
         }
         log.info("=============================================");
-        log.info("=========entity扫描包结束！==================");
+        log.info("=========entity扫描结束！====================");
         log.info("=============================================");
     }
     /* *

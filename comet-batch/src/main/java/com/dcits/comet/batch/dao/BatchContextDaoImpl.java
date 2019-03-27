@@ -29,7 +29,7 @@ public class BatchContextDaoImpl implements BatchContextDao {
 
     @Override
     public void saveBatchContext(String exeId,String jobExecutionId, BatchContext batchContext) {
-        jdbcTemplate.update("delete from batch_context where job_execution_id = ?", new Object[] { jobExecutionId },
+        jdbcTemplate.update("delete from batch_context where exe_id = ?", new Object[] { exeId },
                 new int[] { java.sql.Types.INTEGER });
         jdbcTemplate.update("insert into batch_context(exe_id,job_execution_id,params) values(?,?,?)",
                 new Object[] { exeId,jobExecutionId,JSON.toJSONString(batchContext) });

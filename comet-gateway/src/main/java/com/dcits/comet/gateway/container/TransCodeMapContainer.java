@@ -3,6 +3,7 @@ package com.dcits.comet.gateway.container;
 
 import com.dcits.comet.base.scanner.ClasspathPackageScanner;
 import com.dcits.comet.commons.business.ServiceTransfer;
+import com.dcits.comet.commons.utils.YamlUtil;
 import com.dcits.comet.gateway.property.CometYaml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,19 +46,7 @@ public class TransCodeMapContainer {
 
     static {
         try {
-            Yaml yaml = new Yaml();
-            URL url = TransCodeMapContainer.class.getClassLoader().getResource(COMET_YML);
-            if (url == null) {
-                log.info(COMET_YML+"配置信息不存在！");
-            }
-            //comet.yaml文件中的配置数据，然后转换为obj，
-            Map map = yaml.load(new FileInputStream(url.getFile()));
-            if(null==map){
-                log.info(COMET_YML+"配置信息读取失败！");
-            }
-            log.info(map.toString());
-            packageNames = (List<String>) map.get(GATEWAY_API_PACKAGE_NAMES);
-
+            packageNames = YamlUtil.getListProperty(COMET_YML,GATEWAY_API_PACKAGE_NAMES);
         } catch (Exception e) {
             log.info(COMET_YML+"配置信息读取失败！");
             e.printStackTrace();

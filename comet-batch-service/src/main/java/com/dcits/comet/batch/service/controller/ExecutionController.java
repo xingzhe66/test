@@ -13,6 +13,7 @@ import com.dcits.comet.batch.service.model.QueryInput;
 import com.dcits.comet.batch.service.model.QueryOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -79,7 +80,7 @@ public class ExecutionController {
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
-    public QueryOutput exe(@RequestBody QueryInput queryInput) {
+    public QueryOutput query(@RequestBody QueryInput queryInput) {
         String stepName=queryInput.getStepName();
         String exeId=queryInput.getExeId();
         JobParameters jobParameter= new JobParametersBuilder()
@@ -98,6 +99,11 @@ public class ExecutionController {
         BeanCopier beanCopier2 = BeanCopier.create(JobExecution.class, QueryOutput.class, false);
         beanCopier2.copy(jobExecution,queryOutput,null);
         BatchContext batchContext=batchContextDao.getBatchContext(exeId);
+        //不可能step执行完成而batchContext为null，除非中断或事务问题；事务一致需要时间，所以需要重新查询
+        if(jobExecution.getExitStatus().getExitCode().equals(ExitStatus.COMPLETED.getExitCode())&&null==batchContext){
+            //更新batchContext和jobExecution不在同一个事务，所以后可能交易完成了，但上下文没有更新
+            throw new BatchServiceException("请重新查询");
+        }
         queryOutput.setExeId(exeId);
         queryOutput.setStepName(queryInput.getStepName());
         queryOutput.setBatchContext(batchContext);

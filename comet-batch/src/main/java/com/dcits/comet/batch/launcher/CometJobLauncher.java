@@ -63,7 +63,9 @@ public class CometJobLauncher implements  JobLauncher,InitializingBean {
 
         BatchContextManager.getInstance().putBatchContext(exeId, batchContext);
 
-        return this.run(job,jobParameters);
+        JobExecution jobexe = this.run(job, jobParameters);
+
+        return jobexe;
     }
 
 

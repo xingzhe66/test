@@ -134,8 +134,7 @@ public class CommonJobLauncher implements IJobLauncher {
             e.printStackTrace();
             throw new BatchException(e.getMessage(), e);
         } finally {
-            //清理context
-            BatchContextManager.getInstance().clear(exeId);
+
         }
 
         return jobExeResult;
@@ -146,7 +145,7 @@ public class CommonJobLauncher implements IJobLauncher {
         return new JobParametersBuilder()
 //                    .addDate("date", new Date())
                 .addString(EXE_ID, exeId)
-                .addString(STEP_NAME, stepName)
+           //     .addString(STEP_NAME, stepName)
                 .toJobParameters()
                 ;
     }
