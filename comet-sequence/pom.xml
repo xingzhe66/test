@@ -10,6 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>comet-sequence</artifactId>
-
+    <packaging>pom</packaging>
+    <modules>
+        <module>comet-sequence-api</module>
+        <module>comet-sequence-provider</module>
+    </modules>
 
 </project>
