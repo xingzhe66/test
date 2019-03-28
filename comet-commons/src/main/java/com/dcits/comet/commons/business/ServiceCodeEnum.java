@@ -6,7 +6,8 @@ package com.dcits.comet.commons.business;
  * @author ChengLiang
  */
 public enum ServiceCodeEnum {
-    MBSDCODE("MbsdCore");
+    MBSDCODE("MbsdCore"),
+    MBSDPRIICE("MbsdPrice");
 
     /**
      * 服务编码
