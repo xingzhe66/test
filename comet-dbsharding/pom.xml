@@ -48,5 +48,9 @@
         <groupId>com.dcits</groupId>
         <artifactId>comet-base</artifactId>
     </dependency>
+    <dependency>
+        <groupId>io.shardingsphere</groupId>
+        <artifactId>sharding-core</artifactId>
+    </dependency>
 </dependencies>
 </project>
