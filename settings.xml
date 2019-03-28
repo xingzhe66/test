@@ -278,7 +278,7 @@ under the License.
                     </snapshots>
                 </repository>
                 <repository>
-                    <id>snapshot</id>
+                    <id>Snapshot</id>
                     <name>snapshot</name>
                     <url>http://10.7.25.206:8081/nexus/content/repositories/snapshots/</url>
                     <releases>
