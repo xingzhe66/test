@@ -1,7 +1,6 @@
 package com.dcits.comet.uid.impl;
 
 import com.dcits.comet.commons.utils.NetUtils;
-import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.uid.entity.WorkerNodePo;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +28,6 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     private volatile WorkerNodePo workerNodePo = WorkerNodePo.builder().build();
     // 创建线程池
     private ExecutorService taskExecutor;
-
-    /**
-     * 缓冲切换标识(true-切换，false-不切换)
-     */
-    private volatile boolean sw;
-
     /**
      * 异步标识(true-异步，false-同步)
      */
@@ -43,12 +36,6 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
      * 当前生成的序列值
      */
     private LongAdder currentId;
-    /**
-     * 业务标识
-     */
-    private String bizTag;
-
-
     /**
      * 异步线程任务
      */
@@ -62,17 +49,15 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     }
 
     @Override
-    protected long nextId(String bizTag) {
-        if (StringUtil.isEmpty(bizTag)) {
-            bizTag = NetUtils.getLocalAddress();
-        }
-        if (!WorkerIdAssigner.keys.containsKey(bizTag)) {
-            workerIdAssigner.assignWorkerId(bizTag);
+    protected long nextId(final String bizTag) {
+        String seqName = null == bizTag ? NetUtils.getLocalAddress() : bizTag;
+        if (!WorkerIdAssigner.keys.containsKey(seqName)) {
+            workerIdAssigner.assignWorkerId(seqName);
             currentId = new LongAdder();
-            currentId.add(Long.valueOf(WorkerIdAssigner.keys.get(bizTag).getCurrSeq()));
+            currentId.add(Long.valueOf(WorkerIdAssigner.keys.get(seqName).getCurrSeq()));
         }
 
-        WorkerNodePo workerNodePo = WorkerIdAssigner.keys.get(bizTag);
+        WorkerNodePo workerNodePo = WorkerIdAssigner.keys.get(seqName);
         boolean cycle = workerNodePo.getSeqCycle().equals("Y") ? true : false;
 
         long nextid = currentId.longValue() + Long.valueOf(workerNodePo.getStep());
@@ -96,6 +81,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         } else {
             currentId.add(Long.valueOf(workerNodePo.getStep()));
             nextid = currentId.longValue();
+            thresholdHandler(bizTag, nextid);
         }
 
         return nextid;
