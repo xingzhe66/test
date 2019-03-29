@@ -1,8 +1,7 @@
 package com.dcits.comet.uid.provider.service;
 
-import com.dcits.comet.uid.provider.CachedUidGenerator;
-import com.dcits.comet.uid.provider.DefaultUidGenerator;
-import com.dcits.comet.uid.provider.RedisUidGenerator;
+import com.dcits.comet.uid.impl.DefaultUidGenerator;
+import com.dcits.comet.uid.impl.RedisUidGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +22,6 @@ public class UidTestController {
     private DefaultUidGenerator defaultUidGenerator;
 
     @Resource
-    private CachedUidGenerator cachedUidGenerator;
-
-    @Resource
     private RedisUidGenerator redisUidGenerator;
 
     //@Autowired
@@ -33,25 +29,16 @@ public class UidTestController {
 
     @GetMapping("/default")
     public String[] test() {
-        String uid = defaultUidGenerator.getUID(true);
+        long uid = defaultUidGenerator.getUID();
         String strings[] = new String[2];
         strings[0] = String.valueOf(uid);
         strings[1] = defaultUidGenerator.parseUID(uid);
         return strings;
     }
 
-    @GetMapping("/cache")
-    public String[] cache() {
-        String uid = cachedUidGenerator.getUID();
-        String strings[] = new String[2];
-        strings[0] = String.valueOf(uid);
-
-        return strings;
-    }
-
     @GetMapping("/redis")
     public String redis() {
-        String uid = redisUidGenerator.getUID();
-        return uid;
+        long uid = redisUidGenerator.getUID();
+        return String.valueOf(uid);
     }
 }

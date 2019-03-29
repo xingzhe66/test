@@ -1,5 +1,6 @@
 package com.dcits.comet.uid.worker;
 
+
 import com.dcits.comet.uid.entity.WorkerNodePo;
 
 import java.util.Map;
@@ -16,4 +17,6 @@ public interface WorkerIdAssigner {
     Map<String, WorkerNodePo> keys = new ConcurrentHashMap<>();
 
     long assignWorkerId(final String bizType);
+
+    void doUpdateNextSegment(final String bizTag,final long nextid);
 }

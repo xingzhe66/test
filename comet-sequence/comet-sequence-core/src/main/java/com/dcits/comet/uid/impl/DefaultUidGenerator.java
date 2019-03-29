@@ -1,4 +1,4 @@
-package com.dcits.comet.uid.provider;
+package com.dcits.comet.uid.impl;
 
 import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.commons.utils.DateUtil;
@@ -9,19 +9,20 @@ import com.dcits.comet.uid.UidGenerator;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * twitter snowflake
+ *
  * @author leijian
  * @version 1.0
  * @date 2019/3/27 10:16
  * @see DefaultUidGenerator
  **/
 @Slf4j
-public class DefaultUidGenerator implements UidGenerator, InitializingBean {
+public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
     /**
      * Bits allocate
      */
@@ -38,7 +39,7 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
     /**
      * Stable fields after spring bean initializing
      */
-    protected BitsAllocator bitsAllocator;
+    protected BitsAllocator bitsAllocator = new BitsAllocator(timeBits, workerBits, seqBits);
     protected long workerId;
 
     /**
@@ -52,32 +53,25 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
      */
     protected WorkerIdAssigner workerIdAssigner;
 
-    private long sequenceMask = 99999;
 
     @Override
-    public String getUID() throws UidGenerateException {
+    public long getUID() throws UidGenerateException {
         try {
-            return getUID(false);
+            return getUID(null);
         } catch (Exception e) {
             log.error("Generate unique id exception. ", e);
             throw new UidGenerateException("999999", "流水号生成异常");
         }
     }
 
+
     @Override
-    public String getUID(boolean preDate) throws UidGenerateException {
-        return getUID(null, preDate);
+    public long getUID(String bizTag) throws UidGenerateException {
+        return nextId(bizTag);
     }
 
     @Override
-    public String getUID(String bizTag, boolean preDate) throws UidGenerateException {
-        return nextId(bizTag, preDate);
-    }
-
-
-    @Override
-    public String parseUID(String uidd) {
-        long uid = Long.valueOf(uidd);
+    public String parseUID(long uid) {
         long totalBits = BitsAllocator.TOTAL_BITS;
         long signBits = bitsAllocator.getSignBits();
         long timestampBits = bitsAllocator.getTimestampBits();
@@ -97,20 +91,6 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
                 uid, thatTimeStr, workerId, sequence);
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // initialize bits allocator
-        bitsAllocator = new BitsAllocator(timeBits, workerBits, seqBits);
-
-        // initialize worker id为主机地址
-        workerId = workerIdAssigner.assignWorkerId(NetUtils.getLocalAddress());
-        if (workerId > bitsAllocator.getMaxWorkerId()) {
-            throw new RuntimeException("Worker id " + workerId + " exceeds the max " + bitsAllocator.getMaxWorkerId());
-        }
-        log.info("InitializingBean{}", this.getClass().getName());
-        log.info("Initialized bits(1, {}, {}, {}) for workerID:{}", timeBits, workerBits, seqBits, workerId);
-    }
-
     /**
      * @return long
      * @Author leijian
@@ -118,13 +98,13 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
      * @Date 2019/3/27 10:53
      * @Param []
      **/
-    protected synchronized String nextId(final String bizTag, final boolean preDate) {
+    protected synchronized long nextId(final String bizTag) {
         if (!StringUtil.isEmpty(bizTag)) {
             workerId = workerIdAssigner.assignWorkerId(bizTag);
+        } else {
+            workerId = workerIdAssigner.assignWorkerId(NetUtils.getLocalAddress());
         }
-        if (preDate) {
-            return preDatenextId(workerId);
-        }
+
         long currentSecond = getCurrentSecond();
         // Clock moved backwards, refuse to generate uid
         if (currentSecond < lastSecond) {
@@ -132,7 +112,6 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
             log.error("Clock moved backwards. Refusing for %d seconds", refusedSeconds);
             throw new UidGenerateException("999999", "流水号生成异常");
         }
-
         // At the same second, increase sequence
         if (currentSecond == lastSecond) {
             sequence = (sequence + 1) & bitsAllocator.getMaxSequence();
@@ -144,55 +123,9 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
         } else {
             sequence = 0L;
         }
-
         lastSecond = currentSecond;
-
         // Allocate bits for UID
-        return String.valueOf(bitsAllocator.allocate(currentSecond - epochSeconds, workerId, sequence));
-    }
-
-    /**
-     * @param [workerId]
-     * @return java.lang.String
-     * @Author leijian
-     * @Description //TODO
-     * @Date 2019/3/28 13:14
-     **/
-    public synchronized String preDatenextId(final long workerId) {
-        long currentSecond = getCurrentSecond();
-        // 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
-        if (currentSecond < lastSecond) {
-            long refusedSeconds = lastSecond - currentSecond;
-            log.error("Clock moved backwards. Refusing for %d seconds", refusedSeconds);
-            throw new UidGenerateException("999999", "流水号生成异常");
-        }
-        // 如果是同一时间生成的，则进行秒内序列
-        if (currentSecond == lastSecond) {
-            sequence = (sequence + 1) % sequenceMask;
-            // Exceed the max sequence, we wait the next second to generate uid
-            if (sequence == 0) {
-                currentSecond = getNextSecond(lastSecond);
-                sequence = 0L;
-            }
-            // At the different second, sequence restart from zero
-        } else {
-            sequence = 0L;
-        }
-
-        lastSecond = currentSecond;
-
-        String ssequence = String.valueOf(sequence);
-        if (sequence < 10000) {
-            while (ssequence.length() < 5) {
-                ssequence = '0' + ssequence;
-            }
-        }
-        String dateStr = DateUtil.formatDate(new Date(TimeUnit.SECONDS.toMillis(currentSecond)), "yyyyMMddHHmm");
-        String sworkerId = String.valueOf(workerId);
-        while (sworkerId.length() < 2) {
-            sworkerId = '0' + sworkerId;
-        }
-        return dateStr + sworkerId + ssequence;
+        return bitsAllocator.allocate(currentSecond - epochSeconds, workerId, sequence);
     }
 
     /**

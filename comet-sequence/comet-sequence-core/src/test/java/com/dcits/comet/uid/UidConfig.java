@@ -1,4 +1,4 @@
-package com.dcits.comet.uid.configuration;
+package com.dcits.comet.uid;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
