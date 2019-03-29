@@ -3,13 +3,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-@Configuration
-@ConfigurationProperties(prefix = "generator")
-@PropertySource("classpath:/config/generator.properties")
-public class GeneratorEntity {
+import java.util.Properties;
+
+//@Configuration
+//@ConfigurationProperties(prefix = "generator")
+//@PropertySource("classpath:/config/generator.properties")
+
+public class GeneratorProperties {
     private String basedir;
     private String basePackage;
     private String entityPackage;
+    private String entityParentClass;
     private String mapperPackage;
     private String isDeleteTablePrefix;
     private String tableName;
@@ -23,6 +27,19 @@ public class GeneratorEntity {
     private int tablePkSize;
     private String shardColumn;
     private String tableType;
+
+    public GeneratorProperties(Properties props) {
+        this.entityPackage=props.getProperty("entityPackage");
+        this.entityParentClass=props.getProperty("entityParentClass");
+        this.mapperPackage=props.getProperty("mapperPackage");
+        this.tableName=props.getProperty("tableName");
+        this.author=props.getProperty("author");
+        this.dbName=props.getProperty("dbName");
+        this.dbType=props.getProperty("dbType");
+        this.isCrateAllTable=props.getProperty("isCrateAllTable");
+        this.iscreateMapperExt=props.getProperty("iscreateMapperExt");
+        this.shardColumn=props.getProperty("shardColumn");
+    }
 
     public String getTableType() {
         return tableType;
@@ -158,6 +175,15 @@ public class GeneratorEntity {
 
     public void setTablePkSize(int tablePkSize) {
         this.tablePkSize = tablePkSize;
+    }
+
+
+    public String getEntityParentClass() {
+        return entityParentClass;
+    }
+
+    public void setEntityParentClass(String entityParentClass) {
+        this.entityParentClass = entityParentClass;
     }
 
     @Override
