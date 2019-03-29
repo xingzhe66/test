@@ -1,6 +1,6 @@
 package ${mouldName}.${entityPackage};
 
-import com.dcits.ensemble.cloud.cif.common.base.BaseCifPo;
+import com.dcits.ensemble.cloud.cif.common.base.${entityParentClass};
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 <#if tablePkSize =="Y">
@@ -27,7 +27,7 @@ import com.dcits.comet.dao.annotation.PartitionKey;
 <#if tableType ??>
 @TableType(name="${tableName}",value=TableTypeEnum.${tableType})
 </#if>
-public class ${className} extends BaseCifPo{
+public class ${className} extends  ${entityParentClass}{
 
 	<#list cloums as c>
 	/**

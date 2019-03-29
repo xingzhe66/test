@@ -1,14 +1,12 @@
 package com.dcits.comet.mybatis.generator.service;
 
-import com.dcits.comet.mybatis.generator.entity.GeneratorEntity;
+import com.dcits.comet.mybatis.generator.entity.GeneratorProperties;
 import com.dcits.comet.mybatis.generator.mapper.CodeGeneratorMapper;
 import com.dcits.comet.mybatis.generator.util.PbUtils;
 import com.dcits.comet.mybatis.generator.util.TemplateHelp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,11 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@EnableConfigurationProperties(GeneratorEntity.class)
 public class CodeGeneratorService {
     public static final String TRUE = "true";
-    @Autowired
-    GeneratorEntity generatorEntity;
+
     @Autowired
     private CodeGeneratorMapper codeDao;
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeGeneratorService.class);
@@ -33,14 +29,15 @@ public class CodeGeneratorService {
      * @return
      * @throws Exception
      */
-    public void createCode() throws Exception {
-        String isCrateAllTable = generatorEntity.getIsCrateAllTable();
+
+    public void createCode(GeneratorProperties generatorProperties) throws Exception {
+        String isCrateAllTable = generatorProperties.getIsCrateAllTable();
         //生成所有表
             if (!PbUtils.isEmpty(isCrateAllTable) && TRUE.equals(isCrateAllTable.toLowerCase())) {
-                List<Map<String, Object>> listTables = getTablesList();
+                List<Map<String, Object>> listTables = getTablesList(generatorProperties);
                 if(listTables.size()>0){
                     for (int i = 0; i < listTables.size(); i++) {
-                        generatorEntity.setTableName((String) listTables.get(i).get("TABLE_NAME"));
+                        generatorProperties.setTableName((String) listTables.get(i).get("TABLE_NAME"));
                         String tableComment=(String) listTables.get(i).get("TABLE_COMMENT");
                         String tableType=null;
                         if(tableComment!=null && tableComment.toUpperCase().contains("PARAM")){
@@ -52,46 +49,47 @@ public class CodeGeneratorService {
                         if(tableComment!=null && tableComment.toUpperCase().contains("UPRIGHT")){
                             tableType="UPRIGHT";
                         }
-                        generatorEntity.setTableType(tableType);
-                        generatorEntity.setEntityDescription(tableComment);
-                        createCodeFolw();
+                        generatorProperties.setTableType(tableType);
+                        generatorProperties.setEntityDescription(tableComment);
+                        createCodeFolw(generatorProperties);
                     }
                 }else{
                     LOGGER.info("数据库不存在,请确认generator.properties配置文件的generator.dbName配置是否正确");
                 }
             } else {
-                String tableComment=getTableComment();
+                String tableComment=getTableComment(generatorProperties);
                 if(tableComment!=null && tableComment.toUpperCase().contains("PARAM")){
-                    generatorEntity.setTableType("PARAM");
+                    generatorProperties.setTableType("PARAM");
                 }
                 if(tableComment!=null && tableComment.toUpperCase().contains("LEVEL")){
-                    generatorEntity.setTableType("LEVEL");
+                    generatorProperties.setTableType("LEVEL");
                 }
                 if(tableComment!=null && tableComment.toUpperCase().contains("UPRIGHT")){
-                    generatorEntity.setTableType("UPRIGHT");
+                    generatorProperties.setTableType("UPRIGHT");
                 }
-                generatorEntity.setEntityDescription(tableComment);
-                createCodeFolw();
+                generatorProperties.setEntityDescription(tableComment);
+                createCodeFolw(generatorProperties);
             }
+
     }
     /**
      *生成对应文件
      */
-    public void createCodeFolw()throws Exception{
-        List<String> tableKeys=getTableKeys();
-        generatorEntity.setTablePkSize(tableKeys.size());
-        Map<String, Object> modelDate= getTemplateData(getTableComumnModel(tableKeys));
+    public void createCodeFolw(GeneratorProperties generatorProperties)throws Exception{
+        List<String> tableKeys=getTableKeys(generatorProperties);
+        generatorProperties.setTablePkSize(tableKeys.size());
+        Map<String, Object> modelDate= getTemplateData(getTableComumnModel(tableKeys,generatorProperties),generatorProperties);
         if(!modelDate.isEmpty()){
             //生成entity
-            createEntity(modelDate);
+            createEntity(modelDate,generatorProperties);
             //生成Mapper.Xml
-            createMapperXml(modelDate);
+            createMapperXml(modelDate,generatorProperties);
             //生成Mapper_ext.Xml
-            String iscreateMapperExt = generatorEntity.getIsCreateMapperExt();
+            String iscreateMapperExt = generatorProperties.getIsCreateMapperExt();
             if (!PbUtils.isEmpty(iscreateMapperExt) && TRUE.equals(iscreateMapperExt.toLowerCase())) {
-                createMapperExt(modelDate);
+                createMapperExt(modelDate,generatorProperties);
             }
-            LOGGER.info(generatorEntity.getTableName() + "表对应的JavaBean和Mapper文件生成");
+            LOGGER.info(generatorProperties.getTableName() + "表对应的JavaBean和Mapper文件生成");
         }else{
             LOGGER.info("generator.properties配置文件的generator.dbName或者generator.tableName不存在");
         }
@@ -101,30 +99,30 @@ public class CodeGeneratorService {
      * 生成mybatis mapper文件
      * @throws Exception
      */
-    public void createMapperXml(Map<String, Object> modelDate) throws Exception {
+    public void createMapperXml(Map<String, Object> modelDate,GeneratorProperties generatorProperties) throws Exception {
         String ftlName = "/MybatisMapper.ftl";
         // 生成文件的路径和名称
-        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Mapper.xml";
+        String fileName = generatorProperties.getBasedir() + "/src/main/resources/" + generatorProperties.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorProperties.getTableName()) + "Mapper.xml";
         TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
     /**
      * 生成mybatis mapper_ext文件
      * @throws Exception
      */
-    public void  createMapperExt(Map<String, Object> modelDate)throws Exception {
+    public void  createMapperExt(Map<String, Object> modelDate,GeneratorProperties generatorProperties)throws Exception {
         String ftlName = "/MybatisMapper_ext.ftl";
         // 生成文件的路径和名称
-        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Mapper_ext.xml";
+        String fileName = generatorProperties.getBasedir() + "/src/main/resources/" + generatorProperties.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorProperties.getTableName()) + "Mapper_ext.xml";
         TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
     /**
      * 生成JavaBean 实体类
      * @throws Exception
      */
-    public void createEntity(Map<String, Object> modelDate) throws Exception {
+    public void createEntity(Map<String, Object> modelDate,GeneratorProperties generatorProperties) throws Exception {
         String ftlName = "/entity.ftl";
         // 生成文件的路径和名称
-        String fileName = generatorEntity.getBasedir() + "/" + generatorEntity.getBasePackage().replace(".", "/") + "/"+generatorEntity.getEntityPackage()+"/" + PbUtils.convertToCamelCase(generatorEntity.getTableName()) + "Po.java";
+        String fileName = generatorProperties.getBasedir() + "/src/main/java/" + generatorProperties.getBasePackage().replace(".", "/") + "/"+ generatorProperties.getEntityPackage()+"/" + PbUtils.convertToCamelCase(generatorProperties.getTableName()) + "Po.java";
         TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
 
@@ -132,12 +130,12 @@ public class CodeGeneratorService {
      * 获取所有的表名称及描述
      * @return
      */
-    public List<Map<String, Object>> getTablesList() throws Exception {
+    public List<Map<String, Object>> getTablesList(GeneratorProperties generatorProperties) throws Exception {
         List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            params.put("dbName", generatorEntity.getDbName());
-            params.put("dbType", generatorEntity.getDbType());//数据库类型
+            params.put("dbName", generatorProperties.getDbName());
+            params.put("dbType", generatorProperties.getDbType());//数据库类型
             maps = codeDao.getTablesList(params);
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,11 +145,11 @@ public class CodeGeneratorService {
     /**
      * 获取表的描述信息
      */
-    public String getTableComment() {
+    public String getTableComment(GeneratorProperties generatorProperties) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("tableName", generatorEntity.getTableName());// 表名称
-        params.put("dbName", generatorEntity.getDbName());// 数据库名称
-        params.put("dbType", generatorEntity.getDbType());//数据库类型
+        params.put("tableName", generatorProperties.getTableName());// 表名称
+        params.put("dbName", generatorProperties.getDbName());// 数据库名称
+        params.put("dbType", generatorProperties.getDbType());//数据库类型
         String tableComment = codeDao.getTableComment(params);
         return tableComment;
     }
@@ -159,11 +157,11 @@ public class CodeGeneratorService {
     /**
      * 获取表得主键
      */
-    public List<String> getTableKeys() {
+    public List<String> getTableKeys(GeneratorProperties generatorProperties) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("tableName", generatorEntity.getTableName());// 表名称
-        params.put("dbName", generatorEntity.getDbName());// 数据库名称
-        params.put("dbType", generatorEntity.getDbType());//数据库类型
+        params.put("tableName", generatorProperties.getTableName());// 表名称
+        params.put("dbName", generatorProperties.getDbName());// 数据库名称
+        params.put("dbType", generatorProperties.getDbType());//数据库类型
         List<String> tableKeys = codeDao.getTableKeys(params);
         return tableKeys;
 
@@ -174,11 +172,11 @@ public class CodeGeneratorService {
      *
      * @return
      */
-    private List<Map> getListMap() {
+    private List<Map> getListMap(GeneratorProperties generatorProperties) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("tableName", generatorEntity.getTableName());// 表名称
-        params.put("dbName", generatorEntity.getDbName());// 数据库名称
-        params.put("dbType", generatorEntity.getDbType());//数据库类型
+        params.put("tableName", generatorProperties.getTableName());// 表名称
+        params.put("dbName", generatorProperties.getDbName());// 数据库名称
+        params.put("dbType", generatorProperties.getDbType());//数据库类型
         List<Map> maps = codeDao.getListMap(params);
         return maps;
     }
@@ -187,8 +185,8 @@ public class CodeGeneratorService {
      * 处理数据表列信息
      * @return
      */
-    public List<Map<String, Object>> getTableComumnModel(List<String> tableKeys) {
-        List<Map> list = getListMap();
+    public List<Map<String, Object>> getTableComumnModel(List<String> tableKeys,GeneratorProperties generatorProperties) {
+        List<Map> list = getListMap(generatorProperties);
         List<Map<String, Object>> clList = new ArrayList<Map<String, Object>>();
         if (list != null && list.size() > 0) {
             int pkIndex=1;
@@ -226,7 +224,7 @@ public class CodeGeneratorService {
                         //标识分库键
                         String partitonKey=null;
                         String shardFlag="N";
-                        if("LEVEL".equals(generatorEntity.getTableType()) && columnName.toUpperCase().equals(generatorEntity.getShardColumn().toUpperCase())){
+                        if("LEVEL".equals(generatorProperties.getTableType()) && columnName.toUpperCase().equals(generatorProperties.getShardColumn().toUpperCase())){
                             shardFlag="Y";
                             partitonKey="@PartitionKey";
                         }
@@ -258,25 +256,26 @@ public class CodeGeneratorService {
      * @param clList
      * @return
      */
-    public Map<String, Object> getTemplateData(List<Map<String, Object>> clList) {
+    public Map<String, Object> getTemplateData(List<Map<String, Object>> clList,GeneratorProperties generatorProperties) {
         Map<String, Object> data = new HashMap<String, Object>();
         if (clList != null && clList.size() > 0) {
-            String className=PbUtils.convertToCamelCase(generatorEntity.getTableName())+"Po";
+            String className=PbUtils.convertToCamelCase(generatorProperties.getTableName())+"Po";
             data.put("className", className);// 类名称
             data.put("objectName", PbUtils.fristStrToLowerCase(className));// 类名首字母小写
-            data.put("mouldName", generatorEntity.getBasePackage());// 基本包名称
-            data.put("entityPackage", generatorEntity.getEntityPackage());//entity包名称
-            data.put("functionComment", generatorEntity.getEntityDescription());// 功能说明
-            data.put("tableName", generatorEntity.getTableName().toUpperCase());// 表名称
+            data.put("mouldName", generatorProperties.getBasePackage());// 基本包名称
+            data.put("entityPackage", generatorProperties.getEntityPackage());//entity包名称
+            data.put("functionComment", generatorProperties.getEntityDescription());// 功能说明
+            data.put("tableName", generatorProperties.getTableName().toUpperCase());// 表名称
             data.put("cloums", clList);// 属性
-            data.put("author", generatorEntity.getAuthor());// 作者
+            data.put("author", generatorProperties.getAuthor());// 作者
             data.put("date", PbUtils.getCurrentDateTime());// 日期
-            if(generatorEntity.getTablePkSize()>0){
+            data.put("entityParentClass", generatorProperties.getEntityParentClass());// entity父类
+            if(generatorProperties.getTablePkSize()>0){
                 data.put("tablePkSize","Y");//存在主键
             }else{
                 data.put("tablePkSize","N");//不存在主键
             }
-            data.put("tableType",generatorEntity.getTableType());//表类型 PARAM(参数表)  LEVEL（水平分库）  UPRIGHT（垂直分库）
+            data.put("tableType", generatorProperties.getTableType());//表类型 PARAM(参数表)  LEVEL（水平分库）  UPRIGHT（垂直分库）
 
         }
         return data;
