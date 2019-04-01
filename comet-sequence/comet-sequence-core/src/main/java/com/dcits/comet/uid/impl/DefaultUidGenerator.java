@@ -136,6 +136,9 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
      **/
     protected synchronized long nextId(final String bizTag) {
         workerId = WorkerIdAssigner.keys.get(bizTag).getId();
+        if (!this.getClass().getSimpleName().equals(WorkerIdAssigner.keys.get(bizTag).getType())) {
+            throw new UidGenerateException("流水类型[" + bizTag + "]配置的实现type是[" + WorkerIdAssigner.keys.get(bizTag).getType() + "]");
+        }
         long currentSecond = getCurrentSecond();
         // Clock moved backwards, refuse to generate uid
         if (currentSecond < lastSecond) {

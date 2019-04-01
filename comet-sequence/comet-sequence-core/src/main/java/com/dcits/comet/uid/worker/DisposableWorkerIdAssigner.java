@@ -15,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -164,11 +166,51 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
 
     }
 
+    @Override
+    public List<WorkerNodePo> getWorkNodePoList(String bizTag) {
+        //查询出当前节点的workid序列号
+        List<WorkerNodePo> list = new LinkedList<WorkerNodePo>();
+        String sql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = \'" + NetUtils.getLocalAddress() + "\' AND BIZ_TAG = \'" + bizTag + "\'";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()
+        ) {
+
+            while (resultSet.next()) {
+                WorkerNodePo workerNodePo = WorkerNodePo.builder()
+                        .id(resultSet.getLong("ID"))
+                        .hostName(resultSet.getString("HOST_NAME"))
+                        .port(resultSet.getString("PORT"))
+                        .type(resultSet.getString("TYPE"))
+                        .launchDate(resultSet.getDate("LAUNCH_DATE"))
+                        .modified(resultSet.getString("MODIFIED"))
+                        .created(resultSet.getString("CREATED"))
+                        .bizTag(resultSet.getString("BIZ_TAG"))
+                        .step(resultSet.getString("STEP"))
+                        .minSeq(resultSet.getString("MIN_SEQ"))
+                        .middleId(resultSet.getString("MIDDLE_ID"))
+                        .maxSeq(resultSet.getString("MAX_SEQ"))
+                        .currSeq(resultSet.getString("CURR_SEQ"))
+                        .countSeq(resultSet.getString("COUNT_SEQ"))
+                        .seqCycle(resultSet.getString("SEQ_CYCLE"))
+                        .seqCache(resultSet.getString("SEQ_CACHE"))
+                        .cacheCount(resultSet.getString("CACHE_COUNT")).build();
+                log.info("{}", workerNodePo);
+                list.add(workerNodePo);
+            }
+        } catch (Exception e) {
+            log.error("{}", e);
+        } finally {
+
+        }
+        return list;
+    }
+
     private void updateId(String bizTag, final long nextid, final String type) {
         if (StringUtil.isEmpty(bizTag)) {
             bizTag = WorkerIdAssigner.DEF;
         }
-        log.info("bizTag:{},nextid:{},type:{}",bizTag,nextid,type);
+        log.info("bizTag:{},nextid:{},type:{}", bizTag, nextid, type);
         String querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG = ? AND TYPE = ? FOR UPDATE";
         final WorkerNodePo currentSegment = WorkerNodePo.builder().build();
         Connection connection = null;
@@ -179,7 +221,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             preparedStatement = connection.prepareStatement(querySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1, NetUtils.getLocalAddress());
             preparedStatement.setString(2, bizTag);
-            preparedStatement.setString(3,type);
+            preparedStatement.setString(3, type);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Date Sqldate = java.sql.Date.valueOf(LocalDate.now());
@@ -209,7 +251,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             }
             connection.commit();
         } catch (Exception e) {
-            log.error("数据同步异常{}",e);
+            log.error("数据同步异常{}", e);
             try {
                 connection.rollback();
             } catch (SQLException e1) {
@@ -245,6 +287,56 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             log.error("数据库操作异常", e);
             throw new BusinessException("数据库操作异常");
 
+        }
+    }
+
+    @Override
+    public void doUpdatenextSeqCache(WorkerNodePo workerNodePo, String seqCache, long nextid) {
+        log.info("workerNodePo:{},seqCache:{},nextid:{}", workerNodePo, seqCache, nextid);
+        String querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG = ? FOR UPDATE";
+        final WorkerNodePo currentSegment = WorkerNodePo.builder().build();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getConnection(dataSource);
+            preparedStatement = connection.prepareStatement(querySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            preparedStatement.setString(1, NetUtils.getLocalAddress());
+            preparedStatement.setString(2, workerNodePo.getBizTag());
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                workerNodePo.setSeqCache(seqCache);
+                workerNodePo.setCurrSeq(String.valueOf(nextid));
+                Date Sqldate = Date.valueOf(LocalDate.now());
+                log.info("{}", workerNodePo);
+                keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
+                resultSet.updateDate("LAUNCH_DATE", Sqldate);
+                resultSet.updateString("CURR_SEQ", String.valueOf(nextid));
+                resultSet.updateString("SEQ_CACHE", seqCache);
+                resultSet.updateRow();
+            }
+            connection.commit();
+        } catch (Exception e) {
+            log.error("数据同步异常{}", e);
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                log.error("数据库操作异常{}", e);
+            }
+        } finally {
+            try {
+                if (Objects.nonNull(resultSet)) {
+                    resultSet.close();
+                }
+                if (Objects.nonNull(preparedStatement)) {
+                    preparedStatement.close();
+                }
+                if (Objects.nonNull(connection)) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                log.error("数据库操作异常{}", e);
+            }
         }
     }
 }

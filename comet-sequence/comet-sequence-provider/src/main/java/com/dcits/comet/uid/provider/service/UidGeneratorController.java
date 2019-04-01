@@ -12,11 +12,11 @@ import javax.annotation.Resource;
  * @author leijian
  * @version 1.0
  * @date 2019/3/27 13:20
- * @see UidTestController
+ * @see UidGeneratorController
  **/
 @RestController
 @Slf4j
-public class UidTestController {
+public class UidGeneratorController {
 
     @Resource
     private DefaultUidGenerator defaultUidGenerator;

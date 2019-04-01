@@ -63,7 +63,7 @@ public class UidGeneratorFactory {
         workerIdAssigner = new DisposableWorkerIdAssigner();
         workerIdAssigner.setDataSource(dataSource);
 
-        UidGenerator uidGenerator = getUidGenerator(LoadingUidGenerator.class);
+        UidGenerator uidGenerator = getUidGenerator(RedisUidGenerator.class);
         this.uidGeneratorProxy = new UidGeneratorProxy(uidGenerator);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

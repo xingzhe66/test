@@ -3,6 +3,7 @@ package com.dcits.comet.uid.worker;
 
 import com.dcits.comet.uid.entity.WorkerNodePo;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,4 +22,8 @@ public interface WorkerIdAssigner {
     long assignWorkerId(final String bizType, final String type);
 
     void doUpdateNextSegment(final String bizTag, final long nextid, final String type);
+
+    List<WorkerNodePo> getWorkNodePoList(final String bizTag);
+
+    void doUpdatenextSeqCache(WorkerNodePo workerNodePo,String seqCache,long nextid);
 }

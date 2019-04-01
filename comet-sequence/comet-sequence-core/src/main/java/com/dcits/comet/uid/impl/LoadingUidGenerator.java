@@ -1,10 +1,13 @@
 package com.dcits.comet.uid.impl;
 
+import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.uid.entity.WorkerNodePo;
 import com.dcits.comet.uid.thread.NamedThreadFactory;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -13,6 +16,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 /**
  * @author leijian
@@ -39,6 +43,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
      */
     private static final int DELAY = 3 * 1000;
 
+    private static final int SEQ_CACHE_STEP = 100;
     /**
      * 定时任务延迟指定时间执行
      */
@@ -73,6 +78,9 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
             currentId.add(Long.valueOf(WorkerIdAssigner.keys.get(seqName).getCurrSeq()));
         }
         WorkerNodePo workerNodePo = WorkerIdAssigner.keys.get(seqName);
+        if (!this.getClass().getSimpleName().equals(workerNodePo.getType())) {
+            throw new UidGenerateException("流水类型[" + bizTag + "]配置的实现type是[" + workerNodePo.getType() + "]");
+        }
         boolean cycle = workerNodePo.getSeqCycle().equals("Y") ? true : false;
         long nextid = currentId.longValue() + Long.valueOf(workerNodePo.getStep());
         //序列生成已经达到最大值
@@ -82,10 +90,25 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
                 currentId.add(Long.valueOf(workerNodePo.getMinSeq()));
                 nextid = currentId.longValue();
                 asynLoadingSegment = false;
+                thresholdHandler(bizTag);
             } else {
                 log.error("{}序列已经达到最大值且不可重复生成", bizTag);
                 return -1L;
             }
+        } else if (!cycle && nextid > Long.valueOf(workerNodePo.getSeqCache()) && Long.valueOf(workerNodePo.getSeqCache()) > 0L) {
+            //不是循环的流水序列类型支持动态调整数据类型
+            currentId.reset();
+            List<WorkerNodePo> workerNodePoList = workerIdAssigner.getWorkNodePoList(bizTag);
+            //获取分配节点的最大值，从最大值开始分配下一个cacheseq
+            String seqCache = workerNodePoList.stream().sorted(Comparator.comparing(WorkerNodePo::getSeqCache)).collect(Collectors.toList()).get(0).getSeqCache();
+            String nextSeqCache = String.valueOf(Integer.valueOf(seqCache) + SEQ_CACHE_STEP);
+            currentId.add(Long.valueOf(nextSeqCache));
+            nextid = currentId.longValue();
+            //更新并且重置keys缓存
+            workerIdAssigner.doUpdatenextSeqCache(workerNodePo,seqCache,nextid);
+            asynLoadingSegment = false;
+            thresholdHandler(bizTag);
+
         } else {
             currentId.add(Long.valueOf(workerNodePo.getStep()));
             nextid = currentId.longValue();

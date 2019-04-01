@@ -1,5 +1,6 @@
 package com.dcits.comet.uid.impl;
 
+import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.uid.entity.WorkerNodePo;
 import com.dcits.comet.uid.thread.NamedThreadFactory;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
@@ -58,6 +59,9 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         if (!WorkerIdAssigner.keys.containsKey(seqName)) {
             //获取TYPE是redis实现的节点信息
             workerIdAssigner.assignWorkerId(seqName, this.getClass().getSimpleName().toLowerCase());
+            if (!this.getClass().getSimpleName().equals(WorkerIdAssigner.keys.get(bizTag).getType())) {
+                throw new UidGenerateException("流水类型[" + bizTag + "]配置的实现type是[" + WorkerIdAssigner.keys.get(bizTag).getType() + "]");
+            }
             key = WorkerIdAssigner.keys.get(bizTag).getHostName();
             hashKey = WorkerIdAssigner.keys.get(bizTag).getBizTag();
             Integer minSeq = Integer.parseInt(WorkerIdAssigner.keys.get(bizTag).getMinSeq());
