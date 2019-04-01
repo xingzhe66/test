@@ -9,8 +9,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.Test;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,7 +25,6 @@ import javax.sql.DataSource;
  **/
 //@SpringBootApplication
 @Slf4j
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JavaApplicationTest {
 
     DataSource dataSource;
@@ -55,8 +53,8 @@ public class JavaApplicationTest {
         defaultUidGenerator.setWorkerIdAssigner(workerIdAssigner);
 
         UidGeneratorProxy uidGeneratorProxy = new UidGeneratorProxy(defaultUidGenerator);
-        UidGenerator uidGenerator = uidGeneratorProxy.getProxy();
-        log.info("{}", uidGenerator.getUID());
+        UidGenerator uidGHikariPoolenerator = uidGeneratorProxy.getProxy();
+        log.info("{}", uidGeneratorProxy.getProxy().getUID());
     }
 
     @Test

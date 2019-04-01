@@ -7,8 +7,11 @@ import com.dcits.comet.uid.UidGenerator;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -76,6 +79,25 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
             bizTag = WorkerIdAssigner.DEF;
         }
         return nextId(bizTag);
+    }
+
+    @Override
+    public List<Long> getUIDList(long value) throws UidGenerateException {
+        Assert.isTrue(value <= 0L, "获取流水号的个数不能小于或者等于0");
+        return getUIDList(null, value);
+    }
+
+    @Override
+    public List<Long> getUIDList(String bizTag, long value) throws UidGenerateException {
+        if (StringUtils.isEmpty(bizTag)) {
+            bizTag = WorkerIdAssigner.DEF;
+        }
+        List uidList = new LinkedList();
+        for (long i = 0L; i < value; i++) {
+            uidList.add(nextId(bizTag));
+        }
+
+        return uidList;
     }
 
     @Override

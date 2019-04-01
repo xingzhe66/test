@@ -79,6 +79,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     }
 
 
+
     private void thresholdHandler(String bizTag) {
         log.info("数据库同步操作");
         // 异步处理-启动线程更新DB，有线程池执行

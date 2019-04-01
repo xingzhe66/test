@@ -2,6 +2,8 @@ package com.dcits.comet.uid;
 
 import com.dcits.comet.commons.exception.UidGenerateException;
 
+import java.util.List;
+
 /**
  * @author leijian
  * @version 1.0
@@ -57,6 +59,25 @@ public interface UidGenerator {
      * @ate 2019/3/28 17:29
      **/
     long getUID(String bizTag) throws UidGenerateException;
+
+    /**
+     * @param value
+     * @return java.util.List<java.lang.Long>
+     * @author leijian
+     * @Description //TODO
+     * @date 2019/4/1 9:39
+     **/
+    List<Long> getUIDList(long value) throws UidGenerateException;
+
+    /**
+     * @param bizTage
+     * @param value
+     * @return java.util.List<java.lang.Long>
+     * @author leijian
+     * @Description //TODO
+     * @date 2019/4/1 9:39
+     **/
+    List<Long> getUIDList(String bizTag, long value) throws UidGenerateException;
 
 
     /**

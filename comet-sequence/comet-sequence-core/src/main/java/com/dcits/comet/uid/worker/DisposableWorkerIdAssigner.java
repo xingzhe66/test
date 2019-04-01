@@ -119,7 +119,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
     public void buildWorkerNode() {
         log.info("初始化节点信息开始");
         if (BusiUtil.isNotNull(keys)) {
-            log.info("缓存中信息结束");
+            log.info("缓存中已存在{}的值，直接从缓存取数，初始化节点信息结束", keys);
             return;
         }
 
@@ -255,5 +255,13 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             throw new BusinessException("数据库操作异常");
 
         }
+    }
+
+    static {
+        //程序关闭的时候同步更新到数据库
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            log.info("{}", keys);
+            System.out.println("程序关闭的时候同步更新到数据库");
+        }));
     }
 }
