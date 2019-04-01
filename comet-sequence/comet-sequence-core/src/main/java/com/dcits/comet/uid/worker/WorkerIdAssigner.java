@@ -14,9 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public interface WorkerIdAssigner {
 
+    String DEF = "def";
+
     Map<String, WorkerNodePo> keys = new ConcurrentHashMap<>();
 
     long assignWorkerId(final String bizType);
 
-    void doUpdateNextSegment(final String bizTag,final long nextid);
+    void doUpdateNextSegment(final String bizTag, final long nextid);
 }

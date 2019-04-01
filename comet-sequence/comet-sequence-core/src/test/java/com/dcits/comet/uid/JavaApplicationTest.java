@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import javax.sql.DataSource;
@@ -30,27 +30,44 @@ import javax.sql.DataSource;
 public class JavaApplicationTest {
 
     DataSource dataSource;
+    DisposableWorkerIdAssigner workerIdAssigner = new DisposableWorkerIdAssigner();
 
-    @BeforeAll
+    //@BeforeAll
     void DataSource() {
         DataSource dataSource = new HikariDataSource();
-        ((HikariDataSource) dataSource).setJdbcUrl("jdbc:mysql://10.7.25.205:3306/ensemble16-cif1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8");
+        ((HikariDataSource) dataSource).setJdbcUrl("jdbc:mysql://127.0.0.1:3306/workflow?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8");
         ((HikariDataSource) dataSource).setUsername("root");
-        ((HikariDataSource) dataSource).setPassword("123456");
+        ((HikariDataSource) dataSource).setPassword("root");
         ((HikariDataSource) dataSource).setDriverClassName("com.mysql.jdbc.Driver");
         this.dataSource = dataSource;
+        workerIdAssigner.setDataSource(dataSource);
     }
 
     @Test
-    void LoadingUidGenerator() {
-        DisposableWorkerIdAssigner workerIdAssigner = new DisposableWorkerIdAssigner();
-        workerIdAssigner.setDataSource(dataSource);
+    void UidGeneratorFactory() {
+        log.info("{}", UidGeneratorFactory.getInstance().getKey());
+    }
+
+    @Test
+    void UidGeneratorProxy() {
+        workerIdAssigner.buildWorkerNode();
+        DefaultUidGenerator defaultUidGenerator = new DefaultUidGenerator();
+        defaultUidGenerator.setWorkerIdAssigner(workerIdAssigner);
+
+        UidGeneratorProxy uidGeneratorProxy = new UidGeneratorProxy(defaultUidGenerator);
+        UidGenerator uidGenerator = uidGeneratorProxy.getProxy();
+        log.info("{}", uidGenerator.getUID());
+    }
+
+    @Test
+    void LoadingUidGenerator() throws InterruptedException {
         //workerIdAssigner.buildWorkerNode();
         //实现类
-       LoadingUidGenerator loadingUidGenerator = new LoadingUidGenerator();
-       loadingUidGenerator.setWorkerIdAssigner(workerIdAssigner);
+        DefaultUidGenerator loadingUidGenerator = new LoadingUidGenerator();
+        loadingUidGenerator.setWorkerIdAssigner(workerIdAssigner);
 
-       log.info("{}",loadingUidGenerator.getUID());
+        log.info("{}", loadingUidGenerator.getUID());
+        Thread.sleep(300000);
     }
 
 
@@ -78,6 +95,10 @@ public class JavaApplicationTest {
         redisTemplate.setHashKeySerializer(jackson2JsonRedisSerializer);
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
+
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(jedisConnectionFactory);
+
         redisUidGenerator.setRedisTemplate(redisTemplate);
         //获取节点序列号
         long uid = redisUidGenerator.getUID();

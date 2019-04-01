@@ -1,7 +1,6 @@
 package com.dcits.comet.uid.worker;
 
 import com.dcits.comet.commons.exception.BusinessException;
-import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.commons.utils.BusiUtil;
 import com.dcits.comet.commons.utils.NetUtils;
 import com.dcits.comet.commons.utils.StringUtil;
@@ -54,9 +53,60 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
     public long assignWorkerId(final String bizType) {
         buildWorkerNode();
         if (keys.get(bizType) == null) {
-            throw new UidGenerateException("流水号生成参数异常[" + bizType + "]");
+            createWorkerNode(bizType);
+            buildWorkerNode();
         }
         return keys.get(bizType).getId();
+    }
+
+    public void createWorkerNode(final String bizType) {
+        String querySql = " INSERT  INTO WORKER_NODE (HOST_NAME, PORT, TYPE, LAUNCH_DATE,BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        final WorkerNodePo currentSegment = WorkerNodePo.builder().build();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            Date Sqldate = java.sql.Date.valueOf(LocalDate.now());
+            connection = getConnection(dataSource);
+            preparedStatement = connection.prepareStatement(querySql);
+            preparedStatement.setString(1, NetUtils.getLocalAddress());
+            preparedStatement.setString(2, "8080");
+            preparedStatement.setString(3, WorkerIdAssigner.DEF);
+            preparedStatement.setDate(4, Sqldate);
+            preparedStatement.setString(5, bizType);
+            preparedStatement.setString(6, "1");//STEP
+            preparedStatement.setString(7, "0");
+            preparedStatement.setString(8, String.valueOf(Long.MAX_VALUE / 2));
+            preparedStatement.setString(9, String.valueOf(Long.MAX_VALUE));
+            preparedStatement.setString(10, "1");
+            preparedStatement.setString(11, "1");
+            preparedStatement.setString(12, "Y");
+            preparedStatement.setString(13, "1");
+            preparedStatement.setString(14, "1");
+            preparedStatement.executeUpdate();
+            connection.commit();
+        } catch (Exception e) {
+            log.error("数据库操作异常{}", e);
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                log.error("数据库操作异常{}", e);
+            }
+        } finally {
+            try {
+                if (Objects.nonNull(resultSet)) {
+                    resultSet.close();
+                }
+                if (Objects.nonNull(preparedStatement)) {
+                    preparedStatement.close();
+                }
+                if (Objects.nonNull(connection)) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                log.error("数据库操作异常{}", e);
+            }
+        }
     }
 
     /**
@@ -79,6 +129,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()
         ) {
+
             while (resultSet.next()) {
                 WorkerNodePo workerNodePo = WorkerNodePo.builder()
                         .id(resultSet.getLong("ID"))
@@ -99,7 +150,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                         .seqCache(resultSet.getString("SEQ_CACHE"))
                         .cacheCount(resultSet.getString("CACHE_COUNT")).build();
                 log.info("{}", workerNodePo);
-                keys.putIfAbsent(workerNodePo.getBizTag() == null ? workerNodePo.getHostName() : workerNodePo.getBizTag(), workerNodePo);
+                keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
             }
             connection.commit();
             //启动定时同步任务
@@ -116,6 +167,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
 
     @Override
     public void doUpdateNextSegment(final String bizTag, final long nextid) {
+        log.info("节点信息同步");
         try {
             updateId(bizTag, nextid);
         } catch (Exception e) {
@@ -124,13 +176,11 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
 
     }
 
-    private void updateId(final String bizTag, final long nextid) {
-        String querySql = "";
+    private void updateId(String bizTag, final long nextid) {
         if (StringUtil.isEmpty(bizTag)) {
-            querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG IS NULL FOR UPDATE";
-        } else {
-            querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG = ? FOR UPDATE";
+            bizTag = WorkerIdAssigner.DEF;
         }
+        String querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG = ? FOR UPDATE";
         final WorkerNodePo currentSegment = WorkerNodePo.builder().build();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -139,9 +189,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             connection = getConnection(dataSource);
             preparedStatement = connection.prepareStatement(querySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1, NetUtils.getLocalAddress());
-            if (StringUtil.isNotEmpty(bizTag)) {
-                preparedStatement.setString(2, bizTag);
-            }
+            preparedStatement.setString(2, bizTag);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Date Sqldate = java.sql.Date.valueOf(LocalDate.now());
@@ -164,7 +212,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                         .seqCache(resultSet.getString("SEQ_CACHE"))
                         .cacheCount(resultSet.getString("CACHE_COUNT")).build();
                 log.info("{}", workerNodePo);
-                keys.putIfAbsent(workerNodePo.getBizTag() == null ? workerNodePo.getHostName() : workerNodePo.getBizTag(), workerNodePo);
+                keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
                 resultSet.updateDate("LAUNCH_DATE", Sqldate);
                 resultSet.updateString("CURR_SEQ", String.valueOf(nextid));
                 resultSet.updateRow();
@@ -195,10 +243,6 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    public void connect() {
-        log.info("同步信息");
     }
 
     private Connection getConnection(DataSource dataSource) {

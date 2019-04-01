@@ -2,8 +2,6 @@ package com.dcits.comet.uid.impl;
 
 import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.commons.utils.DateUtil;
-import com.dcits.comet.commons.utils.NetUtils;
-import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.uid.BitsAllocator;
 import com.dcits.comet.uid.UidGenerator;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
@@ -53,6 +51,13 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
      */
     protected WorkerIdAssigner workerIdAssigner;
 
+    public DefaultUidGenerator() {
+
+    }
+
+    public DefaultUidGenerator(WorkerIdAssigner workerIdAssigner) {
+        setWorkerIdAssigner(workerIdAssigner);
+    }
 
     @Override
     public long getUID() throws UidGenerateException {
@@ -67,6 +72,9 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
 
     @Override
     public long getUID(String bizTag) throws UidGenerateException {
+        if (StringUtils.isEmpty(bizTag)) {
+            bizTag = WorkerIdAssigner.DEF;
+        }
         return nextId(bizTag);
     }
 
@@ -99,12 +107,7 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
      * @Param []
      **/
     protected synchronized long nextId(final String bizTag) {
-        if (!StringUtil.isEmpty(bizTag)) {
-            workerId = workerIdAssigner.assignWorkerId(bizTag);
-        } else {
-            workerId = workerIdAssigner.assignWorkerId(NetUtils.getLocalAddress());
-        }
-
+        workerId = WorkerIdAssigner.keys.get(bizTag).getId();
         long currentSecond = getCurrentSecond();
         // Clock moved backwards, refuse to generate uid
         if (currentSecond < lastSecond) {
