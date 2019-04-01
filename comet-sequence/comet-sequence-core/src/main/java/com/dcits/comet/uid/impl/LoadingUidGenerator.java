@@ -1,12 +1,16 @@
 package com.dcits.comet.uid.impl;
 
 import com.dcits.comet.uid.entity.WorkerNodePo;
+import com.dcits.comet.uid.thread.NamedThreadFactory;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -31,6 +35,19 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
      */
     private LongAdder currentId;
     /**
+     * 同步时间(单位毫秒)
+     */
+    private static final int DELAY = 3 * 1000;
+
+    /**
+     * 定时任务延迟指定时间执行
+     */
+    private static final int INITIALDELAY = 3 * 1000;
+    /**
+     * 定时任务执行器
+     */
+    private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("keep-loadinguidgenerator-uid-sync", true));
+    /**
      * 异步线程任务
      */
     FutureTask<Boolean> asynLoadSegmentTask = null;
@@ -39,6 +56,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         if (taskExecutor == null) {
             taskExecutor = Executors.newSingleThreadExecutor();
         }
+        scheduledExecutorService.scheduleWithFixedDelay(this::keepWithDB, INITIALDELAY, DELAY, TimeUnit.MILLISECONDS);
     }
 
     public LoadingUidGenerator(WorkerIdAssigner workerIdAssigner) {
@@ -50,11 +68,10 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     protected synchronized long nextId(final String bizTag) {
         String seqName = null == bizTag ? WorkerIdAssigner.DEF : bizTag;
         if (!WorkerIdAssigner.keys.containsKey(seqName)) {
-            workerIdAssigner.assignWorkerId(seqName);
+            workerIdAssigner.assignWorkerId(seqName, this.getClass().getSimpleName().toLowerCase());
             currentId = new LongAdder();
             currentId.add(Long.valueOf(WorkerIdAssigner.keys.get(seqName).getCurrSeq()));
         }
-
         WorkerNodePo workerNodePo = WorkerIdAssigner.keys.get(seqName);
         boolean cycle = workerNodePo.getSeqCycle().equals("Y") ? true : false;
         long nextid = currentId.longValue() + Long.valueOf(workerNodePo.getStep());
@@ -74,24 +91,30 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
             nextid = currentId.longValue();
             asynLoadingSegment = true;
         }
-        thresholdHandler(bizTag);
         return nextid;
     }
 
 
-
     private void thresholdHandler(String bizTag) {
-        log.info("数据库同步操作");
         // 异步处理-启动线程更新DB，有线程池执行
         if (asynLoadingSegment) {
+            log.info("异步处理-启动线程更新DB");
             asynLoadSegmentTask = new FutureTask<>(() -> {
-                workerIdAssigner.doUpdateNextSegment(bizTag, currentId.longValue());
+                workerIdAssigner.doUpdateNextSegment(bizTag, currentId.longValue(), this.getClass().getSimpleName().toLowerCase());
                 return true;
             });
             taskExecutor.submit(asynLoadSegmentTask);
         } else {// 同步处理，直接更新DB
-            workerIdAssigner.doUpdateNextSegment(bizTag, currentId.longValue());
+            log.info("同步处理直接更新DB");
+            workerIdAssigner.doUpdateNextSegment(bizTag, currentId.longValue(), this.getClass().getSimpleName().toLowerCase());
         }
     }
 
+    @Override
+    public void keepWithDB() {
+        WorkerIdAssigner.keys.forEach((bizTag, workerNodePo) -> {
+            long updateUid = currentId.longValue();
+            workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, this.getClass().getSimpleName().toLowerCase());
+        });
+    }
 }

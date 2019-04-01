@@ -18,7 +18,7 @@ public interface WorkerIdAssigner {
 
     Map<String, WorkerNodePo> keys = new ConcurrentHashMap<>();
 
-    long assignWorkerId(final String bizType);
+    long assignWorkerId(final String bizType, final String type);
 
-    void doUpdateNextSegment(final String bizTag, final long nextid);
+    void doUpdateNextSegment(final String bizTag, final long nextid, final String type);
 }

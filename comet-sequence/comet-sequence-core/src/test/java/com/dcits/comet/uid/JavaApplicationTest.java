@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,38 +28,44 @@ import javax.sql.DataSource;
 @Slf4j
 public class JavaApplicationTest {
 
+    private static volatile boolean running = true;
+
     DataSource dataSource;
+
     DisposableWorkerIdAssigner workerIdAssigner = new DisposableWorkerIdAssigner();
 
-    //@BeforeAll
-    void DataSource() {
+    @Before
+    public void DataSource() {
         DataSource dataSource = new HikariDataSource();
-        ((HikariDataSource) dataSource).setJdbcUrl("jdbc:mysql://127.0.0.1:3306/workflow?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8");
+        ((HikariDataSource) dataSource).setJdbcUrl("jdbc:mysql://10.7.25.205:3306/workflow?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8");
         ((HikariDataSource) dataSource).setUsername("root");
-        ((HikariDataSource) dataSource).setPassword("root");
+        ((HikariDataSource) dataSource).setPassword("123456");
         ((HikariDataSource) dataSource).setDriverClassName("com.mysql.jdbc.Driver");
         this.dataSource = dataSource;
         workerIdAssigner.setDataSource(dataSource);
     }
 
     @Test
-    void UidGeneratorFactory() {
+    public void UidGeneratorFactoryGetKey() {
         log.info("{}", UidGeneratorFactory.getInstance().getKey());
+        synchronized (JavaApplicationTest.class) {
+            while (running) {
+                try {
+                    JavaApplicationTest.class.wait();
+                } catch (Throwable localThrowable) {
+                }
+            }
+        }
     }
 
     @Test
-    void UidGeneratorProxy() {
-        workerIdAssigner.buildWorkerNode();
-        DefaultUidGenerator defaultUidGenerator = new DefaultUidGenerator();
-        defaultUidGenerator.setWorkerIdAssigner(workerIdAssigner);
-
-        UidGeneratorProxy uidGeneratorProxy = new UidGeneratorProxy(defaultUidGenerator);
-        UidGenerator uidGHikariPoolenerator = uidGeneratorProxy.getProxy();
-        log.info("{}", uidGeneratorProxy.getProxy().getUID());
+    public void UidGeneratorFactoryGetKeyList() {
+        log.info("{}", UidGeneratorFactory.getInstance().getKeyList(6));
     }
 
+
     @Test
-    void LoadingUidGenerator() throws InterruptedException {
+    public void LoadingUidGenerator() throws InterruptedException {
         //workerIdAssigner.buildWorkerNode();
         //实现类
         DefaultUidGenerator loadingUidGenerator = new LoadingUidGenerator();
@@ -70,11 +77,10 @@ public class JavaApplicationTest {
 
 
     @Test
-    void RedisUidGeneratorTest() throws InterruptedException {
+    public void RedisUidGeneratorTest() throws InterruptedException {
         //设置数据源
         DisposableWorkerIdAssigner workerIdAssigner = new DisposableWorkerIdAssigner();
         workerIdAssigner.setDataSource(dataSource);
-        workerIdAssigner.buildWorkerNode();
         RedisUidGenerator redisUidGenerator = new RedisUidGenerator();
         redisUidGenerator.setWorkerIdAssigner(workerIdAssigner);
         //配置redis信息
@@ -96,7 +102,6 @@ public class JavaApplicationTest {
 
         StringRedisTemplate template = new StringRedisTemplate();
         template.setConnectionFactory(jedisConnectionFactory);
-
         redisUidGenerator.setRedisTemplate(redisTemplate);
         //获取节点序列号
         long uid = redisUidGenerator.getUID();
@@ -106,11 +111,10 @@ public class JavaApplicationTest {
     }
 
     @Test
-    void DefaultUidGeneratorTest() {
+    public void DefaultUidGeneratorTest() {
         //设置数据源
         DisposableWorkerIdAssigner workerIdAssigner = new DisposableWorkerIdAssigner();
         workerIdAssigner.setDataSource(dataSource);
-        workerIdAssigner.buildWorkerNode();
         DefaultUidGenerator defaultUidGenerator = new DefaultUidGenerator();
         defaultUidGenerator.setWorkerIdAssigner(workerIdAssigner);
         long uid = defaultUidGenerator.getUID();

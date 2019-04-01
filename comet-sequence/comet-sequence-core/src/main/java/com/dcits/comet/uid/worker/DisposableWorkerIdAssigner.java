@@ -1,12 +1,12 @@
 package com.dcits.comet.uid.worker;
 
 import com.dcits.comet.commons.exception.BusinessException;
-import com.dcits.comet.commons.utils.BusiUtil;
 import com.dcits.comet.commons.utils.NetUtils;
 import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.uid.entity.WorkerNodePo;
-import com.dcits.comet.uid.thread.NamedThreadFactory;
+import com.dcits.comet.uid.impl.DefaultUidGenerator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.math.RandomUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,8 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * 1.获取机器序列号，支持直接去网卡IP地址或者从配置文件加载；2.获取流水号生成的步长
@@ -30,16 +28,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 @Slf4j
 public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
 
-    /**
-     * 同步时间(单位毫秒)
-     */
-    private static final int RECONNECT_PERIOD_DEFAULT = 3 * 1000;
-
-    /**
-     * 定时任务执行器
-     */
-    private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("keep-uid-sync", true));
-
     DataSource dataSource;
 
     /**
@@ -50,11 +38,13 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
      * @Param []
      **/
     @Override
-    public long assignWorkerId(final String bizType) {
-        buildWorkerNode();
+    public long assignWorkerId(final String bizType, final String type) {
+        buildWorkerNode(type);
         if (keys.get(bizType) == null) {
+            //默认创建的是雪花算法（雪花算法不需要人为的按照节点分配步长）
             createWorkerNode(bizType);
-            buildWorkerNode();
+            buildWorkerNode(type);
+            //throw new UidGenerateException("999999", "流水号参数未配置");
         }
         return keys.get(bizType).getId();
     }
@@ -70,8 +60,8 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             connection = getConnection(dataSource);
             preparedStatement = connection.prepareStatement(querySql);
             preparedStatement.setString(1, NetUtils.getLocalAddress());
-            preparedStatement.setString(2, "8080");
-            preparedStatement.setString(3, WorkerIdAssigner.DEF);
+            preparedStatement.setString(2, System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));
+            preparedStatement.setString(3, DefaultUidGenerator.class.getSimpleName().toLowerCase());
             preparedStatement.setDate(4, Sqldate);
             preparedStatement.setString(5, bizType);
             preparedStatement.setString(6, "1");//STEP
@@ -116,15 +106,14 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
      * @Date 2019/3/27 10:26
      * @Param []
      **/
-    public void buildWorkerNode() {
+    public void buildWorkerNode(String type) {
         log.info("初始化节点信息开始");
-        if (BusiUtil.isNotNull(keys)) {
+        if (keys.containsKey(type)) {
             log.info("缓存中已存在{}的值，直接从缓存取数，初始化节点信息结束", keys);
             return;
         }
-
         //查询出当前节点的workid序列号
-        String sql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = \'" + NetUtils.getLocalAddress() + "\'";
+        String sql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = \'" + NetUtils.getLocalAddress() + "\' AND TYPE = \'" + type + "\'";
         try (Connection connection = getConnection(dataSource);
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()
@@ -153,8 +142,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                 keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
             }
             connection.commit();
-            //启动定时同步任务
-            //scheduledExecutorService.scheduleWithFixedDelay(this::connect, RECONNECT_PERIOD_DEFAULT, RECONNECT_PERIOD_DEFAULT, TimeUnit.MILLISECONDS);
+
         } catch (Exception e) {
             log.error("{}", e);
         } finally {
@@ -166,21 +154,22 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
     }
 
     @Override
-    public void doUpdateNextSegment(final String bizTag, final long nextid) {
+    public void doUpdateNextSegment(final String bizTag, final long nextid, final String type) {
         log.info("节点信息同步");
         try {
-            updateId(bizTag, nextid);
+            updateId(bizTag, nextid, type);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void updateId(String bizTag, final long nextid) {
+    private void updateId(String bizTag, final long nextid, final String type) {
         if (StringUtil.isEmpty(bizTag)) {
             bizTag = WorkerIdAssigner.DEF;
         }
-        String querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG = ? FOR UPDATE";
+        log.info("bizTag:{},nextid:{},type:{}",bizTag,nextid,type);
+        String querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG = ? AND TYPE = ? FOR UPDATE";
         final WorkerNodePo currentSegment = WorkerNodePo.builder().build();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -190,6 +179,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             preparedStatement = connection.prepareStatement(querySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             preparedStatement.setString(1, NetUtils.getLocalAddress());
             preparedStatement.setString(2, bizTag);
+            preparedStatement.setString(3,type);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 Date Sqldate = java.sql.Date.valueOf(LocalDate.now());
@@ -219,6 +209,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             }
             connection.commit();
         } catch (Exception e) {
+            log.error("数据同步异常{}",e);
             try {
                 connection.rollback();
             } catch (SQLException e1) {
@@ -255,13 +246,5 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             throw new BusinessException("数据库操作异常");
 
         }
-    }
-
-    static {
-        //程序关闭的时候同步更新到数据库
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("{}", keys);
-            System.out.println("程序关闭的时候同步更新到数据库");
-        }));
     }
 }

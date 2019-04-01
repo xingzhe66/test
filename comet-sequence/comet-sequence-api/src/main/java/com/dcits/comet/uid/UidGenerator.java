@@ -52,7 +52,7 @@ public interface UidGenerator {
     long getUID() throws UidGenerateException;
 
     /**
-     * @param bizTag
+     * @param bizTag 流水号类型
      * @return java.lang.String
      * @author leijian
      * @Description //TODO
@@ -61,23 +61,23 @@ public interface UidGenerator {
     long getUID(String bizTag) throws UidGenerateException;
 
     /**
-     * @param value
+     * @param size 获取流水号的个数
      * @return java.util.List<java.lang.Long>
      * @author leijian
      * @Description //TODO
      * @date 2019/4/1 9:39
      **/
-    List<Long> getUIDList(long value) throws UidGenerateException;
+    List<Long> getUIDList(long size) throws UidGenerateException;
 
     /**
-     * @param bizTage
-     * @param value
+     * @param bizTag 流水号的类型
+     * @param size   获取流水号的个数
      * @return java.util.List<java.lang.Long>
      * @author leijian
      * @Description //TODO
      * @date 2019/4/1 9:39
      **/
-    List<Long> getUIDList(String bizTag, long value) throws UidGenerateException;
+    List<Long> getUIDList(String bizTag, long size) throws UidGenerateException;
 
 
     /**
@@ -88,5 +88,8 @@ public interface UidGenerator {
      * @return Parsed info
      */
     String parseUID(long uid);
+
+
+    void keepWithDB();
 
 }

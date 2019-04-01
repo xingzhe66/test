@@ -89,6 +89,7 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
 
     @Override
     public List<Long> getUIDList(String bizTag, long value) throws UidGenerateException {
+        Assert.isTrue(value <= 0L, "获取流水号的个数不能小于或者等于0");
         if (StringUtils.isEmpty(bizTag)) {
             bizTag = WorkerIdAssigner.DEF;
         }
@@ -119,6 +120,11 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
         // format as string
         return String.format("{\"UID\":\"%d\",\"timestamp\":\"%s\",\"workerId\":\"%d\",\"sequence\":\"%d\"}",
                 uid, thatTimeStr, workerId, sequence);
+    }
+
+    @Override
+    public void keepWithDB() {
+        //TODO 雪花算法什么也不干
     }
 
     /**
