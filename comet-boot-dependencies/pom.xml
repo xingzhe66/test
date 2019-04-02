@@ -57,6 +57,16 @@
                 <version>${comet.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.dcits</groupId>
+                <artifactId>comet-sequence-provider</artifactId>
+                <version>${comet.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dcits</groupId>
+                <artifactId>comet-sequence-core</artifactId>
+                <version>${comet.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>${mybatis.version}</version>

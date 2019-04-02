@@ -30,9 +30,10 @@ import javax.sql.DataSource;
 @Slf4j
 @Component
 public class UidGeneratorConfig {
+
     @Bean("workerIdAssigner")
     @DependsOn("ds_uid")
-    public DisposableWorkerIdAssigner disposableWorkerIdAssigner(@Autowired DataSource dataSource) {
+    public DisposableWorkerIdAssigner disposableWorkerIdAssigner(@Qualifier("ds_uid") DataSource dataSource) {
         DisposableWorkerIdAssigner disposableWorkerIdAssigner = new DisposableWorkerIdAssigner();
         disposableWorkerIdAssigner.setDataSource(dataSource);
         return disposableWorkerIdAssigner;
