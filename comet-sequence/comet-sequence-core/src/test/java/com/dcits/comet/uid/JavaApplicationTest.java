@@ -17,6 +17,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import javax.sql.DataSource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author leijian
@@ -45,6 +48,12 @@ public class JavaApplicationTest {
         workerIdAssigner.setDataSource(dataSource);
     }
 
+    @Test
+    public void test() throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = simpleDateFormat.parse("2019-01-01");
+        System.out.println(date.getTime());
+    }
     @Test
     public void UidGeneratorFactoryGetKey() {
         log.info("{}", UidGeneratorFactory.getInstance().getKey());

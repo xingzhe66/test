@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -28,6 +30,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
 
     private static ReentrantLock lock = new ReentrantLock();
 
+    private String className = getClass().getSimpleName().toLowerCase();
     // 创建线程池
     private ExecutorService taskExecutor;
     /**
@@ -43,7 +46,10 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
      */
     private static final int DELAY = 3 * 1000;
 
-    private static final int SEQ_CACHE_STEP = 100;
+    /**
+     *
+     */
+    private int seqCacheStep = 100;
     /**
      * 定时任务延迟指定时间执行
      */
@@ -56,6 +62,8 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
      * 异步线程任务
      */
     FutureTask<Boolean> asynLoadSegmentTask = null;
+
+    private Map<String, LongAdder> manager = new ConcurrentHashMap();
 
     public LoadingUidGenerator() {
         if (taskExecutor == null) {
@@ -73,13 +81,15 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     protected synchronized long nextId(final String bizTag) {
         String seqName = null == bizTag ? WorkerIdAssigner.DEF : bizTag;
         if (!WorkerIdAssigner.keys.containsKey(seqName)) {
-            workerIdAssigner.assignWorkerId(seqName, this.getClass().getSimpleName().toLowerCase());
+            workerIdAssigner.assignWorkerId(seqName, className);
             currentId = new LongAdder();
             currentId.add(Long.valueOf(WorkerIdAssigner.keys.get(seqName).getCurrSeq()));
+            manager.put(seqName, currentId);
         }
+        currentId = manager.get(seqName);
         WorkerNodePo workerNodePo = WorkerIdAssigner.keys.get(seqName);
-        if (!this.getClass().getSimpleName().equals(workerNodePo.getType())) {
-            throw new UidGenerateException("流水类型[" + bizTag + "]配置的实现type是[" + workerNodePo.getType() + "]");
+        if (!this.getClass().getSimpleName().toLowerCase().equals(workerNodePo.getType())) {
+            throw new UidGenerateException("999999", "流水类型[" + bizTag + "]配置的实现type是[" + workerNodePo.getType() + "]");
         }
         boolean cycle = workerNodePo.getSeqCycle().equals("Y") ? true : false;
         long nextid = currentId.longValue() + Long.valueOf(workerNodePo.getStep());
@@ -101,43 +111,47 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
             List<WorkerNodePo> workerNodePoList = workerIdAssigner.getWorkNodePoList(bizTag);
             //获取分配节点的最大值，从最大值开始分配下一个cacheseq
             String seqCache = workerNodePoList.stream().sorted(Comparator.comparing(WorkerNodePo::getSeqCache)).collect(Collectors.toList()).get(0).getSeqCache();
-            String nextSeqCache = String.valueOf(Integer.valueOf(seqCache) + SEQ_CACHE_STEP);
+            String nextSeqCache = String.valueOf(Integer.valueOf(seqCache) + seqCacheStep);
             currentId.add(Long.valueOf(nextSeqCache));
             nextid = currentId.longValue();
             //更新并且重置keys缓存
-            workerIdAssigner.doUpdatenextSeqCache(workerNodePo,seqCache,nextid);
+            workerIdAssigner.doUpdatenextSeqCache(workerNodePo, seqCache, nextid);
             asynLoadingSegment = false;
             thresholdHandler(bizTag);
-
         } else {
             currentId.add(Long.valueOf(workerNodePo.getStep()));
             nextid = currentId.longValue();
             asynLoadingSegment = true;
         }
+        manager.put(seqName, currentId);
         return nextid;
     }
 
+
+    public void setSeqCacheStep(int seqCacheStep) {
+        this.seqCacheStep = seqCacheStep;
+    }
 
     private void thresholdHandler(String bizTag) {
         // 异步处理-启动线程更新DB，有线程池执行
         if (asynLoadingSegment) {
             log.info("异步处理-启动线程更新DB");
             asynLoadSegmentTask = new FutureTask<>(() -> {
-                workerIdAssigner.doUpdateNextSegment(bizTag, currentId.longValue(), this.getClass().getSimpleName().toLowerCase());
+                workerIdAssigner.doUpdateNextSegment(bizTag, manager.get(bizTag).longValue(), className);
                 return true;
             });
             taskExecutor.submit(asynLoadSegmentTask);
         } else {// 同步处理，直接更新DB
             log.info("同步处理直接更新DB");
-            workerIdAssigner.doUpdateNextSegment(bizTag, currentId.longValue(), this.getClass().getSimpleName().toLowerCase());
+            workerIdAssigner.doUpdateNextSegment(bizTag, manager.get(bizTag).longValue(), className);
         }
     }
 
     @Override
     public void keepWithDB() {
         WorkerIdAssigner.keys.forEach((bizTag, workerNodePo) -> {
-            long updateUid = currentId.longValue();
-            workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, this.getClass().getSimpleName().toLowerCase());
+            long updateUid = manager.get(bizTag).longValue();
+            workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, className);
         });
     }
 }

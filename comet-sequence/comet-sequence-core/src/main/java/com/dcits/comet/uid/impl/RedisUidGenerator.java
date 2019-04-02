@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisUidGenerator extends DefaultUidGenerator {
 
+    private String className = getClass().getSimpleName().toLowerCase();
+
     public RedisUidGenerator() {
 
     }
@@ -58,9 +60,9 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         String delta = "";
         if (!WorkerIdAssigner.keys.containsKey(seqName)) {
             //获取TYPE是redis实现的节点信息
-            workerIdAssigner.assignWorkerId(seqName, this.getClass().getSimpleName().toLowerCase());
-            if (!this.getClass().getSimpleName().equals(WorkerIdAssigner.keys.get(bizTag).getType())) {
-                throw new UidGenerateException("流水类型[" + bizTag + "]配置的实现type是[" + WorkerIdAssigner.keys.get(bizTag).getType() + "]");
+            workerIdAssigner.assignWorkerId(seqName, className);
+            if (!className.equals(WorkerIdAssigner.keys.get(bizTag).getType())) {
+                throw new UidGenerateException("999999", "流水类型[" + bizTag + "]配置的实现type是[" + WorkerIdAssigner.keys.get(bizTag).getType() + "]");
             }
             key = WorkerIdAssigner.keys.get(bizTag).getHostName();
             hashKey = WorkerIdAssigner.keys.get(bizTag).getBizTag();
@@ -90,7 +92,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
     void updateDB(String bizTag, WorkerNodePo workerNodePo) {
         log.info("序列节点同步到数据库");
         long updateUid = Long.valueOf("" + redisTemplate.opsForHash().get(workerNodePo.getHostName(), workerNodePo.getBizTag()));
-        workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, this.getClass().getSimpleName().toLowerCase());
+        workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, className);
     }
 
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {

@@ -24,18 +24,19 @@ import java.util.concurrent.TimeUnit;
  **/
 @Slf4j
 public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
+
+    private String className = getClass().getSimpleName().toLowerCase();
+
     /**
      * Bits allocate
      */
-    protected int timeBits = 28;
-    protected int workerBits = 22;
+    protected int timeBits = 40;
+    protected int workerBits = 10;
     protected int seqBits = 13;
 
-    /**
-     * Customer epoch, unit as second. For example 2016-05-20 (ms: 1463673600000)
-     */
-    protected String epochStr = "2016-05-20";
-    protected long epochSeconds = TimeUnit.MILLISECONDS.toSeconds(1463673600000L);
+
+    protected String epochStr = "2019-01-01";
+    protected long epochSeconds = TimeUnit.MILLISECONDS.toSeconds(1546272000000L);
 
     /**
      * Stable fields after spring bean initializing
@@ -67,7 +68,7 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
         try {
             return getUID(null);
         } catch (Exception e) {
-            log.error("Generate unique id exception. ", e);
+            log.error("Generate unique id exception.{}", e);
             throw new UidGenerateException("999999", "流水号生成异常");
         }
     }
@@ -136,8 +137,8 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
      **/
     protected synchronized long nextId(final String bizTag) {
         workerId = WorkerIdAssigner.keys.get(bizTag).getId();
-        if (!this.getClass().getSimpleName().equals(WorkerIdAssigner.keys.get(bizTag).getType())) {
-            throw new UidGenerateException("流水类型[" + bizTag + "]配置的实现type是[" + WorkerIdAssigner.keys.get(bizTag).getType() + "]");
+        if (!className.equals(WorkerIdAssigner.keys.get(bizTag).getType())) {
+            throw new UidGenerateException("999999", "流水类型[" + bizTag + "]配置的实现type是[" + WorkerIdAssigner.keys.get(bizTag).getType() + "]");
         }
         long currentSecond = getCurrentSecond();
         // Clock moved backwards, refuse to generate uid
@@ -179,7 +180,7 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
     private long getCurrentSecond() {
         long currentSecond = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         if (currentSecond - epochSeconds > bitsAllocator.getMaxDeltaSeconds()) {
-            throw new UidGenerateException("Timestamp bits is exhausted. Refusing UID generate. Now: " + currentSecond);
+            throw new UidGenerateException("999999", "Timestamp bits is exhausted. Refusing UID generate. Now: " + currentSecond);
         }
 
         return currentSecond;
