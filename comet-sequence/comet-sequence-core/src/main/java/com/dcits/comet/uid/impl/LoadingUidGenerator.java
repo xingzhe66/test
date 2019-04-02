@@ -149,6 +149,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
 
     @Override
     public void keepWithDB() {
+        log.info("{}同步序列到数据库",this.getClass().getSimpleName());
         WorkerIdAssigner.keys.forEach((bizTag, workerNodePo) -> {
             long updateUid = manager.get(bizTag).longValue();
             workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, className);

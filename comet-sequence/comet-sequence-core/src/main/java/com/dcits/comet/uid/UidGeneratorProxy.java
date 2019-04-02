@@ -20,11 +20,11 @@ public class UidGeneratorProxy {
      * @Description //TODO
      * @ate 2019/3/30 16:45
      **/
-    UidGeneratorProxy(final UidGenerator uidGenerator) {
+    public UidGeneratorProxy(final UidGenerator uidGenerator) {
         this.uidGenerator = uidGenerator;
     }
 
-    UidGenerator getProxy() {
+    public UidGenerator getProxy() {
         return (UidGenerator) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{UidGenerator.class},
                 new UidInvocationHandler());
     }

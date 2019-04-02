@@ -109,7 +109,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
      * @Param []
      **/
     public void buildWorkerNode(String type) {
-        log.info("初始化节点信息开始");
+        log.info("初始化节点信息开始{}", type);
         if (keys.containsKey(type)) {
             log.info("缓存中已存在{}的值，直接从缓存取数，初始化节点信息结束", keys);
             return;

@@ -46,6 +46,13 @@ public class SpringContextUtil implements ApplicationContextAware {
     }
 
     /**
+     * 从静态变量ApplicationContext中取得Bean
+     */
+    public static <T> T getBean(Class<T> requiredType) {
+        return applicationContext.getBean(requiredType);
+    }
+
+    /**
      * 清除applicationContext静态变量.
      */
     public static void cleanApplicationContext() {

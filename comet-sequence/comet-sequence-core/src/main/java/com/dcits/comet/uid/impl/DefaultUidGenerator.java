@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * twitter snowflake
+ * twitter snowflakeUidGenerator
  *
  * @author leijian
  * @version 1.0
@@ -30,9 +30,9 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
     /**
      * Bits allocate
      */
-    protected int timeBits = 40;
-    protected int workerBits = 10;
-    protected int seqBits = 13;
+    protected int timeBits = 31;
+    protected int workerBits = 20;
+    protected int seqBits = 12;
 
 
     protected String epochStr = "2019-01-01";
