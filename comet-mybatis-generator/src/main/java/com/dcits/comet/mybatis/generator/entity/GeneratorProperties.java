@@ -27,6 +27,8 @@ public class GeneratorProperties {
     private int tablePkSize;
     private String shardColumn;
     private String tableType;
+    private String isCreateValidation;
+
 
     public GeneratorProperties(Properties props) {
         this.entityPackage=props.getProperty("entityPackage");
@@ -39,6 +41,15 @@ public class GeneratorProperties {
         this.isCrateAllTable=props.getProperty("isCrateAllTable");
         this.iscreateMapperExt=props.getProperty("iscreateMapperExt");
         this.shardColumn=props.getProperty("shardColumn");
+        this.isCreateValidation=props.getProperty("isCreateValidation");
+    }
+
+    public String getIsCreateValidation() {
+        return isCreateValidation;
+    }
+
+    public void setIsCreateValidation(String isCreateValidation) {
+        this.isCreateValidation = isCreateValidation;
     }
 
     public String getTableType() {

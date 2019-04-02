@@ -21,6 +21,7 @@ public class CodeGeneratorService {
     @Autowired
     private CodeGeneratorMapper codeDao;
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeGeneratorService.class);
+    private static Map<String,Object> validationMap =new HashMap<>();
 
     /**
      * 生成代码入口
@@ -70,6 +71,16 @@ public class CodeGeneratorService {
                 generatorProperties.setEntityDescription(tableComment);
                 createCodeFolw(generatorProperties);
             }
+          //生成校验配置文件
+           String isCreateValidation = generatorProperties.getIsCreateValidation();
+          if (!PbUtils.isEmpty(isCreateValidation) && TRUE.equals(isCreateValidation.toLowerCase()) && !validationMap.isEmpty()) {
+              Map<String,Object> datas=new HashMap<>();
+              datas.put("validation",validationMap);
+              createValidation(datas,generatorProperties);
+            LOGGER.info(generatorProperties.getDbName() + "校验信息文件生成完成");
+          }
+
+
 
     }
     /**
@@ -80,9 +91,9 @@ public class CodeGeneratorService {
         generatorProperties.setTablePkSize(tableKeys.size());
         Map<String, Object> modelDate= getTemplateData(getTableComumnModel(tableKeys,generatorProperties),generatorProperties);
         if(!modelDate.isEmpty()){
-            //生成entity
-            createEntity(modelDate,generatorProperties);
-            //生成Mapper.Xml
+//            //生成entity
+           createEntity(modelDate,generatorProperties);
+//            //生成Mapper.Xml
             createMapperXml(modelDate,generatorProperties);
             //生成Mapper_ext.Xml
             String iscreateMapperExt = generatorProperties.getIsCreateMapperExt();
@@ -90,10 +101,15 @@ public class CodeGeneratorService {
                 createMapperExt(modelDate,generatorProperties);
             }
             LOGGER.info(generatorProperties.getTableName() + "表对应的JavaBean和Mapper文件生成");
+
         }else{
             LOGGER.info("generator.properties配置文件的generator.dbName或者generator.tableName不存在");
         }
     }
+
+
+
+
 
     /**
      * 生成mybatis mapper文件
@@ -115,6 +131,8 @@ public class CodeGeneratorService {
         String fileName = generatorProperties.getBasedir() + "/src/main/resources/" + generatorProperties.getMapperPackage()+"/" + PbUtils.convertToCamelCase(generatorProperties.getTableName()) + "Mapper_ext.xml";
         TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
+
+
     /**
      * 生成JavaBean 实体类
      * @throws Exception
@@ -125,6 +143,19 @@ public class CodeGeneratorService {
         String fileName = generatorProperties.getBasedir() + "/src/main/java/" + generatorProperties.getBasePackage().replace(".", "/") + "/"+ generatorProperties.getEntityPackage()+"/" + PbUtils.convertToCamelCase(generatorProperties.getTableName()) + "Po.java";
         TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
     }
+
+    /**
+     * 生成校验配置信息
+     * @throws Exception
+     */
+    public void createValidation(Map<String, Object> modelDate,GeneratorProperties generatorProperties) throws Exception {
+        String ftlName =  "/validation.ftl";
+        // 生成文件的路径和名称
+        String fileName = generatorProperties.getBasedir() + "/src/main/resources/ValidationMessages.properties";
+        TemplateHelp.creatTemplate(modelDate, ftlName, fileName);
+    }
+
+
 
     /**
      * 获取所有的表名称及描述
@@ -243,6 +274,10 @@ public class CodeGeneratorService {
                         oMap.put("javaType", PbUtils.convertJavaType(columnType));
                         oMap.put("jdbcType", PbUtils.convertJdbcType(columnType));
                     }
+                    if(oMap.get("columnComment")!=null && ""!=oMap.get("columnComment")){
+                        validationMap.put((String) oMap.get("columnName"),oMap.get("columnComment"));
+                    }
+
                 }
                 clList.add(oMap);// 添加到集合
             }
