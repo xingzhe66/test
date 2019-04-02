@@ -293,41 +293,83 @@ public class PbUtils {
         type = type.toUpperCase();
         if (type.contains("CHAR") || type.contains("VARCHAR") || type.contains("LONGVARCHAR")) {
             javaType = "String";
-        }else if(type.contains("DECIMAL") && type.endsWith(",0)")){
-            javaType = "Long";
-        } else if (type.contains("NUMERIC") || (type.contains("DECIMAL")&& !type.endsWith(",0)"))) {
+        } else if (type.contains("DECIMAL") || type.contains("NUMERIC")) {
             javaType = "java.math.BigDecimal";
         }else if (type.contains("BIT") || type.contains("BOOLEAN")) {
             javaType = "boolean";
-        }else if(type.contains("BINARY") || type.contains("VARBINARY") || type.contains("LONGVARBINARY")) {
-            javaType = "byte[]";
-        }else if (type.contains("BIGINT")) {
-            javaType = "Long";
-        }else if (type.contains("DOUBLE") || type.contains("FLOAT")) {
-            javaType = "double";
-        }else if (type.contains("DATE")) {
-            javaType = "java.sql.Date";
+        }else if (type.contains("TINYINT")) {
+            javaType = "byte";
+        }else if (type.contains("SMALLINT")) {
+            javaType = "short";
         }else if (type.contains("INTEGER")) {
             javaType = "INTEGER";
+        }else if (type.contains("BIGINT")) {
+            javaType = "Long";
+        }else if (type.contains("REAL")) {
+            javaType = "float";
+        }else if (type.contains("DOUBLE") || type.contains("FLOAT")) {
+            javaType = "double";
+        }else if(type.contains("BINARY") || type.contains("VARBINARY") || type.contains("LONGVARBINARY")) {
+            javaType = "byte[]";
+        }else if (type.contains("DATE")) {
+            javaType = "java.sql.Date";
+        }else if (type.contains("TIME")) {
+            javaType = "java.sql.Time";
+        }else if (type.contains("TIMESTAMP")) {
+            javaType = "java.sql.Timestamp";
         }
         return javaType;
+    }
+    public static String convertJdbcType(String type) {
+        String jdbcType = "OTHER";
+        type = type.toUpperCase();
+        if (type.contains("CHAR") || type.contains("VARCHAR") || type.contains("LONGVARCHAR")) {
+            jdbcType = "VARCHAR";
+        } else if (type.contains("DECIMAL") || type.contains("NUMERIC")) {
+            jdbcType = "NUMERIC";
+        }else if (type.contains("TINYINT")) {
+            jdbcType = "TINYINT";
+        }else if (type.contains("SMALLINT")) {
+            jdbcType = "SMALLINT";
+        }else if (type.contains("INTEGER")) {
+            jdbcType = "INTEGER";
+        }else if (type.contains("BIGINT")) {
+            jdbcType = "BIGINT";
+        }else if (type.contains("REAL")) {
+            jdbcType = "REAL";
+        }else if (type.contains("DOUBLE") || type.contains("FLOAT")) {
+            jdbcType = "NUMERIC";
+        }else if(type.contains("BINARY")) {
+            jdbcType = "BINARY";
+        }else if (type.contains("DATE")) {
+            jdbcType = "DATE";
+        }else if (type.contains("TIME")) {
+            jdbcType = "TIME";
+        }else if (type.contains("TIMESTAMP")) {
+            jdbcType = "TIMESTAMP";
+        }else if (type.contains("LONG")) {
+             jdbcType = "BIGINT";
+       }
+
+        return jdbcType;
     }
 
-    public static String convertJdbcType(String type) {
-        String javaType = "VARCHAR";
-        if (type.contains("interval") || type.contains("blob") || type.contains("varchar") || type.contains("char")) {
-            javaType = "VARCHAR";
-        } else if (type.contains("long")) {
-            javaType = "BIGINT";
-        }else if (type.contains("decimal") || type.contains("float") || type.contains("double") || type.contains("integer") || type.contains("longtext")) {
-            javaType = "NUMERIC";
-        }else if (type.contains("date") || type.contains("datetime")) {
-            javaType = "TIMESTAMP";
-        } else if (type.contains("int")) {
-            javaType = "INTEGER";
-        }
-        return javaType;
-    }
+//
+//    public static String convertJdbcType(String type) {
+//        String jdbcType = type;
+//        if (type.contains("interval") || type.contains("blob") || type.contains("varchar") || type.contains("char")) {
+//            jdbcType = "VARCHAR";
+//        } else if (type.contains("long")) {
+//            jdbcType = "BIGINT";
+//        }else if (type.contains("decimal") || type.contains("float") || type.contains("double") || type.contains("integer") || type.contains("longtext")) {
+//            jdbcType = "NUMERIC";
+//        }else if (type.contains("date") || type.contains("datetime")) {
+//            jdbcType = "TIMESTAMP";
+//        } else if (type.contains("int")) {
+//            jdbcType = "INTEGER";
+//        }
+//        return jdbcType;
+//    }
 
     /*
      * 将数据库的数据类型转换为java的数据类型
