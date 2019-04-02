@@ -1,12 +1,10 @@
 package com.dcits.comet.uid.provider.service;
 
-import com.dcits.comet.commons.utils.SpringContextUtil;
 import com.dcits.comet.uid.UidGenerator;
 import com.dcits.comet.uid.UidGeneratorProxy;
 import com.dcits.comet.uid.impl.LoadingUidGenerator;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -38,13 +36,6 @@ public class LoadingUidGeneratorFactory extends UidGeneratorFactory {
 
 
     private LoadingUidGeneratorFactory() {
-        //配置数据源
-        DataSource dataSource = SpringContextUtil.getBean("dataSource");
-
-        workerIdAssigner = SpringContextUtil.getBean("workerIdAssigner");
-
-        workerIdAssigner.setDataSource(dataSource);
-
         UidGenerator uidGenerator = getUidGenerator(LoadingUidGenerator.class);
         this.uidGeneratorProxy = new UidGeneratorProxy(uidGenerator);
     }

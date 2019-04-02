@@ -1,4 +1,4 @@
-package com.dcits.comet.uid.provider.service;
+package com.dcits.comet.uid.provider.config;
 
 import com.dcits.comet.uid.impl.DefaultUidGenerator;
 import com.dcits.comet.uid.impl.LoadingUidGenerator;
