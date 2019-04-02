@@ -312,7 +312,9 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                 keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
                 resultSet.updateDate("LAUNCH_DATE", Sqldate);
                 resultSet.updateString("CURR_SEQ", String.valueOf(nextid));
-                resultSet.updateString("SEQ_CACHE", seqCache);
+                if(!StringUtil.isEmpty(seqCache)){
+                    resultSet.updateString("SEQ_CACHE", seqCache);
+                }
                 resultSet.updateRow();
             }
             connection.commit();

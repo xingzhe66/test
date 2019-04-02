@@ -2,7 +2,6 @@ package com.dcits.comet.uid.impl;
 
 import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.uid.entity.WorkerNodePo;
-import com.dcits.comet.uid.thread.NamedThreadFactory;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,9 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -42,22 +38,10 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
      */
     private LongAdder currentId;
     /**
-     * 同步时间(单位毫秒)
-     */
-    private static final int DELAY = 3 * 1000;
-
-    /**
      *
      */
     private int seqCacheStep = 100;
-    /**
-     * 定时任务延迟指定时间执行
-     */
-    private static final int INITIALDELAY = 3 * 1000;
-    /**
-     * 定时任务执行器
-     */
-    private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("keep-loadinguidgenerator-uid-sync", true));
+
     /**
      * 异步线程任务
      */
@@ -69,7 +53,6 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         if (taskExecutor == null) {
             taskExecutor = Executors.newSingleThreadExecutor();
         }
-        scheduledExecutorService.scheduleWithFixedDelay(this::keepWithDB, INITIALDELAY, DELAY, TimeUnit.MILLISECONDS);
     }
 
     public LoadingUidGenerator(WorkerIdAssigner workerIdAssigner) {
@@ -94,7 +77,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         boolean cycle = workerNodePo.getSeqCycle().equals("Y") ? true : false;
         long nextid = currentId.longValue() + Long.valueOf(workerNodePo.getStep());
         //序列生成已经达到最大值
-        if (nextid > Long.valueOf(workerNodePo.getMaxSeq())) {
+        if (nextid > Long.valueOf(workerNodePo.getMaxSeq()) && Long.valueOf(workerNodePo.getSeqCache()) <= 0L) {
             if (cycle) {
                 currentId.reset();
                 currentId.add(Long.valueOf(workerNodePo.getMinSeq()));
@@ -122,6 +105,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
             currentId.add(Long.valueOf(workerNodePo.getStep()));
             nextid = currentId.longValue();
             asynLoadingSegment = true;
+            workerIdAssigner.doUpdatenextSeqCache(workerNodePo, null, nextid);
         }
         manager.put(seqName, currentId);
         return nextid;
@@ -149,7 +133,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
 
     @Override
     public void keepWithDB() {
-        log.info("{}同步序列到数据库",this.getClass().getSimpleName());
+        log.info("{}同步序列到数据库", this.getClass().getSimpleName());
         WorkerIdAssigner.keys.forEach((bizTag, workerNodePo) -> {
             long updateUid = manager.get(bizTag).longValue();
             workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, className);

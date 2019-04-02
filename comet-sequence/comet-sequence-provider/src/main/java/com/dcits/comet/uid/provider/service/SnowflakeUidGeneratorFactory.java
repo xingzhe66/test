@@ -5,11 +5,8 @@ import com.dcits.comet.uid.UidGenerator;
 import com.dcits.comet.uid.UidGeneratorProxy;
 import com.dcits.comet.uid.impl.DefaultUidGenerator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
-
-import static com.dcits.comet.uid.worker.WorkerIdAssigner.keys;
 
 /**
  * @author leijian
@@ -24,7 +21,6 @@ public class SnowflakeUidGeneratorFactory extends UidGeneratorFactory {
 
     private UidGeneratorProxy uidGeneratorProxy;
 
-    private static RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
 
     public synchronized long getKey(String name) {
         return uidGeneratorProxy.getProxy().getUID(name);
@@ -42,21 +38,11 @@ public class SnowflakeUidGeneratorFactory extends UidGeneratorFactory {
         return getKeyList(null, size);
     }
 
-
     private SnowflakeUidGeneratorFactory() {
         //配置数据源
         workerIdAssigner = SpringContextUtil.getBean("workerIdAssigner");
         UidGenerator uidGenerator = getUidGenerator(DefaultUidGenerator.class);
         this.uidGeneratorProxy = new UidGeneratorProxy(uidGenerator);
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("程序关闭的时候同步更新到数据库");
-            log.info("{}", keys);
-            try {
-                uidGenerator.keepWithDB();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }));
     }
 
 

@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.sql.DataSource;
 import java.util.List;
 
-import static com.dcits.comet.uid.worker.WorkerIdAssigner.keys;
-
 /**
  * @author leijian
  * @version 1.0
@@ -49,16 +47,6 @@ public class LoadingUidGeneratorFactory extends UidGeneratorFactory {
 
         UidGenerator uidGenerator = getUidGenerator(LoadingUidGenerator.class);
         this.uidGeneratorProxy = new UidGeneratorProxy(uidGenerator);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("程序关闭的时候同步更新到数据库");
-            log.info("{}", keys);
-            try {
-                uidGenerator.keepWithDB();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }));
     }
 
 

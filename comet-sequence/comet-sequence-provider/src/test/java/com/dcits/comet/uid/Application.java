@@ -4,6 +4,7 @@ import com.dcits.comet.uid.impl.DefaultUidGenerator;
 import com.dcits.comet.uid.impl.LoadingUidGenerator;
 import com.dcits.comet.uid.impl.RedisUidGenerator;
 import com.dcits.comet.uid.worker.DisposableWorkerIdAssigner;
+import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +48,7 @@ public class Application {
     @Bean
     @DependsOn("workerIdAssigner")
     @ConditionalOnClass(RedisTemplate.class)
+    @ConditionalOnBean(DisposableWorkerIdAssigner.class)
     public RedisTemplate<String, Object> redisTemplate(@Autowired RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
@@ -68,19 +70,21 @@ public class Application {
 
     @Bean
     @DependsOn("workerIdAssigner")
-    @ConditionalOnBean(RedisTemplate.class)
+    @ConditionalOnBean({RedisTemplate.class, DisposableWorkerIdAssigner.class})
     public RedisUidGenerator redisUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner, @Autowired RedisTemplate redisTemplate) {
         return new RedisUidGenerator(workerIdAssigner, redisTemplate);
     }
 
     @Bean
     @DependsOn("workerIdAssigner")
+    @ConditionalOnBean({DisposableWorkerIdAssigner.class})
     public LoadingUidGenerator loadingUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner) {
         return new LoadingUidGenerator(workerIdAssigner);
     }
 
     @Bean
     @DependsOn("workerIdAssigner")
+    @ConditionalOnBean({DisposableWorkerIdAssigner.class})
     public DefaultUidGenerator defaultUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner) {
         workerIdAssigner.buildWorkerNode(DefaultUidGenerator.class.getSimpleName().toLowerCase());
         return new DefaultUidGenerator(workerIdAssigner);

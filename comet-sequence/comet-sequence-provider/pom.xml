@@ -39,8 +39,6 @@
             <artifactId>comet-sequence-core</artifactId>
             <version>${comet.version}</version>
         </dependency>
-
-
     </dependencies>
 
 </project>

@@ -2,15 +2,9 @@ package com.dcits.comet.uid.impl;
 
 import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.uid.entity.WorkerNodePo;
-import com.dcits.comet.uid.thread.NamedThreadFactory;
 import com.dcits.comet.uid.worker.WorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author leijian
@@ -33,24 +27,6 @@ public class RedisUidGenerator extends DefaultUidGenerator {
     }
 
     private RedisTemplate<String, Object> redisTemplate;
-
-    /**
-     * 同步时间(单位毫秒)
-     */
-    private static final int DELAY = 3 * 1000;
-
-    /**
-     * 定时任务延迟指定时间执行
-     */
-    private static final int INITIALDELAY = 3 * 1000;
-    /**
-     * 定时任务执行器
-     */
-    private final ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("keep-redisuidgenerator-uid-sync", true));
-
-    ScheduledFuture scheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(() -> {
-        keepWithDB();
-    }, INITIALDELAY, DELAY, TimeUnit.MILLISECONDS);
 
     @Override
     protected long nextId(String bizTag) {
@@ -90,7 +66,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
     }
 
     void updateDB(String bizTag, WorkerNodePo workerNodePo) {
-        log.info("序列节点同步到数据库");
+        log.info("{}序列节点同步到数据库", this.className);
         long updateUid = Long.valueOf("" + redisTemplate.opsForHash().get(workerNodePo.getHostName(), workerNodePo.getBizTag()));
         workerIdAssigner.doUpdateNextSegment(bizTag, updateUid, className);
     }
