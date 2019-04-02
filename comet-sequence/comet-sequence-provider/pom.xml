@@ -21,11 +21,6 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
@@ -36,19 +31,10 @@
 
         <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>comet-sequence-api</artifactId>
+            <artifactId>comet-sequence-core</artifactId>
             <version>${comet.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.dcits</groupId>
-            <artifactId>comet-commons</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
 
     </dependencies>
 

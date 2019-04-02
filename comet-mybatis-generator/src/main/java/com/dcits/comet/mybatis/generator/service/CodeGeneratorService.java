@@ -239,7 +239,6 @@ public class CodeGeneratorService {
                     // 列类型
                     if ("COLUMNTYPE".equals(key)) {
                         String columnType = map.get("COLUMNTYPE").toString();// 列类型
-                        oMap.put("javaType", PbUtils.convertJavaType(columnType));
                         oMap.put("dbType", columnType);
                         oMap.put("javaType", PbUtils.convertJavaType(columnType));
                         oMap.put("jdbcType", PbUtils.convertJdbcType(columnType));

@@ -1,6 +1,6 @@
 package ${mouldName}.${entityPackage};
 
-import com.dcits.ensemble.cloud.cif.common.base.${entityParentClass};
+import ${mouldName}.base.${entityParentClass};
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 <#if tablePkSize =="Y">

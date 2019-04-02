@@ -293,7 +293,9 @@ public class PbUtils {
         type = type.toUpperCase();
         if (type.contains("CHAR") || type.contains("VARCHAR") || type.contains("LONGVARCHAR")) {
             javaType = "String";
-        } else if (type.contains("NUMERIC") || type.contains("DECIMAL")) {
+        }else if(type.contains("DECIMAL") && type.endsWith(",0)")){
+            javaType = "Long";
+        } else if (type.contains("NUMERIC") || (type.contains("DECIMAL")&& !type.endsWith(",0)"))) {
             javaType = "java.math.BigDecimal";
         }else if (type.contains("BIT") || type.contains("BOOLEAN")) {
             javaType = "boolean";
