@@ -18,25 +18,25 @@ import static com.dcits.comet.dao.BaseDaoSupport.*;
 
 public class ParamDaoSupport extends SqlSessionDaoSupport {
 
-    @Cacheable(value = "param", key = "#cacheKey")
+    @Cacheable(value = "param", key = "#cacheKey",unless="#result == null")
     public <T extends BasePo> Integer count(T entity, String cacheKey) {
         String className = entity.getClass().getName();
         return (Integer) this.getSqlSession().selectOne(className + POSTFIX_COUNT, entity);
     }
 
-    @Cacheable(value = "param", key = "#cacheKey")
+    @Cacheable(value = "param", key = "#cacheKey",unless="#result == null")
     public <T extends BasePo> T selectOne(T entity, String cacheKey) {
         String className = entity.getClass().getName();
         return (T) this.getSqlSession().selectOne(className + POSTFIX_SELECTONE, entity);
     }
 
-    @Cacheable(value = "param", key = "#cacheKey")
+    @Cacheable(value = "param", key = "#cacheKey",unless="#result == null")
     public <T extends BasePo> List<T> selectList(T entity, String cacheKey) {
         String statementPostfix = entity.getClass().getName() + POSTFIX_SELECTLIST;
         return this.getSqlSession().selectList(statementPostfix, entity);
     }
 
-    @Cacheable(value = "param", key = "#cacheKey")
+    @Cacheable(value = "param", key = "#cacheKey",unless="#result == null")
     public <T extends BasePo> List<T> selectAll(T entity, String cacheKey) {
         String statementPostfix = entity.getClass().getName() + POSTFIX_SELECTLIST;
         return this.getSqlSession().selectList(statementPostfix, entity);
