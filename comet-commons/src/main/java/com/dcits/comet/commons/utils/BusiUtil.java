@@ -842,7 +842,7 @@ public class BusiUtil {
      * @author Liang
      * @update 2015年2月5日 下午4:00:16
      */
-    public static Date convertStr2Date(String date) throws ParseException {
+    public static Date convertStr2Date(String date)  {
         return DateUtil.parseDate(date, DateUtil.PATTERN_SIMPLE_DATE);
     }
 
