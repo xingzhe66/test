@@ -18,6 +18,12 @@ public class LoadingUidGeneratorFactory extends UidGeneratorFactory {
 
     private UidGeneratorProxy uidGeneratorProxy;
 
+    /**
+     * @param name
+     * @return long
+     * @author leijian
+     * @date 2019/4/2 16:49
+     **/
     public synchronized long getKey(String name) {
         return uidGeneratorProxy.getProxy().getUID(name);
     }

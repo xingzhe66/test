@@ -7,11 +7,13 @@ import com.dcits.comet.uid.worker.DisposableWorkerIdAssigner;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -20,6 +22,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 
 /**
@@ -30,6 +33,26 @@ import javax.sql.DataSource;
 @Slf4j
 @Component
 public class UidGeneratorConfig {
+
+    /**
+     * Spring容器关闭时更新到数据库
+     *
+     * @param []
+     * @return void
+     * @author leijian
+     * @Description //TODO
+     * @date 2019/4/2 16:53
+     **/
+    @PreDestroy
+    public void keepWithDB() {
+        log.info("Spring容器关闭时更新到数据库");
+    }
+
+    @Bean("ds_uid")
+    @ConfigurationProperties(prefix = "spring.datasource.ds-0.hikari")
+    public  DataSource dataSource(){
+        return  new HikariDataSource();
+    }
 
     @Bean("workerIdAssigner")
     @DependsOn("ds_uid")
