@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.math.RandomUtils;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -17,7 +18,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 1.获取机器序列号，支持直接去网卡IP地址或者从配置文件加载；2.获取流水号生成的步长
@@ -56,7 +56,6 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
         final WorkerNodePo currentSegment = WorkerNodePo.builder().build();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
             Date Sqldate = java.sql.Date.valueOf(LocalDate.now());
             connection = getConnection(dataSource);
@@ -66,7 +65,8 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             preparedStatement.setString(3, DefaultUidGenerator.class.getSimpleName().toLowerCase());
             preparedStatement.setDate(4, Sqldate);
             preparedStatement.setString(5, bizType);
-            preparedStatement.setString(6, "1");//STEP
+            //STEP
+            preparedStatement.setString(6, "1");
             preparedStatement.setString(7, "0");
             preparedStatement.setString(8, String.valueOf(Long.MAX_VALUE / 2));
             preparedStatement.setString(9, String.valueOf(Long.MAX_VALUE));
@@ -85,19 +85,26 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                 log.error("数据库操作异常{}", e);
             }
         } finally {
-            try {
-                if (Objects.nonNull(resultSet)) {
-                    resultSet.close();
+            close(preparedStatement, connection);
+        }
+    }
+
+    private static void close(AutoCloseable... args) {
+        if (args == null) {
+            return;
+        }
+        try {
+            for (AutoCloseable arg : args) {
+                if (arg != null) {
+                    arg.close();
                 }
-                if (Objects.nonNull(preparedStatement)) {
-                    preparedStatement.close();
-                }
-                if (Objects.nonNull(connection)) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                log.error("数据库操作异常{}", e);
             }
+        } catch (IOException e) {
+            log.error("close failed", e);
+        } catch (SQLException e) {
+            log.error("close failed", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -109,7 +116,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
      * @Param []
      **/
     public void buildWorkerNode(String type) {
-        log.info("初始化节点信息开始{}", type);
+        log.info("初始化节点信息开始:{}", type);
         if (keys.containsKey(type)) {
             log.info("缓存中已存在{}的值，直接从缓存取数，初始化节点信息结束", keys);
             return;
@@ -140,11 +147,9 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                         .seqCycle(resultSet.getString("SEQ_CYCLE"))
                         .seqCache(resultSet.getString("SEQ_CACHE"))
                         .cacheCount(resultSet.getString("CACHE_COUNT")).build();
-                log.info("{}", workerNodePo);
                 keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
             }
             connection.commit();
-
         } catch (Exception e) {
             log.error("{}", e);
         } finally {
@@ -195,7 +200,6 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                         .seqCycle(resultSet.getString("SEQ_CYCLE"))
                         .seqCache(resultSet.getString("SEQ_CACHE"))
                         .cacheCount(resultSet.getString("CACHE_COUNT")).build();
-                log.info("{}", workerNodePo);
                 list.add(workerNodePo);
             }
         } catch (Exception e) {
@@ -243,7 +247,6 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                         .seqCycle(resultSet.getString("SEQ_CYCLE"))
                         .seqCache(resultSet.getString("SEQ_CACHE"))
                         .cacheCount(resultSet.getString("CACHE_COUNT")).build();
-                log.info("{}", workerNodePo);
                 keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
                 resultSet.updateDate("LAUNCH_DATE", Sqldate);
                 resultSet.updateString("CURR_SEQ", String.valueOf(nextid));
@@ -258,19 +261,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                 log.error("数据库操作异常{}", e);
             }
         } finally {
-            try {
-                if (Objects.nonNull(resultSet)) {
-                    resultSet.close();
-                }
-                if (Objects.nonNull(preparedStatement)) {
-                    preparedStatement.close();
-                }
-                if (Objects.nonNull(connection)) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                log.error("数据库操作异常{}", e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -292,7 +283,6 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
 
     @Override
     public void doUpdatenextSeqCache(WorkerNodePo workerNodePo, String seqCache, long nextid) {
-        log.info("workerNodePo:{},seqCache:{},nextid:{}", workerNodePo, seqCache, nextid);
         String querySql = "SELECT ID, HOST_NAME, PORT, TYPE, LAUNCH_DATE, MODIFIED, CREATED, BIZ_TAG, STEP,MIN_SEQ, MIDDLE_ID, MAX_SEQ, CURR_SEQ, COUNT_SEQ,SEQ_CYCLE,SEQ_CACHE,CACHE_COUNT FROM WORKER_NODE WHERE HOST_NAME = ? AND BIZ_TAG = ? FOR UPDATE";
         final WorkerNodePo currentSegment = WorkerNodePo.builder().build();
         Connection connection = null;
@@ -308,11 +298,10 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                 workerNodePo.setSeqCache(seqCache);
                 workerNodePo.setCurrSeq(String.valueOf(nextid));
                 Date Sqldate = Date.valueOf(LocalDate.now());
-                log.info("{}", workerNodePo);
                 keys.putIfAbsent(workerNodePo.getBizTag(), workerNodePo);
                 resultSet.updateDate("LAUNCH_DATE", Sqldate);
                 resultSet.updateString("CURR_SEQ", String.valueOf(nextid));
-                if(!StringUtil.isEmpty(seqCache)){
+                if (!StringUtil.isEmpty(seqCache)) {
                     resultSet.updateString("SEQ_CACHE", seqCache);
                 }
                 resultSet.updateRow();
@@ -326,19 +315,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
                 log.error("数据库操作异常{}", e);
             }
         } finally {
-            try {
-                if (Objects.nonNull(resultSet)) {
-                    resultSet.close();
-                }
-                if (Objects.nonNull(preparedStatement)) {
-                    preparedStatement.close();
-                }
-                if (Objects.nonNull(connection)) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                log.error("数据库操作异常{}", e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 }

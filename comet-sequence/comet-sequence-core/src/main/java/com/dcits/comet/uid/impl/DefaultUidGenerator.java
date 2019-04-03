@@ -136,6 +136,10 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
      * @Param []
      **/
     protected synchronized long nextId(final String bizTag) {
+        String seqName = null == bizTag ? WorkerIdAssigner.DEF : bizTag;
+        if (!WorkerIdAssigner.keys.containsKey(seqName)) {
+            workerIdAssigner.assignWorkerId(seqName, className);
+        }
         workerId = WorkerIdAssigner.keys.get(bizTag).getId();
         if (!className.equals(WorkerIdAssigner.keys.get(bizTag).getType())) {
             throw new UidGenerateException("999999", "流水类型[" + bizTag + "]配置的实现type是[" + WorkerIdAssigner.keys.get(bizTag).getType() + "]");

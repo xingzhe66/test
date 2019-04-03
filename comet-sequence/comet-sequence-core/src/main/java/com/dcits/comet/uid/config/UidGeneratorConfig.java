@@ -1,4 +1,4 @@
-package com.dcits.comet.uid.provider.config;
+package com.dcits.comet.uid.config;
 
 import com.dcits.comet.uid.impl.DefaultUidGenerator;
 import com.dcits.comet.uid.impl.LoadingUidGenerator;
@@ -8,8 +8,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,12 +23,12 @@ import javax.sql.DataSource;
  **/
 @Slf4j
 @Component
-public class UidGeneratorConfig {
+public class UidGeneratorConfig extends HikariProperties {
 
     /**
      * Spring容器关闭时更新到数据库
      *
-     * @param []
+     * @param
      * @return void
      * @author leijian
      * @Description //TODO
@@ -42,9 +40,21 @@ public class UidGeneratorConfig {
     }
 
     @Bean("ds_uid")
-    @ConfigurationProperties(prefix = "spring.datasource.ds-0.hikari")
-    public  DataSource dataSource(){
-        return  new HikariDataSource();
+    public DataSource dataSource() {
+        HikariDataSource hikariDataSource = new HikariDataSource();
+        hikariDataSource.setJdbcUrl(jdbcUrl);
+        hikariDataSource.setUsername(username);
+        hikariDataSource.setPassword(password);
+        hikariDataSource.setDriverClassName(driverClassName);
+        hikariDataSource.setPoolName(poolName);
+        hikariDataSource.setMinimumIdle(minIdle);
+        hikariDataSource.setMaximumPoolSize(maxPoolSize);
+        hikariDataSource.setAutoCommit(isAutoCommit);
+        hikariDataSource.setIdleTimeout(idleTimeout);
+        hikariDataSource.setMaxLifetime(maxLifetime);
+        hikariDataSource.setConnectionTimeout(connectionTimeout);
+        hikariDataSource.setConnectionTestQuery(connectionTestQuery);
+        return hikariDataSource;
     }
 
     @Bean("workerIdAssigner")
@@ -58,23 +68,19 @@ public class UidGeneratorConfig {
 
     @Bean
     @DependsOn("workerIdAssigner")
-    @ConditionalOnBean({RedisTemplate.class, DisposableWorkerIdAssigner.class})
     public RedisUidGenerator redisUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner, @Autowired RedisTemplate redisTemplate) {
         return new RedisUidGenerator(workerIdAssigner, redisTemplate);
     }
 
     @Bean
     @DependsOn("workerIdAssigner")
-    @ConditionalOnBean({DisposableWorkerIdAssigner.class})
     public LoadingUidGenerator loadingUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner) {
         return new LoadingUidGenerator(workerIdAssigner);
     }
 
     @Bean
     @DependsOn("workerIdAssigner")
-    @ConditionalOnBean({DisposableWorkerIdAssigner.class})
     public DefaultUidGenerator defaultUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner) {
-        workerIdAssigner.buildWorkerNode(DefaultUidGenerator.class.getSimpleName().toLowerCase());
         return new DefaultUidGenerator(workerIdAssigner);
     }
 

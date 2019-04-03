@@ -1,7 +1,7 @@
 package com.dcits.comet.uid;
 
-import com.dcits.comet.uid.provider.service.LoadingUidGeneratorFactory;
-import com.dcits.comet.uid.provider.service.SnowflakeUidGeneratorFactory;
+import com.dcits.comet.uid.factory.LoadingUidGeneratorFactory;
+import com.dcits.comet.uid.factory.SnowflakeUidGeneratorFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
