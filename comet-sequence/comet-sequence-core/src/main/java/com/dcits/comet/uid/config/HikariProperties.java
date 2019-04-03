@@ -13,28 +13,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class HikariProperties {
 
-    @Value("${spring.datasource.ds-uid.hikari.connection-timeout}")
+    @Value("${ds.uid.datasource.connection-timeout}")
     volatile long connectionTimeout;
-    @Value("${spring.datasource.ds-uid.hikari.idle-timeout}")
+    @Value("${ds.uid.datasource.idle-timeout}")
     volatile long idleTimeout;
-    @Value("${spring.datasource.ds-uid.hikari.max-lifetime}")
+    @Value("${ds.uid.datasource.max-lifetime}")
     volatile long maxLifetime;
-    @Value("${spring.datasource.ds-uid.hikari.maximum-pool-size}")
+    @Value("${ds.uid.datasource.maximum-pool-size}")
     volatile int maxPoolSize;
-    @Value("${spring.datasource.ds-uid.hikari.minimum-idle}")
+    @Value("${ds.uid.datasource.minimum-idle}")
     volatile int minIdle;
-    @Value("${spring.datasource.ds-uid.hikari.username}")
+    @Value("${ds.uid.datasource.username}")
     volatile String username;
-    @Value("${spring.datasource.ds-uid.hikari.password}")
+    @Value("${ds.uid.datasource.password}")
     volatile String password;
-    @Value("${spring.datasource.ds-uid.hikari.connection-test-query}")
+    @Value("${ds.uid.datasource.connection-test-query}")
     String connectionTestQuery;
-    @Value("${spring.datasource.ds-uid.hikari.driver-class-name}")
+    @Value("${ds.uid.datasource.driver-class-name}")
     String driverClassName;
-    @Value("${spring.datasource.ds-uid.hikari.jdbc-url}")
+    @Value("${ds.uid.datasource.jdbc-url}")
     String jdbcUrl;
-    @Value("${spring.datasource.ds-uid.hikari.pool-name}")
+    @Value("${ds.uid.datasource.pool-name}")
     String poolName;
-    @Value("${spring.datasource.ds-uid.hikari.auto-commit:true}")
+    @Value("${ds.uid.datasource.auto-commit:true}")
     boolean isAutoCommit;
 }
