@@ -91,6 +91,38 @@ public class CometJobLauncher implements  JobLauncher,InitializingBean {
     public JobExecution run(final Job job, final JobParameters jobParameters)
             throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException,
             JobParametersInvalidException {
+
+        Assert.notNull(job, "The Job must not be null.");
+        Assert.notNull(jobParameters, "The JobParameters must not be null.");
+
+
+        JobExecution lastExecution = jobRepository.getLastJobExecution(job.getName(), jobParameters);
+        if (lastExecution != null) {
+            if (!job.isRestartable()) {
+                throw new JobRestartException("JobInstance already exists and is not restartable");
+            }
+            /*
+             * validate here if it has stepExecutions that are UNKNOWN, STARTING, STARTED and STOPPING
+             * retrieve the previous execution and check
+             */
+            for (StepExecution execution : lastExecution.getStepExecutions()) {
+                BatchStatus status = execution.getStatus();
+                if (status.isRunning() || status == BatchStatus.STOPPING) {
+                    throw new JobExecutionAlreadyRunningException("A job execution for this job is already running: "
+                            + lastExecution);
+                } else if (status == BatchStatus.UNKNOWN) {
+                    throw new JobRestartException(
+                            "Cannot restart step [" + execution.getStepName() + "] from UNKNOWN status. "
+                                    + "The last execution ended with a failure that could not be rolled back, "
+                                    + "so it may be dangerous to proceed. Manual intervention is probably necessary.");
+                }
+            }
+        }
+
+        // Check the validity of the parameters before doing creating anything
+        // in the repository...
+        job.getJobParametersValidator().validate(jobParameters);
+
         final JobExecution jobExecution;
         /*
          * There is a very small probability that a non-restartable job can be
