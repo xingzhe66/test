@@ -37,6 +37,16 @@ public class YamlUtil {
         return  (String) map.get(propertyName);
     }
 
+    /**
+     * @author wangyun
+     * @date 2019/3/27
+     * @description
+     */
+    public static<T> T getProperty(String ymlName,String propertyName){
+        Map map = getMap(ymlName);
+        return  (T) map.get(propertyName);
+    }
+
     private static Map getMap(String ymlName) {
         Yaml yaml = new Yaml();
         URL url = YamlUtil.class.getClassLoader().getResource(ymlName);
