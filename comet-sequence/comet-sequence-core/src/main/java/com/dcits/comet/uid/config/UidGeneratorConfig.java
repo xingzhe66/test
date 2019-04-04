@@ -8,6 +8,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,8 +24,32 @@ import javax.sql.DataSource;
  **/
 @Slf4j
 @Component
-public class UidGeneratorConfig extends HikariProperties {
+public class UidGeneratorConfig {
 
+    @Value("${ds.uid.datasource.connection-timeout}")
+    volatile long connectionTimeout;
+    @Value("${ds.uid.datasource.idle-timeout}")
+    volatile long idleTimeout;
+    @Value("${ds.uid.datasource.max-lifetime}")
+    volatile long maxLifetime;
+    @Value("${ds.uid.datasource.maximum-pool-size}")
+    volatile int maxPoolSize;
+    @Value("${ds.uid.datasource.minimum-idle}")
+    volatile int minIdle;
+    @Value("${ds.uid.datasource.username}")
+    volatile String username;
+    @Value("${ds.uid.datasource.password}")
+    volatile String password;
+    @Value("${ds.uid.datasource.connection-test-query}")
+    String connectionTestQuery;
+    @Value("${ds.uid.datasource.driver-class-name}")
+    String driverClassName;
+    @Value("${ds.uid.datasource.jdbc-url}")
+    String jdbcUrl;
+    @Value("${ds.uid.datasource.pool-name}")
+    String poolName;
+    @Value("${ds.uid.datasource.auto-commit:true}")
+    boolean isAutoCommit;
     /**
      * Spring容器关闭时更新到数据库
      *
