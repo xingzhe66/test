@@ -1,7 +1,8 @@
 package com.dcits.comet.mvc.interceptor;
 
 
-import com.dcits.comet.mvc.util.SpringContextUtil;
+
+import com.dcits.comet.commons.utils.SpringContextUtil;
 
 import java.util.*;
 
