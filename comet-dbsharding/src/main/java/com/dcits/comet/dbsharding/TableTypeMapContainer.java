@@ -41,7 +41,7 @@ public class TableTypeMapContainer {
     static {
         try {
             packageNames = YamlUtil.getListProperty(COMET_YML,GATEWAY_API_PACKAGE_NAMES);
-
+           // packageNames=YamlUtil.getProperty(COMET_YML,GATEWAY_API_PACKAGE_NAMES);
         } catch (Exception e) {
             log.info(COMET_YML+"配置信息读取失败！");
             e.printStackTrace();
