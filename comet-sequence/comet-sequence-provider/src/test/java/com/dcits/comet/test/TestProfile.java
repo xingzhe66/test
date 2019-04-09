@@ -58,20 +58,20 @@ public class TestProfile {
             Mockito.doAnswer(t -> {
                 Object[] arguments = t.getArguments();
                 System.out.println("set autocommit " + arguments[0]);
-                return new DoesNothing();
+                return DoesNothing.doesNothing();
             }).when(conn).setAutoCommit(Mockito.anyBoolean());
 
             Mockito.doAnswer(t -> {
                 System.out.println("commit");
-                return new DoesNothing();
+                return DoesNothing.doesNothing();
             }).when(conn).commit();
             Mockito.doAnswer(t -> {
                 System.out.println("rollback");
-                return new DoesNothing();
+                return DoesNothing.doesNothing();
             }).when(conn).rollback();
             Mockito.doAnswer(t -> {
                 System.out.println("close");
-                return new DoesNothing();
+                return DoesNothing.doesNothing();
             }).when(conn).close();
             Mockito.when(conn.createStatement()).thenReturn(stmt);
 
