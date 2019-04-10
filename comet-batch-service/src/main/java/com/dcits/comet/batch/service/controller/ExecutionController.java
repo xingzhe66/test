@@ -101,7 +101,7 @@ public class ExecutionController {
         BatchContext batchContext=batchContextDao.getBatchContext(exeId);
         //不可能step执行完成而batchContext为null，除非中断或事务问题；事务一致需要时间，所以需要重新查询
         if(jobExecution.getExitStatus().getExitCode().equals(ExitStatus.COMPLETED.getExitCode())&&null==batchContext){
-            //更新batchContext和jobExecution不在同一个事务，所以后可能交易完成了，但上下文没有更新
+            //更新batchContext和jobExecution不在同一个事务，所以可能交易完成了，但上下文没有更新
             throw new BatchServiceException("请重新查询");
         }
         queryOutput.setExeId(exeId);

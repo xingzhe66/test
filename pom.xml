@@ -40,6 +40,7 @@
         <module>comet-batch-service</module>
         <module>comet-gateway</module>
         <module>comet-mvc</module>
+        <module>comet-flow</module>
     </modules>
     <build>
         <plugins>

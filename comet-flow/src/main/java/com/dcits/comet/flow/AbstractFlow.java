@@ -1,4 +1,4 @@
-package com.dcits.comet.commons.flow;
+package com.dcits.comet.flow;
 
 import com.dcits.comet.commons.Context;
 import com.dcits.comet.commons.data.BaseRequest;
