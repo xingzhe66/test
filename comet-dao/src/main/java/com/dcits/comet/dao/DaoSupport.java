@@ -41,6 +41,8 @@ public interface DaoSupport extends BaseDaoSupport {
 
     <T extends BasePo> List<T> selectList(String statementPostfix, Map<String, Object> parameter);
 
+    <T extends BasePo> List<T> selectByPage(T entity);
+
     <T extends BasePo> List<T> selectList(T entity, int pageIndex, int pageSize);
 
     <T extends BasePo> List<T> selectList(String statementPostfix, T entity, int pageIndex, int pageSize);

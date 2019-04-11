@@ -10,6 +10,8 @@
  */
 package com.dcits.comet.commons;
 
+import com.dcits.comet.commons.data.head.AppHead;
+import com.dcits.comet.commons.data.head.SysHead;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -88,7 +90,6 @@ public class Context implements Serializable {
     /**
      * 渠道
      */
-
     private String sourceType;
 
     /**
@@ -126,6 +127,14 @@ public class Context implements Serializable {
      * 数据路由关键字段
      */
     private String routerKey;
+    /**
+     * 应用头
+     */
+    private AppHead appHead;
+    /**
+     * 系统头
+     */
+    private SysHead sysHead;
 
     /**
      * @fields platformId
@@ -205,5 +214,57 @@ public class Context implements Serializable {
         //popContext();
         //pushContext(new Context());
         ThreadLocalManager.remove();
+    }
+
+    public String getTranDate() {
+        return sysHead.getTranDate();
+    }
+
+    public String getTranBranch() {
+        return sysHead.getBranchId();
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public String getProgramId() {
+        return sysHead.getProgramId();
+    }
+
+    public boolean isBatch() {
+        return isBatch;
+    }
+
+    public String getSystemId() {
+        return sysHead.getSystemId();
+    }
+
+    public String getSourceType() {
+        return sysHead.getSourceType();
+    }
+
+    public String getUserId() {
+        return sysHead.getUserId();
+    }
+
+    public String getUserLang() {
+        return sysHead.getUserLang();
+    }
+
+    public String getCompany() {
+        return sysHead.getCompany();
+    }
+
+    public String getAuthUserId() {
+        return sysHead.getAuthUserId();
+    }
+
+    public String getMultiCorpQueryAllow() {
+        return multiCorpQueryAllow;
+    }
+
+    public String getMultiInfoShare() {
+        return multiInfoShare;
     }
 }

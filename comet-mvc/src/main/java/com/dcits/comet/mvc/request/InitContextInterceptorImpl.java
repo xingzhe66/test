@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.comet.commons.Context;
 import com.dcits.comet.commons.ThreadLocalManager;
+import com.dcits.comet.commons.data.head.AppHead;
 import com.dcits.comet.commons.data.head.SysHead;
 import com.dcits.comet.mvc.interceptor.request.IBusinessRequestPreInterceptor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,10 @@ public class InitContextInterceptorImpl implements IBusinessRequestPreIntercepto
      * 系统头
      */
     public final static String SYS_HEAD = "sysHead";
+    /**
+     * 系统头
+     */
+    public final static String APP_HEAD = "appHead";
     /**
      * 业务执行顺序定义
      *
@@ -44,6 +49,10 @@ public class InitContextInterceptorImpl implements IBusinessRequestPreIntercepto
         log.info("<===== start InitContextInterceptor ===== >");
         log.info(jsonObject.toJSONString());
 
+        JSONObject appHeadJSON = jsonObject.getJSONObject(APP_HEAD);
+
+        AppHead appHead = JSON.toJavaObject(appHeadJSON, AppHead.class);
+
         JSONObject sysHeadJSON = jsonObject.getJSONObject(SYS_HEAD);
 
         SysHead sysHead = JSON.toJavaObject(sysHeadJSON, SysHead.class);
@@ -51,15 +60,17 @@ public class InitContextInterceptorImpl implements IBusinessRequestPreIntercepto
         Context context = Context.builder()
                 .platformId(ThreadLocalManager.getUUID())
                 .reference(ThreadLocalManager.getUUID())
-                .tranDate(sysHead.getTranDate())
-                .userId(sysHead.getUserId())
-                .userLang(sysHead.getUserLang())
-                .tranBranch(sysHead.getBranchId())
-                .sourceType(sysHead.getSourceType())
-                .seqNo(sysHead.getSeqNo())
-                .programId(sysHead.getProgramId())
-                .company(sysHead.getCompany())
+//                .tranDate(sysHead.getTranDate())
+//                .userId(sysHead.getUserId())
+//                .userLang(sysHead.getUserLang())
+//                .tranBranch(sysHead.getBranchId())
+//                .sourceType(sysHead.getSourceType())
+//                .seqNo(sysHead.getSeqNo())
+//                .programId(sysHead.getProgramId())
+//                .company(sysHead.getCompany())
                 .isBatch(false)
+                .sysHead(sysHead)
+                .appHead(appHead)
                 .build();
 
         context.init(context);

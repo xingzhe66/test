@@ -1,7 +1,10 @@
 package com.dcits.comet.dao.mybatis;
 
+import com.dcits.comet.commons.Context;
+import com.dcits.comet.commons.data.RowArgs;
 import com.dcits.comet.commons.utils.BeanUtil;
 import com.dcits.comet.commons.utils.BusiUtil;
+import com.dcits.comet.commons.utils.PageUtil;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.annotation.TablePkScanner;
 import com.dcits.comet.dao.interceptor.SelectForUpdateHelper;
@@ -203,6 +206,13 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     @Override
     public <T extends BasePo> List<T> selectList(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().selectList(statementPostfix, parameter);
+    }
+
+    @Override
+    public <T extends BasePo> List<T> selectByPage(T entity) {
+        RowArgs rowArgs = PageUtil.convertAppHead(Context.getInstance().getAppHead());
+        String statementPostfix = entity.getClass().getName() + ".selectList";
+        return this.selectList(statementPostfix, entity, rowArgs.getPageIndex(), rowArgs.getLimit());
     }
 
     @Override
