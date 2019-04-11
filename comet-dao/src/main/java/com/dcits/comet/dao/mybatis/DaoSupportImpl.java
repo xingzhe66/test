@@ -211,8 +211,12 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     @Override
     public <T extends BasePo> List<T> selectByPage(T entity) {
         RowArgs rowArgs = PageUtil.convertAppHead(Context.getInstance().getAppHead());
-        String statementPostfix = entity.getClass().getName() + ".selectList";
-        return this.selectList(statementPostfix, entity, rowArgs.getPageIndex(), rowArgs.getLimit());
+        if (BusiUtil.isNotNull(rowArgs)) {
+            String statementPostfix = entity.getClass().getName() + ".selectList";
+            return this.selectList(statementPostfix, entity, rowArgs.getPageIndex(), rowArgs.getLimit());
+        } else {
+            return this.selectList(entity);
+        }
     }
 
     @Override
