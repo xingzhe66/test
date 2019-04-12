@@ -312,11 +312,13 @@ public class PbUtils {
         }else if(type.contains("BINARY") || type.contains("VARBINARY") || type.contains("LONGVARBINARY")) {
             javaType = "byte[]";
         }else if (type.contains("DATE")) {
-            javaType = "java.sql.Date";
+            javaType = "java.util.Date";
         }else if (type.contains("TIME")) {
             javaType = "java.sql.Time";
         }else if (type.contains("TIMESTAMP")) {
             javaType = "java.sql.Timestamp";
+        }else if (type.contains("INT")) {
+            javaType = "int";
         }
         return javaType;
     }
@@ -331,7 +333,7 @@ public class PbUtils {
             jdbcType = "TINYINT";
         }else if (type.contains("SMALLINT")) {
             jdbcType = "SMALLINT";
-        }else if (type.contains("INTEGER")) {
+        }else if (type.contains("INTEGER") || type.contains("INT")) {
             jdbcType = "INTEGER";
         }else if (type.contains("BIGINT")) {
             jdbcType = "BIGINT";
@@ -349,7 +351,7 @@ public class PbUtils {
             jdbcType = "TIMESTAMP";
         }else if (type.contains("LONG")) {
              jdbcType = "BIGINT";
-       }
+        }
 
         return jdbcType;
     }
