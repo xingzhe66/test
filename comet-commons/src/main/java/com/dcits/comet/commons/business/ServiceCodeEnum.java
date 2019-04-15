@@ -7,7 +7,8 @@ package com.dcits.comet.commons.business;
  */
 public enum ServiceCodeEnum {
     MBSDCODE("MbsdCore"),
-    MBSDPRIICE("MbsdPrice");
+    MBSDPRIICE("MbsdPrice"),
+    MBSDACCOUNT("MbsdAccount");
 
     /**
      * 服务编码
