@@ -80,22 +80,24 @@ public class TransCodeMapContainer {
     }
 
     private void packageScan(String packageName) {
-        ClassLoader cl = TransCodeMapContainer.class.getClassLoader();
-        ClasspathPackageScanner scan = new ClasspathPackageScanner(packageName);
-        List<String> classNameList = null;
-        try {
-            classNameList = scan.getFullyQualifiedClassNameList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       // ClassLoader cl = TransCodeMapContainer.class.getClassLoader();
+        ClassScaner classScaner=new ClassScaner();
+        List<Class<?>> classNameList = classScaner.doScanPackage(packageName);
+//        ClasspathPackageScanner scan = new ClasspathPackageScanner(packageName);
+//        List<String> classNameList = null;
+//        try {
+//            classNameList = scan.getFullyQualifiedClassNameList();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         if (classNameList != null) {
-            for (String className : classNameList) {
-                Class<?> aClass = null;
-                try {
-                    aClass = cl.loadClass(className);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+            for (Class aClass : classNameList) {
+//                Class<?> aClass = null;
+//                try {
+//                    aClass = cl.loadClass(className);
+//                } catch (ClassNotFoundException e) {
+//                    e.printStackTrace();
+//                }
                 Method[] methods = aClass.getMethods();
                 //.getDeclaredMethods();
                 for (Method method : methods) {

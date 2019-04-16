@@ -35,43 +35,43 @@ public class BatchContextManager {
 
     //todo 多线程执行process时会有线程安全问题
     //todo 对于多线程执行部分，最好不put
-    public void put(String jobId,String key,Object value) {
+    public void put(String exeId,String key,Object value) {
         synchronized (map) {
-            BatchContext batchContext = this.map.get(jobId);
+            BatchContext batchContext = this.map.get(exeId);
             if (null == batchContext) {
                 batchContext = new BatchContext();
             }
             batchContext.getParams().put(key,value);
-            this.map.put(jobId,batchContext);
+            this.map.put(exeId,batchContext);
         }
     }
 
-    public void putBatchContext(String jobId,BatchContext batchContext) {
+    public void putBatchContext(String exeId,BatchContext batchContext) {
 
-        this.map.put(jobId,batchContext);
+        this.map.put(exeId,batchContext);
 
     }
 
-    public Object get(String jobId,String key) {
-        BatchContext batchContext =this.map.get(jobId);
+    public Object get(String exeId,String key) {
+        BatchContext batchContext =this.map.get(exeId);
         if(null==batchContext){
             return null;
         }
         return batchContext.getParams().get(key);
     }
 
-    public void clear(String jobId) {
+    public void clear(String exeId) {
 
-        BatchContext batchContext =this.map.get(jobId);
+        BatchContext batchContext =this.map.get(exeId);
 
         if(null==batchContext){
             return;
         }
-        map.remove(jobId);
+        map.remove(exeId);
     }
 
 
-    public BatchContext getBatchContext(String jobId) {
-        return map.get(jobId);
+    public BatchContext getBatchContext(String exeId) {
+        return map.get(exeId);
     }
 }

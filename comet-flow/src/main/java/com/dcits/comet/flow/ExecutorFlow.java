@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExecutorFlow {
     public <IN, OUT> OUT start(String beanName, IN input) {
-        //aaa
-        //bbb
         IFlow flow = (IFlow) SpringContextUtil.getBean(beanName);
         return (OUT) flow.handle(input);
     }
