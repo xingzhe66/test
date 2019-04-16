@@ -302,7 +302,7 @@ public class PbUtils {
         }else if (type.contains("SMALLINT")) {
             javaType = "short";
         }else if (type.contains("INTEGER")) {
-            javaType = "INTEGER";
+            javaType = "Integer";
         }else if (type.contains("BIGINT")) {
             javaType = "Long";
         }else if (type.contains("REAL")) {
@@ -318,10 +318,11 @@ public class PbUtils {
         }else if (type.contains("TIMESTAMP")) {
             javaType = "java.sql.Timestamp";
         }else if (type.contains("INT")) {
-            javaType = "int";
+            javaType = "Integer";
         }
         return javaType;
     }
+
     public static String convertJdbcType(String type) {
         String jdbcType = "OTHER";
         type = type.toUpperCase();
