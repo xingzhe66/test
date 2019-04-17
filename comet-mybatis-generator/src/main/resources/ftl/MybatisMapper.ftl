@@ -37,18 +37,18 @@
 		</trim>
 	</sql>
 
-	<#--分库where条件-->
-	<#if tableType ?? && tableType =="LEVEL">
-	<sql id="Shard_Where">
-		<trim suffixOverrides="AND">
-		  <#list cloums as c>
-		    <#if c.pkFlag == "Y" ||  c.shardFlag=="Y">
-			  ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
-		    </#if>
-		  </#list>
-		</trim>
-	</sql>
-	</#if>
+	<#--&lt;#&ndash;分库where条件&ndash;&gt;-->
+	<#--<#if tableType ?? && tableType =="LEVEL">-->
+	<#--<sql id="Shard_Where">-->
+		<#--<trim suffixOverrides="AND">-->
+		  <#--<#list cloums as c>-->
+		    <#--<#if c.pkFlag == "Y" ||  c.shardFlag=="Y">-->
+			  <#--${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND-->
+		    <#--</#if>-->
+		  <#--</#list>-->
+		<#--</trim>-->
+	<#--</sql>-->
+	<#--</#if>-->
 
 
 	<sql id="Base_Select">
@@ -92,11 +92,13 @@
 		   </#list>
 		</set>
 		<where>
-		<#if tableType ?? && tableType =="LEVEL">
-			<include refid="Shard_Where"/>
-		<#else>
-			<include refid="Base_Where" />
-		</#if>
+			<trim suffixOverrides="AND">
+			  <#list cloums as c>
+			     <#if c.pkFlag == "Y" || c.shardFlag=="Y">
+			       ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+			    </#if>
+			  </#list>
+			</trim>
 		</where>
 	</update>
 
