@@ -43,13 +43,15 @@ public class Appmain implements CommandLineRunner {
         cifBusinessPo.setBusiness("110");
         cifBusinessPo=daoSupport.selectOne(cifBusinessPo);
         LOGGER.info(cifBusinessPo.toString());
+        cifBusinessPo.setTranTime(1231233333L);
+//
+//        CifBusinessPo updateset=new CifBusinessPo();
+//        updateset.setTranTime(123123L);
+//        CifBusinessPo updatewhere=new CifBusinessPo();
+//        updatewhere.setBusiness("110");
+//        daoSupport.update(updateset,updatewhere);
 
-        CifBusinessPo updateset=new CifBusinessPo();
-        updateset.setTranTime(123123L);
-        CifBusinessPo updatewhere=new CifBusinessPo();
-        updatewhere.setBusiness("110");
-        daoSupport.update(updateset,updatewhere);
-
+        daoSupport.update(cifBusinessPo);
         //        SysLog sysLog=new SysLog();
 //        sysLog.setId(1000000000001l);
 //     //   sysLog=daoSupport.selectByPrimaryKey(sysLog,1000000000001l);
