@@ -14,6 +14,7 @@ import com.dcits.comet.commons.data.head.AppHead;
 import com.dcits.comet.commons.data.head.SysHead;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,16 +42,19 @@ public class Context implements Serializable {
     /**
      * 系统运行日期
      */
+    @Setter
     private String runDate;
 
     /**
      * 上一系统运行日期
      */
+    @Setter
     private String lastRunDate;
 
     /**
      * 下一系统运行日期
      */
+    @Setter
     private String nextRunDate;
 
     /**

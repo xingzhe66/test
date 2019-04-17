@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -82,8 +83,20 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
     }
 
     private void preHandler(IN input) {
+
         log.info("<===== execute preHandler =====>");
+
+        //getEffectiveTrace
+        List<ITrace> traceList = TraceFactory.getEffectiveTrace(ITrace.class);
+
+        //loop trace
+        if (BusiUtil.isNotNull(traceList)) {
+            log.info("<===== loop trace =====>");
+            traceList.forEach(iTrace -> iTrace.trace(input));
+        }
+
     }
+
 
     private void postHandler(IN input, OUT out) {
         log.info("<===== execute postHandler =====>");
