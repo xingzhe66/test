@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcits.yunyun.entity.CifBusinessPo">
+	<resultMap id="BaseResultMap" type="com.dcits.yunyun.entity.CifBusinessPo" >
+				<result column="business" property="business"  jdbcType="VARCHAR"/>
+				<result column="business_desc" property="businessDesc"  jdbcType="VARCHAR"/>
+				<result column="company" property="company"  jdbcType="VARCHAR"/>
+				<result column="tran_timestamp" property="tranTimestamp"  jdbcType="VARCHAR"/>
+				<result column="tran_time" property="tranTime"  jdbcType="INTEGER"/>
+	</resultMap>
+
+	<sql id="Table_Name">
+		CIF_BUSINESS
+	</sql>
+
+	<sql id="Base_Column">
+				business,
+				business_desc,
+				company,
+				tran_timestamp,
+				tran_time
+	</sql>
+
+	<sql id="Base_Where">
+		<trim suffixOverrides="AND">
+		   <if test="business != null and business != '' ">
+		       business = #{business}  AND
+			</if>
+		   <if test="businessDesc != null and businessDesc != '' ">
+		       business_desc = #{businessDesc}  AND
+			</if>
+		   <if test="company != null and company != '' ">
+		       company = #{company}  AND
+			</if>
+		   <if test="tranTimestamp != null and tranTimestamp != '' ">
+		       tran_timestamp = #{tranTimestamp}  AND
+			</if>
+		   <if test="tranTime != null and tranTime != '' ">
+		       tran_time = #{tranTime}  AND
+			</if>
+		</trim>
+	</sql>
+
+
+
+	<sql id="Base_Select">
+		SELECT
+		<include refid="Base_Column" />
+		FROM
+		<include refid="Table_Name" />
+		<where>
+			<include refid="Base_Where" />
+		</where>
+	</sql>
+
+	<insert id="insert" >
+		insert into
+		<include refid="Table_Name" />
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="business != null ">
+		        business,
+			</if>
+			<if test="businessDesc != null ">
+		        business_desc,
+			</if>
+			<if test="company != null ">
+		        company,
+			</if>
+			<if test="tranTimestamp != null ">
+		        tran_timestamp,
+			</if>
+			<if test="tranTime != null ">
+		        tran_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="business != null ">
+				#{business},
+			</if>
+			<if test="businessDesc != null ">
+				#{businessDesc},
+			</if>
+			<if test="company != null ">
+				#{company},
+			</if>
+			<if test="tranTimestamp != null ">
+				#{tranTimestamp},
+			</if>
+			<if test="tranTime != null ">
+				#{tranTime},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update"  >
+		UPDATE <include refid="Table_Name" />
+		<set>
+					<if test="businessDesc != null and businessDesc != ''">
+					    business_desc = #{businessDesc},
+					</if>
+					<if test="company != null and company != ''">
+					    company = #{company},
+					</if>
+					<if test="tranTimestamp != null and tranTimestamp != ''">
+					    tran_timestamp = #{tranTimestamp},
+					</if>
+					<if test="tranTime != null and tranTime != ''">
+					    tran_time = #{tranTime},
+					</if>
+		</set>
+		<where>
+			<include refid="Base_Where" />
+		</where>
+	</update>
+
+	<update id="updateByEntity" >
+		UPDATE
+		<include refid="Table_Name" />
+		<set>
+		    	<if test="s.business != null ">
+			    	business = #{s.business},
+				</if>
+		    	<if test="s.businessDesc != null ">
+			    	business_desc = #{s.businessDesc},
+				</if>
+		    	<if test="s.company != null ">
+			    	company = #{s.company},
+				</if>
+		    	<if test="s.tranTimestamp != null ">
+			    	tran_timestamp = #{s.tranTimestamp},
+				</if>
+		    	<if test="s.tranTime != null ">
+			    	tran_time = #{s.tranTime},
+				</if>
+		</set>
+		<where>
+			<trim prefix="(" suffix=")" suffixOverrides="AND">
+					<if test="w.business != null ">
+					business = #{w.business}
+					AND
+					</if>
+					<if test="w.businessDesc != null ">
+					business_desc = #{w.businessDesc}
+					AND
+					</if>
+					<if test="w.company != null ">
+					company = #{w.company}
+					AND
+					</if>
+					<if test="w.tranTimestamp != null ">
+					tran_timestamp = #{w.tranTimestamp}
+					AND
+					</if>
+					<if test="w.tranTime != null ">
+					tran_time = #{w.tranTime}
+					AND
+					</if>
+			</trim>
+		</where>
+	</update>
+	<delete id="delete" >
+		DELETE FROM
+		<include refid="Table_Name" />
+		<where>
+			<include refid="Base_Where" />
+		</where>
+	</delete>
+
+	<select id="count" parameterType="java.util.Map" resultType="int">
+		select count(1) from
+		<include refid="Table_Name" />
+		<where>
+			<include refid="Base_Where" />
+		</where>
+	</select>
+
+	<select id="selectOne"  resultMap="BaseResultMap">
+		<include refid="Base_Select" />
+	</select>
+
+	<select id="selectList"  resultMap="BaseResultMap">
+		<include refid="Base_Select" />
+	</select>
+
+	<select id="selectForUpdate" resultMap="BaseResultMap" useCache="false">
+		<include refid="Base_Select" />
+		for update
+	</select>
+
+
+	<!--根据主键查询-->
+	<select id="selectByPrimaryKey"  resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column" />
+		FROM
+		<include refid="Table_Name" />
+		<where>
+			<trim suffixOverrides="AND">
+				business = #{business}  AND
+			</trim>
+		</where>
+	</select>
+
+
+    <!--根据主键删除-->
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM <include refid="Table_Name" />
+		<where>
+			<trim suffixOverrides="AND">
+				business = #{business}  AND
+			</trim>
+		</where>
+	</delete>
+</mapper>

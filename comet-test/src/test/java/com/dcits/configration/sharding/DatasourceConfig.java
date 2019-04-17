@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-//@Configuration
+@Configuration
 public class DatasourceConfig {
 
 
@@ -23,6 +23,11 @@ public class DatasourceConfig {
         return new HikariDataSource();
     }
 
+    @ConfigurationProperties(prefix = "spring.datasource.ds-2.hikari")
+    @Bean(name = "ds_2")
+    public DataSource dataSource2() {
+        return new HikariDataSource();
+    }
 
 
 }

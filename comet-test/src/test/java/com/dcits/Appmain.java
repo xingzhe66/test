@@ -3,6 +3,7 @@ package com.dcits;
 import com.alibaba.fastjson.JSON;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.model.Order;
+import com.dcits.yunyun.entity.CifBusinessPo;
 import com.dcits.yunyun.entity.SysLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,23 +37,36 @@ public class Appmain implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         DaoSupport daoSupport= (DaoSupport) applicationContext.getBean("daoSupport");
-        SysLog sysLog=new SysLog();
-        sysLog.setId(1000000000001l);
-     //   sysLog=daoSupport.selectByPrimaryKey(sysLog,1000000000001l);
-        LOGGER.info(sysLog.toString());
-
-        sysLog=new SysLog();
-        sysLog.setId(2000000000002l);
-     //   sysLog=daoSupport.selectByPrimaryKey(sysLog,2000000000002l);
-        LOGGER.info(sysLog.toString());
-
-        sysLog=new SysLog();
-        sysLog.addOrder(Order.desc("id"));
-        List<SysLog> list=daoSupport.selectList(sysLog.getClass().getName()+".extendSelect",sysLog);
-        LOGGER.info(JSON.toJSONString(list));
 
 
-        LOGGER.info(sysLog.toString());
+        CifBusinessPo cifBusinessPo=new CifBusinessPo();
+        cifBusinessPo.setBusiness("110");
+        cifBusinessPo=daoSupport.selectOne(cifBusinessPo);
+        LOGGER.info(cifBusinessPo.toString());
+
+        CifBusinessPo updateset=new CifBusinessPo();
+        updateset.setTranTime(123123L);
+        CifBusinessPo updatewhere=new CifBusinessPo();
+        updatewhere.setBusiness("110");
+        daoSupport.update(updateset,updatewhere);
+
+        //        SysLog sysLog=new SysLog();
+//        sysLog.setId(1000000000001l);
+//     //   sysLog=daoSupport.selectByPrimaryKey(sysLog,1000000000001l);
+//        LOGGER.info(sysLog.toString());
+//
+//        sysLog=new SysLog();
+//        sysLog.setId(2000000000002l);
+//     //   sysLog=daoSupport.selectByPrimaryKey(sysLog,2000000000002l);
+//        LOGGER.info(sysLog.toString());
+//
+//        sysLog=new SysLog();
+//        sysLog.addOrder(Order.desc("id"));
+//        List<SysLog> list=daoSupport.selectList(sysLog.getClass().getName()+".extendSelect",sysLog);
+//        LOGGER.info(JSON.toJSONString(list));
+//
+//
+//        LOGGER.info(sysLog.toString());
 
     }
 }

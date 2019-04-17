@@ -1,8 +1,10 @@
 package com.dcits.configration.sharding;
 
-import com.dcits.comet.dbsharding.algorithm.DatabaseShardingAlgorithm;
+import com.dcits.comet.dbsharding.TableTypeMapContainer;
+import com.google.common.collect.Multimap;
 import io.shardingsphere.api.config.rule.ShardingRuleConfiguration;
 import io.shardingsphere.api.config.rule.TableRuleConfiguration;
+import io.shardingsphere.api.config.strategy.HintShardingStrategyConfiguration;
 import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
 import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,37 +20,57 @@ import java.util.Map;
 import java.util.Properties;
 
 @Configuration
+//@Profile(value="prod")
 public class ShardingConfig {
 
     @Primary
-    @DependsOn({ "ds_0", "ds_1"})
+    @DependsOn({"ds_0", "ds_1", "ds_2"})
     @Bean(name = "shardingDataSource")
-    public DataSource getDataSource(@Qualifier("ds_0") DataSource ds_0, @Qualifier("ds_1") DataSource ds_1) throws SQLException {
+    public DataSource getDataSource(@Qualifier("ds_0") DataSource ds0, @Qualifier("ds_1") DataSource ds1, @Qualifier("ds_2") DataSource ds2) throws SQLException {
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
-        shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
-//        shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());
-        shardingRuleConfig.getBindingTableGroups().add("sys_log");
-        shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("id",new DatabaseShardingAlgorithm()));
-//        shardingRuleConfig.setDefaultTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("order_id", new TablePreciseShardingAlgorithm(), new TableRangeShardingAlgorithm()));
+        //未配置分片规则的表将通过默认数据源定位
+        shardingRuleConfig.setDefaultDataSourceName("ds_0");
+        //默认分库策略
+        shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new HintShardingStrategyConfiguration(new CifHintShardingAlgorithm()));
+        //默认分表策略
+        //shardingRuleConfig.setDefaultTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("order_id", new TablePreciseShardingAlgorithm(), new TableRangeShardingAlgorithm()));
+        //获取表的类型和表名
+        Multimap<String, String> paramMultiMap = TableTypeMapContainer.getMultiMap();
+        //如果是水平分库表分片规则列表
+        if(paramMultiMap.get("level").size()>0){
+            for(String levelTableName : paramMultiMap.get("level")){
+                shardingRuleConfig.getTableRuleConfigs().add(getTableRuleConfiguration(levelTableName));
+            }
+        }
+        //绑定表规则列表
+        if(paramMultiMap.get("param").size()>0  ){
+            String paramString= paramMultiMap.get("param").toString();
+            shardingRuleConfig.getBindingTableGroups().add(paramString.substring(1,paramString.length()-1));
+        }
+
+        if(paramMultiMap.get("upright").size()>0  ){
+            String uprightString= paramMultiMap.get("upright").toString();
+            shardingRuleConfig.getBindingTableGroups().add(uprightString.substring(1,uprightString.length()-1));
+        }
+        //数据源集合
         Map<String, DataSource> dataSourceMap = new HashMap<>();
-        dataSourceMap.put("ds_0", ds_0);
-        dataSourceMap.put("ds_1", ds_1);
+        dataSourceMap.put("ds_0", ds0);
+        dataSourceMap.put("ds_1", ds1);
+        dataSourceMap.put("ds_2", ds2);
+        //配置信息
         Properties properties = new Properties();
         properties.setProperty("sql.show", Boolean.TRUE.toString());
         return ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new HashMap<String, Object>(), properties);
     }
 
-    private static TableRuleConfiguration getOrderTableRuleConfiguration() {
+    private static TableRuleConfiguration getTableRuleConfiguration(String tableName) {
         TableRuleConfiguration result = new TableRuleConfiguration();
-        result.setLogicTable("sys_log");
-       // result.set
-        result.setActualDataNodes("ds_0.sys_log,ds_1.sys_log");
-        //result.sets
-       // result.setKeyGeneratorColumnName("id");
-        result.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("id",new DatabaseShardingAlgorithm()));
-       // result.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("id", "sys_log"));
+        result.setLogicTable(tableName);
+        result.setActualDataNodes("ds_${0..2}."+tableName);
+        // result.setKeyGeneratorColumnName("id");
+        result.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("client_no",new CifDatabaseShardingAlgorithm()));
+        // result.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("id", "sys_log"));
         return result;
     }
 
 }
-

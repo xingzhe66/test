@@ -7,6 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 
 @ImportResource(value = "classpath:data-source-context.xml")
 @PropertySource(value = "classpath:batch-hsql.properties")
-@Configuration
+//@Configuration
 public class HsqlDatasourceConfig {
 }

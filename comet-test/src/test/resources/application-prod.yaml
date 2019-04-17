@@ -1,0 +1,133 @@
+spring:
+  application:
+    name: ensemble-cloud-cif-service
+  jackson:
+    default-property-inclusion: non-null
+  datasource:
+    ds-0:
+      hikari:
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-cif1?useUnicode=true&characterEncoding=utf8
+        driver-class-name: com.mysql.jdbc.Driver
+        username: root
+        password: 123456
+        minimum-idle: 10
+        maximum-pool-size: 200
+        pool-name: DS_0
+        connection-timeout: 300000
+        connection-test-query: select 1
+        max-lifetime: 600000
+        idle-timeout: 120000
+        data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
+    ds-1:
+      hikari:
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-cif2?useUnicode=true&characterEncoding=utf8
+        driver-class-name: com.mysql.jdbc.Driver
+        username: root
+        password: 123456
+        minimum-idle: 10
+        maximum-pool-size: 200
+        pool-name: DS_1
+        connection-timeout: 300000
+        connection-test-query: select 1
+        max-lifetime: 600000
+        idle-timeout: 120000
+        data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
+    ds-2:
+      hikari:
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-cif3?useUnicode=true&characterEncoding=utf8
+        driver-class-name: com.mysql.jdbc.Driver
+        username: root
+        password: 123456
+        minimum-idle: 10
+        maximum-pool-size: 200
+        pool-name: DS_2
+        connection-timeout: 300000
+        connection-test-query: select 1
+        max-lifetime: 600000
+        idle-timeout: 120000
+        data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
+  redis:
+    host: 10.7.25.206 #redis服务器地址
+    port: 18888
+    timeout: 10000 #超时时间
+    database: 0 #0-15 16个库 默认0
+    lettuce:
+      pool:
+        max-active: 8 #最大连接数
+        max-wait: -1 #默认-1 最大连接阻塞等待时间
+        max-idle: 8 #最大空闲连接 默认8
+        min-idle: 0 #最小空闲连接
+
+##  设置注册中心地址
+#eureka:
+#  client:
+#    healthcheck:
+#      enabled: true
+#    service-url:
+#      defaultZone: http://10.7.25.206:8761/eureka/
+#  instance:
+#    lease-expiration-duration-in-seconds: 90
+#    lease-renewal-interval-in-seconds: 30
+#server:
+#  port: 18080
+#
+#ds:
+#  uid:
+#    datasource:
+#      register-mbeans: true
+#      auto-commit: true
+#      pool-name: UIDHikari
+#      minimum-idle: 20
+#      connection-test-query: SELECT 1
+#      maximum-pool-size: 100
+#      connection-timeout: 30000
+#      jdbc-url: jdbc:mysql://10.7.25.205:3306/workflow?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+#      password: 123456
+#      max-lifetime: 1800000
+#      idle-timeout: 30000
+#      driver-class-name: com.mysql.jdbc.Driver
+#      username: root
+#
+#  ##  设置entity包名
+#  #entity:
+#  #  sanner:
+#  #    packageName: com.dcits.ensemble.cloud.cif.common.entity
+#
+#  datasource:
+#    mq:
+#      hikari:
+#        jdbc-url: jdbc:mysql://127.0.0.1:3306/comet-mq?useUnicode=true&characterEncoding=utf8
+#        driver-class-name: com.mysql.jdbc.Driver
+#        username: root
+#        password: mysql
+#        minimum-idle: 10
+#        maximum-pool-size: 200
+#        pool-name: DS_0
+#        connection-timeout: 300000
+#        connection-test-query: select 1
+#        max-lifetime: 600000 #一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
+#        idle-timeout: 120000
+#mybatis:
+#  mapperLocations: classpath*:mapper/*.xml
+#  typeAliasesPackage: com.dcits.comet.*.model
+#
+#
+####producer
+#rocketmq:
+#  producer:
+#    isOnOff: on    #该应用是否启用生产者
+#    groupName: ${spring.application.name}  #发送同一类消息的设置为同一个group，保证唯一,默认不需要设置，rocketmq会使用ip@pid(pid代表jvm名字)作为唯一标示
+#    namesrvAddr: 127.0.0.1:9876  #mq的nameserver地址
+#    maxMessageSize: 4096  #消息最大长度 默认1024*4(4M)
+#    sendMsgTimeout: 3000  #发送消息超时时间,默认3000
+#    retryTimesWhenSendFailed: 2    #发送消息失败重试次数，默认2
+#
+#  ###consumer
+#  consumer:
+#    isOnOff: on    ##该应用是否启用消费者
+#    groupName: ${spring.application.name}
+#    namesrvAddr: 127.0.0.1:9876    #mq的nameserver地址
+#    topics: DemoTopic  #该消费者订阅的主题和tags("*"号表示订阅该主题下所有的tags),格式：topic~tag1||tag2||tag3;topic2~*;
+#    consumeThreadMin: 20
+#    consumeThreadMax: 64
+#    consumeMessageBatchMaxSize: 1   #设置一次消费消息的条数，默认为1条
