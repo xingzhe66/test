@@ -41,6 +41,7 @@
         <module>comet-gateway</module>
         <module>comet-mvc</module>
         <module>comet-flow</module>
+        <module>comet-assembly</module>
     </modules>
     <build>
         <plugins>
