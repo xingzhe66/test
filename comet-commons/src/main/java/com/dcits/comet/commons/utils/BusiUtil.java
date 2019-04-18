@@ -349,8 +349,10 @@ public class BusiUtil {
      */
     public static <T> T decode(String source, String condition, T value,
                                T value1) {
-        if (condition.equals(source))
+        if (condition.equals(source)){
             return value;
+        }
+
         return value1;
     }
 
@@ -369,10 +371,12 @@ public class BusiUtil {
      */
     public static <T> T decode(String source, String condition1, T value1,
                                String condition2, T value2, T value3) {
-        if (condition1.equals(source))
+        if (condition1.equals(source)){
             return value1;
-        else if (condition2.equals(source))
+        } else if (condition2.equals(source)){
             return value2;
+        }
+
         return value3;
     }
 

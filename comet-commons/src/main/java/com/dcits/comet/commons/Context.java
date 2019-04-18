@@ -32,6 +32,7 @@ import java.util.Stack;
 @Getter
 @Builder
 @ToString
+@Setter
 public class Context implements Serializable {
 
     private static Logger logger = LoggerFactory.getLogger(Context.class);
@@ -144,6 +145,13 @@ public class Context implements Serializable {
      * @fields platformId
      */
     private String platformId;
+
+    /**
+     * 流程编号，全局唯一序列
+     * @fields flowId
+     **/
+    private Long flowId;
+
 
     /**
      * @fields map

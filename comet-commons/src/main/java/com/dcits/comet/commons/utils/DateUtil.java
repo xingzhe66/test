@@ -10,9 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 
 /**
@@ -466,4 +469,58 @@ public final class DateUtil {
         }
 		return (int) (date.getTime() / 1000);
 	}
+
+
+    /**
+     * @Author guihj
+     * @Description 获取系统当前时间
+     * @Date 2019/4/15 9:43
+     * @Param []
+     * @return java.lang.String
+     **/
+    public static String  getCurrentDate(){
+        Date date = new Date();
+        //时间戳
+        long times = date.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return  formatter.format(date);
+    }
+
+    /**
+     * 获取给定时间与当前系统时间的差值（以毫秒为单位）
+     *
+     * @author GaoHuanjie
+     */
+    public static long getTimeDifference(String paramTime) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 获取系统时间
+        String systemTime = getCurrentDate();
+        long difference = 0;
+        try {
+            Date systemDate = dateFormat.parse(systemTime);
+            Date paramDate = dateFormat.parse(paramTime);
+            difference = systemDate.getTime() - paramDate.getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return difference;
+    }
+
+
+    /**
+     * @Author guihj
+     * @Description 生成随机id TODO  提交时删除  需要用自动生成随机id
+     * @Date 2019/4/15 13:30
+     * @Param []
+     * @return java.lang.Long
+     **/
+    public  static Long  longRandomId(){
+        long min = 1;
+        long max = 99999999;
+        Long rangeLong = min + (((long) (new Random().nextDouble() * (max - min))));
+        return rangeLong;
+    }
+
+
+
 }
