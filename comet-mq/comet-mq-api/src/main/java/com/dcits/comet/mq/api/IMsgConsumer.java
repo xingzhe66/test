@@ -6,6 +6,6 @@ package com.dcits.comet.mq.api;
  **/
 public interface IMsgConsumer {
 
-    public Message receive();
+    public RocketMessage receive();
 
 }

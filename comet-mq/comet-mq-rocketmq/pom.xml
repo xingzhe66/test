@@ -11,5 +11,88 @@
 
     <artifactId>comet-mq-rocketmq</artifactId>
 
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-dao</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-commons</artifactId>
+        </dependency>
+
+        <!-- 整合RocketMq -->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-mq-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.dcits</groupId>-->
+            <!--<artifactId>comet-sequence-api</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>com.dcits</groupId>-->
+            <!--<artifactId>comet-sequence-core</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+                <resource>
+                    <directory>src/main/resources/</directory>
+                    <includes>
+                        <include>**/*.*</include>
+                    </includes>
+                </resource>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 </project>
