@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 
 
 @SpringBootConfiguration
-@PropertySource(value = "src/test/resources/mq.properties")
+@PropertySource(value = "classpath:mq.properties")
 public class MQProducerConfiguration {
     public static final Logger LOGGER = LoggerFactory.getLogger(MQProducerConfiguration.class);
     /**

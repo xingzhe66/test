@@ -10,8 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
-@ComponentScan(basePackages = {"com.dcits.comet","com.dcits.comet.mq"})
+//@SpringBootApplication
+//@ComponentScan(basePackages = {"com.dcits.comet","com.dcits.comet.mq"})
 public class AppMain implements CommandLineRunner {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(AppMain.class);

@@ -1,8 +1,7 @@
-package com.dcits.comet.mq.configration.mq;
+package com.dcits.comet.mq.consumer;
 
 
-import com.dcits.comet.mq.MQConsumeMsgListenerProcessor;
-import lombok.extern.slf4j.Slf4j;
+import com.dcits.comet.mq.consumer.exception.MQException;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
@@ -11,36 +10,38 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.StringUtils;
 
 
 /**
- * 消费者Bean配置
- * .<br/>
+ * @author wangyun
+ * @date 2019/4/18
+ * @description
  */
 @SpringBootConfiguration
-@PropertySource(value = "classpath:mq.properties")
-@Slf4j
-public class MQConsumerConfiguration {
-
+//@PropertySource(value = "classpath:mq.properties")
+//@ConfigurationProperties(prefix ="rocketmq.consumer")
+public class ConsumerConfiguration {
+    public static final Logger LOGGER = LoggerFactory.getLogger(ConsumerConfiguration.class);
+    @Value("${rocketmq.consumer.namesrvAddr}")
     private String namesrvAddr;
-
+    @Value("${rocketmq.consumer.groupName}")
     private String groupName;
-
+    @Value("${rocketmq.consumer.consumeThreadMin}")
     private int consumeThreadMin;
-
+    @Value("${rocketmq.consumer.consumeThreadMax}")
     private int consumeThreadMax;
-
+    @Value("${rocketmq.consumer.topics}")
     private String topics;
-
+    @Value("${rocketmq.consumer.consumeMessageBatchMaxSize}")
     private int consumeMessageBatchMaxSize;
     @Autowired
-    private MQConsumeMsgListenerProcessor mqMessageListenerProcessor;
+    private MQConsumeListener mQConsumeListener;
 
     @Bean
-    public DefaultMQPushConsumer getRocketMQConsumer() {
+    public DefaultMQPushConsumer getRocketMQConsumerOne() {
         if (StringUtils.isEmpty(groupName)) {
             // throw new RocketMQException(RocketMQErrorEnum.PARAMM_NULL,"groupName is null !!!",false);
         }
@@ -54,7 +55,7 @@ public class MQConsumerConfiguration {
         consumer.setNamesrvAddr(namesrvAddr);
         consumer.setConsumeThreadMin(consumeThreadMin);
         consumer.setConsumeThreadMax(consumeThreadMax);
-        consumer.registerMessageListener(mqMessageListenerProcessor);
+        consumer.registerMessageListener(mQConsumeListener);
         /**
          * 设置Consumer第一次启动是从队列头部开始消费还是队列尾部开始消费
          * 如果非第一次启动，那么按照上次消费的位置继续消费
@@ -78,10 +79,10 @@ public class MQConsumerConfiguration {
                 consumer.subscribe(topicTag[0], topicTag[1]);
             }
             consumer.start();
-            log.info("consumer is start !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr);
+            LOGGER.info("consumer is start !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr);
         } catch (MQClientException e) {
-            log.error("consumer is start !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr, e);
-            //throw new RocketMQException(e);
+            LOGGER.error("consumer is start !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr, e);
+            throw new MQException(e);
         }
         return consumer;
     }

@@ -15,7 +15,6 @@ public class RocketMessage extends Message {
 
     private String tag;
 
-    private String msgText;
 
 
 }

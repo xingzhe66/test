@@ -1,29 +1,39 @@
-package com.dcits.comet.mq.exception;
+package com.dcits.comet.mq.consumer.exception;
+
+import lombok.Data;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-public class CometMQException extends RuntimeException{
+/**
+ * @ClassName MQException
+ * @Author guihj
+ * @Date 2019/4/12 16:41
+ * @Description TODO
+ * @Version 1.0
+ **/
+@Data
+public class MQException extends RuntimeException {
     private String exceptionCode;
     private String exceptionMsg;
 
-    public CometMQException() {
+    public MQException() {
         super();
     }
 
-    public CometMQException(String message) {
+    public MQException(String message) {
         super(message);
     }
 
-    public CometMQException(String message, Throwable cause) {
+    public MQException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CometMQException(Throwable cause) {
+    public MQException(Throwable cause) {
         super(cause);
     }
 
-    protected CometMQException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected MQException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
@@ -82,19 +92,4 @@ public class CometMQException extends RuntimeException{
         super.setStackTrace(stackTrace);
     }
 
-    public String getExceptionCode() {
-        return exceptionCode;
-    }
-
-    public void setExceptionCode(String exceptionCode) {
-        this.exceptionCode = exceptionCode;
-    }
-
-    public String getExceptionMsg() {
-        return exceptionMsg;
-    }
-
-    public void setExceptionMsg(String exceptionMsg) {
-        this.exceptionMsg = exceptionMsg;
-    }
 }

@@ -1,0 +1,12 @@
+rocketmq:
+  consumer:
+    groupName: ${spring.application.name}
+    namesrvAddr: 10.7.25.201:9876
+    topics: dcits~*;
+    consumeThreadMin: 20
+    consumeThreadMax: 64
+    consumeMessageBatchMaxSize: 1
+    isOnOff: on
+spring:
+  application:
+    name: wangyun

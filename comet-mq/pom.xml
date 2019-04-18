@@ -14,6 +14,7 @@
     <modules>
         <module>comet-mq-api</module>
         <module>comet-mq-rocketmq</module>
+        <module>comet-mq-consumer</module>
     </modules>
 
     <dependencies>

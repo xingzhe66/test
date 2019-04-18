@@ -1,10 +1,10 @@
 package com.dcits.comet.mq;
 
-import com.dcits.comet.mq.model.Message;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +35,7 @@ public class DefaultProductTest {
     public void send() throws MQClientException, RemotingException, MQBrokerException, InterruptedException{
         String msg = "demo msg test";
         logger.info("开始发送消息："+msg);
-        ROMessage sendMsg = new Message("DemoTopic","DemoTag",msg);
+        Message sendMsg = new Message("DemoTopic","DemoTag",msg.getBytes());
         //默认3秒超时
         SendResult sendResult = defaultMQProducer.send(sendMsg);
         logger.info("消息发送响应信息："+sendResult.toString());
