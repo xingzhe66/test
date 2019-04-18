@@ -1,5 +1,6 @@
 package com.dcits.comet.uid;
 
+import com.dcits.comet.uid.factory.SnowflakeUidGeneratorFactory;
 import com.dcits.comet.uid.impl.DefaultUidGenerator;
 import com.dcits.comet.uid.impl.LoadingUidGenerator;
 import com.dcits.comet.uid.impl.RedisUidGenerator;
@@ -56,7 +57,7 @@ public class JavaApplicationTest {
     }
     @Test
     public void UidGeneratorFactoryGetKey() {
-        log.info("{}", UidGeneratorFactory.getInstance().getKey());
+        log.info("{}", SnowflakeUidGeneratorFactory.getInstance().getKey());
         synchronized (JavaApplicationTest.class) {
             while (running) {
                 try {
