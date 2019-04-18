@@ -34,6 +34,7 @@ public class MQConsumeListener implements MessageListenerConcurrently {
         MessageExt messageExt = msgs.get(0);
         log.info("接受到的消息为："+new String(messageExt.getBody()));
         IMQConsumer mqConsumer=MQConsumerFactory.getInstance(messageExt.getTopic(),messageExt.getTags());
+
         if(mqConsumer!=null){
             //TODO 判断该消息是否重复消费（RocketMQ不保证消息不重复，如果你的业务需要保证严格的不重复消息，需要你自己在业务端去重）
 
@@ -41,6 +42,7 @@ public class MQConsumeListener implements MessageListenerConcurrently {
             message.setMsgText(new String(messageExt.getBody()));
             //处理对应的业务逻辑
             mqConsumer.onMessage(message);
+
         }
         if(mqConsumer==null){
             int reconsume = messageExt.getReconsumeTimes();
