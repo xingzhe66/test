@@ -3,6 +3,7 @@ package com.dcits.comet.flow;
 import com.dcits.comet.commons.utils.SpringContextUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>Title: TraceFactory.java</p>
@@ -23,7 +24,6 @@ public class TraceFactory {
         // 按照getOrder 排序  升序
         Collections.sort(traceList, Comparator.comparing(E::getOrder));
         //将未生效的前置服务排除
-        traceList.stream().filter(E::isEffective);
-        return traceList;
+        return traceList.stream().filter(E::isEffective).collect(Collectors.toList());
     }
 }
