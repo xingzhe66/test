@@ -13,7 +13,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper=false)
 public class Message implements Serializable {
 
-    private Long messageId;
+    private String messageId;
 
     private String msgText;
 }

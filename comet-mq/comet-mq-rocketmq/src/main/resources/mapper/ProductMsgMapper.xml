@@ -1,40 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dcits.comet.mq.model.ProductMsgPo">
-	<resultMap id="BaseResultMap" type="com.dcits.comet.mq.model.ProductMsgPo" >
-        <result column="producted_msg_id" property="productedMsgId"  jdbcType="INTEGER"/>
-        <result column="flow_id" property="flowId"  jdbcType="INTEGER"/>
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcits.comet.mq.rocketmq.model.MqProducerMsgPo">
+    <resultMap id="BaseResultMap" type="com.dcits.comet.mq.rocketmq.model.MqProducerMsgPo" >
+        <result column="mq_msg_id" property="mqMsgId"  jdbcType="VARCHAR"/>
+        <result column="flow_id" property="flowId"  jdbcType="VARCHAR"/>
+        <result column="broker_name" property="brokerName"  jdbcType="VARCHAR"/>
+        <result column="offset_msg_id" property="offsetMsgId"  jdbcType="VARCHAR"/>
+        <result column="msg_id" property="msgId"  jdbcType="VARCHAR"/>
         <result column="message" property="message"  jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime"  jdbcType="VARCHAR"/>
         <result column="last_update" property="lastUpdate"  jdbcType="VARCHAR"/>
         <result column="status" property="status"  jdbcType="INTEGER"/>
         <result column="message_type" property="messageType"  jdbcType="VARCHAR"/>
         <result column="seq_no" property="seqNo"  jdbcType="INTEGER"/>
+        <result column="queue_id" property="queueId"  jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Table_Name">
-        PRODUCT_MSG
+        MQ_PRODUCER_MSG
     </sql>
 
     <sql id="Base_Column">
-        producted_msg_id,
+        mq_msg_id,
         flow_id,
+        broker_name,
+        offset_msg_id,
+        msg_id,
         message,
         create_time,
         last_update,
         status,
         message_type,
-        seq_no
+        seq_no,
+        queue_id
     </sql>
 
     <sql id="Base_Where">
         <trim suffixOverrides="AND">
-            <if test="productedMsgId != null and productedMsgId != '' ">
-                producted_msg_id = #{productedMsgId}  AND
+            <if test="mqMsgId != null and mqMsgId != '' ">
+                mq_msg_id = #{mqMsgId}  AND
             </if>
             <if test="flowId != null and flowId != '' ">
                 flow_id = #{flowId}  AND
+            </if>
+            <if test="brokerName != null and brokerName != '' ">
+                broker_name = #{brokerName}  AND
+            </if>
+            <if test="offsetMsgId != null and offsetMsgId != '' ">
+                offset_msg_id = #{offsetMsgId}  AND
+            </if>
+            <if test="msgId != null and msgId != '' ">
+                msg_id = #{msgId}  AND
             </if>
             <if test="message != null and message != '' ">
                 message = #{message}  AND
@@ -53,6 +70,9 @@
             </if>
             <if test="seqNo != null and seqNo != '' ">
                 seq_no = #{seqNo}  AND
+            </if>
+            <if test="queueId != null and queueId != '' ">
+                queue_id = #{queueId}  AND
             </if>
         </trim>
     </sql>
@@ -73,11 +93,20 @@
         insert into
         <include refid="Table_Name" />
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="productedMsgId != null ">
-                producted_msg_id,
+            <if test="mqMsgId != null ">
+                mq_msg_id,
             </if>
             <if test="flowId != null ">
                 flow_id,
+            </if>
+            <if test="brokerName != null ">
+                broker_name,
+            </if>
+            <if test="offsetMsgId != null ">
+                offset_msg_id,
+            </if>
+            <if test="msgId != null ">
+                msg_id,
             </if>
             <if test="message != null ">
                 message,
@@ -97,13 +126,25 @@
             <if test="seqNo != null ">
                 seq_no,
             </if>
+            <if test="queueId != null ">
+                queue_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="productedMsgId != null ">
-                #{productedMsgId},
+            <if test="mqMsgId != null ">
+                #{mqMsgId},
             </if>
             <if test="flowId != null ">
                 #{flowId},
+            </if>
+            <if test="brokerName != null ">
+                #{brokerName},
+            </if>
+            <if test="offsetMsgId != null ">
+                #{offsetMsgId},
+            </if>
+            <if test="msgId != null ">
+                #{msgId},
             </if>
             <if test="message != null ">
                 #{message},
@@ -123,12 +164,24 @@
             <if test="seqNo != null ">
                 #{seqNo},
             </if>
+            <if test="queueId != null ">
+                #{queueId},
+            </if>
         </trim>
     </insert>
 
     <update id="update"  >
         UPDATE <include refid="Table_Name" />
         <set>
+            <if test="brokerName != null and brokerName != ''">
+                broker_name = #{brokerName},
+            </if>
+            <if test="offsetMsgId != null and offsetMsgId != ''">
+                offset_msg_id = #{offsetMsgId},
+            </if>
+            <if test="msgId != null and msgId != ''">
+                msg_id = #{msgId},
+            </if>
             <if test="message != null and message != ''">
                 message = #{message},
             </if>
@@ -147,11 +200,14 @@
             <if test="seqNo != null and seqNo != ''">
                 seq_no = #{seqNo},
             </if>
+            <if test="queueId != null and queueId != ''">
+                queue_id = #{queueId},
+            </if>
         </set>
         <where>
             <trim suffixOverrides="AND">
-                <if test="productedMsgId != null and productedMsgId != ''">
-                    producted_msg_id = #{productedMsgId}
+                <if test="mqMsgId != null and mqMsgId != ''">
+                    mq_msg_id = #{mqMsgId}
                     AND
                 </if>
                 <if test="flowId != null and flowId != ''">
@@ -166,11 +222,20 @@
         UPDATE
         <include refid="Table_Name" />
         <set>
-            <if test="s.productedMsgId != null ">
-                producted_msg_id = #{s.productedMsgId},
+            <if test="s.mqMsgId != null ">
+                mq_msg_id = #{s.mqMsgId},
             </if>
             <if test="s.flowId != null ">
                 flow_id = #{s.flowId},
+            </if>
+            <if test="s.brokerName != null ">
+                broker_name = #{s.brokerName},
+            </if>
+            <if test="s.offsetMsgId != null ">
+                offset_msg_id = #{s.offsetMsgId},
+            </if>
+            <if test="s.msgId != null ">
+                msg_id = #{s.msgId},
             </if>
             <if test="s.message != null ">
                 message = #{s.message},
@@ -190,15 +255,30 @@
             <if test="s.seqNo != null ">
                 seq_no = #{s.seqNo},
             </if>
+            <if test="s.queueId != null ">
+                queue_id = #{s.queueId},
+            </if>
         </set>
         <where>
             <trim prefix="(" suffix=")" suffixOverrides="AND">
-                <if test="w.productedMsgId != null ">
-                    producted_msg_id = #{w.productedMsgId}
+                <if test="w.mqMsgId != null ">
+                    mq_msg_id = #{w.mqMsgId}
                     AND
                 </if>
                 <if test="w.flowId != null ">
                     flow_id = #{w.flowId}
+                    AND
+                </if>
+                <if test="w.brokerName != null ">
+                    broker_name = #{w.brokerName}
+                    AND
+                </if>
+                <if test="w.offsetMsgId != null ">
+                    offset_msg_id = #{w.offsetMsgId}
+                    AND
+                </if>
+                <if test="w.msgId != null ">
+                    msg_id = #{w.msgId}
                     AND
                 </if>
                 <if test="w.message != null ">
@@ -223,6 +303,10 @@
                 </if>
                 <if test="w.seqNo != null ">
                     seq_no = #{w.seqNo}
+                    AND
+                </if>
+                <if test="w.queueId != null ">
+                    queue_id = #{w.queueId}
                     AND
                 </if>
             </trim>
@@ -266,7 +350,7 @@
         <include refid="Table_Name" />
         <where>
             <trim suffixOverrides="AND">
-                producted_msg_id = #{productedMsgId}  AND
+                mq_msg_id = #{mqMsgId}  AND
             </trim>
         </where>
     </select>
@@ -277,7 +361,7 @@
         DELETE FROM <include refid="Table_Name" />
         <where>
             <trim suffixOverrides="AND">
-                producted_msg_id = #{productedMsgId}  AND
+                mq_msg_id = #{mqMsgId}  AND
             </trim>
         </where>
     </delete>

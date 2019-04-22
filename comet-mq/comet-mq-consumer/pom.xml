@@ -26,7 +26,21 @@
         <groupId>org.apache.rocketmq</groupId>
         <artifactId>rocketmq-client</artifactId>
     </dependency>
+    <dependency>
+        <groupId>com.dcits</groupId>
+        <artifactId>comet-dao</artifactId>
+    </dependency>
 
+    <dependency>
+        <groupId>com.dcits</groupId>
+        <artifactId>comet-commons</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>com.zaxxer</groupId>
+        <artifactId>HikariCP</artifactId>
+        <scope>test</scope>
+    </dependency>
 </dependencies>
 
 </project>

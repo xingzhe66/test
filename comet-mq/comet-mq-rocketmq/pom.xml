@@ -17,13 +17,21 @@
 
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-mq-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -62,19 +70,17 @@
             <!--<artifactId>comet-sequence-core</artifactId>-->
             <!--<version>1.0-SNAPSHOT</version>-->
         <!--</dependency>-->
-
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
-        </dependency>
 
     </dependencies>
 
@@ -86,12 +92,6 @@
                         <include>**/*.*</include>
                     </includes>
                 </resource>
-            <resource>
-                <directory>src/main/resources/</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
         </resources>
     </build>
 

@@ -150,7 +150,7 @@ public class Context implements Serializable {
      * 流程编号，全局唯一序列
      * @fields flowId
      **/
-    private Long flowId;
+    private String flowId;
 
 
     /**

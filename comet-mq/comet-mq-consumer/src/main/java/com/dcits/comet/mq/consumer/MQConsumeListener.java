@@ -2,11 +2,13 @@ package com.dcits.comet.mq.consumer;
 
 import com.dcits.comet.mq.api.IMQConsumer;
 import com.dcits.comet.mq.api.Message;
+import com.dcits.comet.mq.consumer.service.ConsumerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -19,6 +21,8 @@ import java.util.List;
 @Component
 @Slf4j
 public class MQConsumeListener implements MessageListenerConcurrently {
+    @Autowired
+    ConsumerService consumerService;
 
     /**
      *  默认msgs里只有一条消息，可以通过设置consumeMessageBatchMaxSize参数来批量接收消息<br/>
@@ -32,9 +36,15 @@ public class MQConsumeListener implements MessageListenerConcurrently {
         }
         //默认每次接收一条
         MessageExt messageExt = msgs.get(0);
-        log.info("接受到的消息为："+new String(messageExt.getBody()));
-        IMQConsumer mqConsumer=MQConsumerFactory.getInstance(messageExt.getTopic(),messageExt.getTags());
+        //判断消息是否已经被接收过，如果已经接收过，则直接返回
+        if(consumerService.isMessageReceived(messageExt.getMsgId())){
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+        }
+        //保存消息
+        consumerService.saveConsumerMessage(messageExt);
 
+        log.info("消息內容为："+new String(messageExt.getBody()));
+        IMQConsumer mqConsumer=MQConsumerFactory.getInstance(messageExt.getTopic(),messageExt.getTags());
         if(mqConsumer!=null){
             //TODO 判断该消息是否重复消费（RocketMQ不保证消息不重复，如果你的业务需要保证严格的不重复消息，需要你自己在业务端去重）
 

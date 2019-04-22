@@ -509,18 +509,18 @@ public final class DateUtil {
 
     /**
      * @Author guihj
-     * @Description 生成随机id TODO  提交时删除  需要用自动生成随机id
-     * @Date 2019/4/15 13:30
-     * @Param []
-     * @return java.lang.Long
+     * @Description 将时间戳转换为时间
+     * @Date 2019/4/21 10:52
+     * @Param [stampT]
+     * @return java.lang.String
      **/
-    public  static Long  longRandomId(){
-        long min = 1;
-        long max = 99999999;
-        Long rangeLong = min + (((long) (new Random().nextDouble() * (max - min))));
-        return rangeLong;
+    public static String stampToDate(long stampT){
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(stampT);
+        res = simpleDateFormat.format(date);
+        return res;
     }
-
 
 
 }

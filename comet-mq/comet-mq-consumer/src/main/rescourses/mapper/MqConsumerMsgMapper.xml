@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcits.comet.mq.consumer.model.MqConsumerMsgPo">
+    <resultMap id="BaseResultMap" type="com.dcits.comet.mq.consumer.model.MqConsumerMsgPo" >
+        <result column="mq_message_id" property="mqMessageId"  jdbcType="VARCHAR"/>
+        <result column="msg_id" property="msgId"  jdbcType="VARCHAR"/>
+        <result column="born_time" property="bornTime"  jdbcType="VARCHAR"/>
+        <result column="born_host" property="bornHost"  jdbcType="VARCHAR"/>
+        <result column="store_time" property="storeTime"  jdbcType="VARCHAR"/>
+        <result column="store_host" property="storeHost"  jdbcType="VARCHAR"/>
+        <result column="topic" property="topic"  jdbcType="VARCHAR"/>
+        <result column="tag" property="tag"  jdbcType="VARCHAR"/>
+        <result column="queue_id" property="queueId"  jdbcType="INTEGER"/>
+        <result column="receive_time" property="receiveTime"  jdbcType="VARCHAR"/>
+        <result column="status" property="status"  jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime"  jdbcType="VARCHAR"/>
+        <result column="remark" property="remark"  jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Table_Name">
+        MQ_CONSUMER_MSG
+    </sql>
+
+    <sql id="Base_Column">
+        mq_message_id,
+        msg_id,
+        born_time,
+        born_host,
+        store_time,
+        store_host,
+        topic,
+        tag,
+        queue_id,
+        receive_time,
+        status,
+        update_time,
+        remark
+    </sql>
+
+    <sql id="Base_Where">
+        <trim suffixOverrides="AND">
+            <if test="mqMessageId != null and mqMessageId != '' ">
+                mq_message_id = #{mqMessageId}  AND
+            </if>
+            <if test="msgId != null and msgId != '' ">
+                msg_id = #{msgId}  AND
+            </if>
+            <if test="bornTime != null and bornTime != '' ">
+                born_time = #{bornTime}  AND
+            </if>
+            <if test="bornHost != null and bornHost != '' ">
+                born_host = #{bornHost}  AND
+            </if>
+            <if test="storeTime != null and storeTime != '' ">
+                store_time = #{storeTime}  AND
+            </if>
+            <if test="storeHost != null and storeHost != '' ">
+                store_host = #{storeHost}  AND
+            </if>
+            <if test="topic != null and topic != '' ">
+                topic = #{topic}  AND
+            </if>
+            <if test="tag != null and tag != '' ">
+                tag = #{tag}  AND
+            </if>
+            <if test="queueId != null and queueId != '' ">
+                queue_id = #{queueId}  AND
+            </if>
+            <if test="receiveTime != null and receiveTime != '' ">
+                receive_time = #{receiveTime}  AND
+            </if>
+            <if test="status != null and status != '' ">
+                status = #{status}  AND
+            </if>
+            <if test="updateTime != null and updateTime != '' ">
+                update_time = #{updateTime}  AND
+            </if>
+            <if test="remark != null and remark != '' ">
+                remark = #{remark}  AND
+            </if>
+        </trim>
+    </sql>
+
+
+
+    <sql id="Base_Select">
+        SELECT
+        <include refid="Base_Column" />
+        FROM
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </sql>
+
+    <insert id="insert" >
+        insert into
+        <include refid="Table_Name" />
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mqMessageId != null ">
+                mq_message_id,
+            </if>
+            <if test="msgId != null ">
+                msg_id,
+            </if>
+            <if test="bornTime != null ">
+                born_time,
+            </if>
+            <if test="bornHost != null ">
+                born_host,
+            </if>
+            <if test="storeTime != null ">
+                store_time,
+            </if>
+            <if test="storeHost != null ">
+                store_host,
+            </if>
+            <if test="topic != null ">
+                topic,
+            </if>
+            <if test="tag != null ">
+                tag,
+            </if>
+            <if test="queueId != null ">
+                queue_id,
+            </if>
+            <if test="receiveTime != null ">
+                receive_time,
+            </if>
+            <if test="status != null ">
+                status,
+            </if>
+            <if test="updateTime != null ">
+                update_time,
+            </if>
+            <if test="remark != null ">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mqMessageId != null ">
+                #{mqMessageId},
+            </if>
+            <if test="msgId != null ">
+                #{msgId},
+            </if>
+            <if test="bornTime != null ">
+                #{bornTime},
+            </if>
+            <if test="bornHost != null ">
+                #{bornHost},
+            </if>
+            <if test="storeTime != null ">
+                #{storeTime},
+            </if>
+            <if test="storeHost != null ">
+                #{storeHost},
+            </if>
+            <if test="topic != null ">
+                #{topic},
+            </if>
+            <if test="tag != null ">
+                #{tag},
+            </if>
+            <if test="queueId != null ">
+                #{queueId},
+            </if>
+            <if test="receiveTime != null ">
+                #{receiveTime},
+            </if>
+            <if test="status != null ">
+                #{status},
+            </if>
+            <if test="updateTime != null ">
+                #{updateTime},
+            </if>
+            <if test="remark != null ">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update"  >
+        UPDATE <include refid="Table_Name" />
+        <set>
+            <if test="msgId != null and msgId != ''">
+                msg_id = #{msgId},
+            </if>
+            <if test="bornTime != null and bornTime != ''">
+                born_time = #{bornTime},
+            </if>
+            <if test="bornHost != null and bornHost != ''">
+                born_host = #{bornHost},
+            </if>
+            <if test="storeTime != null and storeTime != ''">
+                store_time = #{storeTime},
+            </if>
+            <if test="storeHost != null and storeHost != ''">
+                store_host = #{storeHost},
+            </if>
+            <if test="topic != null and topic != ''">
+                topic = #{topic},
+            </if>
+            <if test="tag != null and tag != ''">
+                tag = #{tag},
+            </if>
+            <if test="queueId != null and queueId != ''">
+                queue_id = #{queueId},
+            </if>
+            <if test="receiveTime != null and receiveTime != ''">
+                receive_time = #{receiveTime},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        <where>
+            <trim suffixOverrides="AND">
+                mq_message_id = #{mqMessageId}  AND
+            </trim>
+        </where>
+    </update>
+
+    <update id="updateByEntity" >
+        UPDATE
+        <include refid="Table_Name" />
+        <set>
+            <if test="s.mqMessageId != null ">
+                mq_message_id = #{s.mqMessageId},
+            </if>
+            <if test="s.msgId != null ">
+                msg_id = #{s.msgId},
+            </if>
+            <if test="s.bornTime != null ">
+                born_time = #{s.bornTime},
+            </if>
+            <if test="s.bornHost != null ">
+                born_host = #{s.bornHost},
+            </if>
+            <if test="s.storeTime != null ">
+                store_time = #{s.storeTime},
+            </if>
+            <if test="s.storeHost != null ">
+                store_host = #{s.storeHost},
+            </if>
+            <if test="s.topic != null ">
+                topic = #{s.topic},
+            </if>
+            <if test="s.tag != null ">
+                tag = #{s.tag},
+            </if>
+            <if test="s.queueId != null ">
+                queue_id = #{s.queueId},
+            </if>
+            <if test="s.receiveTime != null ">
+                receive_time = #{s.receiveTime},
+            </if>
+            <if test="s.status != null ">
+                status = #{s.status},
+            </if>
+            <if test="s.updateTime != null ">
+                update_time = #{s.updateTime},
+            </if>
+            <if test="s.remark != null ">
+                remark = #{s.remark},
+            </if>
+        </set>
+        <where>
+            <trim prefix="(" suffix=")" suffixOverrides="AND">
+                <if test="w.mqMessageId != null ">
+                    mq_message_id = #{w.mqMessageId}
+                    AND
+                </if>
+                <if test="w.msgId != null ">
+                    msg_id = #{w.msgId}
+                    AND
+                </if>
+                <if test="w.bornTime != null ">
+                    born_time = #{w.bornTime}
+                    AND
+                </if>
+                <if test="w.bornHost != null ">
+                    born_host = #{w.bornHost}
+                    AND
+                </if>
+                <if test="w.storeTime != null ">
+                    store_time = #{w.storeTime}
+                    AND
+                </if>
+                <if test="w.storeHost != null ">
+                    store_host = #{w.storeHost}
+                    AND
+                </if>
+                <if test="w.topic != null ">
+                    topic = #{w.topic}
+                    AND
+                </if>
+                <if test="w.tag != null ">
+                    tag = #{w.tag}
+                    AND
+                </if>
+                <if test="w.queueId != null ">
+                    queue_id = #{w.queueId}
+                    AND
+                </if>
+                <if test="w.receiveTime != null ">
+                    receive_time = #{w.receiveTime}
+                    AND
+                </if>
+                <if test="w.status != null ">
+                    status = #{w.status}
+                    AND
+                </if>
+                <if test="w.updateTime != null ">
+                    update_time = #{w.updateTime}
+                    AND
+                </if>
+                <if test="w.remark != null ">
+                    remark = #{w.remark}
+                    AND
+                </if>
+            </trim>
+        </where>
+    </update>
+    <delete id="delete" >
+        DELETE FROM
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </delete>
+
+    <select id="count" parameterType="java.util.Map" resultType="int">
+        select count(1) from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </select>
+
+    <select id="selectOne"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectList"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectForUpdate" resultMap="BaseResultMap" useCache="false">
+        <include refid="Base_Select" />
+        for update
+    </select>
+
+
+    <!--根据主键查询-->
+    <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column" />
+        FROM
+        <include refid="Table_Name" />
+        <where>
+            <trim suffixOverrides="AND">
+                mq_message_id = #{mqMessageId}  AND
+            </trim>
+        </where>
+    </select>
+
+
+    <!--根据主键删除-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM <include refid="Table_Name" />
+        <where>
+            <trim suffixOverrides="AND">
+                mq_message_id = #{mqMessageId}  AND
+            </trim>
+        </where>
+    </delete>
+</mapper>

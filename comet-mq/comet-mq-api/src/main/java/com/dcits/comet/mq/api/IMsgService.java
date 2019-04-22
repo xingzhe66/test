@@ -1,6 +1,8 @@
 package com.dcits.comet.mq.api;
 
 
+import org.apache.rocketmq.client.producer.SendResult;
+
 import java.util.List;
 
 /**
@@ -13,12 +15,12 @@ import java.util.List;
 public interface IMsgService {
     /**
      * @Author guihj
-     * @Description //发送消息
+     * @Description //rocket真实发送消息
      * @Date 2019/4/15 14:28
      * @Param []
      * @return void
      **/
-    public String send(RocketMessage rocketMessage) throws Exception;
+    public SendResult realSend(RocketMessage rocketMessage) throws Exception;
 
     /**
      * @Author guihj
@@ -35,7 +37,7 @@ public interface IMsgService {
      * @Param []
      * @return int
      **/
-    public int updateMessageSuccess(RocketMessage message);
+    public int updateMessageSuccess(RocketMessage message, SendResult sendResult);
 
 
     /**

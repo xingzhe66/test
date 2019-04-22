@@ -8,8 +8,16 @@ import com.dcits.comet.commons.data.head.SysHead;
 import com.dcits.comet.commons.data.head.SysHeadOut;
 import com.dcits.comet.commons.exception.BusinessException;
 import com.dcits.comet.commons.utils.BusiUtil;
+import com.dcits.comet.commons.utils.DateUtil;
+import com.dcits.comet.commons.utils.StringUtil;
+import com.dcits.comet.flow.constant.MsgSendStatus;
+import com.dcits.comet.flow.service.FlowService;
+import com.dcits.comet.mq.api.IMsgService;
+import com.dcits.comet.mq.api.RocketMessage;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -27,6 +35,12 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseResponse> implements IFlow<IN, OUT> {
 
     public abstract OUT execute(IN input);
+
+
+    @Autowired
+    FlowService flowService;
+    @Autowired
+    IMsgService iMsgService;
 
     @Override
     public OUT handle(IN input) {
@@ -65,7 +79,6 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             if (BusiUtil.isNotNull(input.getAppHead())) {
                 BusinessResult.success(output, input.getAppHead());
             }
-
             // endHandle
             postHandler(input, output);
         } catch (Exception e) {
@@ -73,8 +86,13 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
                 BusinessException businessException = (BusinessException) e;
                 BusinessResult.error(businessException.getErrorCode(), businessException.getErrorMessage());
             }
+            try {
+                flowService.updateFlowException(e);
+                iMsgService.updateMsgStatusException();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             throw e;
-
         } finally {
 
         }
@@ -85,7 +103,17 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
     private void preHandler(IN input) {
 
         log.info("<===== execute preHandler =====>");
+        //生成flowId  //TODO 需要调用sequence
+        String flowId = StringUtil.getUUID();
+        //将flowId赋值给上下文Context
+        Context.getInstance().setFlowId(flowId);
 
+        //在流程开始时，将流程信息存入表中
+        try {
+            flowService.saveFlowInFo(input,this.getClass().getSimpleName());
+        }catch (Exception e){
+           e.printStackTrace();
+        }
         //getEffectiveTrace
         List<ITrace> traceList = TraceFactory.getEffectiveTrace(ITrace.class);
 
@@ -94,14 +122,40 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             log.info("<===== loop trace =====>");
             traceList.forEach(iTrace -> iTrace.trace(input));
         }
-
     }
-
 
     private void postHandler(IN input, OUT out) {
         log.info("<===== execute postHandler =====>");
         setOriginalSysHead(out.getSysHead(), input.getSysHead());
+        try {
+            try {
+                //更新流程执行状态  3
+                flowService.updateFlowSusscee(out);
+                //更新消息发送状态  2
+                iMsgService.updateMsgStatusSend();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            //获取对应flowId的消息集合
+            List<RocketMessage> rocketMessages = iMsgService.getMessageByFloWId();
+            if (rocketMessages != null && rocketMessages.size() > 0) {
+                for (int i = 0; i < rocketMessages.size(); ++i) {
+                    RocketMessage rocketMessage = (RocketMessage) rocketMessages.get(i);
+                    //调用rocketMq真实发送消息
+                    SendResult sendResult = iMsgService.realSend(rocketMessage);
+                    if (MsgSendStatus.SEND_OK.toString().equals(sendResult.getSendStatus().toString())) {
+                        log.info("mq message send success-----------------");
+                        //更新消息状态  3
+                        iMsgService.updateMessageSuccess(rocketMessage,sendResult);
+                    }
+                }
+            }
+        } catch (Exception var7) {
+            log.info("mq message send fail------------------");
+            var7.printStackTrace();
+        }
     }
+
 
     /**
      * 设置返回sysHead
