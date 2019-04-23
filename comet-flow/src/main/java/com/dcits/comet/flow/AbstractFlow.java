@@ -8,7 +8,6 @@ import com.dcits.comet.commons.data.head.SysHead;
 import com.dcits.comet.commons.data.head.SysHeadOut;
 import com.dcits.comet.commons.exception.BusinessException;
 import com.dcits.comet.commons.utils.BusiUtil;
-import com.dcits.comet.commons.utils.DateUtil;
 import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.flow.constant.MsgSendStatus;
 import com.dcits.comet.flow.service.FlowService;
@@ -49,6 +48,10 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
 
         // preHandle
         preHandler(input);
+
+        //preBusinessHandler
+        preBusinessHandler(input);
+
         Stopwatch stopwatch = Stopwatch.createStarted();
         OUT output = null;
         log.info("The [{}] flow elapsedTime is [{}]", className, stopwatch.elapsed(TimeUnit.MILLISECONDS));
@@ -79,6 +82,9 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             if (BusiUtil.isNotNull(input.getAppHead())) {
                 BusinessResult.success(output, input.getAppHead());
             }
+
+            //postBusinessHandler
+            postBusinessHandler(input);
             // endHandle
             postHandler(input, output);
         } catch (Exception e) {
@@ -110,9 +116,9 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
 
         //在流程开始时，将流程信息存入表中
         try {
-            flowService.saveFlowInFo(input,this.getClass().getSimpleName());
-        }catch (Exception e){
-           e.printStackTrace();
+            flowService.saveFlowInFo(input, this.getClass().getSimpleName());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         //getEffectiveTrace
         List<ITrace> traceList = TraceFactory.getEffectiveTrace(ITrace.class);
@@ -146,7 +152,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
                     if (MsgSendStatus.SEND_OK.toString().equals(sendResult.getSendStatus().toString())) {
                         log.info("mq message send success-----------------");
                         //更新消息状态  3
-                        iMsgService.updateMessageSuccess(rocketMessage,sendResult);
+                        iMsgService.updateMessageSuccess(rocketMessage, sendResult);
                     }
                 }
             }
@@ -181,4 +187,12 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
         out.setSceneId(in.getSceneId());
     }
 
+
+    public void preBusinessHandler(IN input) {
+
+    }
+
+    public void postBusinessHandler(IN input) {
+
+    }
 }
