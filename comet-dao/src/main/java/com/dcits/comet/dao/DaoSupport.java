@@ -31,6 +31,8 @@ public interface DaoSupport extends BaseDaoSupport {
 
     <T extends BasePo> int update(String statementPostfix, T entity);
 
+    <T extends BasePo> int update(String statementPostfix,List<T> list) ;
+
     int update(String statementPostfix, Map<String, Object> parameter);
 
     <T extends BasePo> int delete(String statementPostfix, T entity);

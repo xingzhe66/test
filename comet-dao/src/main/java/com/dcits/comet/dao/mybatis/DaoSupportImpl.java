@@ -167,6 +167,16 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     }
 
     @Override
+    public <T extends BasePo> int update(String statementPostfix,List<T> list) {
+        int i = 0;
+        BasePo bp;
+        for (Iterator it = list.iterator(); it.hasNext(); i += this.update(statementPostfix,bp)) {
+            bp = (BasePo) it.next();
+        }
+
+        return i;
+    }
+    @Override
     public int update(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().update(statementPostfix, parameter);
     }

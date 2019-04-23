@@ -582,6 +582,18 @@ public class StringUtil {
         b.append(baos.toString());
         return b.toString();
     }
+    public static String ObjectToString(Object str) {
+        if (str == null) {
+            return null;
+        } else {
+            if ("".equals(str)) {
+                return null;
+            } else {
+                return str.toString();
+            }
+        }
+    }
+
 
     /**
      * 获得一个UUID
