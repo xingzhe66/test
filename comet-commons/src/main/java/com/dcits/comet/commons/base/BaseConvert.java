@@ -1,5 +1,6 @@
 package com.dcits.comet.commons.base;
 
+import com.dcits.comet.commons.Context;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mappings;
@@ -25,5 +26,4 @@ public interface BaseConvert<SOURCE, TARGET> {
 
     @InheritInverseConfiguration
     List<SOURCE> from(List<TARGET> var1);
-
 }
