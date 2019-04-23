@@ -9,13 +9,10 @@ import com.dcits.comet.commons.data.head.SysHeadOut;
 import com.dcits.comet.commons.exception.BusinessException;
 import com.dcits.comet.commons.utils.BusiUtil;
 import com.dcits.comet.commons.utils.StringUtil;
-import com.dcits.comet.flow.constant.MsgSendStatus;
 import com.dcits.comet.flow.service.FlowService;
 import com.dcits.comet.mq.api.IMsgService;
-import com.dcits.comet.mq.api.RocketMessage;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
@@ -92,12 +89,12 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
                 BusinessException businessException = (BusinessException) e;
                 BusinessResult.error(businessException.getErrorCode(), businessException.getErrorMessage());
             }
-            try {
+            /*try {
                 flowService.updateFlowException(e);
                 iMsgService.updateMsgStatusException();
             } catch (Exception e1) {
                 e1.printStackTrace();
-            }
+            }*/
             throw e;
         } finally {
 
@@ -115,11 +112,11 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
         Context.getInstance().setFlowId(flowId);
 
         //在流程开始时，将流程信息存入表中
-        try {
+       /* try {
             flowService.saveFlowInFo(input, this.getClass().getSimpleName());
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         //getEffectiveTrace
         List<ITrace> traceList = TraceFactory.getEffectiveTrace(ITrace.class);
 
@@ -133,7 +130,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
     private void postHandler(IN input, OUT out) {
         log.info("<===== execute postHandler =====>");
         setOriginalSysHead(out.getSysHead(), input.getSysHead());
-        try {
+       /* try {
             try {
                 //更新流程执行状态  3
                 flowService.updateFlowSusscee(out);
@@ -159,7 +156,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
         } catch (Exception var7) {
             log.info("mq message send fail------------------");
             var7.printStackTrace();
-        }
+        }*/
     }
 
 
