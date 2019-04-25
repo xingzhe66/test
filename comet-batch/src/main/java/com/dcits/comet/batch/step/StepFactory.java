@@ -72,7 +72,8 @@ public class StepFactory {
                         .transactionManager(dataSourceTransactionManager)
                         .chunk(chunkSize)
                         //
-                        .reader(reader)//.faultTolerant().skip(JsonParseException.class).skipLimit(1)
+                        .reader(reader)//todo 对于错误容忍的配置可以放在调度作为参数传入
+                        // .faultTolerant().skip(JsonParseException.class).skipLimit(1)
                         //.listener(new MessageItemReadListener(errorWriter))
                         .writer(writer)//.faultTolerant().skip(Exception.class).skipLimit(1)
                         //    .listener(new MessageWriteListener())
