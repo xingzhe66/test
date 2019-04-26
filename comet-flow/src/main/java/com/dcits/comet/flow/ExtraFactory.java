@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * <p>Title: TraceFactory.java</p>
+ * <p>Title: ExtraFactory.java</p>
  * <p>Description: TODO</p>
  * <p>Copyright: Copyright (c) 2014-2019</p>
  * <p>Company: dcits</p>
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
  * @author cuimh
  * @version v1.0
  */
-public class TraceFactory {
+public class ExtraFactory {
 
-    public static <E extends ITrace> List<E> getEffectiveTrace(Class<E> e) {
+    public static <E extends IExtraFlow> List<E> getEffectiveExtra(Class<E> e) {
         Map<String, E> traceMap = SpringContextUtil.getBeansOfType(e);
         //转换为List
         List<E> traceList = new ArrayList(traceMap.values());
