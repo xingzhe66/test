@@ -39,24 +39,22 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
     IMsgService iMsgService;
 
     @Override
-    public OUT handle(IN input) {
-
-        String className = this.getClass().getSimpleName();
+    public OUT handle(String beanName, IN input) {
 
         // preHandle
         preHandler(input);
 
         //preBusinessHandler
-        preBusinessHandler(input);
+        preBusinessHandler(beanName, input);
 
         Stopwatch stopwatch = Stopwatch.createStarted();
         OUT output = null;
-        log.info("The [{}] flow elapsedTime is [{}]", className, stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        log.info("The [{}] flow elapsedTime is [{}]", beanName, stopwatch.elapsed(TimeUnit.MILLISECONDS));
         try {
             output = this.execute(input);
 
             if (BusiUtil.isNull(output)) {
-                log.warn("The [{}] flow returned no result! ", className);
+                log.warn("The [{}] flow returned no result! ", beanName);
 
                 //1、返回表示此 Class 所表示的实体（类、接口、基本类型或 void）的直接超类的 Type
                 Type genType = getClass().getGenericSuperclass();
@@ -81,7 +79,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             }
 
             //postBusinessHandler
-            postBusinessHandler(input);
+            postBusinessHandler(beanName, input);
             // endHandle
             postHandler(input, output);
         } catch (Exception e) {
@@ -118,12 +116,12 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             e.printStackTrace();
         }*/
         //getEffectiveTrace
-        List<ITrace> traceList = TraceFactory.getEffectiveTrace(ITrace.class);
+        List<IExtraTrace> traceList = ExtraFactory.getEffectiveExtra(IExtraTrace.class);
 
         //loop trace
         if (BusiUtil.isNotNull(traceList)) {
             log.info("<===== loop trace =====>");
-            traceList.forEach(iTrace -> iTrace.trace(input));
+            traceList.forEach(iExtraTrace -> iExtraTrace.trace(input));
         }
     }
 
@@ -185,11 +183,23 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
     }
 
 
-    public void preBusinessHandler(IN input) {
-
+    public void preBusinessHandler(String beanName, IN input) {
+        //getEffectiveExtra
+        List<IExtraBusiness> businessList = ExtraFactory.getEffectiveExtra(IExtraBusiness.class);
+        //loop IExtraBusiness
+        if (BusiUtil.isNotNull(businessList)) {
+            log.info("<===== loop IExtraBusiness =====>");
+            businessList.forEach(business -> business.before(beanName, input));
+        }
     }
 
-    public void postBusinessHandler(IN input) {
-
+    public void postBusinessHandler(String beanName, IN input) {
+        //getEffectiveExtra
+        List<IExtraBusiness> businessList = ExtraFactory.getEffectiveExtra(IExtraBusiness.class);
+        //loop IExtraBusiness
+        if (BusiUtil.isNotNull(businessList)) {
+            log.info("<===== loop IExtraBusiness =====>");
+            businessList.forEach(business -> business.after(beanName, input));
+        }
     }
 }
