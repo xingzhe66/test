@@ -11,7 +11,7 @@ eureka:
     healthcheck:
       enabled: true
     service-url:
-      defaultZone: http://10.7.25.230:8761/eureka/
+      defaultZone: http://10.7.25.206:8761/eureka/
   instance:
     lease-expiration-duration-in-seconds: 90
     lease-renewal-interval-in-seconds: 30

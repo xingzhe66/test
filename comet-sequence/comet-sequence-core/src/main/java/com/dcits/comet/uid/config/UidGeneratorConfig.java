@@ -26,30 +26,15 @@ import javax.sql.DataSource;
 @Component
 public class UidGeneratorConfig {
 
-    @Value("${ds.uid.datasource.connection-timeout}")
-    volatile long connectionTimeout;
-    @Value("${ds.uid.datasource.idle-timeout}")
-    volatile long idleTimeout;
-    @Value("${ds.uid.datasource.max-lifetime}")
-    volatile long maxLifetime;
-    @Value("${ds.uid.datasource.maximum-pool-size}")
-    volatile int maxPoolSize;
-    @Value("${ds.uid.datasource.minimum-idle}")
-    volatile int minIdle;
     @Value("${ds.uid.datasource.username}")
     volatile String username;
     @Value("${ds.uid.datasource.password}")
     volatile String password;
-    @Value("${ds.uid.datasource.connection-test-query}")
-    String connectionTestQuery;
     @Value("${ds.uid.datasource.driver-class-name}")
     String driverClassName;
     @Value("${ds.uid.datasource.jdbc-url}")
     String jdbcUrl;
-    @Value("${ds.uid.datasource.pool-name}")
-    String poolName;
-    @Value("${ds.uid.datasource.auto-commit:true}")
-    boolean isAutoCommit;
+
     /**
      * Spring容器关闭时更新到数据库
      *
@@ -71,14 +56,6 @@ public class UidGeneratorConfig {
         hikariDataSource.setUsername(username);
         hikariDataSource.setPassword(password);
         hikariDataSource.setDriverClassName(driverClassName);
-        hikariDataSource.setPoolName(poolName);
-        hikariDataSource.setMinimumIdle(minIdle);
-        hikariDataSource.setMaximumPoolSize(maxPoolSize);
-        hikariDataSource.setAutoCommit(isAutoCommit);
-        hikariDataSource.setIdleTimeout(idleTimeout);
-        hikariDataSource.setMaxLifetime(maxLifetime);
-        hikariDataSource.setConnectionTimeout(connectionTimeout);
-        hikariDataSource.setConnectionTestQuery(connectionTestQuery);
         return hikariDataSource;
     }
 
@@ -91,21 +68,24 @@ public class UidGeneratorConfig {
     }
 
 
-    @Bean
+    @Bean("redisUidGenerator")
     @DependsOn("workerIdAssigner")
     public RedisUidGenerator redisUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner, @Autowired RedisTemplate redisTemplate) {
+        log.info("init redisUidGenerator");
         return new RedisUidGenerator(workerIdAssigner, redisTemplate);
     }
 
-    @Bean
+    @Bean("loadingUidGenerator")
     @DependsOn("workerIdAssigner")
     public LoadingUidGenerator loadingUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner) {
+        log.info("init loadingUidGenerator");
         return new LoadingUidGenerator(workerIdAssigner);
     }
 
-    @Bean
+    @Bean("defaultUidGenerator")
     @DependsOn("workerIdAssigner")
     public DefaultUidGenerator defaultUidGenerator(@Qualifier("workerIdAssigner") DisposableWorkerIdAssigner workerIdAssigner) {
+        log.info("init defaultUidGenerator");
         return new DefaultUidGenerator(workerIdAssigner);
     }
 
