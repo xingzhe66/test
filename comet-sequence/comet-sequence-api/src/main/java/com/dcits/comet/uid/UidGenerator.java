@@ -17,7 +17,7 @@ public interface UidGenerator {
 
     String UID_REIDS_PREDATE = "/uid/redis/predate";
 
-    String UID_REIDS_BIZTAG = "/uid/redis/biztag";
+    String UID_REIDS_BIZTAG = "/uid/redis/{biztag}";
 
     String UID_REIDS_PREDATEANDBIZTAG = "/uid/redis/predateandbiztag";
 
@@ -26,18 +26,18 @@ public interface UidGenerator {
 
     String UID_DEF_PREDATE = "/uid/def/predate";
 
-    String UID_DEF_BIZTAG = "/uid/def/biztag";
+    String UID_DEF_BIZTAG = "/uid/def/{biztag}";
 
     String UID_DEF_PREDATEANDBIZTAG = "/uid/def/predateandbiztag";
 
     //buffer序列
-    String UID_BUFF_DEF = "/uid/buf/def";
+    String UID_LOAD_DEF = "/uid/load/def";
 
-    String UID_BUFF_PREDATE = "/uid/buf/predate";
+    String UID_LOAD_PREDATE = "/uid/load/predate";
 
-    String UID_BUFF_BIZTAG = "/uid/buf/biztag";
+    String UID_LOAD_BIZTAG = "/uid/load/{biztag}";
 
-    String UID_BUFF_PREDATEANDBIZTAG = "/uid/buf/predateandbiztag";
+    String UID_LOAD_PREDATEANDBIZTAG = "/uid/load/predateandbiztag";
 
     /**
      * 根据主机名获取ID
