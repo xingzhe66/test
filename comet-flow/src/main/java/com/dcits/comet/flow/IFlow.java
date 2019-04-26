@@ -8,5 +8,5 @@ package com.dcits.comet.flow;
  **/
 public interface IFlow<I, O> {
 
-    O handle(I i);
+    O handle(String beanName, I i);
 }
