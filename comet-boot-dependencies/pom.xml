@@ -69,12 +69,12 @@
             </dependency>
             <dependency>
                 <groupId>com.dcits</groupId>
-                <artifactId>comet-sequence-provider</artifactId>
+                <artifactId>comet-sequence-core</artifactId>
                 <version>${comet.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.dcits</groupId>
-                <artifactId>comet-sequence-core</artifactId>
+                <artifactId>comet-sequence-api</artifactId>
                 <version>${comet.version}</version>
             </dependency>
             <dependency>
