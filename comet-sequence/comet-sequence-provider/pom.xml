@@ -82,7 +82,6 @@
             <groupId>org.perf4j</groupId>
             <artifactId>perf4j</artifactId>
             <version>${perf4j.version}</version>
-            <classifier>log4jonly</classifier>
         </dependency>
 
         <dependency>
