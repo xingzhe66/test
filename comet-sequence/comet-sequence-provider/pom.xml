@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.perf4j</groupId>
             <artifactId>perf4j</artifactId>
-            <version>0.9.16</version>
+            <version>${perf4j.version}</version>
         </dependency>
 
         <dependency>
