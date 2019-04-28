@@ -26,7 +26,18 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -36,9 +47,41 @@
         </dependency>
 
         <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.perf4j</groupId>
+            <artifactId>perf4j</artifactId>
+            <version>0.9.16</version>
+        </dependency>
+
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-rpc-provider</artifactId>
@@ -50,10 +93,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>comet-sequence-core</artifactId>
-            <version>${comet.version}</version>
+            <artifactId>comet-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-sequence-api</artifactId>
         </dependency>
 
     </dependencies>

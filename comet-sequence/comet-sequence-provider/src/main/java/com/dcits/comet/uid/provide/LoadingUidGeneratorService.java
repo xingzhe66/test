@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  * @date 2019/4/26 10:09
  **/
-@RestController
+@Deprecated
 public class LoadingUidGeneratorService {
 
-    @PostMapping(value = UidGenerator.UID_LOAD_BIZTAG)
     public Long getKeyBybiztag(@PathVariable(required = false) String biztag) {
         return LoadingUidGeneratorFactory.getInstance().getKey(biztag);
     }

@@ -22,7 +22,7 @@ public class ServiceApplication {
         SpringApplication.run(ServiceApplication.class, args);
     }
 
-    @FeignClient("sequence-provider")
+    @FeignClient("comet-sequence-provide")
     public interface TestClient {
         @RequestMapping(value = "/uid/def/def", method = RequestMethod.GET)
         Long getSonwKey();
@@ -47,12 +47,20 @@ public class ServiceApplication {
 
         @GetMapping("/consumer1")
         public String dc1() {
-            return String.valueOf(testClient.getLoadKeyBybiztag("cif.seqNo"));
+            String random = "";
+            String[] doc = {"cif.seq", "rb.seq", "ac.seq"};
+            int index = (int) (Math.random() * doc.length);
+            random = doc[index];
+            return String.valueOf(testClient.getLoadKeyBybiztag(random));
         }
 
         @GetMapping("/consumer2")
         public String dc2() {
-            return String.valueOf(testClient.getRedisBybiztag("redis"));
+            String random = "";
+            String[] doc = {"fm.seq","cilentNo","123","456"};
+            int index = (int) (Math.random() * doc.length);
+            random = doc[index];
+            return String.valueOf(testClient.getRedisBybiztag(random));
         }
 
     }
