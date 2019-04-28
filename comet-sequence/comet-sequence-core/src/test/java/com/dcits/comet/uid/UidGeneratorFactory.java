@@ -16,8 +16,6 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import javax.sql.DataSource;
 import java.util.List;
 
-import static com.dcits.comet.uid.worker.WorkerIdAssigner.keys;
-
 /**
  * @author leijian
  * @version 1.0
@@ -65,16 +63,6 @@ public class UidGeneratorFactory {
 
         UidGenerator uidGenerator = getUidGenerator(RedisUidGenerator.class);
         this.uidGeneratorProxy = new UidGeneratorProxy(uidGenerator);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("程序关闭的时候同步更新到数据库");
-            log.info("{}", keys);
-            try {
-                uidGenerator.keepWithDB();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }));
     }
 
     public static UidGenerator getUidGenerator(Class<?> clazz) {

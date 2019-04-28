@@ -123,10 +123,6 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
                 uid, thatTimeStr, workerId, sequence);
     }
 
-    @Override
-    public void keepWithDB() {
-        //TODO 雪花算法什么也不干
-    }
 
     /**
      * @return long

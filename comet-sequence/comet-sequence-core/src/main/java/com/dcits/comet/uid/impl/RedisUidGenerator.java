@@ -60,10 +60,6 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         return "redis";
     }
 
-    @Override
-    public void keepWithDB() {
-        WorkerIdAssigner.keys.forEach((k, v) -> updateDB(k, v));
-    }
 
     void updateDB(String bizTag, WorkerNodePo workerNodePo) {
         log.info("{}序列节点同步到数据库", this.className);
