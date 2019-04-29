@@ -31,6 +31,7 @@
         <snakeyaml.version>1.23</snakeyaml.version>
         <hibernate-validator.version>6.0.14.Final</hibernate-validator.version>
         <sofa.version>3.1.3</sofa.version>
+        <perf4j.version>0.9.16</perf4j.version>
     </properties>
     <distributionManagement>
         <repository>
@@ -69,12 +70,12 @@
             </dependency>
             <dependency>
                 <groupId>com.dcits</groupId>
-                <artifactId>comet-sequence-provider</artifactId>
+                <artifactId>comet-sequence-core</artifactId>
                 <version>${comet.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.dcits</groupId>
-                <artifactId>comet-sequence-core</artifactId>
+                <artifactId>comet-sequence-api</artifactId>
                 <version>${comet.version}</version>
             </dependency>
             <dependency>
