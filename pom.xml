@@ -42,6 +42,7 @@
         <module>comet-mvc</module>
         <module>comet-flow</module>
         <module>comet-assembly</module>
+        <module>comet-batch-sonic</module>
     </modules>
     <build>
         <plugins>
