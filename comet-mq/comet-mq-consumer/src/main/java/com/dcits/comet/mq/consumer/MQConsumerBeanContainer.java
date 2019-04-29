@@ -18,7 +18,7 @@ public class MQConsumerBeanContainer {
 
     private static volatile MQConsumerBeanContainer mqConsumerBeanContainer;
 
-    private final static Map<String, String> TRANS_CODE_MAP =
+    private final static Map<String, String> CONSUMER_BEAN_MAP =
             new HashMap<String, String>();
 
     public static MQConsumerBeanContainer getInstance() {
@@ -36,13 +36,14 @@ public class MQConsumerBeanContainer {
     }
 
     private void init() {
+        //TODO 加载顺序问题
         ApplicationContext appContext = SpringContextUtil.getApplicationContext();
         Map<String, IMQConsumer> map = appContext.getBeansOfType(IMQConsumer.class);
         for(String key:map.keySet()){
             Class clazz=map.get(key).getClass();
             if(clazz.isAnnotationPresent(RocketMQConsumer.class)){
                 RocketMQConsumer rocketMQConsumer = (RocketMQConsumer) clazz.getAnnotation(RocketMQConsumer.class);
-                TRANS_CODE_MAP.put(rocketMQConsumer.topic()+DL+ rocketMQConsumer.tag(),key);
+                CONSUMER_BEAN_MAP.put(rocketMQConsumer.topic()+DL+ rocketMQConsumer.tag(),key);
             }
         }
         log.info("=============================================");
@@ -52,6 +53,6 @@ public class MQConsumerBeanContainer {
 
 
     public String getBeanName(String topic, String tag) {
-        return TRANS_CODE_MAP.get(topic+DL+tag);
+        return CONSUMER_BEAN_MAP.get(topic+DL+tag);
     }
 }
