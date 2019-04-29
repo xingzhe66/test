@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cometbatchsonic</artifactId>
+    <artifactId>comet-batch-sonic</artifactId>
 
     <dependencies>
         <dependency>
