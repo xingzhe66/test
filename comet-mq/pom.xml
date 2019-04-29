@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>comet-mq-api</module>
-        <module>comet-mq-rocketmq</module>
+        <module>comet-mq-producer</module>
         <module>comet-mq-consumer</module>
     </modules>
 
