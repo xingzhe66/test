@@ -15,7 +15,7 @@ public class DemoExecutor implements NormalStepExecutor {
     @Override
     public ReportCompleted execute(NormalRunningStep step) {
         //获取自定义参数
-        Map<String, Object> params = step.getParameters();
+//        Map<String, Object> params = step.getParameters();
         // 执行业务逻辑 .....
         //返回执行结果
         return StepResult.SUCCESS_BLANK;

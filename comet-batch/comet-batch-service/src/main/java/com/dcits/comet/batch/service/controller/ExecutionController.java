@@ -21,6 +21,10 @@ import com.dcits.comet.batch.service.exception.BatchServiceException;
 import com.dcits.comet.batch.service.model.ExeInput;
 import com.dcits.comet.batch.service.model.QueryInput;
 import com.dcits.comet.batch.service.model.QueryOutput;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author wangyun
