@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcits.comet.mq.producer.rocketmq.model.MqProducerMsgPo">
+    <resultMap id="BaseResultMap" type="com.dcits.comet.mq.producer.rocketmq.model.MqProducerMsgPo" >
+        <result column="mq_msg_id" property="mqMsgId"  jdbcType="VARCHAR"/>
+        <result column="flow_id" property="flowId"  jdbcType="VARCHAR"/>
+        <result column="broker_name" property="brokerName"  jdbcType="VARCHAR"/>
+        <result column="offset_msg_id" property="offsetMsgId"  jdbcType="VARCHAR"/>
+        <result column="msg_id" property="msgId"  jdbcType="VARCHAR"/>
+        <result column="message" property="message"  jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime"  jdbcType="VARCHAR"/>
+        <result column="last_update" property="lastUpdate"  jdbcType="VARCHAR"/>
+        <result column="status" property="status"  jdbcType="INTEGER"/>
+        <result column="message_type" property="messageType"  jdbcType="VARCHAR"/>
+        <result column="seq_no" property="seqNo"  jdbcType="INTEGER"/>
+        <result column="queue_id" property="queueId"  jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Table_Name">
+        MQ_PRODUCER_MSG
+    </sql>
+
+    <sql id="Base_Column">
+        mq_msg_id,
+        flow_id,
+        broker_name,
+        offset_msg_id,
+        msg_id,
+        message,
+        create_time,
+        last_update,
+        status,
+        message_type,
+        seq_no,
+        queue_id
+    </sql>
+
+    <sql id="Base_Where">
+        <trim suffixOverrides="AND">
+            <if test="mqMsgId != null and mqMsgId != '' ">
+                mq_msg_id = #{mqMsgId}  AND
+            </if>
+            <if test="flowId != null and flowId != '' ">
+                flow_id = #{flowId}  AND
+            </if>
+            <if test="brokerName != null and brokerName != '' ">
+                broker_name = #{brokerName}  AND
+            </if>
+            <if test="offsetMsgId != null and offsetMsgId != '' ">
+                offset_msg_id = #{offsetMsgId}  AND
+            </if>
+            <if test="msgId != null and msgId != '' ">
+                msg_id = #{msgId}  AND
+            </if>
+            <if test="message != null and message != '' ">
+                message = #{message}  AND
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                create_time = #{createTime}  AND
+            </if>
+            <if test="lastUpdate != null and lastUpdate != '' ">
+                last_update = #{lastUpdate}  AND
+            </if>
+            <if test="status != null and status != '' ">
+                status = #{status}  AND
+            </if>
+            <if test="messageType != null and messageType != '' ">
+                message_type = #{messageType}  AND
+            </if>
+            <if test="seqNo != null and seqNo != '' ">
+                seq_no = #{seqNo}  AND
+            </if>
+            <if test="queueId != null and queueId != '' ">
+                queue_id = #{queueId}  AND
+            </if>
+        </trim>
+    </sql>
+
+
+
+    <sql id="Base_Select">
+        SELECT
+        <include refid="Base_Column" />
+        FROM
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </sql>
+
+    <insert id="insert" >
+        insert into
+        <include refid="Table_Name" />
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mqMsgId != null ">
+                mq_msg_id,
+            </if>
+            <if test="flowId != null ">
+                flow_id,
+            </if>
+            <if test="brokerName != null ">
+                broker_name,
+            </if>
+            <if test="offsetMsgId != null ">
+                offset_msg_id,
+            </if>
+            <if test="msgId != null ">
+                msg_id,
+            </if>
+            <if test="message != null ">
+                message,
+            </if>
+            <if test="createTime != null ">
+                create_time,
+            </if>
+            <if test="lastUpdate != null ">
+                last_update,
+            </if>
+            <if test="status != null ">
+                status,
+            </if>
+            <if test="messageType != null ">
+                message_type,
+            </if>
+            <if test="seqNo != null ">
+                seq_no,
+            </if>
+            <if test="queueId != null ">
+                queue_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mqMsgId != null ">
+                #{mqMsgId},
+            </if>
+            <if test="flowId != null ">
+                #{flowId},
+            </if>
+            <if test="brokerName != null ">
+                #{brokerName},
+            </if>
+            <if test="offsetMsgId != null ">
+                #{offsetMsgId},
+            </if>
+            <if test="msgId != null ">
+                #{msgId},
+            </if>
+            <if test="message != null ">
+                #{message},
+            </if>
+            <if test="createTime != null ">
+                #{createTime},
+            </if>
+            <if test="lastUpdate != null ">
+                #{lastUpdate},
+            </if>
+            <if test="status != null ">
+                #{status},
+            </if>
+            <if test="messageType != null ">
+                #{messageType},
+            </if>
+            <if test="seqNo != null ">
+                #{seqNo},
+            </if>
+            <if test="queueId != null ">
+                #{queueId},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update"  >
+        UPDATE <include refid="Table_Name" />
+        <set>
+            <if test="brokerName != null and brokerName != ''">
+                broker_name = #{brokerName},
+            </if>
+            <if test="offsetMsgId != null and offsetMsgId != ''">
+                offset_msg_id = #{offsetMsgId},
+            </if>
+            <if test="msgId != null and msgId != ''">
+                msg_id = #{msgId},
+            </if>
+            <if test="message != null and message != ''">
+                message = #{message},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="lastUpdate != null and lastUpdate != ''">
+                last_update = #{lastUpdate},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="messageType != null and messageType != ''">
+                message_type = #{messageType},
+            </if>
+            <if test="seqNo != null and seqNo != ''">
+                seq_no = #{seqNo},
+            </if>
+            <if test="queueId != null and queueId != ''">
+                queue_id = #{queueId},
+            </if>
+        </set>
+        <where>
+            <trim suffixOverrides="AND">
+                <if test="mqMsgId != null and mqMsgId != ''">
+                    mq_msg_id = #{mqMsgId}
+                    AND
+                </if>
+                <if test="flowId != null and flowId != ''">
+                    flow_id = #{flowId}
+                    AND
+                </if>
+            </trim>
+        </where>
+    </update>
+
+    <update id="updateByEntity" >
+        UPDATE
+        <include refid="Table_Name" />
+        <set>
+            <if test="s.mqMsgId != null ">
+                mq_msg_id = #{s.mqMsgId},
+            </if>
+            <if test="s.flowId != null ">
+                flow_id = #{s.flowId},
+            </if>
+            <if test="s.brokerName != null ">
+                broker_name = #{s.brokerName},
+            </if>
+            <if test="s.offsetMsgId != null ">
+                offset_msg_id = #{s.offsetMsgId},
+            </if>
+            <if test="s.msgId != null ">
+                msg_id = #{s.msgId},
+            </if>
+            <if test="s.message != null ">
+                message = #{s.message},
+            </if>
+            <if test="s.createTime != null ">
+                create_time = #{s.createTime},
+            </if>
+            <if test="s.lastUpdate != null ">
+                last_update = #{s.lastUpdate},
+            </if>
+            <if test="s.status != null ">
+                status = #{s.status},
+            </if>
+            <if test="s.messageType != null ">
+                message_type = #{s.messageType},
+            </if>
+            <if test="s.seqNo != null ">
+                seq_no = #{s.seqNo},
+            </if>
+            <if test="s.queueId != null ">
+                queue_id = #{s.queueId},
+            </if>
+        </set>
+        <where>
+            <trim prefix="(" suffix=")" suffixOverrides="AND">
+                <if test="w.mqMsgId != null ">
+                    mq_msg_id = #{w.mqMsgId}
+                    AND
+                </if>
+                <if test="w.flowId != null ">
+                    flow_id = #{w.flowId}
+                    AND
+                </if>
+                <if test="w.brokerName != null ">
+                    broker_name = #{w.brokerName}
+                    AND
+                </if>
+                <if test="w.offsetMsgId != null ">
+                    offset_msg_id = #{w.offsetMsgId}
+                    AND
+                </if>
+                <if test="w.msgId != null ">
+                    msg_id = #{w.msgId}
+                    AND
+                </if>
+                <if test="w.message != null ">
+                    message = #{w.message}
+                    AND
+                </if>
+                <if test="w.createTime != null ">
+                    create_time = #{w.createTime}
+                    AND
+                </if>
+                <if test="w.lastUpdate != null ">
+                    last_update = #{w.lastUpdate}
+                    AND
+                </if>
+                <if test="w.status != null ">
+                    status = #{w.status}
+                    AND
+                </if>
+                <if test="w.messageType != null ">
+                    message_type = #{w.messageType}
+                    AND
+                </if>
+                <if test="w.seqNo != null ">
+                    seq_no = #{w.seqNo}
+                    AND
+                </if>
+                <if test="w.queueId != null ">
+                    queue_id = #{w.queueId}
+                    AND
+                </if>
+            </trim>
+        </where>
+    </update>
+    <delete id="delete" >
+        DELETE FROM
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </delete>
+
+    <select id="count" parameterType="java.util.Map" resultType="int">
+        select count(1) from
+        <include refid="Table_Name" />
+        <where>
+            <include refid="Base_Where" />
+        </where>
+    </select>
+
+    <select id="selectOne"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectList"  resultMap="BaseResultMap">
+        <include refid="Base_Select" />
+    </select>
+
+    <select id="selectForUpdate" resultMap="BaseResultMap" useCache="false">
+        <include refid="Base_Select" />
+        for update
+    </select>
+
+
+    <!--根据主键查询-->
+    <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column" />
+        FROM
+        <include refid="Table_Name" />
+        <where>
+            <trim suffixOverrides="AND">
+                mq_msg_id = #{mqMsgId}  AND
+            </trim>
+        </where>
+    </select>
+
+
+    <!--根据主键删除-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM <include refid="Table_Name" />
+        <where>
+            <trim suffixOverrides="AND">
+                mq_msg_id = #{mqMsgId}  AND
+            </trim>
+        </where>
+    </delete>
+</mapper>
