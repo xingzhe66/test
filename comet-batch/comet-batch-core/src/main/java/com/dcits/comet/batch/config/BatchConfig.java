@@ -37,7 +37,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @date 2019/3/21
  * @description 批量默认配置
  */
-@Configuration
+//@Configuration
 public class BatchConfig {
 
 
