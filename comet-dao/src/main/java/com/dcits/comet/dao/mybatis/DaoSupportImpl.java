@@ -110,6 +110,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return (T) result;
     }
 
+
     @Override
     public <T extends BasePo> T selectForUpdate(String statementPostfix, T parameter) {
         BasePo result;
@@ -167,15 +168,16 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     }
 
     @Override
-    public <T extends BasePo> int update(String statementPostfix,List<T> list) {
+    public <T extends BasePo> int update(String statementPostfix, List<T> list) {
         int i = 0;
         BasePo bp;
-        for (Iterator it = list.iterator(); it.hasNext(); i += this.update(statementPostfix,bp)) {
+        for (Iterator it = list.iterator(); it.hasNext(); i += this.update(statementPostfix, bp)) {
             bp = (BasePo) it.next();
         }
 
         return i;
     }
+
     @Override
     public int update(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().update(statementPostfix, parameter);
@@ -202,6 +204,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         String statementPostfix = entity.getClass().getName() + POSTFIX_SELECTLIST;
         return this.selectList(statementPostfix, entity);
     }
+
 
     @Override
     public <T extends BasePo> List<T> selectAll(T entity) {
@@ -303,6 +306,34 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         }
 
         return result;
+    }
+
+
+    @Override
+    public <T extends BasePo> List<T> selectListForUpdate(T entity) {
+        List<BasePo> result;
+        try {
+            SelectForUpdateHelper.setSelectForUpdate();
+            result = this.selectList(entity);
+        } finally {
+            SelectForUpdateHelper.cancelSelectForUpdate();
+        }
+
+        return (List<T>) result;
+    }
+
+
+    @Override
+    public <T extends BasePo> List<T> selectListForUpdate(String statementPostfix, T entity) {
+        List<BasePo> result;
+        try {
+            SelectForUpdateHelper.setSelectForUpdate();
+            result = this.selectList(statementPostfix, entity);
+        } finally {
+            SelectForUpdateHelper.cancelSelectForUpdate();
+        }
+
+        return (List<T>) result;
     }
 
     final private <T extends BasePo> T getPkObject(T param, boolean ignoreNullValue, Object... pkValue) {
