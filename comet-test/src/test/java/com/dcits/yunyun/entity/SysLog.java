@@ -6,6 +6,9 @@ import com.dcits.comet.dao.model.BasePo;
 import java.util.Date;
 
 public class SysLog extends BasePo {
+//    private SysLog(){
+//
+//    }
     private Long id;
 
     private String username;
