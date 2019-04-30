@@ -70,4 +70,10 @@ public class ParamSupportImpl implements ParamSupport {
         return paramDaoSupport.delete(entity, cacheKey);
     }
 
+    @Override
+    public <T extends BasePo> int update(T setParameter, T whereParameter) {
+        String cacheKey = CacheUtil.getCacheKey(whereParameter);
+        return paramDaoSupport.update(setParameter,whereParameter, cacheKey);
+    }
+
 }

@@ -91,5 +91,12 @@ public interface BaseDaoSupport {
      * @return
      */
     <T extends BasePo> int delete(T entity);
-
+    /**
+     * 更新方法
+     *
+     * @param setParameter,whereParameter
+     * @param <T>
+     * @return
+     */
+    <T extends BasePo> int update(T setParameter, T whereParameter);
 }
