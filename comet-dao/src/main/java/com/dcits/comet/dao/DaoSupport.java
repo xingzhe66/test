@@ -56,4 +56,8 @@ public interface DaoSupport extends BaseDaoSupport {
     <T extends BasePo> QueryResult<T> selectQueryResult(String statementPostfix, T entity, int pageIndex, int pageSize);
 
     <T extends BasePo> QueryResult<T> selectQueryResult(String statementPostfix, Map<String, Object> parameter, int pageIndex, int pageSize);
+
+    <T extends BasePo> List<T> selectListForUpdate(String statementPostfix, T entity);
+
+    <T extends BasePo> List<T> selectListForUpdate(T entity);
 }
