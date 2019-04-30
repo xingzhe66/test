@@ -928,4 +928,57 @@ public class BusiUtil {
     public static String getOperString(String input) {
         return new StringBuffer().append(BEFORE_OPER).append(input).append(AFTER_OPER).toString();
     }
+
+    /**
+     * 基本计息
+     *
+     * @param startDate [计息开始日期]
+     * @param endDate [计息结束日期]
+     * @param rate [年利率]
+     * @param amt [计息金额]
+     * @param basisDay [年基准天数]
+     * @param monthlyBasis [月基准天数类型]
+     * @return BigDecimal[利息]
+     */
+    public static BigDecimal computerInterest(Date startDate, Date endDate, BigDecimal rate, BigDecimal amt,
+                                              String basisDay, String  monthlyBasis, String intCalcBal) {
+        BigDecimal interest = null;
+        rate = rate.divide(new BigDecimal(100));//去百分号
+        if ("AB".equals(intCalcBal)) {//积数计息法
+            interest = aggInterest(amt, rate, basisDay);
+        } else {
+            interest = noAggInterest(startDate, endDate, rate, amt, basisDay,monthlyBasis);
+        }
+        return interest;
+    }
+
+    /**
+     * 非积数计息
+     * @param startDate [计息开始日期]
+     * @param endDate [计息结束日期]
+     * @param rate [年利率]
+     * @param amt [计息金额]
+     * @param basisDay [年基准天数]
+     * @param monthlyBasis [月基准天数类型]
+     * @return BigDecimal[利息]
+     */
+    public static BigDecimal noAggInterest(Date startDate, Date endDate, BigDecimal rate, BigDecimal amt, String basisDay,String monthlyBasis) {
+        // 获取计息天数
+        BigDecimal days =  DateUtil.getDiffDays(startDate, endDate);
+        // 非积数方式(利息=计息天数*计息金额*日利率)
+        return days.multiply(amt).multiply(rate).divide(toBigDecimal(basisDay), 8, BigDecimal.ROUND_FLOOR);
+    }
+
+    /**
+     * 积数计息
+     *
+     * @param amt
+     * @param rate
+     * @param basisDay
+     * @return BigDecimal
+     */
+    public static BigDecimal aggInterest(BigDecimal amt, BigDecimal rate, String basisDay) {
+        // 积数方式(利息=积数*日利率)
+        return amt.multiply(rate).divide(toBigDecimal(basisDay), 8, BigDecimal.ROUND_FLOOR);
+    }
 }
