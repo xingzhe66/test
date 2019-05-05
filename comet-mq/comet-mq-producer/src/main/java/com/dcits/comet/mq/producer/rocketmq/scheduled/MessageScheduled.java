@@ -40,7 +40,7 @@ public class MessageScheduled {
      * @Param []
      * @return void
      **/
-    @Scheduled(cron = "0/10 * * * * ?")
+//    @Scheduled(cron = "0/60 * * * * ?")
     public void updateMqStatusCron() throws InterruptedException {
         log.info("定时扫描状态为1的消息");
         List<MqProducerMsgPo> productMsgPos=messageService.getMsgStatusOne();
@@ -64,7 +64,7 @@ public class MessageScheduled {
      * @Param []
      * @return void
      **/
-    @Scheduled(cron = "0/10 * * * * ?")
+//    @Scheduled(cron = "0/60 * * * * ?")
     public void autoSendMqCron() throws Exception {
         log.info("定时扫描状态为2的消息");
         List<MqProducerMsgPo> productMsgPos=messageService.getMsgStatusTwo();
