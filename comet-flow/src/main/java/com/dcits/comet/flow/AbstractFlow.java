@@ -87,13 +87,13 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
                 BusinessResult.error(businessException.getErrorCode(), businessException.getErrorMessage());
             }
             //更新流程和消息状态
-            try {
-                flowService.updateFlowException(e);
-                mqService.updateExceptionStatus();
-            } catch (Exception e1) {
-                log.info("update  Status  Exception  fail------------------");
-                e1.printStackTrace();
-            }
+//            try {
+//                flowService.updateFlowException(e);
+//                mqService.updateExceptionStatus();
+//            } catch (Exception e1) {
+//                log.info("update  Status  Exception  fail------------------");
+//                e1.printStackTrace();
+//            }
             throw e;
         } finally {
 
@@ -108,12 +108,12 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
         //将flowId赋值给上下文Context
         Context.getInstance().setFlowId(flowId);
         //在流程开始时，将流程信息存入表中
-        try {
-            flowService.saveFlowInFo(input, this.getClass().getSimpleName());
-        } catch (Exception e) {
-            log.info("save flow inFo fail-----------------");
-            e.printStackTrace();
-        }
+//        try {
+//            flowService.saveFlowInFo(input, this.getClass().getSimpleName());
+//        } catch (Exception e) {
+//            log.info("save flow inFo fail-----------------");
+//            e.printStackTrace();
+//        }
         //getEffectiveTrace
         List<IExtraTrace> traceList = ExtraFactory.getEffectiveExtra(IExtraTrace.class);
 
@@ -128,14 +128,14 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
         log.info("<===== execute postHandler =====>");
         setOriginalSysHead(out.getSysHead(), input.getSysHead());
         //流程执行成功，发送mq
-        try {
-            //更新流程执行状态  3
-            flowService.updateFlowSusscee(out);
-            //更新消息发送状态  2 并真实发送消息
-            mqService.mqHandler();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+//        try {
+//            //更新流程执行状态  3
+//            flowService.updateFlowSusscee(out);
+//            //更新消息发送状态  2 并真实发送消息
+//            mqService.mqHandler();
+//        } catch (Exception e1) {
+//            e1.printStackTrace();
+//        }
     }
 
 
