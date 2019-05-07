@@ -11,7 +11,6 @@ import com.dcits.sonic.executor.step.segment.SegmentStepExecutor;
 import com.dcits.sonic.executor.step.segment.StepSegmentedStepSender;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class SegmentBatchExecutorPartition implements SegmentStepExecutor {
     }
 
     //生成分段执行用到的拓展参数，如偏移量等
-    private List<SegmentRunningStep.Segment> doSegment(@NotNull ExeInput exeInput, Map<String, Object> parameters) {
+    private List<SegmentRunningStep.Segment> doSegment(ExeInput exeInput, Map<String, Object> parameters) {
         List<SegmentRunningStep.Segment> segments = new ArrayList();
         //根据入参生成分段
         BatchContext batchContext = new BatchContext();
