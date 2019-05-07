@@ -1,21 +1,15 @@
 package com.dcits.comet.batch.sonic;
 
 
-import java.util.*;
-
-import com.dcits.comet.batch.IBStep;
-import com.dcits.comet.batch.holder.SpringContextHolder;
-import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.sonic.executor.api.ReportCompleted;
-import com.dcits.sonic.executor.base.Parameters;
 import com.dcits.sonic.executor.step.normal.NormalRunningStep;
 import com.dcits.sonic.executor.step.normal.NormalStepExecutor;
-import com.dcits.sonic.executor.step.StepContextManager;
 import com.dcits.sonic.executor.step.segment.StepSegmentedStepSender;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.swing.text.Segment;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author wangyun
@@ -28,7 +22,7 @@ public class DemoFdExecutor implements NormalStepExecutor {
     @Override
     public ReportCompleted execute(NormalRunningStep step) {
         //用户自定义参数
-        Parameters params = step.getParameters();
+        Map<String, Object> params = step.getParameters();
 //         执行分段逻辑 .....
         List<Segment> segments = doSegment(params);
         //生成分段信息
@@ -41,7 +35,7 @@ public class DemoFdExecutor implements NormalStepExecutor {
         return null;
     }
 
-    private List<Segment> doSegment(Parameters params) {
+    private List<Segment> doSegment(Map<String, Object>  params) {
         List<Segment> segments=new ArrayList() ;
         //根据入参生成分段
 //        ApplicationContext context= SpringContextHolder.getApplicationContext();

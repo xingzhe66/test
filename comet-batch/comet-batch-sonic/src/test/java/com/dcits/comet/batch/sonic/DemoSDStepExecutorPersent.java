@@ -8,6 +8,7 @@ import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.step.StepResult;
 import com.dcits.sonic.executor.step.segment.SegmentRunningStep;
 import com.dcits.sonic.executor.step.segment.SegmentStepExecutor;
+
 public class DemoSDStepExecutorPersent implements SegmentStepExecutor {
     @Override
     public ReportCompleted execute(SegmentRunningStep runningStep) {

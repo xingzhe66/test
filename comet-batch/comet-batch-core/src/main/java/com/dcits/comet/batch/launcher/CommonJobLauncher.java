@@ -8,15 +8,15 @@ import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.param.BatchContextManager;
 import com.dcits.comet.batch.step.StepFactory;
 import com.dcits.comet.batch.step.StepParam;
-import com.dcits.comet.batch.util.BatchContextTool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.job.SimpleJob;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
@@ -24,12 +24,11 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
-import static com.dcits.comet.batch.constant.BatchConstant.*;
+import static com.dcits.comet.batch.constant.BatchConstant.EXE_ID;
+import static com.dcits.comet.batch.constant.BatchConstant.JOB_PEX;
 
 
 /**
