@@ -1,4 +1,4 @@
-package com.dcits.comet.batch.model;
+package com.dcits.comet.batch.service.model;
 
 import com.dcits.comet.batch.param.BatchContext;
 

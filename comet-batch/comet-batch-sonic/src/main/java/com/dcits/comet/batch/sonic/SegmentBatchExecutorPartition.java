@@ -3,7 +3,7 @@ package com.dcits.comet.batch.sonic;
 import com.alibaba.fastjson.JSON;
 import com.dcits.comet.batch.IBStep;
 import com.dcits.comet.batch.holder.SpringContextHolder;
-import com.dcits.comet.batch.model.ExeInput;
+import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.step.segment.SegmentRunningStep;
@@ -34,9 +34,9 @@ public class SegmentBatchExecutorPartition implements SegmentStepExecutor {
         //用户自定义拓展参数
         Map<String, Object> parameters = segmentRunningStep.getParameters();
         log.debug("parameters{}", parameters);
-        ExeInput exeInput = JSON.parseObject(JSON.toJSONString(parameters), ExeInput.class);
+        JobParam jobParam = JSON.parseObject(JSON.toJSONString(parameters), JobParam.class);
         // 执行分段逻辑 .....
-        List<SegmentRunningStep.Segment> AttributesList = doSegment(exeInput, parameters);
+        List<SegmentRunningStep.Segment> AttributesList = doSegment(jobParam, parameters);
         //生成分段信息
         StepSegmentedStepSender segmentedStepSender = new StepSegmentedStepSender(segmentRunningStep);
         //批量添加分段，推荐分批生成分段、添加，避免内存溢出
@@ -48,13 +48,13 @@ public class SegmentBatchExecutorPartition implements SegmentStepExecutor {
     }
 
     //生成分段执行用到的拓展参数，如偏移量等
-    private List<SegmentRunningStep.Segment> doSegment(ExeInput exeInput, Map<String, Object> parameters) {
+    private List<SegmentRunningStep.Segment> doSegment(JobParam jobParam, Map<String, Object> parameters) {
         List<SegmentRunningStep.Segment> segments = new ArrayList();
         //根据入参生成分段
         BatchContext batchContext = new BatchContext();
         batchContext.getParams().putAll(parameters);
 
-        IBStep bstep = SpringContextHolder.getBean(exeInput.getStepName());
+        IBStep bstep = SpringContextHolder.getBean(jobParam.getStepName());
         List<String> nodes = bstep.getNodeList(batchContext);
         for (String node : nodes) {
             SegmentRunningStep.Segment segment = new SegmentRunningStep.Segment();

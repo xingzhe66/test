@@ -4,14 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.launcher.IJobLauncher;
 import com.dcits.comet.batch.launcher.JobParam;
-import com.dcits.comet.batch.model.ExeInput;
 import com.dcits.comet.batch.sonic.exception.BatchServiceException;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.step.StepResult;
 import com.dcits.sonic.executor.step.normal.NormalRunningStep;
 import com.dcits.sonic.executor.step.normal.NormalStepExecutor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.beans.BeanCopier;
 
 import java.util.Map;
 
@@ -34,15 +32,10 @@ public class NormalBatchExecutor implements NormalStepExecutor {
             Map<String, Object> parameters = normalRunningStep.getParameters();
             log.debug("parameters{}", parameters);
 
-            ExeInput exeInput = JSON.parseObject(JSON.toJSONString(parameters), ExeInput.class);
-
-            JobParam jobParam = new JobParam();
-            BeanCopier beanCopier = BeanCopier.create(ExeInput.class, JobParam.class, false);
-            beanCopier.copy(exeInput, jobParam, null);
+            JobParam jobParam = JSON.parseObject(JSON.toJSONString(parameters), JobParam.class);
 
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
-
-            jobLauncher.run(exeInput.getStepName(), jobParam);
+            jobLauncher.run(jobParam.getStepName(), jobParam);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BatchServiceException(e.getMessage(), e);

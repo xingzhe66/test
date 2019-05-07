@@ -1,4 +1,4 @@
-package com.dcits.comet.batch.model;
+package com.dcits.comet.batch.service.model;
 
 import com.dcits.comet.batch.param.BatchContext;
 import org.springframework.batch.core.BatchStatus;
@@ -6,28 +6,22 @@ import org.springframework.batch.core.ExitStatus;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author wangyun
  * @date 2019/3/21
  * @description
  */
-public class ExeOutput extends BaseOutput implements Serializable {
-
+public class QueryOutput  implements Serializable {
     private String stepName;
-
     private String exeId;
-
-    private BatchContext batchContext;
-
     private volatile BatchStatus status;
     private volatile Date startTime;
     private volatile Date createTime;
     private volatile Date endTime;
     private volatile Date lastUpdated;
     private volatile ExitStatus exitStatus;
-    private transient volatile List<Throwable> failureExceptions;
+    private BatchContext batchContext;
 
     public String getStepName() {
         return stepName;
@@ -43,14 +37,6 @@ public class ExeOutput extends BaseOutput implements Serializable {
 
     public void setExeId(String exeId) {
         this.exeId = exeId;
-    }
-
-    public BatchContext getBatchContext() {
-        return batchContext;
-    }
-
-    public void setBatchContext(BatchContext batchContext) {
-        this.batchContext = batchContext;
     }
 
     public BatchStatus getStatus() {
@@ -101,11 +87,11 @@ public class ExeOutput extends BaseOutput implements Serializable {
         this.exitStatus = exitStatus;
     }
 
-    public List<Throwable> getFailureExceptions() {
-        return failureExceptions;
+    public BatchContext getBatchContext() {
+        return batchContext;
     }
 
-    public void setFailureExceptions(List<Throwable> failureExceptions) {
-        this.failureExceptions = failureExceptions;
+    public void setBatchContext(BatchContext batchContext) {
+        this.batchContext = batchContext;
     }
 }
