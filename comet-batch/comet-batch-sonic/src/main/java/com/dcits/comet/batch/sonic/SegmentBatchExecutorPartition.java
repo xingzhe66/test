@@ -7,7 +7,6 @@ import com.dcits.comet.batch.model.ExeInput;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.step.segment.SegmentRunningStep;
-import com.dcits.sonic.executor.step.segment.SegmentRunningStep.Segment;
 import com.dcits.sonic.executor.step.segment.SegmentStepExecutor;
 import com.dcits.sonic.executor.step.segment.StepSegmentedStepSender;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.dcits.sonic.executor.step.segment.SegmentRunningStep.Segment;
 
 /**
  * 分段Step开发.
