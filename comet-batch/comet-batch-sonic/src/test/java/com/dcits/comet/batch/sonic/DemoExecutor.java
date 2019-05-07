@@ -1,6 +1,5 @@
 package com.dcits.comet.batch.sonic;
 
-import java.util.Map;
 
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.step.StepResult;
