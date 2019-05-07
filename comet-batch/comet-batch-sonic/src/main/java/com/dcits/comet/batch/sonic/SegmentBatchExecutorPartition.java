@@ -11,11 +11,11 @@ import com.dcits.sonic.executor.step.segment.SegmentStepExecutor;
 import com.dcits.sonic.executor.step.segment.StepSegmentedStepSender;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.dcits.sonic.executor.step.segment.SegmentRunningStep.Segment;
 
 /**
  * 分段Step开发.
@@ -37,7 +37,7 @@ public class SegmentBatchExecutorPartition implements SegmentStepExecutor {
         log.debug("parameters{}", parameters);
         ExeInput exeInput = JSON.parseObject(JSON.toJSONString(parameters), ExeInput.class);
         // 执行分段逻辑 .....
-        List<Segment> AttributesList = doSegment(exeInput, parameters);
+        List<SegmentRunningStep.Segment> AttributesList = doSegment(exeInput, parameters);
         //生成分段信息
         StepSegmentedStepSender segmentedStepSender = new StepSegmentedStepSender(segmentRunningStep);
         //批量添加分段，推荐分批生成分段、添加，避免内存溢出
@@ -49,8 +49,8 @@ public class SegmentBatchExecutorPartition implements SegmentStepExecutor {
     }
 
     //生成分段执行用到的拓展参数，如偏移量等
-    private List<Segment> doSegment(ExeInput exeInput, Map<String, Object> parameters) {
-        List<Segment> segments = new ArrayList();
+    private List<SegmentRunningStep.Segment> doSegment(@NotNull ExeInput exeInput, Map<String, Object> parameters) {
+        List<SegmentRunningStep.Segment> segments = new ArrayList();
         //根据入参生成分段
         BatchContext batchContext = new BatchContext();
         batchContext.getParams().putAll(parameters);
@@ -58,7 +58,7 @@ public class SegmentBatchExecutorPartition implements SegmentStepExecutor {
         IBStep bstep = SpringContextHolder.getBean(exeInput.getStepName());
         List<String> nodes = bstep.getNodeList(batchContext);
         for (String node : nodes) {
-            Segment segment = new Segment();
+            SegmentRunningStep.Segment segment = new SegmentRunningStep.Segment();
             int countNum = bstep.getCountNum(batchContext, node);
             segment.setStart(1);
             segment.setEnd(countNum);
