@@ -10,10 +10,9 @@ import org.springframework.core.env.Environment;
  * @version 1.0
  * @date 2019/4/5 20:46
  **/
-@ConfigurationProperties(UidGeneratorProperties.PREFIX)
+@ConfigurationProperties(prefix = "ds.uid.datasource", ignoreUnknownFields = false)
 @Data
 public class UidGeneratorProperties {
-    public static final String PREFIX = "ds.uid.datasource";
 
     @Autowired
     private Environment environment;
