@@ -44,7 +44,16 @@ public class ConsumerService {
         mqConsumerMsgPo.setQueueId(messageExt.getQueueId());
         mqConsumerMsgPo.setReceiveTime(DateUtil.getCurrentDate());
         mqConsumerMsgPo.setStatus(1);
-        daoSupport.insert(mqConsumerMsgPo);
+        try {
+            daoSupport.insert(mqConsumerMsgPo);
+        } catch (Exception e) {
+            if (e.getMessage().indexOf("ORA-00001") != -1) {
+
+            } else {
+
+            }
+        }
+
     }
 
 
