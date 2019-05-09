@@ -57,7 +57,9 @@ public abstract class AbstractBStep<T,O> implements IBStep<T,O> {
         }
     }
 
-    public abstract void writeOne(BatchContext batchContext,O item);
+    public void writeOne(BatchContext batchContext,O item){
+
+    }
 
     @Override
     public void afterBatchStep(BatchContext batchContext) {
