@@ -31,7 +31,7 @@ import java.util.List;
  **/
 @Component
 @Slf4j
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(transactionManager = "shardTransactionManager",propagation = Propagation.REQUIRES_NEW)
 public class MsgServiceImple implements IMsgService {
 
     @Autowired
