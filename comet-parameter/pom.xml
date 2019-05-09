@@ -12,12 +12,6 @@
     <artifactId>comet-parameter</artifactId>
 
     <dependencies>
-
-    <dependency>
-        <groupId>com.dcits</groupId>
-        <artifactId>comet-batch</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-batch-service</artifactId>

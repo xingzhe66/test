@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,10 +47,61 @@ public class DefaultParamSynService extends AbstractParamSynService<ParamInSQL> 
             log.debug("starting readParams");
         }
         String currentDate = DateUtil.formatDate(new Date(),DateUtil.PATTERN_SIMPLE_DATE);
-        String fileName = this.fileDir+ File.separator+currentDate+ ParamConstant.SQL_FILE_TAIL;
-        Long totalRow = FileUtil.getFileRowCount(fileName,ParamInSQL.class);
-        List<ParamInSQL> params = FileUtil.readFileToList(fileName,ParamInSQL.class,0,totalRow.intValue());
+        List<ParamInSQL> params = new ArrayList<>();
+        if(ParamConstant.SYN_TYPE_INCREMENT.equals(synType)){
+            //增量每天一个sql文件
+            String fileName = this.fileDir+ File.separator+currentDate+ ParamConstant.SQL_FILE_TAIL;
+            Long totalRow = FileUtil.getFileRowCount(fileName,ParamInSQL.class);
+            params = FileUtil.readFileToList(fileName,ParamInSQL.class,0,totalRow.intValue());
+        }else{
+            //全量 以表名称为文件名有多个
+            params = loadParams(fileDir);
+        }
+
         return params;
+    }
+
+    /**
+     * 遍历目标目录下，加载参数
+     * @param fileDir
+     * @return
+     */
+
+    private List<ParamInSQL> loadParams(String fileDir) {
+        List<ParamInSQL> paramInSQLS = new ArrayList<>();
+        List<File> result = new ArrayList<File>();
+        File folder = new File(fileDir);
+        File[] subFolders = folder.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.isDirectory()) {
+                    return false;
+                }
+                if (file.getName().toLowerCase().contains(".sql")) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        if (subFolders != null) {
+            for (File file : subFolders) {
+                if (file.isFile()) {
+                    // 如果是文件则将文件添加到结果列表中
+                    result.add(file);
+                } else {
+                    // 如果是文件夹，则递归调用本方法，然后把所有的文件加到结果列表中
+                    //result.addAll(searchFiles(file, keyword));
+                }
+            }
+        }
+        for(File file : result){
+            Long totalRow = FileUtil.getFileRowCount(file.getAbsolutePath(),ParamInSQL.class);
+            List<ParamInSQL> subList = FileUtil.readFileToList(file.getAbsolutePath(),ParamInSQL.class,0,totalRow.intValue());
+            paramInSQLS.addAll(subList);
+        }
+        return paramInSQLS;
+
+
     }
 
     @Override
