@@ -22,11 +22,11 @@
             <!--<artifactId>sonic-executor-spring</artifactId>-->
             <!--<version>3.0.0-SNAPSHOT</version>-->
         <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.dcits</groupId>-->
-            <!--<artifactId>comet-batch-core</artifactId>-->
-            <!--<version>1.0-SNAPSHOT</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-batch-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
