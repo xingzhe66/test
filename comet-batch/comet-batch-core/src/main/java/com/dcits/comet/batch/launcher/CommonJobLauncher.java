@@ -27,6 +27,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 import static com.dcits.comet.batch.constant.BatchConstant.EXE_ID;
 import static com.dcits.comet.batch.constant.BatchConstant.JOB_PEX;
 
@@ -42,7 +44,7 @@ public class CommonJobLauncher implements IJobLauncher {
 
     @Autowired
     private JobRepository jobRepository;
-    @Autowired
+    @Resource(name="batchTaskExecutor")
     private TaskExecutor taskExecutor;
 
     @Autowired

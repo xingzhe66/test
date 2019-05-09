@@ -31,7 +31,8 @@ import static com.dcits.comet.batch.constant.BatchConstant.STEP_PEX;
  */
 public class StepFactory {
     protected static final Log LOGGER = LogFactory.getLog(CommonJobLauncher.class);
-
+    public static final String BATCH_TASK_EXECUTOR = "batchTaskExecutor";
+    public static final String BATCH_TRANSACTION_MANAGER = "batchTransactionManager";
 
 
     public static Step build(StepParam stepParam) {
@@ -45,12 +46,12 @@ public class StepFactory {
         String node = stepParam.getNode();
 
         ApplicationContext context = SpringContextHolder.getApplicationContext();
-        TaskExecutor taskExecutor= context.getBean(TaskExecutor.class);
+        TaskExecutor taskExecutor= (TaskExecutor) context.getBean(BATCH_TASK_EXECUTOR);
         StepBuilderFactory stepBuilders = context.getBean(StepBuilderFactory.class);
 
         IStep stepObj = (IStep) context.getBean(stepName);
 
-        DataSourceTransactionManager dataSourceTransactionManager = (DataSourceTransactionManager) context.getBean("batchTransactionManager");
+        DataSourceTransactionManager dataSourceTransactionManager = (DataSourceTransactionManager) context.getBean(BATCH_TRANSACTION_MANAGER);
         Step step = null;
         if (stepObj instanceof IBStep) {
 

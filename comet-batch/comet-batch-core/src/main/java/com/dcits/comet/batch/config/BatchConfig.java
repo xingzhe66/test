@@ -69,7 +69,7 @@ public class BatchConfig {
 
 
 
-    @Bean
+    @Bean(name="batchTaskExecutor")
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 设置核心线程数
