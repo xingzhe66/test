@@ -10,6 +10,10 @@ import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -23,6 +27,8 @@ import java.util.List;
  **/
 @Component
 @Slf4j
+@Configuration
+@ComponentScan({"com.dcits.comet.mq.producer.rocketmq.service"})
 public class MessageScheduled {
     @Autowired
     MsgServiceImple msgServiceImple;
@@ -32,6 +38,11 @@ public class MessageScheduled {
 
     @Autowired
     Gson gson;
+
+
+    @Value("${rocketmq.scheduled.exceptionTimeout}")
+    private int exceptionTimeout;
+
     /**
      * @Author guihj
      * @Description 定时扫描状态为1的消息，如果时间与当前时间超过五分钟则将状态更新为4，
@@ -40,7 +51,8 @@ public class MessageScheduled {
      * @Param []
      * @return void
      **/
-//    @Scheduled(cron = "0/60 * * * * ?")
+    // @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "${rocketmq.scheduled.corn1}")
     public void updateMqStatusCron() throws InterruptedException {
         log.info("定时扫描状态为1的消息");
         List<MqProducerMsgPo> productMsgPos=messageService.getMsgStatusOne();
@@ -50,7 +62,7 @@ public class MessageScheduled {
                 String createTime =productMsgPo.getCreateTime();
                 long timeDifference= DateUtil.getTimeDifference(createTime);
                 int mmTime=(int)timeDifference/(1000*60);
-                if(mmTime>5){
+                if(mmTime>(exceptionTimeout/60)){
                     msgServiceImple.scheduledUpdateMsgException(productMsgPo.getMqMsgId());
                 }
             }
@@ -64,7 +76,8 @@ public class MessageScheduled {
      * @Param []
      * @return void
      **/
-//    @Scheduled(cron = "0/60 * * * * ?")
+ // @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "${rocketmq.scheduled.corn2}")
     public void autoSendMqCron() throws Exception {
         log.info("定时扫描状态为2的消息");
         List<MqProducerMsgPo> productMsgPos=messageService.getMsgStatusTwo();
@@ -84,5 +97,4 @@ public class MessageScheduled {
             }
         }
     }
-
 }
