@@ -58,7 +58,7 @@ public class YamlUtil {
         try {
             map = yaml.load(new FileInputStream(url.getFile()));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("context",e);
         }
         if (null == map) {
             log.info(ymlName + "配置信息读取失败！");
