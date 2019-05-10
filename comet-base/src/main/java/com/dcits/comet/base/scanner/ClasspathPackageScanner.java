@@ -60,7 +60,7 @@ public class ClasspathPackageScanner {
         URL url = cl.getResource(splashPath);   //file:/D:/WorkSpace/java/ScanTest/target/classes/com/scan
         if (null == url) {
             logger.info("此包不存在:" + basePackage);
-            return null;
+            return new ArrayList<>();
         }
         String filePath = StringUtil.getRootPath(url);
         List<String> names = null; // contains the name of the class file. e.g., Apple.class will be stored as "Apple"
@@ -95,7 +95,7 @@ public class ClasspathPackageScanner {
         sb.append('.');
         sb.append(StringUtil.trimExtension(shortName));
         //打印出结果
-        System.out.println(sb.toString());
+        logger.debug(sb.toString());
         return sb.toString();
     }
 
@@ -103,9 +103,10 @@ public class ClasspathPackageScanner {
         if (logger.isDebugEnabled()) {
             logger.debug("从JAR包中读取类: {}", jarPath);
         }
-        JarInputStream jarIn = new JarInputStream(new FileInputStream(jarPath));
+        FileInputStream fis = new FileInputStream(jarPath);
+        JarInputStream jarIn = new JarInputStream(fis);
         JarEntry entry = jarIn.getNextJarEntry();
-        List<String> nameList = new ArrayList<String>();
+        List<String> nameList = new ArrayList<>();
         while (null != entry) {
             String name = entry.getName();
             if (name.startsWith(splashedPackageName) && isClassFile(name)) {
@@ -114,7 +115,7 @@ public class ClasspathPackageScanner {
 
             entry = jarIn.getNextJarEntry();
         }
-
+        fis.close();
         return nameList;
     }
 
@@ -123,7 +124,7 @@ public class ClasspathPackageScanner {
         String[] names = file.list();
 
         if (null == names) {
-            return null;
+            return new ArrayList<>();
         }
 
         return Arrays.asList(names);
