@@ -22,7 +22,7 @@ public class SonicExecutorServerRegistrar {
         if (sonicSimpleDBLockFactory.isEnable()) {
             //设置分布式锁工程
             SimpleDBLockFactory lockFactory = new SimpleDBLockFactory();
-            lockFactory.setDbType(sonicSimpleDBLockFactory.getDBType());
+            lockFactory.setDbType(sonicSimpleDBLockFactory.getDbType());
             lockFactory.setDriverName(sonicSimpleDBLockFactory.getDriverName());
             lockFactory.setUrl(sonicSimpleDBLockFactory.getUrl());
             lockFactory.setUser(sonicSimpleDBLockFactory.getUser());

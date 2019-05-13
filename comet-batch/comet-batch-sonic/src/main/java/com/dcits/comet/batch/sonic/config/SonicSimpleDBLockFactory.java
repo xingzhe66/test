@@ -1,6 +1,5 @@
 package com.dcits.comet.batch.sonic.config;
 
-import com.dcits.sonic.executor.lock.db.SimpleDBLockFactory;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -11,9 +10,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  **/
 @ConfigurationProperties(prefix = SonicSimpleDBLockFactory.PREFIX, ignoreUnknownFields = true)
 @Data
-public class SonicSimpleDBLockFactory extends SimpleDBLockFactory {
+public class SonicSimpleDBLockFactory {//extends SimpleDBLockFactory {
 
     public static final String PREFIX = "com.dcits.sonic.lock";
-   
+
+    private String url;
+    private String user;
+    private String password;
+    private String dbType;
+    private String driverName;
+
     private boolean enable = false;
 }
