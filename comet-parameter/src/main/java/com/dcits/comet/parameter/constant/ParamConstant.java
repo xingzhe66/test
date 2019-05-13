@@ -8,6 +8,7 @@ package com.dcits.comet.parameter.constant;
  * @Version 1.0
  **/
 public class ParamConstant {
+
     public static final String SQL_FILE_TAIL = ".sql";
 
     public static final String OK_FILE_TAIL = ".ok";
