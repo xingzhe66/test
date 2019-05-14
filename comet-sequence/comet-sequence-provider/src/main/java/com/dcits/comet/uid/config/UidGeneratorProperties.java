@@ -13,7 +13,7 @@ import org.springframework.core.env.Environment;
 @ConfigurationProperties(UidGeneratorProperties.PREFIX)
 @Data
 public class UidGeneratorProperties {
-    public static final String PREFIX = "ds.uid.datasource";
+    public static final String PREFIX = "com.dcits.uid.datasource";
 
     @Autowired
     private Environment environment;

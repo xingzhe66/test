@@ -1,0 +1,23 @@
+{
+	"catalog":"com.dcits.luna.base.data.component.ComponentCatalog",
+	"catalogId":"2a3628f65a024b5a9eac8e39ac88cfb2",
+	"clazzName":"com.dcits.comet.batch.sonic.NormalBatchExecutor",
+	"comment":"",
+	"creator":"leijian",
+	"customParam":[
+		{
+			"defaultValue":"610524",
+			"id":"acctNo",
+			"required":false,
+			"subAttrList":[],
+			"valid":true
+		}
+	],
+	"id":"fe597764807b4ffaba3105bf1c29d92d",
+	"name":"简单step",
+	"refJobId":"913c000cd1384d3a90500f2aac86ffb5",
+	"refJobText":"fbshx_微服务核心",
+	"splitClazzName":"",
+	"stepType":"NR",
+	"valid":true
+}

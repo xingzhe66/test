@@ -48,7 +48,7 @@ public class ParamSynFactory {
         defaultParamSynService.setParamSynDao(paramSynDao);
         String synType = (String)batchContext.getParams().get("synType");
         if(BusiUtil.isNotNull(synType)) {
-            defaultParamSynService.setSynType(synType);
+            defaultParamSynService.setDefaultSynType(synType);
         }
         return defaultParamSynService;
     }

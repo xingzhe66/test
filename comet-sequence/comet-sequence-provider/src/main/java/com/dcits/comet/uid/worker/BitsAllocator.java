@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
  * @date 2019/3/27 10:26
  * @see BitsAllocator
  **/
+
 public class BitsAllocator {
     /**
      * Total 64 bits
@@ -19,6 +20,7 @@ public class BitsAllocator {
     /**
      * Bits for [sign-> second-> workId-> sequence]
      */
+
     private int signBits = 1;
     private final int timestampBits;
     private final int workerIdBits;

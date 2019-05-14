@@ -7,7 +7,7 @@ package com.dcits.comet.uid.context;
  **/
 public class UidGeneratorContext {
 
-    public static final String UID_APP_NAME = "comet-sequence-provide";
+    public static final String UID_APP_NAME = "comet-sequence-provider";
     //default序列
     public static final String UID_REDIS_DEF = "redis";
 

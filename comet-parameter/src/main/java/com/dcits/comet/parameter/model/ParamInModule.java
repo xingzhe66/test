@@ -7,5 +7,5 @@ package com.dcits.comet.parameter.model;
  * @Description ParamInModule
  * @Version 1.0
  **/
-public class ParamInModule {
+public class ParamInModule extends ParamInJson{
 }

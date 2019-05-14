@@ -6,11 +6,9 @@ import lombok.ToString;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -21,12 +19,13 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "worker_node", schema = "workflow", catalog = "")
 @ToString
-public class WorkerNodePo {
+public class WorkerNodePo implements Serializable {
+
     private long id;
     private String hostName;
     private String port;
     private String type;
-    private LocalDate launchDate;
+    private LocalDateTime launchDate;
     private LocalDateTime modified;
     private LocalDateTime created;
     private String bizTag;
@@ -41,7 +40,7 @@ public class WorkerNodePo {
     private String cacheCount;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     public long getId() {
         return id;
@@ -83,11 +82,11 @@ public class WorkerNodePo {
 
     @Basic
     @Column(name = "LAUNCH_DATE")
-    public LocalDate getLaunchDate() {
+    public LocalDateTime getLaunchDate() {
         return launchDate;
     }
 
-    public void setLaunchDate(LocalDate launchDate) {
+    public void setLaunchDate(LocalDateTime launchDate) {
         this.launchDate = launchDate;
     }
 

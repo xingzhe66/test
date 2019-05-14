@@ -8,8 +8,15 @@ package com.dcits.comet.parameter.api;
  * @Version 1.0
  **/
 public interface IParamSyn<T> {
-
+    /**
+     * 检查资源是否可用
+     * @return true 是 false 否
+     */
     boolean checkResourceIsOk();
 
+    /**
+     * 参数同步方法
+     * @throws Throwable
+     */
     void execute() throws Throwable;
 }
