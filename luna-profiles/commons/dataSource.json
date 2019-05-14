@@ -1,7 +1,7 @@
 [
 	{
 		"dataBaseType":"MYSQL",
-		"id":"38b1186cd32e4750bfce5c5bf35a38dd",
+		"id":"c5cee18a6a6d4cc2843977c7c2a821fb",
 		"name":"database",
 		"passWord":"123456",
 		"url":"jdbc:mysql://10.7.25.205:3306/sonic",

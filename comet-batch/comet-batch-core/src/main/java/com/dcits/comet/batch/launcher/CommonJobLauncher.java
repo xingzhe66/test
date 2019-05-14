@@ -106,14 +106,14 @@ public class CommonJobLauncher implements IJobLauncher {
 
             try {
                 //todo 如果启动后又再次调起，已经启动的exeid会被覆盖；
-              //  BatchContextManager.getInstance().putBatchContext(exeId, batchContext);
+                //BatchContextManager.getInstance().putBatchContext(exeId, batchContext);
 
                 jobExecution = jobLauncher.run(job, jobParameters,exeId, batchContext);
 
 
-            } catch (JobExecutionAlreadyRunningException e) {
-                throw e;
-            } catch (JobRestartException e) {
+        } catch (JobExecutionAlreadyRunningException e) {
+            throw e;
+        } catch (JobRestartException e) {
                 throw e;
             } catch (JobInstanceAlreadyCompleteException e) {
                 throw e;

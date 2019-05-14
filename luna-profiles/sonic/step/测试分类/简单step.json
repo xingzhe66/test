@@ -1,0 +1,41 @@
+{
+	"attrMap":{
+		"acctNo":"12345678909",
+		"stepName":"syncBatchAcSubject"
+	},
+	"catalog":"com.dcits.luna.base.data.component.ComponentCatalog",
+	"catalogId":"e9bd1096a6224a0db8bcabc6a56e20c1",
+	"clazzName":"com.dcits.comet.batch.sonic.NormalBatchExecutor",
+	"comment":"简单step",
+	"creator":"leijian",
+	"customParam":[
+		{
+			"defaultValue":"12345678909",
+			"id":"acctNo",
+			"required":false,
+			"subAttrList":[],
+			"valid":true
+		},
+		{
+			"defaultValue":"syncBatchAcSubject",
+			"id":"stepName",
+			"required":false,
+			"subAttrList":[],
+			"valid":true
+		},
+		{
+			"defaultValue":"{lastRunDate: 20190418,runDate: 20190419,nextRunDate: 20190411}",
+			"id":"params",
+			"required":false,
+			"subAttrList":[],
+			"valid":true
+		}
+	],
+	"id":"1ea4d1179ecc4e19b4ca15e83bc6d961",
+	"name":"简单step",
+	"refJobId":"",
+	"refJobText":"",
+	"splitClazzName":"",
+	"stepType":"NR",
+	"valid":true
+}

@@ -18,6 +18,8 @@ import java.util.Map;
 
 
 /**
+ * 分段
+ *
  * @author leijian
  * @version 1.0
  * @date 2019/5/7 14:13

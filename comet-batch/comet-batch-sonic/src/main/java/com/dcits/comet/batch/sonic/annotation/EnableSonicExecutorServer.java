@@ -1,9 +1,10 @@
-package com.dcits.comet.batch.sonic;
+package com.dcits.comet.batch.sonic.annotation;
 
 
 import com.dcits.comet.batch.sonic.config.SonicClientProfileConfig;
+import com.dcits.comet.batch.sonic.config.SonicExecutorServerRegistrar;
 import com.dcits.comet.batch.sonic.config.SonicRemoteProfileConfig;
-import com.dcits.comet.batch.sonic.config.SonicSimpleDBLockFactory;
+import com.dcits.comet.batch.sonic.config.SonicSimpleDbLockFactory;
 import com.dcits.sonic.executor.spring.support.SoincSpringApplicationContext;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
@@ -22,7 +23,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@EnableConfigurationProperties({SonicClientProfileConfig.class, SonicRemoteProfileConfig.class, SonicSimpleDBLockFactory.class})
+@EnableConfigurationProperties({SonicClientProfileConfig.class, SonicRemoteProfileConfig.class, SonicSimpleDbLockFactory.class})
 @Import({SonicExecutorServerRegistrar.class, SoincSpringApplicationContext.class})
 public @interface EnableSonicExecutorServer {
 }

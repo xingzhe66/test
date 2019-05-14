@@ -5,6 +5,7 @@ import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.launcher.IJobLauncher;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.sonic.exception.BatchServiceException;
+import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.api.model.Attributes;
 import com.dcits.sonic.executor.step.StepResult;
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
-/**
+/**分段执行器
  * @author leijian
  * @version 1.0
  * @date 2019/5/7 14:38
@@ -34,6 +35,9 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             log.debug("segAttributes{}", segAttributes);
 
             JobParam jobParam = JSON.parseObject(JSON.toJSONString(parameters), JobParam.class);
+            if(StringUtil.isEmpty(jobParam.getExeId())){
+                jobParam.setExeId(segmentRunningStep.getJobRunId());
+            }
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
             jobLauncher.run(jobParam.getStepName(), jobParam);
         } catch (Exception e) {

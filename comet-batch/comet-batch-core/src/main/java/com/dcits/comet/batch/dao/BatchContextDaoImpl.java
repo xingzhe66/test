@@ -2,12 +2,8 @@ package com.dcits.comet.batch.dao;
 
 import com.alibaba.fastjson.JSON;
 import com.dcits.comet.batch.param.BatchContext;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 /**
  * @author wangyun
  * @date 2019/3/21
@@ -19,20 +15,19 @@ public class BatchContextDaoImpl implements BatchContextDao {
 
     @Override
     public BatchContext getBatchContext(String exeId) {
-        return jdbcTemplate.queryForObject("select params from batch_context where exe_id=?",new Object[] { exeId},
+        return jdbcTemplate.queryForObject("select params from batch_context where exe_id=?", new Object[]{exeId},
                 (resultSet, i) -> {
-                    if(null==resultSet.getString(1)) return null;
-                    BatchContext batchContext=(BatchContext)(JSON.parse(resultSet.getString(1)));
+                    if (null == resultSet.getString(1)) return null;
+                    BatchContext batchContext = (BatchContext) (JSON.parse(resultSet.getString(1)));
                     return batchContext;
                 });
     }
 
     @Override
-    public void saveBatchContext(String exeId,String jobExecutionId, BatchContext batchContext) {
-        jdbcTemplate.update("delete from batch_context where exe_id = ?", new Object[] { exeId },
-                new int[] { java.sql.Types.INTEGER });
+    public void saveBatchContext(String exeId, String jobExecutionId, BatchContext batchContext) {
+        jdbcTemplate.update("delete from batch_context where exe_id = ?", new Object[]{exeId});
         jdbcTemplate.update("insert into batch_context(exe_id,job_execution_id,params) values(?,?,?)",
-                new Object[] { exeId,jobExecutionId,JSON.toJSONString(batchContext) });
+                new Object[]{exeId, jobExecutionId, JSON.toJSONString(batchContext)});
 
     }
 

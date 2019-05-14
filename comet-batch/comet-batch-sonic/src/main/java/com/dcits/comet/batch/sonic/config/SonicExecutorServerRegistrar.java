@@ -1,7 +1,5 @@
-package com.dcits.comet.batch.sonic;
+package com.dcits.comet.batch.sonic.config;
 
-import com.dcits.comet.batch.sonic.config.SonicClientProfileConfig;
-import com.dcits.comet.batch.sonic.config.SonicSimpleDBLockFactory;
 import com.dcits.sonic.executor.SonicExecutorServer;
 import com.dcits.sonic.executor.lock.db.SimpleDBLockFactory;
 import org.springframework.context.annotation.Bean;
@@ -14,19 +12,20 @@ import org.springframework.context.annotation.Bean;
 public class SonicExecutorServerRegistrar {
 
     @Bean(destroyMethod = "shutdown")
-    public SonicExecutorServer sonicExecutorServer(SonicClientProfileConfig sonicClientProfileConfig, SonicSimpleDBLockFactory sonicSimpleDBLockFactory) {
+    public SonicExecutorServer sonicExecutorServer(SonicRemoteProfileConfig sonicRemoteProfileConfig, SonicClientProfileConfig sonicClientProfileConfig, SonicSimpleDbLockFactory sonicSimpleDbLockFactory) {
         //获取实例
         SonicExecutorServer executorServer = SonicExecutorServer.getInstance();
         //初始化参数
         executorServer.setClientProfile(sonicClientProfileConfig);
-        if (sonicSimpleDBLockFactory.isEnable()) {
+        executorServer.setRemoteProfile(sonicRemoteProfileConfig);
+        if (sonicSimpleDbLockFactory.isEnable()) {
             //设置分布式锁工程
             SimpleDBLockFactory lockFactory = new SimpleDBLockFactory();
-            lockFactory.setDbType(sonicSimpleDBLockFactory.getDbType());
-            lockFactory.setDriverName(sonicSimpleDBLockFactory.getDriverName());
-            lockFactory.setUrl(sonicSimpleDBLockFactory.getUrl());
-            lockFactory.setUser(sonicSimpleDBLockFactory.getUser());
-            lockFactory.setPassword(sonicSimpleDBLockFactory.getPassword());
+            lockFactory.setDbType(sonicSimpleDbLockFactory.getDbType());
+            lockFactory.setDriverName(sonicSimpleDbLockFactory.getDriverName());
+            lockFactory.setUrl(sonicSimpleDbLockFactory.getUrl());
+            lockFactory.setUser(sonicSimpleDbLockFactory.getUser());
+            lockFactory.setPassword(sonicSimpleDbLockFactory.getPassword());
             executorServer.setLockFactory(lockFactory);
         }
         //启动

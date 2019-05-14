@@ -8,9 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @version 1.0
  * @date 2019/5/13 15:54
  **/
-@ConfigurationProperties(prefix = SonicSimpleDBLockFactory.PREFIX, ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = SonicSimpleDbLockFactory.PREFIX, ignoreUnknownFields = true)
 @Data
-public class SonicSimpleDBLockFactory {//extends SimpleDBLockFactory {
+public class SonicSimpleDbLockFactory /*extends SimpleDBLockFactory*/ {
 
     public static final String PREFIX = "com.dcits.sonic.lock";
 

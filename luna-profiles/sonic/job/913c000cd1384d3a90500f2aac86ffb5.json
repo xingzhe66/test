@@ -8,7 +8,7 @@
 	"horizontal":0,
 	"modify":"leijian",
 	"catalogId":"f5da596ae54c43bd9708ba091bfc9d33",
-	"modifyTime":"2019-05-13 20:38:54",
+	"modifyTime":"2019-05-14 10:37:12",
 	"nodes":{
 		"S0007":{
 			"canDel":true,
@@ -25,7 +25,7 @@
 			"authNode":false,
 			"modify":"leijian",
 			"ignoreError":false,
-			"modifyTime":"2019-05-13 20:38:54",
+			"modifyTime":"2019-05-14 10:37:12",
 			"top":"115.0",
 			"left":"115.0",
 			"refJobId":"913c000cd1384d3a90500f2aac86ffb5",
@@ -33,46 +33,9 @@
 			"name":"简单step",
 			"width":"130.0",
 			"id":"S0007",
-			"lines":{
-				"S0009":{
-					"toId":"S0008",
-					"valid":true,
-					"canDel":true,
-					"canCopy":false,
-					"name":"",
-					"id":"S0009",
-					"type":"line",
-					"fromId":"S0007"
-				}
-			},
-			"flowId":"913c000cd1384d3a90500f2aac86ffb5",
-			"clazzName":"com.dcits.comet.batch.sonic.NormalBatchExecutor",
-			"height":"27.0"
-		},
-		"S0008":{
-			"canDel":true,
-			"creator":"leijian",
-			"splitClazzName":"com.dcits.comet.batch.sonic.SegmentBatchExecutorPartition",
-			"stepId":"6dcc51a9ed4f451e902d86778181e2e6",
-			"nodePosType":"E",
-			"type":"NR",
-			"attrMap":{},
-			"fillColor":"#20b2aa",
-			"valid":true,
-			"authNode":false,
-			"modify":"leijian",
-			"ignoreError":false,
-			"modifyTime":"2019-05-13 20:38:54",
-			"top":"197.0",
-			"left":"129.0",
-			"refJobId":"913c000cd1384d3a90500f2aac86ffb5",
-			"canCopy":false,
-			"name":"数据库分段",
-			"width":"102.0",
-			"id":"S0008",
 			"lines":{},
 			"flowId":"913c000cd1384d3a90500f2aac86ffb5",
-			"clazzName":"com.dcits.comet.batch.sonic.SegmentBatchExecutor",
+			"clazzName":"com.dcits.comet.batch.sonic.NormalBatchExecutor",
 			"height":"27.0"
 		}
 	},

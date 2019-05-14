@@ -4,12 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.launcher.IJobLauncher;
 import com.dcits.comet.batch.launcher.JobParam;
+import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.sonic.exception.BatchServiceException;
+import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.api.model.Attributes;
 import com.dcits.sonic.executor.step.StepResult;
 import com.dcits.sonic.executor.step.normal.NormalRunningStep;
 import com.dcits.sonic.executor.step.normal.NormalStepExecutor;
+import com.dcits.sonic.executor.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -36,12 +39,22 @@ public class NormalBatchExecutor implements NormalStepExecutor {
             log.debug("parameters{}", parameters);
 
             JobParam jobParam = JSON.parseObject(JSON.toJSONString(attributes.getAttributeMap()), JobParam.class);
+            if (StringUtil.isEmpty(jobParam.getExeId())) {
+                jobParam.setExeId(normalRunningStep.getJobRunId());
+            }
+            BatchContext batchContext = new BatchContext();
+
+            String params = parameters.get("params");
+            batchContext.setParams(JsonUtil.jsonToMap(params));
+            jobParam.setBatchContext(batchContext);
 
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
             jobLauncher.run(jobParam.getStepName(), jobParam);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BatchServiceException(e.getMessage(), e);
+        } finally {
+
         }
         //返回执行结果
         return StepResult.SUCCESS_BLANK;
