@@ -428,4 +428,24 @@ public final class RedisUtil {
             return 0;
         }
     }
+    /**
+     * 获取两个集合的差集
+     *
+     * @param key
+     * @param otherKey
+     * @return
+     */
+    public Set<Object> sDifference(String key, String otherKey) {
+        return redisTemplate.opsForSet().difference(key, otherKey);
+    }
+    /**
+     * 获取集合所有元素
+     *
+     * @param key
+     * @return
+     */
+    public Set<Object> setMembers(String key) {
+        return redisTemplate.opsForSet().members(key);
+    }
+
 }
