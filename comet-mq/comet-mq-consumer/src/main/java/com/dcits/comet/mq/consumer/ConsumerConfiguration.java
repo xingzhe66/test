@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.StringUtils;
 
@@ -78,10 +77,10 @@ public class ConsumerConfiguration {
                 String[] topicTag = topicTags.split("~");
                 consumer.subscribe(topicTag[0], topicTag[1]);
             }
-            consumer.start();
-            LOGGER.info("consumer is start !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr);
+//            consumer.start();
+            LOGGER.info("consumer is init !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr);
         } catch (MQClientException e) {
-            LOGGER.error("consumer is start !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr, e);
+            LOGGER.error("consumer is init !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr, e);
             throw new MQException(e);
         }
         return consumer;
