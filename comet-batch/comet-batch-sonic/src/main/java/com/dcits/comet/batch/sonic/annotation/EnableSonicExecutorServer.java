@@ -5,6 +5,7 @@ import com.dcits.comet.batch.sonic.config.SonicClientProfileConfig;
 import com.dcits.comet.batch.sonic.config.SonicExecutorServerRegistrar;
 import com.dcits.comet.batch.sonic.config.SonicRemoteProfileConfig;
 import com.dcits.comet.batch.sonic.config.SonicSimpleDbLockFactory;
+//import com.dcits.sonic.executor.spring.support.SoincSpringApplicationContext;
 import com.dcits.sonic.executor.spring.support.SoincSpringApplicationContext;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
