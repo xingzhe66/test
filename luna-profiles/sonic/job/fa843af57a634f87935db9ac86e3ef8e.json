@@ -11,7 +11,7 @@
 	"id":"fa843af57a634f87935db9ac86e3ef8e",
 	"initNum":1,
 	"modify":"leijian",
-	"modifyTime":"2019-05-14 10:49:33",
+	"modifyTime":"2019-05-15 11:07:14",
 	"name":"简单job",
 	"nodes":{
 		"S0001":{
@@ -31,12 +31,13 @@
 			"left":"115.0",
 			"lines":{},
 			"modify":"leijian",
-			"modifyTime":"2019-05-14 10:49:33",
+			"modifyTime":"2019-05-15 11:07:14",
 			"name":"简单step",
 			"nodePosType":"S",
 			"refJobId":"",
 			"splitClazzName":"",
 			"stepId":"1ea4d1179ecc4e19b4ca15e83bc6d961",
+			"stepPosId":"99fcb3cf287c45e08583606efcc9cd4c",
 			"top":"115.0",
 			"type":"NR",
 			"valid":true,
