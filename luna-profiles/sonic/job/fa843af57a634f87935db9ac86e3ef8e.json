@@ -1,0 +1,48 @@
+{
+	"canCopy":false,
+	"canDel":true,
+	"catalogId":"b0d6d1225da34661ab81f15a559c1718",
+	"comment":"简单job",
+	"controls":{},
+	"createTime":"2019-05-14 10:47:27",
+	"creator":"leijian",
+	"cronExpression":"",
+	"horizontal":0,
+	"id":"fa843af57a634f87935db9ac86e3ef8e",
+	"initNum":1,
+	"modify":"leijian",
+	"modifyTime":"2019-05-14 10:49:33",
+	"name":"简单job",
+	"nodes":{
+		"S0001":{
+			"attrMap":{
+				"acctNo":"12345678909"
+			},
+			"authNode":false,
+			"canCopy":false,
+			"canDel":true,
+			"clazzName":"com.dcits.comet.batch.sonic.NormalBatchExecutor",
+			"creator":"leijian",
+			"fillColor":"#20b2aa",
+			"flowId":"fa843af57a634f87935db9ac86e3ef8e",
+			"height":"27.0",
+			"id":"S0001",
+			"ignoreError":false,
+			"left":"115.0",
+			"lines":{},
+			"modify":"leijian",
+			"modifyTime":"2019-05-14 10:49:33",
+			"name":"简单step",
+			"nodePosType":"S",
+			"refJobId":"",
+			"splitClazzName":"",
+			"stepId":"1ea4d1179ecc4e19b4ca15e83bc6d961",
+			"top":"115.0",
+			"type":"NR",
+			"valid":true,
+			"width":"130.0"
+		}
+	},
+	"valid":true,
+	"vertical":0
+}

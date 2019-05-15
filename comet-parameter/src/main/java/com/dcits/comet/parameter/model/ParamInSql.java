@@ -7,7 +7,7 @@ package com.dcits.comet.parameter.model;
  * @Description ParamInSQL
  * @Version 1.0
  **/
-public class ParamInSQL extends ParamInModule {
+public class ParamInSql extends ParamInModule {
 
     private String statement;
 
@@ -19,13 +19,4 @@ public class ParamInSQL extends ParamInModule {
         this.statement = statement;
     }
 
-    private String sqlType;
-
-    public void setSqlType(String sqlType) {
-        this.sqlType = sqlType;
-    }
-
-    public String getSqlType() {
-        return sqlType;
-    }
 }

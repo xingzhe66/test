@@ -1,0 +1,11 @@
+[
+	{
+		"dataBaseType":"MYSQL",
+		"id":"c5cee18a6a6d4cc2843977c7c2a821fb",
+		"name":"database",
+		"passWord":"123456",
+		"url":"jdbc:mysql://10.7.25.205:3306/sonic",
+		"userName":"rb",
+		"valid":true
+	}
+]

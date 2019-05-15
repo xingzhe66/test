@@ -1,17 +1,30 @@
-//package com.dcits.comet.batch.sonic;
-//
-//import com.dcits.sonic.executor.SonicExecutorServer;
-//
-///**
-// * @author leijian
-// * @version 1.0
-// * @date 2019/5/7 10:14
-// **/
-//public class ServerMain {
-//    public static void main(String[] args) {
-//        //获取实例
-//        SonicExecutorServer executorServer = SonicExecutorServer.getInstance();
-//        //启动
-//        executorServer.startup();
-//    }
-//}
+package com.dcits.comet.batch.sonic;
+
+import com.dcits.comet.batch.annotation.BatchConfiguration;
+import com.dcits.comet.batch.sonic.annotation.EnableSonicExecutorServer;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+/**
+ * @author leijian
+ * @version 1.0
+ * @date 2019/5/7 10:14
+ **/
+@SpringBootApplication(scanBasePackages = "com.dcits.comet")
+@BatchConfiguration
+@EnableTransactionManagement
+@EnableSonicExecutorServer
+public class ServerMain {
+    public static void main(String[] args) {
+        SpringApplication.run(ServerMain.class);
+
+       /* SonicExecutorServer sonicExecutorServer = SoincSpringApplicationContext.getContext().getBean(SonicExecutorServer.class);
+
+        System.out.println(sonicExecutorServer.getLockFactory().getLock("demo"));*/
+
+    }
+
+
+}
+

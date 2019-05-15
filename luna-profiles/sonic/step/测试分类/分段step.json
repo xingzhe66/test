@@ -1,0 +1,26 @@
+{
+	"attrMap":{
+		"stepName":"dBatchStep"
+	},
+	"catalog":"com.dcits.luna.base.data.component.ComponentCatalog",
+	"catalogId":"e9bd1096a6224a0db8bcabc6a56e20c1",
+	"clazzName":"com.dcits.comet.batch.sonic.SegmentBatchExecutor",
+	"comment":"分段step",
+	"creator":"leijian",
+	"customParam":[
+		{
+			"defaultValue":"dBatchStep",
+			"id":"stepName",
+			"required":false,
+			"subAttrList":[],
+			"valid":true
+		}
+	],
+	"id":"685af4b40a83467c863268874a260d56",
+	"name":"分段step",
+	"refJobId":"",
+	"refJobText":"",
+	"splitClazzName":"com.dcits.comet.batch.sonic.SegmentBatchExecutorPartition",
+	"stepType":"SD",
+	"valid":true
+}

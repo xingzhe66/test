@@ -8,7 +8,6 @@ package com.dcits.comet.parameter.constant;
  * @Version 1.0
  **/
 public class ParamConstant {
-
     public static final String SQL_FILE_TAIL = ".sql";
 
     public static final String OK_FILE_TAIL = ".ok";
@@ -23,13 +22,18 @@ public class ParamConstant {
 
     public static final String SYS_NAME_CIF = "cif";
 
-    //同步类型 增量
-    public static final String SYN_TYPE_INCREMENT = "0";
+    /**
+     * 同步类型 非实时
+     */
 
-    //同步类型 全量
-    public static final String SYN_TYPE_FULL = "1";
+    public static final String SYN_TYPE_NORT = "0";
 
-    public static final String SYN_TYPE_INCREMENT_DIR = "patch";
+    /**
+     * 同步类型 准实时
+     */
+    public static final String SYN_TYPE_NERT = "1";
 
-    public static final String SYN_TYPE_FULL_DIR = "all";
+    public static final String SYN_TYPE_NORT_DIR = "NORT";
+
+    public static final String SYN_TYPE_NERT_DIR = "NERT";
 }

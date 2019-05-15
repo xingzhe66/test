@@ -11,7 +11,6 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class DisposableWorkerIdAssigner {
             workerNodePo.setHostName(NetUtils.getLocalAddress());
             workerNodePo.setPort(System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));
             workerNodePo.setType(type);
-            workerNodePo.setLaunchDate(LocalDate.now());
+            workerNodePo.setLaunchDate(LocalDateTime.now());
             workerNodePo.setModified(LocalDateTime.now());
             workerNodePo.setCreated(LocalDateTime.now());
             workerNodePo.setBizTag(bizTag);
@@ -87,21 +86,21 @@ public class DisposableWorkerIdAssigner {
             WorkerNodePo workerNodePo = dbTags.stream().filter(v -> bizTag.equals(v.getBizTag()) && StringUtils.isNotEmpty(v.getMaxSeq())).sorted(Comparator.comparing(WorkerNodePo::getMaxSeq).reversed()).findFirst().get();
             log.info("获取的当前类型[{}]的最大数据库节点信息{}", bizTag, workerNodePo);
             //数据节点不同NetUtils.getLocalAddress()如果当前节点的信息不存在，需要插入；如果已存在进行更新操作
-            WorkerNodePo needUpdate = dbTags.stream().filter(v -> bizTag.equals(v.getBizTag()) && StringUtils.equals(NetUtils.getLocalAddress(), v.getHostName())).sorted(Comparator.comparing(WorkerNodePo::getMaxSeq).reversed()).findFirst().orElseGet(()->{
-                log.info("存在相同的序列类型{}，在{}节点生成新的实例",bizTag,NetUtils.getLocalAddress());
+            WorkerNodePo needUpdate = dbTags.stream().filter(v -> bizTag.equals(v.getBizTag()) && StringUtils.equals(NetUtils.getLocalAddress(), v.getHostName())).sorted(Comparator.comparing(WorkerNodePo::getMaxSeq).reversed()).findFirst().orElseGet(() -> {
+                log.info("存在相同的序列类型{}，在{}节点生成新的实例", bizTag, NetUtils.getLocalAddress());
                 WorkerNodePo workerNodePo1 = new WorkerNodePo();
                 workerNodePo1.setHostName(NetUtils.getLocalAddress());
                 workerNodePo1.setPort(System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));
                 workerNodePo1.setType(type);
-                workerNodePo1.setLaunchDate(LocalDate.now());
+                workerNodePo1.setLaunchDate(LocalDateTime.now());
                 workerNodePo1.setCreated(LocalDateTime.now());
                 workerNodePo1.setBizTag(bizTag);
                 workerNodePo1.setCurrSeq("0");
-                workerNodePo1.setCountSeq("");
+                workerNodePo1.setCountSeq("0");
                 workerNodePo1.setMiddleId(UidGeneratorContext.UID_MIDDLEID);
-                workerNodePo1.setSeqCycle("");
-                workerNodePo1.setSeqCache("");
-                workerNodePo1.setCacheCount("");
+                workerNodePo1.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
+                workerNodePo1.setSeqCache("0");
+                workerNodePo1.setCacheCount("0");
                 return workerNodePo1;
             });
             log.info("更新前[{}]的PO节点信息{}", bizTag, workerNodePo);
@@ -111,7 +110,7 @@ public class DisposableWorkerIdAssigner {
             needUpdate.setMaxSeq(String.valueOf(Long.valueOf(workerNodePo.getMaxSeq()) + Long.valueOf(UidGeneratorContext.UID_DEF_MAX_SEQ)));
             needUpdate.setStep(workerNodePo.getStep());
             workerNodePo = workerNodePoRepository.saveAndFlush(needUpdate);
-            log.info("更新后PO值{}", needUpdate);
+            log.info("更新后PO值{}", workerNodePo);
             return workerNodePo;
         }
     }
@@ -126,7 +125,7 @@ public class DisposableWorkerIdAssigner {
             workerNodePo.setHostName(NetUtils.getLocalAddress());
             workerNodePo.setPort(System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));
             workerNodePo.setType(type);
-            workerNodePo.setLaunchDate(LocalDate.now());
+            workerNodePo.setLaunchDate(LocalDateTime.now());
             workerNodePo.setModified(LocalDateTime.now());
             workerNodePo.setCreated(LocalDateTime.now());
             workerNodePo.setBizTag(type);
@@ -136,12 +135,40 @@ public class DisposableWorkerIdAssigner {
             workerNodePo.setStep(UidGeneratorContext.UID_DEF_STEP);
             workerNodePo.setCurrSeq("0");
             workerNodePo.setCountSeq("0");
-            workerNodePo.setMiddleId("");
+            workerNodePo.setMiddleId(UidGeneratorContext.UID_MIDDLEID);
             workerNodePo.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
             workerNodePo.setSeqCache("0");
             workerNodePo.setCacheCount("0");
             workerNodePo = workerNodePoRepository.save(workerNodePo);
             dbTags.add(workerNodePo);
+        } else {
+            if (UidGeneratorContext.UID_DEF_DEF.equalsIgnoreCase(type)) {
+                WorkerNodePo needUpdate = dbTags.stream().filter(v -> type.equals(v.getBizTag()) && StringUtils.equals(NetUtils.getLocalAddress(), v.getHostName())).sorted(Comparator.comparing(WorkerNodePo::getMaxSeq).reversed()).findFirst().orElseGet(() -> {
+                    log.info("存在相同的序列类型{}，在{}节点生成新的实例", type, NetUtils.getLocalAddress());
+                    WorkerNodePo workerNodePo1 = new WorkerNodePo();
+                    workerNodePo1.setHostName(NetUtils.getLocalAddress());
+                    workerNodePo1.setPort(System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));
+                    workerNodePo1.setType(type);
+                    workerNodePo1.setLaunchDate(LocalDateTime.now());
+                    workerNodePo1.setCreated(LocalDateTime.now());
+                    workerNodePo1.setBizTag(type);
+                    workerNodePo1.setCurrSeq("0");
+                    workerNodePo1.setCountSeq("0");
+                    workerNodePo1.setMiddleId(UidGeneratorContext.UID_MIDDLEID);
+                    workerNodePo1.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
+                    workerNodePo1.setSeqCache("0");
+                    workerNodePo1.setCacheCount("0");
+                    workerNodePo1.setModified(LocalDateTime.now());
+                    workerNodePo1.setMinSeq(UidGeneratorContext.UID_DEF_MIN_SEQ);
+                    workerNodePo1.setMaxSeq(UidGeneratorContext.UID_DEF_MAX_SEQ);
+                    workerNodePo1.setStep(UidGeneratorContext.UID_DEF_STEP);
+                    return workerNodePo1;
+                });
+                log.info("更新前[{}]的PO节点信息{}", type, needUpdate);
+                WorkerNodePo workerNodePo = workerNodePoRepository.saveAndFlush(needUpdate);
+                log.info("更新前[{}]的PO节点信息{}", type, workerNodePo);
+                dbTags.add(workerNodePo);
+            }
         }
         return dbTags;
     }
@@ -161,7 +188,7 @@ public class DisposableWorkerIdAssigner {
         workerNodePo.setHostName(NetUtils.getLocalAddress());
         workerNodePo.setPort(System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));
         workerNodePo.setType(type);
-        workerNodePo.setLaunchDate(LocalDate.now());
+        workerNodePo.setLaunchDate(LocalDateTime.now());
         workerNodePo.setCreated(LocalDateTime.now());
         workerNodePo.setModified(LocalDateTime.now());
         workerNodePo.setBizTag(bizTag);
@@ -169,7 +196,7 @@ public class DisposableWorkerIdAssigner {
         workerNodePo.setMaxSeq("");
         workerNodePo.setCurrSeq("");
         workerNodePo.setCountSeq("");
-        workerNodePo.setMiddleId("");
+        workerNodePo.setMiddleId(UidGeneratorContext.UID_MIDDLEID);
         workerNodePo.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
         workerNodePo.setSeqCache("");
         workerNodePo.setCacheCount("");

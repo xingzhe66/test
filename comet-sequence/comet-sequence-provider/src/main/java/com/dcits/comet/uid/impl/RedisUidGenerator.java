@@ -108,7 +108,6 @@ public class RedisUidGenerator extends DefaultUidGenerator {
 
     @Override
     protected long nextId(String bizTag) {
-        log.info(bizTag);
         if (!initOK) {
             throw new UidGenerateException("999999", "流水号生成异常");
         }
@@ -209,6 +208,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         newSegment.setBizTag(bizTag);
         newSegment.setUpdateTimestamp(System.currentTimeMillis());
         manager.put(bizTag, newSegment);
+        redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag, Integer.valueOf(cache.get(bizTag).getMinSeq()));
         sw.stop("updateSegmentFromDb", bizTag + " " + workerNodePo);
     }
 
