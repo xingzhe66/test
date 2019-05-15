@@ -15,6 +15,7 @@ import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ import java.util.List;
  **/
 @Component
 @Slf4j
+@ConditionalOnProperty(name = "rocketmq.isEnable", havingValue = "true",matchIfMissing = false)
 @Transactional(transactionManager = "shardTransactionManager",propagation = Propagation.REQUIRES_NEW)
 public class MsgServiceImple implements IMsgService {
 
@@ -58,7 +60,7 @@ public class MsgServiceImple implements IMsgService {
     @Override
     public  SendResult  realSend(RocketMessage rocketMessage) throws Exception {
         Message sendMsg = new Message(
-                rocketMessage.getTopic(), rocketMessage.getTag(),
+                rocketMessage.getTopic(), rocketMessage.getTag(),rocketMessage.getMessageId(),
                 rocketMessage.getMsgText().getBytes(RemotingHelper.DEFAULT_CHARSET));
         return defaultMQProducer.send(sendMsg);
     }

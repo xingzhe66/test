@@ -8,12 +8,14 @@ import com.dcits.comet.commons.data.head.SysHead;
 import com.dcits.comet.commons.data.head.SysHeadOut;
 import com.dcits.comet.commons.exception.BusinessException;
 import com.dcits.comet.commons.utils.BusiUtil;
+import com.dcits.comet.commons.utils.SpringContextUtil;
 import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.flow.service.FlowService;
 import com.dcits.comet.flow.service.MqService;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -34,9 +36,8 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
 
     @Autowired
     FlowService flowService;
-    @Autowired
-    MqService mqService;
-
+    @Value("${rocketmq.isEnable}")
+    private boolean isEnable;
     @Override
     public OUT handle(String beanName, IN input) {
 
@@ -89,7 +90,11 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             //更新流程和消息状态
             try {
                 flowService.updateFlowException(e);
-                mqService.updateExceptionStatus();
+                if(isEnable){
+                    MqService mqService= SpringContextUtil.getBean(MqService.class);
+                    mqService.updateExceptionStatus();
+                }
+
             } catch (Exception e1) {
                 log.info("update  Status  Exception  fail------------------");
                 e1.printStackTrace();
@@ -126,13 +131,17 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
 
     private void postHandler(IN input, OUT out) {
         log.info("<===== execute postHandler =====>");
-        setOriginalSysHead(out.getSysHead(), input.getSysHead());
+       // setOriginalSysHead(out.getSysHead(), input.getSysHead());
         //流程执行成功，发送mq
         try {
             //更新流程执行状态  3
             flowService.updateFlowSusscee(out);
             //更新消息发送状态  2 并真实发送消息
-             mqService.mqHandler();
+            if(isEnable){
+                MqService mqService= SpringContextUtil.getBean(MqService.class);
+                mqService.mqHandler();
+            }
+
         } catch (Exception e1) {
             e1.printStackTrace();
         }

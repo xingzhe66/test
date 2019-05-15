@@ -28,6 +28,7 @@ import java.util.List;
 @Component
 @Slf4j
 @Configuration
+@ConditionalOnProperty(name = "rocketmq.isEnable", havingValue = "true",matchIfMissing = false)
 @ComponentScan({"com.dcits.comet.mq.producer.rocketmq.service"})
 public class MessageScheduled {
     @Autowired

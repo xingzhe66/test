@@ -30,7 +30,7 @@
 	<sql id="Base_Where">
 		<trim suffixOverrides="AND">
 		<#list cloums as c>
-		   <if test="${c.columnName} != null and ${c.columnName} != '' ">
+		   <if test="${c.columnName} != null ">
 		       ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
 			</if>
 		</#list>

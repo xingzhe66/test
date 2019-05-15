@@ -23,6 +23,7 @@ mybatis:
 
 ###producer
 rocketmq:
+  isEnable: true   #是否启动消息
   producer:
     isOnOff: on    #该应用是否启用生产者
     groupName: ${spring.application.name}  #发送同一类消息的设置为同一个group，保证唯一,默认不需要设置，rocketmq会使用ip@pid(pid代表jvm名字)作为唯一标示
@@ -30,6 +31,11 @@ rocketmq:
     maxMessageSize: 4096  #消息最大长度 默认1024*4(4M)
     sendMsgTimeout: 3000  #发送消息超时时间,默认3000
     retryTimesWhenSendFailed: 2    #发送消息失败重试次数，默认2
+  scheduled:
+    exceptionTimeout: 300
+    corn1: 0/10 * * * * ?  # 定时扫描mq_producer_msg表中状态为1的消息，如果startTime与当前时间超过五分钟则将状态更新为4。
+    corn2: 0/10 * * * * ?  # 定时扫描mq_producer_msg表中状态为2的消息，然后发送。
+
 
 ###consumer
   consumer:
