@@ -21,28 +21,27 @@ mybatis:
   typeAliasesPackage: com.dcits.comet.*.model
 
 
-###producer
+###mq
 rocketmq:
-  isEnable: true   #是否启动消息
+  isEnable:  false  #该应用是否启用消息生产者，如果为true,则须配置producer和scheduled下的属性;如果为false,否则可以不同配置
+  ###producer
   producer:
-    isOnOff: on    #该应用是否启用生产者
     groupName: ${spring.application.name}  #发送同一类消息的设置为同一个group，保证唯一,默认不需要设置，rocketmq会使用ip@pid(pid代表jvm名字)作为唯一标示
     namesrvAddr: 127.0.0.1:9876  #mq的nameserver地址
     maxMessageSize: 4096  #消息最大长度 默认1024*4(4M)
     sendMsgTimeout: 3000  #发送消息超时时间,默认3000
     retryTimesWhenSendFailed: 2    #发送消息失败重试次数，默认2
   scheduled:
-    exceptionTimeout: 300
-    corn1: 0/10 * * * * ?  # 定时扫描mq_producer_msg表中状态为1的消息，如果startTime与当前时间超过五分钟则将状态更新为4。
-    corn2: 0/10 * * * * ?  # 定时扫描mq_producer_msg表中状态为2的消息，然后发送。
+    exceptionTimeout: 300  # 消息更新为异常状态的时间间隔，单位为秒（s）
+    corn1: 0/30 * * * * ?  # 定时扫描mq_producer_msg表中状态为1的消息，如果startTime与当前时间超过五分钟则将状态更新为4。
+    corn2: 0/20 * * * * ?   # 定时扫描mq_producer_msg表中状态为2的消息，然后发送。
 
-
-###consumer
+  ###consumer
   consumer:
-    isOnOff: on    ##该应用是否启用消费者
     groupName: ${spring.application.name}
-    namesrvAddr: 127.0.0.1:9876    #mq的nameserver地址
-    topics: DemoTopic;#该消费者订阅的主题和tags("*"号表示订阅该主题下所有的tags),格式：topic~tag1||tag2||tag3;topic2~*;
+    namesrvAddr: 127.0.0.1:9876  #mq的nameserver地址
+    topics: dcits~*  #该消费者订阅的主题和tags("*"号表示订阅该主题下所有的tags),格式：topic~tag1||tag2||tag3;topic2~*;
     consumeThreadMin: 20
     consumeThreadMax: 64
-    consumeMessageBatchMaxSize: 1   #设置一次消费消息的条数，默认为1条
+    consumeMessageBatchMaxSize: 1  #该消费者订阅的主题和tags("*"号表示订阅该主题下所有的tags),格式：topic~tag1||tag2||tag3;topic2~*;
+
