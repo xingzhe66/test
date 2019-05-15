@@ -14,17 +14,14 @@ spring:
   datasource:
     mq:
       hikari:
-        jdbc-url: jdbc:mysql://127.0.0.1:3306/comet-mq?useUnicode=true&characterEncoding=utf8
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/ensemble16-cif1?useUnicode=true&characterEncoding=utf8
         driver-class-name: com.mysql.jdbc.Driver
         username: root
         password: mysql
         minimum-idle: 10
-        maximum-pool-size: 200
+        maximum-pool-size: 10
         pool-name: DS_0
         connection-timeout: 300000
         connection-test-query: select 1
         max-lifetime: 600000 #一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒以上
         idle-timeout: 120000
-mybatis:
-  mapperLocations: classpath*:mapper/*.xml
-  typeAliasesPackage: com.dcits.comet.*.model

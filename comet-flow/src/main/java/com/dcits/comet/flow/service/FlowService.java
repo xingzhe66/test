@@ -8,7 +8,6 @@ import com.dcits.comet.commons.utils.DateUtil;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.flow.constant.FlowStatus;
 import com.dcits.comet.flow.model.FlowInfoPo;
-import com.dcits.comet.mq.api.IMsgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,9 +28,6 @@ public class FlowService {
     @Autowired
     DaoSupport daoSupport;
 
-    @Autowired
-    IMsgService iMsgService;
-
 
     /**
      * @Author guihj
@@ -46,6 +42,7 @@ public class FlowService {
         flowInfoPo.setFlowId(Context.getInstance().getFlowId());
         flowInfoPo.setFlowClassName(flowClassName);
         String inStr=JSON.toJSONString(in);
+        //如果报文入参长度大于2000，则进行处理
         if(inStr!=null && inStr.length()>2000){
             flowInfoPo.setFlowIn(inStr.substring(0,2000));
         }else{

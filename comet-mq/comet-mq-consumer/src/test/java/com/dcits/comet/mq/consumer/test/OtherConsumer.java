@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
  * @Date 2019/4/18
  **/
 @Component
-@RocketMQConsumer(topic="dcits",tag="mq")
+@RocketMQConsumer(topic="dcits",tag="dc")
 @Slf4j
-public class MyConsumer extends AbstractMQConsumer {
+public class OtherConsumer extends AbstractMQConsumer {
     @Override
     public void onMessage(Message message) {
         log.info("OnMessage : "+message.toString());

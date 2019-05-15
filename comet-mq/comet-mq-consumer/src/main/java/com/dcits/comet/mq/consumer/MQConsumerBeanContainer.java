@@ -13,14 +13,12 @@ import java.util.Map;
  * @Date 2019/4/18
  **/
 @Slf4j
-public class MQConsumerBeanContainer {
+public class MQConsumerBeanContainer  {
     public static final String DL = "|";
-
     private static volatile MQConsumerBeanContainer mqConsumerBeanContainer;
 
     private final static Map<String, String> CONSUMER_BEAN_MAP =
             new HashMap<String, String>();
-
     public static MQConsumerBeanContainer getInstance() {
         if (mqConsumerBeanContainer == null) {
             synchronized (MQConsumerBeanContainer.class) {
@@ -35,6 +33,13 @@ public class MQConsumerBeanContainer {
         init();
     }
 
+    public static MQConsumerBeanContainer getMqConsumerBeanContainer() {
+        return mqConsumerBeanContainer;
+    }
+
+    protected  static MQConsumerBeanContainer  initContainer(){
+        return   mqConsumerBeanContainer = new MQConsumerBeanContainer();
+    }
     private void init() {
         //TODO 加载顺序问题
         ApplicationContext appContext = SpringContextUtil.getApplicationContext();
@@ -50,8 +55,6 @@ public class MQConsumerBeanContainer {
         log.info("=========MQConsumer映射扫描结束！============");
         log.info("=============================================");
     }
-
-
     public String getBeanName(String topic, String tag) {
         return CONSUMER_BEAN_MAP.get(topic+DL+tag);
     }

@@ -87,6 +87,7 @@
         <where>
             <include refid="Base_Where" />
         </where>
+        ORDER BY seq_no
     </sql>
 
     <insert id="insert" >

@@ -6,6 +6,7 @@ import com.dcits.comet.mq.api.RocketMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  **/
 @Slf4j
 @Component
+@ConditionalOnProperty(name = "rocketmq.isEnable", havingValue = "true", matchIfMissing = false)
 public class MqService {
     @Autowired
     IMsgService iMsgService;
