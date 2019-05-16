@@ -85,7 +85,7 @@
 		<set>
 		   <#list cloums as c>
 			   <#if c.pkFlag == "N" && c.shardFlag=="N">
-					<if test="${ c.columnName} != null and ${ c.columnName} != ''">
+					<if test="${ c.columnName} != null ">
 					    ${ c.columnNameL} = ${r"#{"}${ c.columnName}},
 					</if>
 			    </#if>

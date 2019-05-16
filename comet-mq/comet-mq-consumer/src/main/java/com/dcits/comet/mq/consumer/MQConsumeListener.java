@@ -9,9 +9,6 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -23,7 +20,7 @@ import java.util.List;
  **/
 @Component
 @Slf4j
-public class MQConsumeListener implements MessageListenerConcurrently, ApplicationListener<ContextRefreshedEvent> {
+public class MQConsumeListener implements MessageListenerConcurrently{
     @Autowired
     ConsumerService consumerService;
 
@@ -77,10 +74,5 @@ public class MQConsumeListener implements MessageListenerConcurrently, Applicati
         }
         // 如果没有return success ，consumer会重新消费该消息，直到return success
         return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-    }
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        MQConsumerBeanContainer.initContainer();
     }
 }
