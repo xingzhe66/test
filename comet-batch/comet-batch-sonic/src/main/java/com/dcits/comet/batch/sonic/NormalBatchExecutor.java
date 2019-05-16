@@ -14,6 +14,7 @@ import com.dcits.sonic.executor.step.normal.NormalRunningStep;
 import com.dcits.sonic.executor.step.normal.NormalStepExecutor;
 import com.dcits.sonic.executor.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 
@@ -40,12 +41,14 @@ public class NormalBatchExecutor implements NormalStepExecutor {
 
             JobParam jobParam = JSON.parseObject(JSON.toJSONString(attributes.getAttributeMap()), JobParam.class);
             if (StringUtil.isEmpty(jobParam.getExeId())) {
-                jobParam.setExeId(normalRunningStep.getJobRunId());
+                jobParam.setExeId(normalRunningStep.getStepRunId());
             }
             BatchContext batchContext = new BatchContext();
 
             String params = parameters.get("params");
-            batchContext.setParams(JsonUtil.jsonToMap(params));
+            if (StringUtils.isNotEmpty(params)) {
+                batchContext.setParams(JsonUtil.jsonToMap(params));
+            }
             jobParam.setBatchContext(batchContext);
 
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
