@@ -9,8 +9,16 @@
 			where t.TABLE_SCHEMA=#{dbName} and TABLE_NAME = #{tableName}
 		</if>
 		<if test="dbType == 'oracle'">
-			select t.comments TABLE_COMMENT from user_tab_comments t
-			where t.TABLE_NAME = #{tableName}
+
+            SELECT DISTINCT
+            t.TABLE_NAME,
+            t.comments
+            FROM
+            user_tab_comments t
+            INNER JOIN USER_CONS_COLUMNS A ON A.TABLE_NAME = T.TABLE_NAME
+            AND  A.OWNER=#{dbName}
+            WHERE
+            t.TABLE_NAME=#{tableName}
 		</if>
 	</select>
 	<!-- 根据数据库名称获取所有表名称及描述 -->
@@ -21,9 +29,15 @@
 			where t.TABLE_SCHEMA=#{dbName}
 		</if>
 		<if test="dbType == 'oracle'">
-			select t.TABLE_NAME,t.comments TABLE_COMMENT from user_tab_comments t
+            SELECT DISTINCT
+            t.TABLE_NAME,
+            t.comments TABLE_COMMENT
+            FROM
+            user_tab_comments t
+            INNER JOIN USER_CONS_COLUMNS A ON A.TABLE_NAME = T.TABLE_NAME
+            AND A.OWNER = #{dbName}
 		</if>
-		<if test="dbName == 'mssql'">
+		<if test="dbType == 'mssql'">
 			select name  as TABLENAME from sysobjects where xtype='u'
 		</if>
 
@@ -40,13 +54,21 @@
 		</if>
 
 		<if test="dbType == 'oracle'">
-			select t.column_name COLUMNNAME,t.data_type COLUMNTYPE, a.COMMENTS  COLUMNCOMMENT from user_tab_columns t
-			INNER JOIN USER_COL_COMMENTS a
-			ON t.table_name = a.table_NAME
-			AND t.COLUMN_NAME = a.COLUMN_NAME
+            SELECT DISTINCT
+            t.column_name COLUMNNAME,
+            t.data_type COLUMNTYPE,
+            a.COMMENTS COLUMNCOMMENT
+            FROM
+            user_tab_columns t
+            INNER JOIN USER_COL_COMMENTS a ON t.table_name = a.table_NAME
+            AND t.COLUMN_NAME = a.COLUMN_NAME
+            INNER JOIN USER_CONS_COLUMNS C ON C.TABLE_NAME = T.TABLE_NAME
+            WHERE
+            C.OWNER =  #{dbName}
+            AND T.TABLE_NAME =  #{tableName}
 		</if>
 
-		<if test="dbName == 'mssql'">
+		<if test="dbType == 'mssql'">
 			SELECT COLUMN_NAME COLUMNNAME,DATA_TYPE COLUMNTYPE,CHARACTER_MAXIMUM_LENGTH DATALENGTH,
 			IS_NULLABLE ISNULLABLE,'' COLUMNCOMMENT FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME=#{tableName}
 		</if>
@@ -58,14 +80,22 @@
 	<select id="getTableKeys" parameterType="java.util.Map"  resultType="java.lang.String">
 		<if test="dbType == 'mysql'">
 			SELECT DISTINCT column_name  FROM INFORMATION_SCHEMA.`KEY_COLUMN_USAGE`
-			WHERE TABLE_NAME = #{tableName} AND constraint_name='PRIMARY';
+			WHERE TABLE_NAME = #{tableName} AND constraint_name='PRIMARY'
 		</if>
 
 		<if test="dbType == 'oracle'">
-
+            SELECT
+            A.COLUMN_NAME
+            FROM
+            USER_CONS_COLUMNS A
+            INNER JOIN USER_CONSTRAINTS B ON A.CONSTRAINT_NAME = B.CONSTRAINT_NAME
+            AND B.CONSTRAINT_TYPE = 'P'
+            WHERE
+            A.TABLE_NAME =  #{tableName}
+            AND A.OWNER = #{dbName}
 		</if>
 
-		<if test="dbName == 'mssql'">
+		<if test="dbType == 'mssql'">
 
 		</if>
 	</select>

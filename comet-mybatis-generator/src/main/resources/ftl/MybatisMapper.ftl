@@ -95,7 +95,9 @@
 			<trim suffixOverrides="AND">
 			  <#list cloums as c>
 			     <#if c.pkFlag == "Y" || c.shardFlag=="Y">
-			       ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+				     <if test="${ c.columnName} != null ">
+			            ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+					 </if>
 			    </#if>
 			  </#list>
 			</trim>
@@ -164,7 +166,9 @@
 			<trim suffixOverrides="AND">
 		    <#list cloums as c>
 			<#if c.pkFlag == "Y">
+		        <if test="${ c.columnName} != null ">
 				${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+				</if>
 			</#if>
 	        </#list>
 			</trim>
@@ -206,7 +210,9 @@
 			<trim suffixOverrides="AND">
 			<#list cloums as c>
 		    <#if c.pkFlag == "Y">
+		        <if test="${ c.columnName} != null ">
 				${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+				</if>
 			</#if>
 			</#list>
 			</trim>
