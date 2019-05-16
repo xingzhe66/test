@@ -1,8 +1,6 @@
 package com.dcits.comet.batch.sonic;
 
 import com.alibaba.fastjson.JSON;
-import com.dcits.comet.batch.IBStep;
-import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.sonic.executor.api.model.Attributes;
@@ -47,19 +45,19 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
         // 生成子分段扩展信息 ...
         List<Attributes> AttributesList = new ArrayList<>();
 
-        IBStep bstep = SpringContextHolder.getBean(jobParam.getStepName());
-        List<String> nodes = bstep.getNodeList(batchContext);
+        //IBStep bstep = SpringContextHolder.getBean(jobParam.getStepName());
+        //List<String> nodes = bstep.getNodeList(batchContext);
 
-        for (String node : nodes) {
-            Map<String, String> attrMap = new HashMap<>();
-            int countNum = bstep.getCountNum(batchContext, node);
-            attrMap.put("beginIndex", "1");
-            attrMap.put("endIndex", countNum + "");
-            attrMap.put("node", node);
-            attrMap.put("pageSize", countNum + "");
-            Attributes segAttributes = new Attributes(attrMap);
-            AttributesList.add(segAttributes);
-        }
+        //for (String node : nodes) {
+        Map<String, String> attrMap = new HashMap<>();
+        //int countNum = bstep.getCountNum(batchContext, "1");
+        attrMap.put("beginIndex", "1");
+        //attrMap.put("endIndex",  + "");
+        attrMap.put("node", "1");
+        //attrMap.put("pageSize", countNum + "");
+        Attributes segAttributes = new Attributes(attrMap);
+        AttributesList.add(segAttributes);
+        //}
         return AttributesList;
     }
 }

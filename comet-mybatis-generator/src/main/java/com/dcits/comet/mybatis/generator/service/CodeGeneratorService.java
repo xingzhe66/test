@@ -264,9 +264,11 @@ public class CodeGeneratorService {
                         oMap.put("shardFlag",shardFlag);
                     }
                     // 注释
+                    if(map.get("COLUMNCOMMENT")==null){
+                        oMap.put("columnComment", " " );
+                    }
                     if ("COLUMNCOMMENT".equals(key)) {
-                        String reStr = PbUtils.strRelplacetoLowerCase(map.get("COLUMNNAME").toString());// 列名称，首字母小写，去下划线
-                        oMap.put("columnComment", map.get(key) == null ? reStr : map.get(key));// 注释
+                        oMap.put("columnComment", map.get(key) == null ? " " : map.get(key));// 注释
                     }
                     // 列类型
                     if ("COLUMNTYPE".equals(key)) {
@@ -299,7 +301,7 @@ public class CodeGeneratorService {
             data.put("objectName", PbUtils.fristStrToLowerCase(className));// 类名首字母小写
             data.put("mouldName", generatorProperties.getBasePackage());// 基本包名称
             data.put("entityPackage", generatorProperties.getEntityPackage());//entity包名称
-            data.put("functionComment", generatorProperties.getEntityDescription());// 功能说明
+            data.put("functionComment", generatorProperties.getEntityDescription()==null?" ":generatorProperties.getEntityDescription());// 功能说明
             data.put("tableName", generatorProperties.getTableName().toUpperCase());// 表名称
             data.put("cloums", clList);// 属性
             data.put("author", generatorProperties.getAuthor());// 作者

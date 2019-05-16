@@ -14,10 +14,13 @@ import com.dcits.sonic.executor.step.segment.SegmentRunningStep;
 import com.dcits.sonic.executor.step.segment.SegmentStepExecutor;
 import com.dcits.sonic.executor.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 
-/**分段执行器
+/**
+ * 分段执行器
+ *
  * @author leijian
  * @version 1.0
  * @date 2019/5/7 14:38
@@ -37,12 +40,16 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             log.debug("segAttributes{}", segAttributes);
 
             JobParam jobParam = JSON.parseObject(JSON.toJSONString(parameters), JobParam.class);
-            if(StringUtil.isEmpty(jobParam.getExeId())){
-                jobParam.setExeId(segmentRunningStep.getJobRunId());
+            if (StringUtil.isEmpty(jobParam.getExeId())) {
+                jobParam.setExeId(segmentRunningStep.getStepRunId());
             }
+
             BatchContext batchContext = new BatchContext();
             String params = parameters.get("params");
-            batchContext.setParams(JsonUtil.jsonToMap(params));
+
+            if (StringUtils.isNotEmpty(params)) {
+                batchContext.setParams(JsonUtil.jsonToMap(params));
+            }
             jobParam.setBatchContext(batchContext);
 
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
