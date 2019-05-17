@@ -15,18 +15,18 @@ import java.util.List;
 public abstract class AbstractBStep<T,O> implements IBStep<T,O> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractBStep.class);
 
-
-    @Override
-    public int getCountNum(BatchContext batchContext,String node) {
-        return -1;
-    }
-
     @Override
     public List<String> getNodeList(BatchContext batchContext) {
         List<String> list = new ArrayList();
         list.add((String)"-1");
         return list;
     }
+
+    @Override
+    public int getCountNum(BatchContext batchContext,String node) {
+        return -1;
+    }
+
 
     @Override
     public void preBatchStep(BatchContext batchContext) {
