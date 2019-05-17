@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 
+import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         }, 60, 60, TimeUnit.SECONDS);
     }
 
+    @PreDestroy
     public void updateCacheToDb() {
         manager.forEach((k, v) -> {
             WorkerNodePo workerNodePo = cache.get(k);

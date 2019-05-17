@@ -13,6 +13,7 @@ import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -217,6 +218,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         return "redis";
     }
 
+    @PreDestroy
     public void updateCacheToDb() {
         for (Map.Entry<String, WorkerNodePo> vo : cache.entrySet()) {
             WorkerNodePo workerNodePo = vo.getValue();
