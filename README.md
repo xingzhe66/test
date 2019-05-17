@@ -4,7 +4,7 @@
 ## comet-base
 > 基础:包含classLoader和package扫描等底层功能。
 
-## comet-batch
+## comet-batch-core
 > 批量模块: 基于spring-batch封装。
 - 批量调度与step分离。
 - step实现与调起方式分离。
@@ -16,6 +16,9 @@
 
 ## comet-batch-service
 > 批量服务模块: 提供调度平台，联机调起所需的对外集成服务接口。
+
+## comet-batch-sonic
+> sonic批量调度平台的集成。
 
 ## comet-boot-dependencies
 > 依赖管理模块: 所有模块的根工程，管理依赖版本，插件版本。

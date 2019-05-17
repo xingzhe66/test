@@ -10,6 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>comet-starter</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>comet-starter-online-service</module>
+        <module>comet-starter-batch-sonic</module>
+        <module>comet-starter-batch-service</module>
+        <module>comet-starter-mq-consumer</module>
+        <module>comet-starter-mq-provider</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
