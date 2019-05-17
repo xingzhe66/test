@@ -54,6 +54,7 @@ public class MQConsumeListener implements MessageListenerConcurrently{
             message.setMessageId(messageExt.getKeys());
             message.setMsgText(new String(messageExt.getBody()));
             //处理对应的业务逻辑
+            //todo 可改为异步处理
             mqConsumer.onMessage(message);
         }
         if(mqConsumer==null){
