@@ -40,11 +40,6 @@ public abstract class AbstractBStep<T,O> implements IBStep<T,O> {
         return list;
     }
 
-//    @Override
-//    public T read() {
-//        return null;
-//    }
-
     @Override
     public O process(BatchContext batchContext,T item) {
         return (O)item;
