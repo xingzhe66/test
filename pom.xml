@@ -41,6 +41,7 @@
         <module>comet-flow</module>
         <module>comet-assembly</module>
         <module>comet-parameter</module>
+        <module>comet-autoconfigure</module>
     </modules>
     <build>
         <plugins>
