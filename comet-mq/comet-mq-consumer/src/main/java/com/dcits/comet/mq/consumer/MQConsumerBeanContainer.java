@@ -58,4 +58,8 @@ public class MQConsumerBeanContainer  {
     public String getBeanName(String topic, String tag) {
         return CONSUMER_BEAN_MAP.get(topic+DL+tag);
     }
+
+    public static Map getConsumerBeanMap(){
+        return CONSUMER_BEAN_MAP;
+    }
 }

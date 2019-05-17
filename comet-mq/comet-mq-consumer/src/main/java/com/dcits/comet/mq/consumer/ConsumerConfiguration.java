@@ -32,8 +32,8 @@ public class ConsumerConfiguration {
     private int consumeThreadMin;
     @Value("${rocketmq.consumer.consumeThreadMax}")
     private int consumeThreadMax;
-    @Value("${rocketmq.consumer.topics}")
-    private String topics;
+//    @Value("${rocketmq.consumer.topics}")
+//    private String topics;
     @Value("${rocketmq.consumer.consumeMessageBatchMaxSize}")
     private int consumeMessageBatchMaxSize;
     @Autowired
@@ -47,9 +47,9 @@ public class ConsumerConfiguration {
         if (StringUtils.isEmpty(namesrvAddr)) {
             //  throw new RocketMQException(RocketMQErrorEnum.PARAMM_NULL,"namesrvAddr is null !!!",false);
         }
-        if (StringUtils.isEmpty(topics)) {
-            //  throw new RocketMQException(RocketMQErrorEnum.PARAMM_NULL,"topics is null !!!",false);
-        }
+//        if (StringUtils.isEmpty(topics)) {
+//            //  throw new RocketMQException(RocketMQErrorEnum.PARAMM_NULL,"topics is null !!!",false);
+//        }
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(groupName);
         consumer.setNamesrvAddr(namesrvAddr);
         consumer.setConsumeThreadMin(consumeThreadMin);
@@ -68,21 +68,17 @@ public class ConsumerConfiguration {
          * 设置一次消费消息的条数，默认为1条
          */
         consumer.setConsumeMessageBatchMaxSize(consumeMessageBatchMaxSize);
-        try {
-            /**
-             * 设置该消费者订阅的主题和tag，如果是订阅该主题下的所有tag，则tag使用*；如果需要指定订阅该主题下的某些tag，则使用||分割，例如tag1||tag2||tag3
-             */
-            String[] topicTagsArr = topics.split(";");
-            for (String topicTags : topicTagsArr) {
-                String[] topicTag = topicTags.split("~");
-                consumer.subscribe(topicTag[0], topicTag[1]);
-            }
-//            consumer.start();
-            LOGGER.info("consumer is init !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr);
-        } catch (MQClientException e) {
-            LOGGER.error("consumer is init !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr, e);
-            throw new MQException(e);
-        }
+//        try {
+//            /**
+//             * 设置该消费者订阅的主题和tag，如果是订阅该主题下的所有tag，则tag使用*；如果需要指定订阅该主题下的某些tag，则使用||分割，例如tag1||tag2||tag3
+//             */
+//
+////            consumer.start();
+//       //     LOGGER.info("consumer is init !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr);
+//        } catch (MQClientException e) {
+//       //     LOGGER.error("consumer is init !!! groupName:{},topics:{},namesrvAddr:{}", groupName, topics, namesrvAddr, e);
+//            throw new MQException(e);
+//        }
         return consumer;
     }
 }

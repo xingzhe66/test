@@ -9,6 +9,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @ClassName ProducerConfig
  * @Author guihj
@@ -27,8 +30,15 @@ public class ConsumerApplicationListener implements ApplicationListener<ContextR
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //初始化容器
         MQConsumerBeanContainer.initContainer();
+        Map consumerBeanMap =MQConsumerBeanContainer.getConsumerBeanMap();
         //启动consume服务监听
         try {
+          //  String[] topicTagsArr = topics.split(";");
+            Set<String> keySet=consumerBeanMap.keySet();
+            for (String topicTags : keySet) {
+                String[] topicTag = topicTags.split("|");
+                defaultMQPushConsumer.subscribe(topicTag[0], topicTag[1]);
+            }
             defaultMQPushConsumer.start();
             log.info("consumer is start !!! groupName:{}", defaultMQPushConsumer.getConsumerGroup());
         } catch (MQClientException e) {
