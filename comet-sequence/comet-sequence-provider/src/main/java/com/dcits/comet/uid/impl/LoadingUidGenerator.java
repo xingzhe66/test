@@ -2,7 +2,6 @@ package com.dcits.comet.uid.impl;
 
 import com.dcits.comet.commons.exception.UidGenerateException;
 import com.dcits.comet.commons.utils.NetUtils;
-import com.dcits.comet.uid.UidGenerator;
 import com.dcits.comet.uid.context.UidGeneratorContext;
 import com.dcits.comet.uid.entity.Segment;
 import com.dcits.comet.uid.entity.WorkerNodePo;

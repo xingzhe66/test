@@ -44,6 +44,6 @@ public class DBatchStep extends AbstractBStep<WorkerNodePo, WorkerNodePo> {
 
     @Override
     public void writeOne(BatchContext batchContext, WorkerNodePo item) {
-        log.info("writeOne");
+        log.info("writezOne");
     }
 }

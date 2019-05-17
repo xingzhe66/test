@@ -68,7 +68,7 @@ public class DisposableWorkerIdAssigner {
             workerNodePo.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
             workerNodePo.setSeqCache("0");
             workerNodePo.setCacheCount("0");
-            workerNodePo = workerNodePoRepository.save(workerNodePo);
+            workerNodePo = workerNodePoRepository.saveAndFlush(workerNodePo);
             return workerNodePo;
         } else {
             //校验每个bizTag配置的流水号类型只能是一种
@@ -139,7 +139,7 @@ public class DisposableWorkerIdAssigner {
             workerNodePo.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
             workerNodePo.setSeqCache("0");
             workerNodePo.setCacheCount("0");
-            workerNodePo = workerNodePoRepository.save(workerNodePo);
+            workerNodePo = workerNodePoRepository.saveAndFlush(workerNodePo);
             dbTags.add(workerNodePo);
         } else {
             if (UidGeneratorContext.UID_DEF_DEF.equalsIgnoreCase(type)) {
@@ -200,7 +200,7 @@ public class DisposableWorkerIdAssigner {
         workerNodePo.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
         workerNodePo.setSeqCache("");
         workerNodePo.setCacheCount("");
-        return workerNodePoRepository.save(workerNodePo);
+        return workerNodePoRepository.saveAndFlush(workerNodePo);
     }
 
     public void setWorkerNodePoRepository(WorkerNodePoRepository workerNodePoRepository) {

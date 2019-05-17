@@ -6,6 +6,7 @@ import lombok.ToString;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 @ToString
 public class WorkerNodePo implements Serializable {
 
-    private long id;
+    private Long id;
     private String hostName;
     private String port;
     private String type;
@@ -41,12 +42,13 @@ public class WorkerNodePo implements Serializable {
 
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "ID")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

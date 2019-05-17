@@ -58,7 +58,7 @@ public class DefaultUidGenerator implements UidGenerator {
         }
         this.workerId = workerNodePo.getId();
         initOK = true;
-        log.info("Init End...{}", this.getClass().getSimpleName());
+        log.info("Init End...{},WorkerNodePo[{}]", this.getClass().getSimpleName(),workerNodePo);
     }
 
     @Override

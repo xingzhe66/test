@@ -19,6 +19,13 @@ CREATE TABLE WORKER_NODE
   SEQ_CACHE   VARCHAR(30) NOT NULL COMMENT '缓存序列数',
   CACHE_COUNT VARCHAR(30) NOT NULL COMMENT '缓存序列计数',
   PRIMARY KEY (ID),
-  UNIQUE KEY `HOST_NAME` (`HOST_NAME`,`BIZ_TAG`) USING BTREE
+  UNIQUE KEY `HOST_NAME` (`HOST_NAME`,`BIZ_TAG`)
 )
   COMMENT ='DB WorkerID Assigner for UID Generator', ENGINE = INNODB;
+
+ DROP TABLE IF EXISTS hibernate_sequence;
+  CREATE TABLE `hibernate_sequence` (
+  `next_val` bigint(20) DEFAULT NULL
+) COMMENT ='DB hibernate_sequence Assigner for UID Generator', ENGINE = INNODB;
+
+
