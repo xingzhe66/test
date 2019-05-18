@@ -18,9 +18,9 @@ public class UidGeneratorContext {
     public static final String UID_LOAD_DEF = "load";
 
 
-    public static final String UID_DEF_MAX_SEQ = "200";
+    public static final long UID_DEF_MAX_SEQ = 200;
 
-    public static final String UID_DEF_MIN_SEQ = "0";
+    public static final long UID_DEF_MIN_SEQ = 0;
 
     public static final String UID_MIDDLEID = "0.75";
 

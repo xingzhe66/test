@@ -31,15 +31,15 @@ public class WorkerNodePo implements Serializable {
     private LocalDateTime modified;
     private LocalDateTime created;
     private String bizTag;
-    private String minSeq;
-    private String maxSeq;
+    private long minSeq;
+    private long maxSeq;
     private int step;
-    private String currSeq;
-    private String countSeq;
+    private long currSeq;
+    private long countSeq;
     private String middleId;
     private String seqCycle;
-    private String seqCache;
-    private String cacheCount;
+    private long seqCache;
+    private long cacheCount;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -125,21 +125,21 @@ public class WorkerNodePo implements Serializable {
 
     @Basic
     @Column(name = "MIN_SEQ")
-    public String getMinSeq() {
+    public long getMinSeq() {
         return minSeq;
     }
 
-    public void setMinSeq(String minSeq) {
+    public void setMinSeq(long minSeq) {
         this.minSeq = minSeq;
     }
 
     @Basic
     @Column(name = "MAX_SEQ")
-    public String getMaxSeq() {
+    public long getMaxSeq() {
         return maxSeq;
     }
 
-    public void setMaxSeq(String maxSeq) {
+    public void setMaxSeq(long maxSeq) {
         this.maxSeq = maxSeq;
     }
 
@@ -155,21 +155,21 @@ public class WorkerNodePo implements Serializable {
 
     @Basic
     @Column(name = "CURR_SEQ")
-    public String getCurrSeq() {
+    public long getCurrSeq() {
         return currSeq;
     }
 
-    public void setCurrSeq(String currSeq) {
+    public void setCurrSeq(long currSeq) {
         this.currSeq = currSeq;
     }
 
     @Basic
     @Column(name = "COUNT_SEQ")
-    public String getCountSeq() {
+    public long getCountSeq() {
         return countSeq;
     }
 
-    public void setCountSeq(String countSeq) {
+    public void setCountSeq(long countSeq) {
         this.countSeq = countSeq;
     }
 
@@ -195,21 +195,21 @@ public class WorkerNodePo implements Serializable {
 
     @Basic
     @Column(name = "SEQ_CACHE")
-    public String getSeqCache() {
+    public long getSeqCache() {
         return seqCache;
     }
 
-    public void setSeqCache(String seqCache) {
+    public void setSeqCache(long seqCache) {
         this.seqCache = seqCache;
     }
 
     @Basic
     @Column(name = "CACHE_COUNT")
-    public String getCacheCount() {
+    public long getCacheCount() {
         return cacheCount;
     }
 
-    public void setCacheCount(String cacheCount) {
+    public void setCacheCount(long cacheCount) {
         this.cacheCount = cacheCount;
     }
 

@@ -74,8 +74,8 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     public void updateCacheToDb() {
         manager.forEach((k, v) -> {
             WorkerNodePo workerNodePo = cache.get(k);
-            if (Long.valueOf(workerNodePo.getCurrSeq()) != v.getValue().longValue()) {
-                workerNodePo.setCurrSeq(String.valueOf(v.getValue().longValue()));
+            if (Long.compare(workerNodePo.getCurrSeq(), v.getValue().longValue()) != 0) {
+                workerNodePo.setCurrSeq(v.getValue().longValue());
                 workerNodePo.setModified(LocalDateTime.now());
                 workerNodePo = disposableWorkerIdAssigner.update(workerNodePo);
                 cache.put(k, workerNodePo);
@@ -95,11 +95,11 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
                     cache.put(tag.getBizTag(), tag);
                     Segment segment = new Segment();
                     LongAdder longAdder = new LongAdder();
-                    longAdder.add(Long.valueOf(tag.getCurrSeq()));
+                    longAdder.add(tag.getCurrSeq());
                     segment.setOk(true);
                     segment.setBizTag(tag.getBizTag());
                     segment.setValue(longAdder);
-                    segment.setMax(Long.valueOf(tag.getMaxSeq()));
+                    segment.setMax(tag.getMaxSeq());
                     segment.setStep(tag.getStep());
                     segment.setUpdateTimestamp(System.currentTimeMillis());
                     manager.put(tag.getBizTag(), segment);
@@ -151,9 +151,9 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         //先从DB for update获取锁，各个节点有可能同时更新值
         WorkerNodePo workerNodePo = disposableWorkerIdAssigner.selectByBizTagAndTypeTodoForUpdateOrInsert(UidGeneratorContext.UID_LOAD_DEF, bizTag);
         newSegment.setOk(true);
-        newSegment.setMax(Long.valueOf(workerNodePo.getMaxSeq()));
+        newSegment.setMax(workerNodePo.getMaxSeq());
         LongAdder longAdder = new LongAdder();
-        longAdder.add(Long.valueOf(workerNodePo.getMinSeq()));
+        longAdder.add(workerNodePo.getMinSeq());
         newSegment.setValue(longAdder);
         newSegment.setStep(workerNodePo.getStep());
         newSegment.setBizTag(bizTag);
@@ -202,7 +202,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
                     boolean SeqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle()) ? true : false;
                     if (SeqCycle) {
                         LongAdder longAdder = new LongAdder();
-                        longAdder.add(Long.valueOf(cache.get(segment.getBizTag()).getMinSeq()));
+                        longAdder.add(cache.get(segment.getBizTag()).getMinSeq());
                         segment.setValue(longAdder);
                         manager.put(segment.getBizTag(), segment);
                         return longAdder.longValue();

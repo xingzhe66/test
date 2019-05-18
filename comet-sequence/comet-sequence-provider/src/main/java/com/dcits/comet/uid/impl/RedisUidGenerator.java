@@ -72,8 +72,8 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         cache.forEach((k, v) -> {
             String key = v.getHostName();
             String hashKey = v.getBizTag();
-            Integer minSeq = Integer.parseInt(v.getMinSeq());
-            Integer currSeq = Integer.parseInt(v.getCurrSeq());
+            long minSeq = v.getMinSeq();
+            long currSeq = v.getCurrSeq();
             //仅仅当不存在时才会设置值
             redisTemplate.opsForHash().putIfAbsent(key, hashKey, minSeq < currSeq ? currSeq : minSeq);
         });
@@ -91,8 +91,8 @@ public class RedisUidGenerator extends DefaultUidGenerator {
                     segment.setOk(true);
                     segment.setBizTag(tag.getBizTag());
                     segment.setStep(tag.getStep());
-                    segment.setMax(Long.valueOf(tag.getMaxSeq()));
-                    redisTemplate.opsForHash().putIfAbsent(NetUtils.getLocalAddress(), tag.getBizTag(), Integer.valueOf(tag.getMinSeq()) < Integer.valueOf(tag.getCurrSeq()) ? Integer.valueOf(tag.getCurrSeq()) : Integer.valueOf(tag.getMinSeq()));
+                    segment.setMax(tag.getMaxSeq());
+                    redisTemplate.opsForHash().putIfAbsent(NetUtils.getLocalAddress(), tag.getBizTag(), tag.getMinSeq() < tag.getCurrSeq() ? tag.getCurrSeq() : tag.getMinSeq());
                     cache.put(tag.getBizTag(), tag);
                     manager.put(tag.getBizTag(), segment);
                     log.info("Add tag {} from db to cache, WorkerNodePo {}", tag.getBizTag(), tag);
@@ -168,7 +168,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
                 {
                     boolean SeqCycle = "Y".equalsIgnoreCase(cache.get(bizTag).getSeqCycle()) ? true : false;
                     if (SeqCycle) {
-                        redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag, Integer.valueOf(cache.get(bizTag).getMinSeq()));
+                        redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag,cache.get(bizTag).getMinSeq());
                         return redisTemplate.opsForHash().increment(NetUtils.getLocalAddress(), bizTag, delta);
                     }
                     isOk = false;
@@ -180,7 +180,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
             waitAndSleep(segment);
             try {
                 segment.wLock().lock();
-                redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag, Integer.valueOf(cache.get(bizTag).getMinSeq()));
+                redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag, cache.get(bizTag).getMinSeq());
                 long value = redisTemplate.opsForHash().increment(NetUtils.getLocalAddress(), bizTag, delta);
                 if (value < Long.valueOf(cache.get(bizTag).getMaxSeq())) {
                     return value;
@@ -214,12 +214,12 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         cache.put(bizTag, workerNodePo);
         Segment newSegment = new Segment();
         newSegment.setOk(true);
-        newSegment.setMax(Long.valueOf(workerNodePo.getMaxSeq()));
+        newSegment.setMax(workerNodePo.getMaxSeq());
         newSegment.setStep(workerNodePo.getStep());
         newSegment.setBizTag(bizTag);
         newSegment.setUpdateTimestamp(System.currentTimeMillis());
         manager.put(bizTag, newSegment);
-        redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag, Integer.valueOf(cache.get(bizTag).getMinSeq()));
+        redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag, cache.get(bizTag).getMinSeq());
         sw.stop("updateSegmentFromDb", bizTag + " " + workerNodePo);
     }
 
@@ -240,8 +240,8 @@ public class RedisUidGenerator extends DefaultUidGenerator {
             WorkerNodePo workerNodePo = vo.getValue();
             Object object = redisTemplate.opsForHash().get(workerNodePo.getHostName(), workerNodePo.getBizTag());
             long updateUid = Long.valueOf("" + object);
-            if (Long.valueOf(workerNodePo.getCurrSeq()) != updateUid) {
-                workerNodePo.setCurrSeq(String.valueOf(updateUid));
+            if (Long.compare(workerNodePo.getCurrSeq(), updateUid) != 0) {
+                workerNodePo.setCurrSeq(updateUid);
                 workerNodePo.setModified(LocalDateTime.now());
                 disposableWorkerIdAssigner.update(workerNodePo);
             }
