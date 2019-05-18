@@ -17,6 +17,7 @@ public abstract class AbstractBStep<T,O> implements IBStep<T,O> {
 
     @Override
     public List<String> getNodeList(BatchContext batchContext) {
+        //DBP通过解析json文件获取
         List<String> list = new ArrayList();
         list.add((String)"-1");
         return list;
@@ -24,6 +25,9 @@ public abstract class AbstractBStep<T,O> implements IBStep<T,O> {
 
     @Override
     public int getCountNum(BatchContext batchContext,String node) {
+        //Type type = ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+        //Type type = ((ParameterizedType)ibStep.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         return -1;
     }
 

@@ -9,6 +9,8 @@ import com.dcits.comet.uid.worker.BitsAllocator;
 import com.dcits.comet.uid.worker.DisposableWorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.util.Assert;
 
 import java.util.LinkedList;
@@ -109,6 +111,11 @@ public class DefaultUidGenerator implements UidGenerator {
      * @Param []
      **/
     protected synchronized long nextId(final String bizTag) {
+        StopWatch sw = null;
+        if (log.isDebugEnabled()) {
+            sw = new Slf4JStopWatch();
+        }
+        log.info("begin nextId({})", bizTag);
         if (!initOK) {
             throw new UidGenerateException("999999", "流水号生成异常");
         }
@@ -127,7 +134,12 @@ public class DefaultUidGenerator implements UidGenerator {
             sequence = 0L;
         }
         lastSecond = currentSecond;
-        return bitsAllocator.allocate(currentSecond - epochSeconds, workerId, sequence);
+        long nextId = bitsAllocator.allocate(currentSecond - epochSeconds, workerId, sequence);
+        log.info("end nextId({})={}", bizTag, nextId);
+        if (log.isDebugEnabled()) {
+            sw.stop("nextId", bizTag + ":" + nextId);
+        }
+        return nextId;
     }
 
     /**

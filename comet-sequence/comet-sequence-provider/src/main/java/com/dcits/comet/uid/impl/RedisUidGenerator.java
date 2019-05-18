@@ -109,6 +109,11 @@ public class RedisUidGenerator extends DefaultUidGenerator {
 
     @Override
     protected long nextId(String bizTag) {
+        StopWatch sw = null;
+        if (log.isDebugEnabled()) {
+            sw = new Slf4JStopWatch();
+        }
+        log.info("begin nextId({})", bizTag);
         if (!initOK) {
             throw new UidGenerateException("999999", "流水号生成异常");
         }
@@ -120,7 +125,12 @@ public class RedisUidGenerator extends DefaultUidGenerator {
         } else {
             updateSegmentFromDb(bizTag);
         }
-        return getIdFromRedis(manager.get(bizTag), bizTag, manager.get(bizTag).getStep());
+        long nextId = getIdFromRedis(manager.get(bizTag), bizTag, manager.get(bizTag).getStep());
+        log.info("end nextId({})={}", bizTag, nextId);
+        if (log.isDebugEnabled()) {
+            sw.stop("nextId", bizTag + ":" + nextId);
+        }
+        return nextId;
     }
 
     public long getIdFromRedis(final Segment segment, final String bizTag, final Integer delta) {
@@ -219,6 +229,12 @@ public class RedisUidGenerator extends DefaultUidGenerator {
     }
 
     @PreDestroy
+    public void destroy() {
+        log.info("程序终止更新到数据库");
+        initOK = false;
+        updateCacheToDb();
+    }
+
     public void updateCacheToDb() {
         for (Map.Entry<String, WorkerNodePo> vo : cache.entrySet()) {
             WorkerNodePo workerNodePo = vo.getValue();

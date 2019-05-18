@@ -65,6 +65,12 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     }
 
     @PreDestroy
+    public void destroy() {
+        log.info("程序终止更新到数据库");
+        initOK = false;
+        updateCacheToDb();
+    }
+
     public void updateCacheToDb() {
         manager.forEach((k, v) -> {
             WorkerNodePo workerNodePo = cache.get(k);
@@ -110,6 +116,11 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
 
     @Override
     protected synchronized long nextId(final String bizTag) {
+        StopWatch sw = null;
+        if (log.isDebugEnabled()) {
+            sw = new Slf4JStopWatch();
+        }
+        log.info("begin nextId({})", bizTag);
         if (!initOK) {
             throw new UidGenerateException("999999", "流水号生成异常");
         }
@@ -124,7 +135,12 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
             updateSegmentFromDb(bizTag);
         }
 
-        return getIdFromSegmentBuffer(manager.get(bizTag));
+        long nextId = getIdFromSegmentBuffer(manager.get(bizTag));
+        log.info("end nextId({})={}", bizTag, nextId);
+        if (log.isDebugEnabled()) {
+            sw.stop("nextId", bizTag + ":" + nextId);
+        }
+        return nextId;
 
     }
 
@@ -228,10 +244,12 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         }
     }
 
+    @Override
     public void setDisposableWorkerIdAssigner(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
         this.disposableWorkerIdAssigner = disposableWorkerIdAssigner;
     }
 
+    @Override
     public DisposableWorkerIdAssigner getDisposableWorkerIdAssigner() {
         return disposableWorkerIdAssigner;
     }
