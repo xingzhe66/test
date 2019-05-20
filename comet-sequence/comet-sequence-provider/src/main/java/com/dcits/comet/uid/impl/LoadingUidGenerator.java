@@ -199,8 +199,8 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
                     return value;
                 }
                 {
-                    boolean SeqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle()) ? true : false;
-                    if (SeqCycle) {
+                    boolean seqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle())&&cache.get(segment.getBizTag()).getSeqCache()!=0L;
+                    if (seqCycle&&value>cache.get(segment.getBizTag()).getSeqCache()) {
                         LongAdder longAdder = new LongAdder();
                         longAdder.add(cache.get(segment.getBizTag()).getMinSeq());
                         segment.setValue(longAdder);

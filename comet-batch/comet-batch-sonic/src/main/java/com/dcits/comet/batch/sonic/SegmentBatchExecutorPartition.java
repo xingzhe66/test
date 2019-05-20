@@ -46,23 +46,20 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
         batchContext.getParams().putAll(parameters);
         // 生成子分段扩展信息 ...
         List<Attributes> AttributesList = new ArrayList<>();
-
+        //jobParam.setStepName("GenPostStep");
         IBStep bstep = SpringContextHolder.getBean(jobParam.getStepName());
         List<String> nodes = bstep.getNodeList(batchContext);
-        //测试三个节点
-        nodes.clear();
-        nodes.add("ds_0");
-        nodes.add("ds_1");
+        //TODO 删除测试三个节点
+        //nodes.clear();
+        //nodes.add("ds_0");
+        //nodes.add("ds_1");
+        //TODO 删除节点
         for (String node : nodes) {
+            int countNum = bstep.getTotalCountNum(batchContext, node);
             Map<String, String> attrMap = new HashMap<>();
-            int countNum = 500000;
             attrMap.put("beginIndex", "1");
             attrMap.put("endIndex", "500000");
             attrMap.put("node", node);
-            if ("ds_1".equalsIgnoreCase(node)) {
-                attrMap.put("beginIndex", "1");
-                attrMap.put("endIndex", "1014607");
-            }
             attrMap.put("pageSize", countNum + "");
             Attributes segAttributes = new Attributes(attrMap);
             AttributesList.add(segAttributes);

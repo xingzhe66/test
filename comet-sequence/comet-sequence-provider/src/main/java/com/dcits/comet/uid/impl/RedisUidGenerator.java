@@ -162,12 +162,12 @@ public class RedisUidGenerator extends DefaultUidGenerator {
                     });
                 }
                 long value = redisTemplate.opsForHash().increment(NetUtils.getLocalAddress(), bizTag, delta);
-                if (value <= Long.valueOf(cache.get(bizTag).getMaxSeq())) {
+                if (value <= cache.get(bizTag).getMaxSeq()) {
                     return value;
                 }
                 {
-                    boolean SeqCycle = "Y".equalsIgnoreCase(cache.get(bizTag).getSeqCycle()) ? true : false;
-                    if (SeqCycle) {
+                    boolean seqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle())&&cache.get(segment.getBizTag()).getSeqCache()!=0L;
+                    if (seqCycle&&value>cache.get(segment.getBizTag()).getSeqCache()) {
                         redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag,cache.get(bizTag).getMinSeq());
                         return redisTemplate.opsForHash().increment(NetUtils.getLocalAddress(), bizTag, delta);
                     }

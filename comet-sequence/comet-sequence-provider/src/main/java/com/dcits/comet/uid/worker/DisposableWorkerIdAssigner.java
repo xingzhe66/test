@@ -84,11 +84,13 @@ public class DisposableWorkerIdAssigner {
                 throw new UidGenerateException("999999", "流水号生成的bizTag配置有重复项" + map.keySet());
             }
             //如果已经有当前的值，取最大值
-
             Optional<WorkerNodePo> workerNodePoOptional = dbTags.stream().filter(v -> bizTag.equals(v.getBizTag())).max(Comparator.comparing(WorkerNodePo::getMaxSeq));
+            Optional<WorkerNodePo> workerNodePoOptional2 = dbTags.stream().filter(v -> bizTag.equals(v.getBizTag())).max(Comparator.comparing(WorkerNodePo::getCacheCount));
+
             WorkerNodePo workerNodePo = workerNodePoOptional.get();
-            //WorkerNodePo workerNodePo = dbTags.stream().filter(v -> bizTag.equals(v.getBizTag()) && StringUtils.isNotEmpty(v.getMaxSeq())).sorted(Comparator.comparing(WorkerNodePo::getMaxSeq).reversed()).findFirst().get();
+            WorkerNodePo workerNodePo2 = workerNodePoOptional2.get();
             log.info("获取的当前类型[{}]的最大数据库节点信息{}", bizTag, workerNodePo);
+            log.info("获取的当前类型[{}]的最大循环数据库节点信息{}", bizTag, workerNodePo2);
             //数据节点不同NetUtils.getLocalAddress()如果当前节点的信息不存在，需要插入；如果已存在进行更新操作
             WorkerNodePo needUpdate = dbTags.stream().filter(v -> bizTag.equals(v.getBizTag()) && StringUtils.equals(NetUtils.getLocalAddress(), v.getHostName())).sorted(Comparator.comparing(WorkerNodePo::getMaxSeq).reversed()).findFirst().orElseGet(() -> {
                 log.info("存在相同的序列类型{}，在{}节点生成新的实例", bizTag, NetUtils.getLocalAddress());
@@ -112,6 +114,11 @@ public class DisposableWorkerIdAssigner {
             needUpdate.setMinSeq(workerNodePo.getMaxSeq());
             //默认加载200个
             needUpdate.setMaxSeq(workerNodePo.getMaxSeq() + UidGeneratorContext.UID_DEF_MAX_SEQ);
+            if("Y".equalsIgnoreCase(workerNodePo.getSeqCycle())&&workerNodePo.getSeqCache()>0L){
+                needUpdate.setMinSeq(workerNodePo.getCacheCount()*UidGeneratorContext.UID_DEF_MAX_SEQ);
+                needUpdate.setMaxSeq(workerNodePo.getMaxSeq()+UidGeneratorContext.UID_DEF_MAX_SEQ);
+                needUpdate.setCacheCount(workerNodePo.getCacheCount()+1);
+            }
             needUpdate.setStep(workerNodePo.getStep());
             workerNodePo = workerNodePoRepository.saveAndFlush(needUpdate);
             log.info("更新后PO值{}", workerNodePo);
