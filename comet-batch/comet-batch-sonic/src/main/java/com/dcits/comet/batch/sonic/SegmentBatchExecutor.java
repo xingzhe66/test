@@ -43,7 +43,12 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             if (StringUtil.isEmpty(jobParam.getExeId())) {
                 jobParam.setExeId(segmentRunningStep.getStepRunId());
             }
-
+            jobParam.setNode(segAttributes.getAttribute("node"));
+            if (null == jobParam.getPageSize() || 0 == jobParam.getPageSize()) {
+                jobParam.setPageSize(Integer.parseInt(segAttributes.getAttribute("pageSize")));
+            }
+            jobParam.setBeginIndex(Integer.parseInt(segAttributes.getAttribute("beginIndex")));
+            jobParam.setEndIndex(Integer.parseInt(segAttributes.getAttribute("endIndex")));
             BatchContext batchContext = new BatchContext();
             String params = parameters.get("params");
 
