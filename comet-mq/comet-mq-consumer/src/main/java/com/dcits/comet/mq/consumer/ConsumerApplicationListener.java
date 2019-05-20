@@ -36,7 +36,8 @@ public class ConsumerApplicationListener implements ApplicationListener<ContextR
           //  String[] topicTagsArr = topics.split(";");
             Set<String> keySet=consumerBeanMap.keySet();
             for (String topicTags : keySet) {
-                String[] topicTag = topicTags.split("|");
+                String[] topicTag = topicTags.split("\\|");
+                log.info("topic:"+topicTag[0]+",tag:"+topicTag[1]);
                 defaultMQPushConsumer.subscribe(topicTag[0], topicTag[1]);
             }
             defaultMQPushConsumer.start();
