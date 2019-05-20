@@ -58,7 +58,7 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
             int countNum = bstep.getTotalCountNum(batchContext, node);
             Map<String, String> attrMap = new HashMap<>();
             attrMap.put("beginIndex", "1");
-            attrMap.put("endIndex", "500000");
+            attrMap.put("endIndex", countNum+"");
             attrMap.put("node", node);
             attrMap.put("pageSize", countNum + "");
             Attributes segAttributes = new Attributes(attrMap);
