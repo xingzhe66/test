@@ -89,9 +89,6 @@ public abstract class AbstractInterceptor implements Interceptor {
             if (SelectForUpdateHelper.isSelectForUpdate()) {
                 originalSql = originalSql + SelectForUpdateHelper.getUpdateSql();
             }
-            if (null != RouteCondition.getRouteParameters()) {
-                originalSql = RouteCondition.getRouteParameters().getProcessingSql() + originalSql;
-            }
             FieldUtils.writeField(boundSql, "sql", originalSql, true);
             return invocation.proceed();
         }
