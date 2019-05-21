@@ -36,7 +36,7 @@ public class ParamSupportImpl implements ParamSupport {
 
     @Override
     public <T extends BasePo> List<T> selectList(T entity) {
-        String cacheKey = CacheUtil.getCacheKeyAll(entity);
+        String cacheKey = CacheUtil.getCacheKey(entity);
         return paramDaoSupport.selectList(entity, cacheKey);
     }
 
@@ -54,7 +54,7 @@ public class ParamSupportImpl implements ParamSupport {
 
     @Override
     public <T extends BasePo> int insert(List<T> list) {
-        String cacheKey = CacheUtil.getCacheKeyAll(list.get(0));
+        String cacheKey = CacheUtil.getCacheKey(list.get(0));
         return paramDaoSupport.insert(list, cacheKey);
     }
 
