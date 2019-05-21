@@ -1,4 +1,4 @@
-package com.dcits.comet.dao;
+package com.dcits.comet.dbsharding.route;
 
 /**
  * @ClassName Route

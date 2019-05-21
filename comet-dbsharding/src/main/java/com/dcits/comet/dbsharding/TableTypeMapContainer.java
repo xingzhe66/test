@@ -1,21 +1,12 @@
 package com.dcits.comet.dbsharding;
 
-import com.dcits.comet.base.scanner.ClasspathPackageScanner;
 import com.dcits.comet.commons.utils.YamlUtil;
 import com.dcits.comet.dao.annotation.TableType;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.FileInputStream;
-import java.net.URL;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName TableTypeMapContainer

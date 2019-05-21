@@ -1,11 +1,12 @@
 package com.dcits;
 
-import com.dcits.comet.batch.RouteProxy;
 import com.dcits.comet.batch.annotation.BatchConfiguration;
+import com.dcits.comet.batch.holder.HintManagerHelper;
 import com.dcits.comet.dao.DaoSupport;
-import com.dcits.comet.dao.Route;
-import com.dcits.comet.dbsharding.DbShardingHintManager;
 import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
+import com.dcits.comet.dbsharding.route.Route;
+import com.dcits.comet.dbsharding.route.RouteProxy;
+import com.dcits.comet.dbsharding.route.dbSharding.DbShardingHintManager;
 import com.dcits.yunyun.entity.CifBusinessPo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 
 @SpringBootApplication
 //@EnableAutoConfiguration(exclude = WebMvcConfigurer.class)
@@ -41,7 +43,9 @@ public class Appmain implements CommandLineRunner {
     public void run(String... args) throws Exception {
         DaoSupport daoSupport = (DaoSupport) applicationContext.getBean("daoSupport");
 
+        List<String> strings = HintManagerHelper.getNodeList(CifBusinessPo.class);
 
+        int num2 = HintManagerHelper.getCountNum(CifBusinessPo.class,strings.get(0),daoSupport);
         CifBusinessPo cifBusinessPo = new CifBusinessPo();
         cifBusinessPo.setBusiness("110");
         cifBusinessPo = daoSupport.selectOne(cifBusinessPo);

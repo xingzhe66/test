@@ -1,13 +1,15 @@
-package com.dcits.comet.dbsharding;
+package com.dcits.comet.dbsharding.route.dbSharding;
 
-import com.dcits.comet.dao.Route;
+import com.dcits.comet.dbsharding.route.Route;
 import io.shardingsphere.api.HintManager;
 import io.shardingsphere.core.hint.HintManagerHolder;
 
 /**
- * @author leijian
- * @version 1.0
- * @date 2019/5/21 9:54
+ * @ClassName DbShardingHintManager
+ * @Author leijian
+ * @Date 2019/5/21 9:52
+ * @Description TODO
+ * @Version 1.0
  **/
 public class DbShardingHintManager implements Route {
 

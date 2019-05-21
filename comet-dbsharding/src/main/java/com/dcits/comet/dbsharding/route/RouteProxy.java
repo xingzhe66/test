@@ -1,15 +1,15 @@
-package com.dcits.comet.batch;
-
-import com.dcits.comet.dao.Route;
+package com.dcits.comet.dbsharding.route;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * @author leijian
- * @version 1.0
- * @date 2019/5/21 10:14
+ * @ClassName RouteProxy
+ * @Author leijian
+ * @Date 2019/5/21 9:52
+ * @Description TODO
+ * @Version 1.0
  **/
 public class RouteProxy {
 

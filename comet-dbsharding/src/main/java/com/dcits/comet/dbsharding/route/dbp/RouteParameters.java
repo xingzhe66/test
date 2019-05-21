@@ -1,12 +1,17 @@
-package com.dcits.comet.dao.interceptor;
-
-import com.dcits.comet.dao.Route;
+package com.dcits.comet.dbsharding.route.dbp;
 
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-public class RouteParameters implements Route {
+/**
+ * @ClassName RouteParameters
+ * @Author leijian
+ * @Date 2019/5/21 9:52
+ * @Description TODO
+ * @Version 1.0
+ **/
+public class RouteParameters {
 
     private static final String GROUP_ID = "GROUP_ID";
     private static final String TABLE_NAME = "TABLE_NAME";
@@ -95,19 +100,7 @@ public class RouteParameters implements Route {
         return stringJoiner.toString();
     }
 
-    @Override
-    public void close() {
-        RouteCondition.clear();
-    }
-
     public String getProcessingSql() {
         return HINT_PREFIX + this.toString() + HINT_SUFFIX;
-    }
-
-
-    @Override
-    public void buildDbIndex(String dbIndex, String tableId) {
-        this.dbIndex = dbIndex;
-        this.tableId = tableId;
     }
 }

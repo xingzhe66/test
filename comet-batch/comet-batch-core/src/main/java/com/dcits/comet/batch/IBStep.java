@@ -22,11 +22,6 @@ public interface IBStep<T,O> extends IStep<T,O>{
      * 获取数据总数量
      * 返回的结果用于计算这个object中的数据需要分多少分页来处理。
      */
-    public int getTotalCountNum(BatchContext batchContext, String node);
-    /**
-     * 获取数据总数量
-     * 返回的结果用于计算这个object中的数据需要分多少分页来处理。
-     */
     public int getCountNum(BatchContext batchContext, String node);
 
 
