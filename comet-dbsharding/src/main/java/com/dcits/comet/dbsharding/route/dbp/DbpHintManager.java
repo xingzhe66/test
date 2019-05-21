@@ -1,6 +1,10 @@
 package com.dcits.comet.dbsharding.route.dbp;
 
+import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.dbsharding.route.Route;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @ClassName DbpHintManager
@@ -22,8 +26,7 @@ public class DbpHintManager implements Route {
 
 
     public static DbpHintManager getInstance() {
-        RouteParameters routeParameters = new RouteParameters();
-        setRouteParameters(routeParameters);
+
         return new DbpHintManager();
     }
 
@@ -37,7 +40,14 @@ public class DbpHintManager implements Route {
 
     @Override
     public void buildDbIndex(String dbIndex, String tableId) {
-
+        RouteParameters routeParameters = new RouteParameters();
+        routeParameters.setGroupId(dbIndex);
+        if (StringUtil.isNotEmpty(tableId)) {
+            List<String> list = new LinkedList();
+            list.add(tableId);
+            routeParameters.setTargetTables(list);
+        }
+        setRouteParameters(routeParameters);
     }
 
     @Override

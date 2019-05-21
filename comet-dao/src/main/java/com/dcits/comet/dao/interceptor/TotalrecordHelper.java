@@ -6,7 +6,7 @@
 package com.dcits.comet.dao.interceptor;
 
 import org.apache.ibatis.executor.parameter.ParameterHandler;
-import org.apache.ibatis.executor.statement.PreparedStatementHandler;
+import org.apache.ibatis.executor.statement.StatementHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class TotalrecordHelper {
         isNeedTotalRowCountHolder.set(isNeedTotalRowCount);
     }
 
-    static void setTotalrecord(String sql, PreparedStatementHandler statementHandler, Connection connection) throws Throwable {
+    static void setTotalrecord(String sql, StatementHandler statementHandler, Connection connection) throws Throwable {
         PreparedStatement countStmt = null;
         ResultSet rs = null;
 

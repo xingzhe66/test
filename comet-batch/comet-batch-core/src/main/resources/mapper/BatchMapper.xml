@@ -12,9 +12,9 @@
     </select>
 
 
-    <select id="count" parameterType="java.util.Map" resultType="int">
+    <select id="SelectCountNum" parameterType="java.util.Map" resultType="int">
 	<![CDATA[
-		SELECT COUNT(*) from ${table}
+		SELECT COUNT(*) from (SELECT #{table} FROM DUAL)
         ]]>
     </select>
 </mapper>

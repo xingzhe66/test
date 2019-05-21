@@ -1,5 +1,6 @@
-package com.dcits.comet.batch.holder;
+package com.dcits.comet.batch.helper;
 
+import com.dcits.comet.batch.entity.TablePO;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.annotation.TableType;
 import com.dcits.comet.dao.annotation.TableTypeEnum;
@@ -7,6 +8,7 @@ import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
 import com.dcits.comet.dbsharding.route.Route;
 import com.dcits.comet.dbsharding.route.RouteProxy;
 import com.dcits.comet.dbsharding.route.dbSharding.DbShardingHintManager;
+import com.dcits.comet.dbsharding.route.dbp.DbpHintManager;
 import io.shardingsphere.core.rule.ShardingDataSourceNames;
 import io.shardingsphere.core.rule.ShardingRule;
 import io.shardingsphere.shardingjdbc.jdbc.core.ShardingContext;
@@ -86,12 +88,12 @@ public class HintManagerHelper {
             tableTypes = (TableType) entity.getAnnotation(TableType.class);
         }
         try {
-            route = DbShardingHintManager.getInstance();
+            route = DbpHintManager.getInstance();
             RouteProxy routeProxy = new RouteProxy(route);
             routeProxy.getProxy().buildDbIndex(node, "");
             HashMap map = new HashMap();
             map.put("table", tableTypes.name());
-            return daoSupport.count("com.dcits.comet.batch.SelectCount", map);
+            return daoSupport.count(TablePO.class.getName()+".SelectCount", map);
         } catch (Exception e) {
             log.error("{}", e);
         } finally {

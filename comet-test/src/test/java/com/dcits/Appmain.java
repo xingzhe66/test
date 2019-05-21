@@ -1,7 +1,7 @@
 package com.dcits;
 
 import com.dcits.comet.batch.annotation.BatchConfiguration;
-import com.dcits.comet.batch.holder.HintManagerHelper;
+import com.dcits.comet.batch.helper.HintManagerHelper;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
 import com.dcits.comet.dbsharding.route.Route;
@@ -45,7 +45,7 @@ public class Appmain implements CommandLineRunner {
 
         List<String> strings = HintManagerHelper.getNodeList(CifBusinessPo.class);
 
-        int num2 = HintManagerHelper.getCountNum(CifBusinessPo.class,strings.get(0),daoSupport);
+        int num2 = HintManagerHelper.getCountNum(CifBusinessPo.class,"ds_1",daoSupport);
         CifBusinessPo cifBusinessPo = new CifBusinessPo();
         cifBusinessPo.setBusiness("110");
         cifBusinessPo = daoSupport.selectOne(cifBusinessPo);

@@ -4,12 +4,14 @@ package com.dcits.comet.dao.interceptor;
 
 
 import com.dcits.comet.dao.model.BasePo;
-import com.dcits.comet.dao.mybatis.DaoSupportImpl;
 import com.dcits.comet.dao.model.Order;
+import com.dcits.comet.dao.mybatis.DaoSupportImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.ibatis.executor.statement.BaseStatementHandler;
 import org.apache.ibatis.executor.statement.PreparedStatementHandler;
 import org.apache.ibatis.executor.statement.RoutingStatementHandler;
+import org.apache.ibatis.executor.statement.SimpleStatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Invocation;
@@ -44,7 +46,13 @@ public abstract class AbstractInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         RoutingStatementHandler statementHandler = (RoutingStatementHandler) invocation.getTarget();
-        PreparedStatementHandler preparedStatHandler = (PreparedStatementHandler) FieldUtils.readField(statementHandler, "delegate", true);
+        Object object = FieldUtils.readField(statementHandler, "delegate", true);
+        BaseStatementHandler preparedStatHandler;
+        if(object instanceof SimpleStatementHandler){
+             preparedStatHandler = (SimpleStatementHandler)object;
+        }else{
+             preparedStatHandler = (PreparedStatementHandler)object;
+        }
         RowBounds rowBounds = (RowBounds) FieldUtils.readField(preparedStatHandler, "rowBounds", true);
         Connection connection = (Connection) invocation.getArgs()[0];
         BoundSql boundSql = preparedStatHandler.getBoundSql();
