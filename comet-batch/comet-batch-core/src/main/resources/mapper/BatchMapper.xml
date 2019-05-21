@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dcits.comet.batch">
+<mapper namespace="com.dcits.comet.batch.entity.TablePO">
 
     <select id="SelectCount" parameterType="java.util.Map" resultType="int" statementType="STATEMENT">
 	<![CDATA[
 
-
-
 		SELECT COUNT(*) from ${table}
 
+        ]]>
+    </select>
 
 
+    <select id="count" parameterType="java.util.Map" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) from ${table}
         ]]>
     </select>
 </mapper>
