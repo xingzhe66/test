@@ -1,0 +1,44 @@
+batch:
+  jdbc:
+    driver: com.mysql.jdbc.Driver
+    password: 123456
+    testWhileIdle: true
+    url: jdbc:mysql://10.7.25.205:3306/ensemble16-ac?characterEncoding=utf-8&rewriteBatchedStatements=true
+    user: ac
+    validationQuery: select 1;
+  threadPool:
+    corePoolSize: 10
+    keepAliveSeconds: 20
+    maxPoolSize: 20
+    queueCapacity: 10
+    threadNamePrefix: batch-
+    waitForTasksToCompleteOnShutdown: true
+com:
+  dcits:
+    sonic:
+      client:
+        app-id: ${spring.application.name}
+        scheduler-addresses: 10.7.25.201:9009
+      lock:
+        db-type: mysql
+        driver-name: com.mysql.jdbc.Driver
+        enable: false
+        password: 123456
+        url: jdbc:mysql://10.7.25.205:3306/sonic
+        user: ac
+logging:
+  level:
+    com:
+      dcits:
+        sonic:
+          remoting: DEBUG
+  path: ./logs
+management:
+  endpoint:
+    beans:
+      enabled: true
+    health:
+      enabled: true
+spring:
+  application:
+    name: sonic-demo

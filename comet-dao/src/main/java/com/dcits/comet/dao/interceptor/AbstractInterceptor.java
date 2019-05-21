@@ -43,26 +43,26 @@ public abstract class AbstractInterceptor implements Interceptor {
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        RoutingStatementHandler statementHandler = (RoutingStatementHandler)invocation.getTarget();
-        PreparedStatementHandler preparedStatHandler = (PreparedStatementHandler)FieldUtils.readField(statementHandler, "delegate", true);
-        RowBounds rowBounds = (RowBounds)FieldUtils.readField(preparedStatHandler, "rowBounds", true);
-        Connection connection = (Connection)invocation.getArgs()[0];
+        RoutingStatementHandler statementHandler = (RoutingStatementHandler) invocation.getTarget();
+        PreparedStatementHandler preparedStatHandler = (PreparedStatementHandler) FieldUtils.readField(statementHandler, "delegate", true);
+        RowBounds rowBounds = (RowBounds) FieldUtils.readField(preparedStatHandler, "rowBounds", true);
+        Connection connection = (Connection) invocation.getArgs()[0];
         BoundSql boundSql = preparedStatHandler.getBoundSql();
         String originalSql = compress(boundSql.getSql());
         Object parameter = preparedStatHandler.getParameterHandler().getParameterObject();
         if (parameter instanceof BasePo) {
-            List<Order> orders = ((BasePo)parameter).getOrderBy();
+            List<Order> orders = ((BasePo) parameter).getOrderBy();
             if (orders != null) {
                 StringBuilder orderSql = (new StringBuilder(originalSql)).append(" ORDER BY ");
                 Map<String, String> columnMapping = (Map) DaoSupportImpl.getPropertyColumnMapper().get(parameter.getClass().getName() + ".BaseResultMap");
 
                 Order order;
                 String columnName;
-                for(Iterator i$ = orders.iterator(); i$.hasNext(); orderSql.append(columnName).append(order.getSort()).append(",")) {
-                    order = (Order)i$.next();
+                for (Iterator i$ = orders.iterator(); i$.hasNext(); orderSql.append(columnName).append(order.getSort()).append(",")) {
+                    order = (Order) i$.next();
                     columnName = order.getColumnName();
                     if (columnMapping != null) {
-                        String mappingColumn = (String)columnMapping.get(order.getPropertyName());
+                        String mappingColumn = (String) columnMapping.get(order.getPropertyName());
                         if (!StringUtils.isEmpty(mappingColumn)) {
                             columnName = mappingColumn;
                         }
@@ -89,7 +89,9 @@ public abstract class AbstractInterceptor implements Interceptor {
             if (SelectForUpdateHelper.isSelectForUpdate()) {
                 originalSql = originalSql + SelectForUpdateHelper.getUpdateSql();
             }
-
+            if (null != RouteCondition.getRouteParameters()) {
+                originalSql = RouteCondition.getRouteParameters().getProcessingSql() + originalSql;
+            }
             FieldUtils.writeField(boundSql, "sql", originalSql, true);
             return invocation.proceed();
         }
@@ -135,7 +137,7 @@ public abstract class AbstractInterceptor implements Interceptor {
 
             fromStartIndex = matcher.start(0);
             text = querySelect.substring(0, fromStartIndex);
-        } while(!isBracketCanPartnership(text));
+        } while (!isBracketCanPartnership(text));
 
         return fromStartIndex;
     }
@@ -147,7 +149,7 @@ public abstract class AbstractInterceptor implements Interceptor {
     private static int getIndexOfCount(String text, char ch) {
         int count = 0;
 
-        for(int i = 0; i < text.length(); ++i) {
+        for (int i = 0; i < text.length(); ++i) {
             count = text.charAt(i) == ch ? count + 1 : count;
         }
 

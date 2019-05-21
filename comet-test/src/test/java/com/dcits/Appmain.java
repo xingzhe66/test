@@ -1,10 +1,12 @@
 package com.dcits;
 
-import com.alibaba.fastjson.JSON;
+import com.dcits.comet.batch.RouteProxy;
+import com.dcits.comet.batch.annotation.BatchConfiguration;
 import com.dcits.comet.dao.DaoSupport;
-import com.dcits.comet.dao.model.Order;
+import com.dcits.comet.dao.Route;
+import com.dcits.comet.dbsharding.DbShardingHintManager;
+import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
 import com.dcits.yunyun.entity.CifBusinessPo;
-import com.dcits.yunyun.entity.SysLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,17 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 
 @SpringBootApplication
 //@EnableAutoConfiguration(exclude = WebMvcConfigurer.class)
-@ComponentScan(basePackages = { "com.dcits", "com.dcits.yunyun"})
+@BatchConfiguration
+@ComponentScan(basePackages = {"com.dcits", "com.dcits.yunyun"})
 public class Appmain implements CommandLineRunner {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(Appmain.class);
-   @Autowired
-   private ApplicationContext applicationContext;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     public static void main(String[] args) {
 
@@ -36,15 +39,28 @@ public class Appmain implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        DaoSupport daoSupport= (DaoSupport) applicationContext.getBean("daoSupport");
+        DaoSupport daoSupport = (DaoSupport) applicationContext.getBean("daoSupport");
 
 
-        CifBusinessPo cifBusinessPo=new CifBusinessPo();
+        CifBusinessPo cifBusinessPo = new CifBusinessPo();
         cifBusinessPo.setBusiness("110");
-        cifBusinessPo=daoSupport.selectOne(cifBusinessPo);
+        cifBusinessPo = daoSupport.selectOne(cifBusinessPo);
         LOGGER.info(cifBusinessPo.toString());
         cifBusinessPo.setTranTime(1231233333L);
-//
+        LinkedHashSet linkedHashSet = ShardingDataSourceHelper.getDataSourceNames();
+        Route route = null;
+        try {
+            route = DbShardingHintManager.getInstance();
+            RouteProxy routeProxy = new RouteProxy(route);
+            routeProxy.getProxy().buildDbIndex("ds_0", null);
+            int num = daoSupport.count(new CifBusinessPo());
+            LOGGER.error(""+num);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        } finally {
+            route.close();
+        }
+        //
 //        CifBusinessPo updateset=new CifBusinessPo();
 //        updateset.setTranTime(123123L);
 //        CifBusinessPo updatewhere=new CifBusinessPo();

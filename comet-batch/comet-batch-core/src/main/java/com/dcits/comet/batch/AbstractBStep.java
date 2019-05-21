@@ -3,10 +3,11 @@ package com.dcits.comet.batch;
 
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.commons.utils.ClassLoaderUtils;
+import com.dcits.comet.dao.Route;
 import com.dcits.comet.dao.annotation.TableType;
+import com.dcits.comet.dbsharding.DbShardingHintManager;
 import com.dcits.comet.dbsharding.TableTypeMapContainer;
 import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
-import io.shardingsphere.api.HintManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -68,11 +69,18 @@ public abstract class AbstractBStep<T, O> implements IBStep<T, O> {
             e.printStackTrace();
         }
         if (tableTypes != null) {
-            if (hasAnnotation && TableTypeMapContainer.getMultiMap().containsValue(tableTypes.name())) {
+            if (hasAnnotation && (TableTypeMapContainer.getMultiMap().containsKey("upright") || TableTypeMapContainer.getMultiMap().containsKey("level")) && TableTypeMapContainer.getMultiMap().containsValue(tableTypes.name())) {
                 //涉及到分区表，强制路由node查询出数据值
-                try (HintManager hintManager = HintManager.getInstance()) {
-                    hintManager.setDatabaseShardingValue(node);
+                Route route = null;
+                try {
+                    route = DbShardingHintManager.getInstance();
+                    RouteProxy routeProxy = new RouteProxy(route);
+                    routeProxy.getProxy().buildDbIndex(node, null);
                     return getCountNum(batchContext, node);
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                } finally {
+                    route.close();
                 }
             }
         }

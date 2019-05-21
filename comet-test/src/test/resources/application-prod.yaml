@@ -8,10 +8,10 @@ spring:
       hikari:
         jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-cif1?useUnicode=true&characterEncoding=utf8
         driver-class-name: com.mysql.jdbc.Driver
-        username: root
+        username: rb
         password: 123456
-        minimum-idle: 10
-        maximum-pool-size: 200
+        minimum-idle: 1
+        maximum-pool-size: 1
         pool-name: DS_0
         connection-timeout: 300000
         connection-test-query: select 1
@@ -22,10 +22,10 @@ spring:
       hikari:
         jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-cif2?useUnicode=true&characterEncoding=utf8
         driver-class-name: com.mysql.jdbc.Driver
-        username: root
+        username: rb
         password: 123456
-        minimum-idle: 10
-        maximum-pool-size: 200
+        minimum-idle: 1
+        maximum-pool-size: 1
         pool-name: DS_1
         connection-timeout: 300000
         connection-test-query: select 1
@@ -36,10 +36,10 @@ spring:
       hikari:
         jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-cif3?useUnicode=true&characterEncoding=utf8
         driver-class-name: com.mysql.jdbc.Driver
-        username: root
+        username: rb
         password: 123456
-        minimum-idle: 10
-        maximum-pool-size: 200
+        minimum-idle: 1
+        maximum-pool-size: 1
         pool-name: DS_2
         connection-timeout: 300000
         connection-test-query: select 1
@@ -131,3 +131,18 @@ spring:
 #    consumeThreadMin: 20
 #    consumeThreadMax: 64
 #    consumeMessageBatchMaxSize: 1   #设置一次消费消息的条数，默认为1条
+batch:
+  jdbc:
+    driver: com.mysql.jdbc.Driver
+    password: 123456
+    testWhileIdle: true
+    url: jdbc:mysql://10.7.25.205:3306/ensemble16-ac?characterEncoding=utf-8&rewriteBatchedStatements=true
+    user: ac
+    validationQuery: select 1;
+  threadPool:
+    corePoolSize: 10
+    keepAliveSeconds: 20
+    maxPoolSize: 20
+    queueCapacity: 10
+    threadNamePrefix: batch-
+    waitForTasksToCompleteOnShutdown: true
