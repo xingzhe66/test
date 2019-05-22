@@ -74,8 +74,7 @@ public class HintManagerHelper {
      * @date 2019/5/21 16:12
      **/
     public static Route getInstance(Class entity, String node) {
-        Route route = null;
-        boolean hasAnnotation = false;
+        boolean hasAnnotation;
         TableType tableTypes = null;
         hasAnnotation = entity.isAnnotationPresent(TableType.class);
         if (hasAnnotation) {
@@ -83,12 +82,11 @@ public class HintManagerHelper {
         }
         try {
             ShardingContext shardingContext = ShardingDataSourceHelper.getShardingContext();
-            route = DbShardingHintManager.getInstance(node, "");
+            return DbShardingHintManager.getInstance(node, "");
         } catch (NoSuchBeanDefinitionException e) {
             //TODO DBP需要获取物理表名
-            route = DbpHintManager.getInstance(node, "");
+            return DbpHintManager.getInstance(node, "");
         }
-        return route;
     }
 
 }
