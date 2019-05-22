@@ -88,17 +88,23 @@ public class HintManagerHelper {
             tableTypes = (TableType) entity.getAnnotation(TableType.class);
         }
         try {
+            ShardingContext shardingContext = ShardingDataSourceHelper.getShardingContext();
+            route = DbShardingHintManager.getInstance();
+            RouteProxy routeProxy = new RouteProxy(route);
+            routeProxy.getProxy().buildDbIndex(node, "");
+            HashMap map = new HashMap();
+            map.put("table", tableTypes.name());
+            return daoSupport.count(TablePO.class.getName() + ".SelectCount", map);
+        } catch (NoSuchBeanDefinitionException e) {
             route = DbpHintManager.getInstance();
             RouteProxy routeProxy = new RouteProxy(route);
             routeProxy.getProxy().buildDbIndex(node, "");
             HashMap map = new HashMap();
             map.put("table", tableTypes.name());
-            return daoSupport.count(TablePO.class.getName()+".SelectCount", map);
-        } catch (Exception e) {
-            log.error("{}", e);
+            return daoSupport.count(TablePO.class.getName() + ".SelectCount", map);
         } finally {
             route.close();
         }
-        return 0;
+       
     }
 }
