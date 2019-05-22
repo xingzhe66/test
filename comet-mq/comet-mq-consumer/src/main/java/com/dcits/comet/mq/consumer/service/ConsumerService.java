@@ -119,11 +119,10 @@ public class ConsumerService {
      * @Param [topic, tag]
      * @return void
      **/
-    public  void updateConsumerMsg(String messageId,String topic,String tag,int status ){
+    public  void updateConsumerMsg(String messageId,String topic,String tag,int status){
         MqConsumerMsgPo mqConsumerMsgPo=new MqConsumerMsgPo();
         mqConsumerMsgPo.setUpdateTime(DateUtil.getCurrentDate());
         mqConsumerMsgPo.setStatus(status);
-        mqConsumerMsgPo.setRemark("topic"+topic+",tag"+tag+"未设置消费者！");
         mqConsumerMsgPo.setMqMessageId(messageId);
         daoSupport.update(mqConsumerMsgPo);
     }
