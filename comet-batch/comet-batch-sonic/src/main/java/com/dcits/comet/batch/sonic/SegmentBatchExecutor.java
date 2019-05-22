@@ -6,7 +6,6 @@ import com.dcits.comet.batch.launcher.IJobLauncher;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.sonic.exception.BatchServiceException;
-import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.api.model.Attributes;
 import com.dcits.sonic.executor.step.StepResult;
@@ -40,9 +39,7 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             log.debug("segAttributes{}", segAttributes);
 
             JobParam jobParam = JSON.parseObject(JSON.toJSONString(parameters), JobParam.class);
-            if (StringUtil.isEmpty(jobParam.getExeId())) {
-                jobParam.setExeId(segmentRunningStep.getStepRunId());
-            }
+            jobParam.setExeId(segmentRunningStep.getStepRunId());
             jobParam.setNode(segAttributes.getAttribute("node"));
             if (null == jobParam.getPageSize() || 0 == jobParam.getPageSize()) {
                 jobParam.setPageSize(Integer.parseInt(segAttributes.getAttribute("pageSize")));

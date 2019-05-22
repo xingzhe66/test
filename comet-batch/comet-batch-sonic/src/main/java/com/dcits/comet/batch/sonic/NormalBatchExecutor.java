@@ -6,7 +6,6 @@ import com.dcits.comet.batch.launcher.IJobLauncher;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.sonic.exception.BatchServiceException;
-import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.api.model.Attributes;
 import com.dcits.sonic.executor.step.StepResult;
@@ -40,9 +39,8 @@ public class NormalBatchExecutor implements NormalStepExecutor {
             log.debug("parameters{}", parameters);
 
             JobParam jobParam = JSON.parseObject(JSON.toJSONString(attributes.getAttributeMap()), JobParam.class);
-            if (StringUtil.isEmpty(jobParam.getExeId())) {
-                jobParam.setExeId(normalRunningStep.getStepRunId());
-            }
+            jobParam.setExeId(normalRunningStep.getStepRunId());
+
             BatchContext batchContext = new BatchContext();
 
             String params = parameters.get("params");
