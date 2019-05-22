@@ -3,6 +3,7 @@ package com.dcits.comet.mq.consumer.service;
 import com.dcits.comet.commons.utils.DateUtil;
 import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.dao.DaoSupport;
+import com.dcits.comet.mq.consumer.constant.Constants;
 import com.dcits.comet.mq.consumer.model.MqConsumerMsgPo;
 import com.dcits.comet.mq.consumer.model.MqConsumerRepeatPo;
 import lombok.extern.slf4j.Slf4j;
@@ -48,17 +49,17 @@ public class ConsumerService {
         mqConsumerMsgPo.setTopic(messageExt.getTopic());
         mqConsumerMsgPo.setQueueId(messageExt.getQueueId());
         mqConsumerMsgPo.setReceiveTime(DateUtil.getCurrentDate());
-        mqConsumerMsgPo.setStatus(1);
+        mqConsumerMsgPo.setStatus(Constants.STATUS_INIT);
         try {
             daoSupport.insert(mqConsumerMsgPo);
             flag=true;
         } catch (Exception e) {
             MqConsumerRepeatPo mqConsumerRepeatPo=new MqConsumerRepeatPo();
             if(e instanceof DuplicateKeyException || e.getMessage().indexOf("ORA-00001") != -1 ){
-                log.warn(messageExt.getMsgId()+"消息已经存在于MQ_CONSUMER_MSG表中，无需重复插入");
+                log.warn(messageExt.getMsgId()+"  messages already exist  the table of MQ_CONSUMER_MSG , without repetitive insertion");
                 mqConsumerRepeatPo.setRemark("消息重复");
             } else {
-                log.info(messageExt.getMsgId()+"消息插入失败");
+                log.error(messageExt.getMsgId()+" message inster fail ");
                 mqConsumerRepeatPo.setRemark("消息插入失败");
             }
             mqConsumerRepeatPo.setMqMessageId(mqConsumerMsgPo.getMqMessageId());
@@ -113,15 +114,15 @@ public class ConsumerService {
 
     /**
      * @Author guihj
-     * @Description //topic 或者 tag 不存在时，修改消息状态
+     * @Description //修改消息状态,  topic 或者 tag 不存在时  2 ，  消费失败时  4
      * @Date 2019/5/15 15:00
      * @Param [topic, tag]
      * @return void
      **/
-    public  void updateConsumerMsg(String messageId,String topic,String tag ){
+    public  void updateConsumerMsg(String messageId,String topic,String tag,int status ){
         MqConsumerMsgPo mqConsumerMsgPo=new MqConsumerMsgPo();
         mqConsumerMsgPo.setUpdateTime(DateUtil.getCurrentDate());
-        mqConsumerMsgPo.setStatus(2);
+        mqConsumerMsgPo.setStatus(status);
         mqConsumerMsgPo.setRemark("topic"+topic+",tag"+tag+"未设置消费者！");
         mqConsumerMsgPo.setMqMessageId(messageId);
         daoSupport.update(mqConsumerMsgPo);
