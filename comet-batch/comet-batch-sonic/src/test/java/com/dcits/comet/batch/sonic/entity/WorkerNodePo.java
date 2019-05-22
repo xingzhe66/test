@@ -1,4 +1,9 @@
-package com.dcits.comet.batch.sonic;
+package com.dcits.comet.batch.sonic.entity;
+
+import com.dcits.comet.dao.annotation.TableType;
+import com.dcits.comet.dao.annotation.TableTypeEnum;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -7,7 +12,9 @@ import java.io.Serializable;
  * @version 1.0
  * @date 2019/4/25 17:39
  **/
-
+@Data
+@EqualsAndHashCode(callSuper=false)
+@TableType(name="WORKER_NODE",value= TableTypeEnum.PARAM)
 public class WorkerNodePo implements Serializable {
 
     private long id;

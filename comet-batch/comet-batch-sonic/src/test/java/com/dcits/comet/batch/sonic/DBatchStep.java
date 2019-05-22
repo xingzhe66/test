@@ -1,8 +1,11 @@
 package com.dcits.comet.batch.sonic;
 
 import com.dcits.comet.batch.AbstractBStep;
+import com.dcits.comet.batch.helper.HintManagerHelper;
 import com.dcits.comet.batch.helper.JobParameterHelper;
 import com.dcits.comet.batch.param.BatchContext;
+import com.dcits.comet.batch.sonic.entity.WorkerNodePo;
+import com.dcits.comet.dao.DaoSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -28,6 +31,9 @@ public class DBatchStep extends AbstractBStep<WorkerNodePo, WorkerNodePo> {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    DaoSupport daoSupport;
 
     @Override
     public void preBatchStep(BatchContext batchContext) {
@@ -67,6 +73,16 @@ public class DBatchStep extends AbstractBStep<WorkerNodePo, WorkerNodePo> {
     }
 
     @Override
+    public int getCountNum(BatchContext batchContext, String node) {
+        return HintManagerHelper.getCountNum(WorkerNodePo.class, node, daoSupport);
+    }
+
+    @Override
+    public List<String> getNodeList(BatchContext batchContext) {
+        return HintManagerHelper.getNodeList(WorkerNodePo.class);
+    }
+
+    @Override
     public void writeChunk(BatchContext batchContext, List<WorkerNodePo> workerNodePoList) {
         log.info("writeChunk() begin, stockList.size=" + workerNodePoList.size());
         int[] updatedCountArray = jdbcTemplate.batchUpdate("update worker_node set PORT = ? where ID=?", new BatchPreparedStatementSetter() {
@@ -86,11 +102,5 @@ public class DBatchStep extends AbstractBStep<WorkerNodePo, WorkerNodePo> {
             sumInsertedCount += a;
         }
         log.info("batchInsert() end, stockList.size=" + workerNodePoList.size() + ",success inserted " + sumInsertedCount + " records");
-    }
-
-
-    @Override
-    public void writeOne(BatchContext batchContext, WorkerNodePo item) {
-        log.info("writezOne");
     }
 }

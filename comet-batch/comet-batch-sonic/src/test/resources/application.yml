@@ -39,6 +39,84 @@ management:
       enabled: true
     health:
       enabled: true
+server:
+  port: 8088
+  servlet:
+    context-path: /rb
 spring:
   application:
     name: sonic-demo
+  batch:
+    job:
+      enabled: false
+  datasource:
+    ds-0:
+      hikari:
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-ac
+        driver-class-name: com.mysql.jdbc.Driver
+        username: rb
+        password: 123456
+        minimum-idle: 1
+        maximum-pool-size: 10
+        pool-name: DS0HikariCP
+        connection-timeout: 30000
+        connection-test-query: select 1
+        max-lifetime: 600000
+        idle-timeout: 120000
+        data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
+    ds-1:
+      hikari:
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-ac
+        driver-class-name: com.mysql.jdbc.Driver
+        username: rb
+        password: 123456
+        minimum-idle: 1
+        maximum-pool-size: 10
+        pool-name: DS1HikariCP
+        connection-timeout: 30000
+        connection-test-query: select 1
+        max-lifetime: 600000
+        idle-timeout: 120000
+        data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
+    ds-2:
+      hikari:
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-ac
+        driver-class-name: com.mysql.jdbc.Driver
+        username: rb
+        password: 123456
+        minimum-idle: 1
+        maximum-pool-size: 10
+        pool-name: DS0HikariCP
+        connection-timeout: 30000
+        connection-test-query: select 1
+        max-lifetime: 600000
+        idle-timeout: 120000
+        data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
+  redis:
+    host: 10.7.25.201 #redis服务器地址
+    port: 7379
+    timeout: 10000 #超时时间
+    database: 0 #0-15 16个库 默认0
+    lettuce:
+      pool:
+        max-active: 8 #最大连接数
+        max-wait: -1 #默认-1 最大连接阻塞等待时间
+        max-idle: 8 #最大空闲连接 默认8
+        min-idle: 0 #最小空闲连接
+#feign:
+#  httpclient:
+#    enabled: true
+#  hystrix:
+#    enabled: false
+#ribbon:
+#  restclient:
+#    enabled: true
+
+#feign:
+#  hystrix:
+#    enabled: true
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 5000
+#        readTimeout: 5000

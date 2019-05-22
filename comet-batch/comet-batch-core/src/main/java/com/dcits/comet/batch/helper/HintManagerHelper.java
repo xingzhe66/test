@@ -1,6 +1,7 @@
 package com.dcits.comet.batch.helper;
 
 import com.dcits.comet.batch.entity.TablePO;
+import com.dcits.comet.commons.utils.SpringContextUtil;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.annotation.TableType;
 import com.dcits.comet.dao.annotation.TableTypeEnum;
@@ -79,7 +80,8 @@ public class HintManagerHelper {
      * @Description 根据表明查询总条数
      * @date 2019/5/21 16:12
      **/
-    public static int getCountNum(Class entity, String node, DaoSupport daoSupport) {
+    public static int getCountNum(Class entity, String node, DaoSupport daoSupport1) {
+        DaoSupport daoSupport = (DaoSupport) SpringContextUtil.getBean("daoSupport");
         Route route = null;
         boolean hasAnnotation = false;
         TableType tableTypes = null;
@@ -94,7 +96,8 @@ public class HintManagerHelper {
             routeProxy.getProxy().buildDbIndex(node, "");
             HashMap map = new HashMap();
             map.put("table", tableTypes.name());
-            return daoSupport.count(TablePO.class.getName() + ".SelectCount", map);
+            int integer = daoSupport.count(TablePO.class.getName() + ".SelectCount", map);
+            return integer;
         } catch (NoSuchBeanDefinitionException e) {
             route = DbpHintManager.getInstance();
             RouteProxy routeProxy = new RouteProxy(route);
@@ -105,6 +108,6 @@ public class HintManagerHelper {
         } finally {
             route.close();
         }
-       
+
     }
 }

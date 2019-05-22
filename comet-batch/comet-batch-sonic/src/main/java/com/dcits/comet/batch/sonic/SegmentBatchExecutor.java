@@ -57,7 +57,7 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             }
             jobParam.setBatchContext(batchContext);
             //TODO 删除测试
-            //jobParam.setStepName("GenPostStep");
+            jobParam.setStepName("dBatchStep");
             //jobParam.setBeginIndex(1);
             //jobParam.setEndIndex(500000);
             //jobParam.setPageSize(500000);
