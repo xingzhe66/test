@@ -11,6 +11,6 @@ import org.springframework.batch.item.ItemWriter;
  * @date 2019/3/21
  * @description
  */
-public interface IStep<T,O> {
+public interface IStep {
 
 }
