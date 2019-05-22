@@ -45,7 +45,6 @@ public class Appmain implements CommandLineRunner {
 
         List<String> strings = HintManagerHelper.getNodeList(CifBusinessPo.class);
 
-        int num2 = HintManagerHelper.getCountNum(CifBusinessPo.class,"ds_1",daoSupport);
         CifBusinessPo cifBusinessPo = new CifBusinessPo();
         cifBusinessPo.setBusiness("110");
         cifBusinessPo = daoSupport.selectOne(cifBusinessPo);
