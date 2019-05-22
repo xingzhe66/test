@@ -52,7 +52,7 @@ public class DBatchStep extends AbstractBStep<WorkerNodePo, WorkerNodePo> {
         workerNodePo.setPort("2");
         Route route = null;
         try {
-            HintManagerHelper.getInstance(WorkerNodePo.class, node);
+            route = HintManagerHelper.getInstance(WorkerNodePo.class, node);
             return daoSupport.count(workerNodePo);
         } catch (Exception e) {
             return 0;
