@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcits.comet.batch.sonic.entity.WorkerNodePo">
+
+    <select id="genPostSelect" parameterType="java.util.Map"
+            resultMap="BaseResultMap">
+      SELECT
+        *
+        FROM WORKER_NODE
+      WHERE  PORT = #{PORT}
+    </select>
+
+    <select id="count" parameterType="java.util.Map" resultType="int">
+        select count(1) from
+        <include refid="Table_Name"/>
+        <where>
+            <include refid="Base_Where"/>
+        </where>
+    </select>
+
+    <update id="updateBatch" parameterType="java.util.Map">
+        update WORKER_NODE set PORT='3'   where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

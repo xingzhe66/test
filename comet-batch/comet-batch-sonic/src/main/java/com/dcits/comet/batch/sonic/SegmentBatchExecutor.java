@@ -56,12 +56,6 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
                 batchContext.setParams(JsonUtil.jsonToMap(params));
             }
             jobParam.setBatchContext(batchContext);
-            //TODO 删除测试
-            jobParam.setStepName("dBatchStep");
-            //jobParam.setBeginIndex(1);
-            //jobParam.setEndIndex(500000);
-            //jobParam.setPageSize(500000);
-            //TODO 删除区间
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
             jobLauncher.run(jobParam.getStepName(), jobParam);
         } catch (Exception e) {

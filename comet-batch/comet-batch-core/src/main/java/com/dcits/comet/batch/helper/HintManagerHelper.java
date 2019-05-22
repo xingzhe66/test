@@ -1,10 +1,10 @@
 package com.dcits.comet.batch.helper;
 
-import com.dcits.comet.batch.entity.TablePO;
 import com.dcits.comet.commons.utils.SpringContextUtil;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.annotation.TableType;
 import com.dcits.comet.dao.annotation.TableTypeEnum;
+import com.dcits.comet.dao.model.BasePo;
 import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
 import com.dcits.comet.dbsharding.route.Route;
 import com.dcits.comet.dbsharding.route.RouteProxy;
@@ -16,7 +16,6 @@ import io.shardingsphere.shardingjdbc.jdbc.core.ShardingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -80,31 +79,28 @@ public class HintManagerHelper {
      * @Description 根据表明查询总条数
      * @date 2019/5/21 16:12
      **/
-    public static int getCountNum(Class entity, String node, DaoSupport daoSupport1) {
+    public static int getCountNum(BasePo entity, String node) {
         DaoSupport daoSupport = (DaoSupport) SpringContextUtil.getBean("daoSupport");
         Route route = null;
         boolean hasAnnotation = false;
         TableType tableTypes = null;
-        hasAnnotation = entity.isAnnotationPresent(TableType.class);
+        hasAnnotation = entity.getClass().isAnnotationPresent(TableType.class);
         if (hasAnnotation) {
-            tableTypes = (TableType) entity.getAnnotation(TableType.class);
+            tableTypes = (TableType) entity.getClass().getAnnotation(TableType.class);
         }
         try {
             ShardingContext shardingContext = ShardingDataSourceHelper.getShardingContext();
             route = DbShardingHintManager.getInstance();
             RouteProxy routeProxy = new RouteProxy(route);
             routeProxy.getProxy().buildDbIndex(node, "");
-            HashMap map = new HashMap();
-            map.put("table", tableTypes.name());
-            int integer = daoSupport.count(TablePO.class.getName() + ".SelectCount", map);
+            int integer = daoSupport.count(entity);
             return integer;
         } catch (NoSuchBeanDefinitionException e) {
             route = DbpHintManager.getInstance();
             RouteProxy routeProxy = new RouteProxy(route);
             routeProxy.getProxy().buildDbIndex(node, "");
-            HashMap map = new HashMap();
-            map.put("table", tableTypes.name());
-            return daoSupport.count(TablePO.class.getName() + ".SelectCount", map);
+            int integer = daoSupport.count(entity);
+            return integer;
         } finally {
             route.close();
         }

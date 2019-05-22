@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dcits.comet.batch.sonic.entity.WorkerNodePo">
+    <resultMap id="BaseResultMap" type="com.dcits.comet.batch.sonic.entity.WorkerNodePo">
+        <result column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="HOST_NAME" property="hostName" jdbcType="VARCHAR"/>
+        <result column="PORT" property="port" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Table_Name">
+		WORKER_NODE
+	</sql>
+
+    <sql id="Base_Column">
+				ID,
+				HOST_NAME,
+				PORT
+	</sql>
+
+    <sql id="Base_Where">
+        <trim suffixOverrides="AND">
+            <if test="id != null ">
+                ID = #{id} AND
+            </if>
+            <if test="hostName != null ">
+                HOST_NAME = #{hostName} AND
+            </if>
+            <if test="port != null ">
+                PORT = #{port} AND
+            </if>
+        </trim>
+    </sql>
+
+
+    <sql id="Base_Select">
+        SELECT
+        <include refid="Base_Column"/>
+        FROM
+        <include refid="Table_Name"/>
+        <where>
+            <include refid="Base_Where"/>
+        </where>
+    </sql>
+</mapper>
