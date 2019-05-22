@@ -2,7 +2,7 @@ rocketmq:
   consumer:
     groupName: ${spring.application.name}
     namesrvAddr: 127.0.0.1:9876
-    topics: dcits~*;
+#    topics: dcits~*;
     consumeThreadMin: 20
     consumeThreadMax: 64
     consumeMessageBatchMaxSize: 1

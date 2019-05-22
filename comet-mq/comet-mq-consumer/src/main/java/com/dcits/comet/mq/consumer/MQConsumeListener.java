@@ -2,6 +2,7 @@ package com.dcits.comet.mq.consumer;
 
 import com.dcits.comet.mq.api.IMQConsumer;
 import com.dcits.comet.mq.api.Message;
+import com.dcits.comet.mq.consumer.constant.Constants;
 import com.dcits.comet.mq.consumer.service.ConsumerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -55,20 +56,20 @@ public class MQConsumeListener implements MessageListenerConcurrently{
             message.setMsgText(new String(messageExt.getBody()));
             //处理对应的业务逻辑
             //todo 可改为异步处理
-            mqConsumer.onMessage(message);
+            try{
+                mqConsumer.onMessage(message);
+                consumerService.updateConsumerMsg(messageExt.getKeys(),messageExt.getTopic(),messageExt.getTags(), Constants.STATUS_SUCCESS);
+            }catch (Exception e){
+                consumerService.updateConsumerMsg(messageExt.getKeys(),messageExt.getTopic(),messageExt.getTags(),Constants.STATUS_EXCEPTION);
+                log.warn("message consumer fail");
+            }
         }
         if(mqConsumer==null){
             int reconsume = messageExt.getReconsumeTimes();
-            //sleep;
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
             if(reconsume ==3){//消息已经重试了3次，如果不需要再次消费，则返回成功
                 //todo 没有实现消费接口而又监听了这个topic的tag，可能是配置错误，需要先持久化到本地；
                 //修改消息状态 2 ，未设置消费者；
-                consumerService.updateConsumerMsg(messageExt.getKeys(),messageExt.getTopic(),messageExt.getTags());
+                consumerService.updateConsumerMsg(messageExt.getKeys(),messageExt.getTopic(),messageExt.getTags(),Constants.STATUS_UNCOMSUMER);
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
             return ConsumeConcurrentlyStatus.RECONSUME_LATER;
