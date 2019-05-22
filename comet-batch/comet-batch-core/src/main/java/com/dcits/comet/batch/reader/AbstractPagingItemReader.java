@@ -1,13 +1,13 @@
 package com.dcits.comet.batch.reader;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.support.AbstractItemCountingItemStreamItemReader;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+
+import java.util.List;
 
 /**
  * Abstract {@link org.springframework.batch.item.ItemStreamReader} for to extend when

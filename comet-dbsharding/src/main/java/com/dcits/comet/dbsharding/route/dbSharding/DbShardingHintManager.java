@@ -13,16 +13,10 @@ import io.shardingsphere.core.hint.HintManagerHolder;
  **/
 public class DbShardingHintManager implements Route {
 
-    private static HintManager hintManager;
-
-    public static DbShardingHintManager getInstance() {
-        hintManager = HintManager.getInstance();
-        return new DbShardingHintManager();
-    }
-
-    @Override
-    public void buildDbIndex(String dbIndex, String tableId) {
+    public static DbShardingHintManager getInstance(String dbIndex, String tableId) {
+        HintManager hintManager = HintManager.getInstance();
         hintManager.setDatabaseShardingValue(dbIndex);
+        return new DbShardingHintManager();
     }
 
     @Override

@@ -9,7 +9,5 @@ package com.dcits.comet.dbsharding.route;
  **/
 public interface Route {
 
-    void buildDbIndex(String dbIndex, String tableId);
-
     void close();
 }

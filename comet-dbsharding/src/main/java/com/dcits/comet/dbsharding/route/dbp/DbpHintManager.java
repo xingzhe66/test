@@ -15,8 +15,6 @@ import java.util.List;
  **/
 public class DbpHintManager implements Route {
 
-    private static DbpHintManager hintManager;
-
     private static final ThreadLocal<RouteParameters> routeParams = new ThreadLocal<RouteParameters>() {
         @Override
         protected RouteParameters initialValue() {
@@ -25,8 +23,8 @@ public class DbpHintManager implements Route {
     };
 
 
-    public static DbpHintManager getInstance() {
-
+    public static DbpHintManager getInstance(String dbIndex, String tableId) {
+        buildDbIndex(dbIndex, tableId);
         return new DbpHintManager();
     }
 
@@ -38,8 +36,8 @@ public class DbpHintManager implements Route {
         routeParams.set(routeParameters);
     }
 
-    @Override
-    public void buildDbIndex(String dbIndex, String tableId) {
+
+    public static void buildDbIndex(String dbIndex, String tableId) {
         RouteParameters routeParameters = new RouteParameters();
         routeParameters.setGroupId(dbIndex);
         if (StringUtil.isNotEmpty(tableId)) {

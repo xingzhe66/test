@@ -5,7 +5,6 @@ import com.dcits.comet.batch.helper.HintManagerHelper;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
 import com.dcits.comet.dbsharding.route.Route;
-import com.dcits.comet.dbsharding.route.RouteProxy;
 import com.dcits.comet.dbsharding.route.dbSharding.DbShardingHintManager;
 import com.dcits.yunyun.entity.CifBusinessPo;
 import org.slf4j.Logger;
@@ -53,9 +52,7 @@ public class Appmain implements CommandLineRunner {
         LinkedHashSet linkedHashSet = ShardingDataSourceHelper.getDataSourceNames();
         Route route = null;
         try {
-            route = DbShardingHintManager.getInstance();
-            RouteProxy routeProxy = new RouteProxy(route);
-            routeProxy.getProxy().buildDbIndex("ds_0", null);
+            route = DbShardingHintManager.getInstance("ds_0",null);
             int num = daoSupport.count(new CifBusinessPo());
             LOGGER.error(""+num);
         } catch (Exception e) {

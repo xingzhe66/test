@@ -6,6 +6,7 @@ import com.dcits.comet.batch.helper.JobParameterHelper;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.sonic.entity.WorkerNodePo;
 import com.dcits.comet.dao.DaoSupport;
+import com.dcits.comet.dbsharding.route.Route;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,12 +48,17 @@ public class DBatchStep extends AbstractBStep<WorkerNodePo, WorkerNodePo> {
 
     @Override
     public int getCountNum(BatchContext batchContext, String node) {
-        Map glTranHistMap = new HashMap();
-        glTranHistMap.put("port", "2");
         WorkerNodePo workerNodePo = new WorkerNodePo();
         workerNodePo.setPort("2");
-        return HintManagerHelper.getCountNum(workerNodePo,node);
-        //return daoSupport.count(WorkerNodePo.class.getName() + ".count", glTranHistMap);
+        Route route = null;
+        try {
+            HintManagerHelper.getInstance(WorkerNodePo.class, node);
+            return daoSupport.count(workerNodePo);
+        } catch (Exception e) {
+            return 0;
+        } finally {
+            route.close();
+        }
     }
 
     @Override

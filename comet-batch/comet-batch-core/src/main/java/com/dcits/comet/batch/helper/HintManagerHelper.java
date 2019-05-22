@@ -1,13 +1,9 @@
 package com.dcits.comet.batch.helper;
 
-import com.dcits.comet.commons.utils.SpringContextUtil;
-import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.annotation.TableType;
 import com.dcits.comet.dao.annotation.TableTypeEnum;
-import com.dcits.comet.dao.model.BasePo;
 import com.dcits.comet.dbsharding.helper.ShardingDataSourceHelper;
 import com.dcits.comet.dbsharding.route.Route;
-import com.dcits.comet.dbsharding.route.RouteProxy;
 import com.dcits.comet.dbsharding.route.dbSharding.DbShardingHintManager;
 import com.dcits.comet.dbsharding.route.dbp.DbpHintManager;
 import io.shardingsphere.core.rule.ShardingDataSourceNames;
@@ -27,7 +23,6 @@ import java.util.List;
  **/
 @Slf4j
 public class HintManagerHelper {
-
 
     /**
      * @param entity 实体类
@@ -73,37 +68,27 @@ public class HintManagerHelper {
     }
 
     /**
-     * @param [entity, node, daoSupport]
      * @return int
      * @author leijian
      * @Description 根据表明查询总条数
      * @date 2019/5/21 16:12
      **/
-    public static int getCountNum(BasePo entity, String node) {
-        DaoSupport daoSupport = (DaoSupport) SpringContextUtil.getBean("daoSupport");
+    public static Route getInstance(Class entity, String node) {
         Route route = null;
         boolean hasAnnotation = false;
         TableType tableTypes = null;
-        hasAnnotation = entity.getClass().isAnnotationPresent(TableType.class);
+        hasAnnotation = entity.isAnnotationPresent(TableType.class);
         if (hasAnnotation) {
-            tableTypes = (TableType) entity.getClass().getAnnotation(TableType.class);
+            tableTypes = (TableType) entity.getAnnotation(TableType.class);
         }
         try {
             ShardingContext shardingContext = ShardingDataSourceHelper.getShardingContext();
-            route = DbShardingHintManager.getInstance();
-            RouteProxy routeProxy = new RouteProxy(route);
-            routeProxy.getProxy().buildDbIndex(node, "");
-            int integer = daoSupport.count(entity);
-            return integer;
+            route = DbShardingHintManager.getInstance(node, "");
         } catch (NoSuchBeanDefinitionException e) {
-            route = DbpHintManager.getInstance();
-            RouteProxy routeProxy = new RouteProxy(route);
-            routeProxy.getProxy().buildDbIndex(node, "");
-            int integer = daoSupport.count(entity);
-            return integer;
-        } finally {
-            route.close();
+            //TODO DBP需要获取物理表名
+            route = DbpHintManager.getInstance(node, "");
         }
-
+        return route;
     }
+
 }
