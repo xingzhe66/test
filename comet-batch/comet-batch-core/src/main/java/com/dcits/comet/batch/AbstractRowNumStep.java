@@ -30,17 +30,6 @@ public abstract class AbstractRowNumStep<T, O> implements IRowNumStep<T, O> {
     }
 
     @Override
-    public void writeChunk(BatchContext batchContext, List<O> items) {
-        for (O item : items) {
-            writeOne(batchContext, item);
-        }
-    }
-
-    public void writeOne(BatchContext batchContext, O item) {
-
-    }
-
-    @Override
     public void afterBatchStep(BatchContext batchContext) {
 
     }
