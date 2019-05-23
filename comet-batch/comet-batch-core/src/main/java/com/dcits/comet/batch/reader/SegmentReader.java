@@ -65,7 +65,7 @@ public class SegmentReader<T> implements ItemReader<T> {
 //        start= (Comparable) batchContext.getParams().get("segment_start");
 //        end= (Comparable) batchContext.getParams().get("segment_end");
 
-        results.addAll(batchStep.getAll(batchContext, start,end,node));
+        results.addAll(batchStep.getPageList(batchContext, start,end,node));
         log.info("doReadPage完毕,results大小为:"+results.size());
     }
 
