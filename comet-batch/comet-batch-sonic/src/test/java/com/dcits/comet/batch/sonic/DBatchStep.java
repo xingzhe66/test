@@ -1,6 +1,6 @@
 package com.dcits.comet.batch.sonic;
 
-import com.dcits.comet.batch.AbstractBStep;
+import com.dcits.comet.batch.AbstractRowNumStep;
 import com.dcits.comet.batch.helper.HintManagerHelper;
 import com.dcits.comet.batch.helper.JobParameterHelper;
 import com.dcits.comet.batch.param.BatchContext;
@@ -23,7 +23,7 @@ import java.util.Map;
  **/
 @Service("dBatchStep")
 @Slf4j
-public class DBatchStep extends AbstractBStep<WorkerNodePo, WorkerNodePo> {
+public class DBatchStep extends AbstractRowNumStep<WorkerNodePo, WorkerNodePo> {
 
     @Autowired
     JdbcTemplate jdbcTemplate;

@@ -20,13 +20,19 @@ public class StepParam {
 
     private int chunkSize;
 
-    private int beginIndex;
+    private Comparable beginIndex;
 
-    private int endIndex;
+    private Comparable endIndex;
 
     private String runType;
 
     private int threadNum;
+
+    private Comparable segmentStart;
+
+    private Comparable segmentEnd;
+
+
 
     private BatchContext batchContext;
 
@@ -54,19 +60,19 @@ public class StepParam {
         this.chunkSize = chunkSize;
     }
 
-    public Integer getEndIndex() {
+    public Comparable getEndIndex() {
         return endIndex;
     }
 
-    public void setEndIndex(Integer endIndex) {
+    public void setEndIndex(Comparable endIndex) {
         this.endIndex = endIndex;
     }
 
-    public Integer getBeginIndex() {
+    public Comparable getBeginIndex() {
         return beginIndex;
     }
 
-    public void setBeginIndex(Integer beginIndex) {
+    public void setBeginIndex(Comparable beginIndex) {
         this.beginIndex = beginIndex;
     }
 
@@ -100,5 +106,21 @@ public class StepParam {
 
     public void setNode(String node) {
         this.node = node;
+    }
+
+    public void setSegmentStart(Comparable segmentStart) {
+        this.segmentStart = segmentStart;
+    }
+
+    public void setSegmentEnd(Comparable segmentEnd) {
+        this.segmentEnd = segmentEnd;
+    }
+
+    public Comparable getSegmentStart() {
+        return segmentStart;
+    }
+
+    public Comparable getSegmentEnd() {
+        return segmentEnd;
     }
 }

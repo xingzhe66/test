@@ -3,6 +3,7 @@ package com.dcits.comet.batch.service.model;
 import com.dcits.comet.batch.param.BatchContext;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author wangyun
@@ -34,11 +35,11 @@ public class ExeInput implements Serializable {
     /**
      从第几条开始读，不包含当前条
      */
-    private int beginIndex;
+    private BigDecimal beginIndex;
     /**
      到第几条开结束，包含当前条
      */
-    private int endIndex;
+    private BigDecimal endIndex;
 
     /**
      异步标示
@@ -59,6 +60,11 @@ public class ExeInput implements Serializable {
      线程数
      */
     private int threadNum;
+
+    private String segmentStart;
+
+    private String segmentEnd;
+
     /**
      上下文
      */
@@ -96,19 +102,19 @@ public class ExeInput implements Serializable {
         this.chunkSize = chunkSize;
     }
 
-    public Integer getEndIndex() {
+    public BigDecimal getEndIndex() {
         return endIndex;
     }
 
-    public void setEndIndex(Integer endIndex) {
+    public void setEndIndex(BigDecimal endIndex) {
         this.endIndex = endIndex;
     }
 
-    public Integer getBeginIndex() {
+    public BigDecimal getBeginIndex() {
         return beginIndex;
     }
 
-    public void setBeginIndex(Integer beginIndex) {
+    public void setBeginIndex(BigDecimal beginIndex) {
         this.beginIndex = beginIndex;
     }
 
@@ -150,5 +156,21 @@ public class ExeInput implements Serializable {
 
     public void setAsync(String async) {
         this.async = async;
+    }
+
+    public String getSegmentStart() {
+        return segmentStart;
+    }
+
+    public void setSegmentStart(String segmentStart) {
+        this.segmentStart = segmentStart;
+    }
+
+    public String getSegmentEnd() {
+        return segmentEnd;
+    }
+
+    public void setSegmentEnd(String segmentEnd) {
+        this.segmentEnd = segmentEnd;
     }
 }

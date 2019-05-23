@@ -1,6 +1,6 @@
 package com.dcits.comet.batch.service.test.batchstep;
 
-import com.dcits.comet.batch.AbstractBStep;
+import com.dcits.comet.batch.AbstractRowNumStep;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.service.test.entity.SysLog;
 import com.dcits.comet.dao.DaoSupport;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service("cBatchStep")
 //@StepScope
-public class CBatchStep extends AbstractBStep<SysLog,SysLog> {
+public class CBatchStep extends AbstractRowNumStep<SysLog,SysLog> {
     protected static final Logger LOGGER = LoggerFactory.getLogger(CBatchStep.class);
     @Resource
     public DaoSupport daoSupport;
@@ -37,10 +37,7 @@ public class CBatchStep extends AbstractBStep<SysLog,SysLog> {
     @Override
     public SysLog process(BatchContext batchContext,SysLog item) {
         LOGGER.info("process C....." + item.toString());
-//        LOGGER.info((String)BatchContextManager.getInstance().get(JobParameterHelper.get("jobId"),"context"));
-//
-//        BatchContextManager.getInstance().put(JobParameterHelper.get("jobId"),"context","process");
-        return item;
+         return item;
     }
     @Override
     public void writeChunk(BatchContext batchContext,List<SysLog> item) {
@@ -60,7 +57,12 @@ public class CBatchStep extends AbstractBStep<SysLog,SysLog> {
     }
 
     @Override
-    public void writeOne(BatchContext batchContext, SysLog item) {
+    public List<String> getNodeList(BatchContext batchContext) {
+        return null;
+    }
 
+    @Override
+    public int getCountNum(BatchContext batchContext, String node) {
+        return 0;
     }
 }

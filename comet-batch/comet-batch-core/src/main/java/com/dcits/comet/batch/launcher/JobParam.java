@@ -36,6 +36,11 @@ public class JobParam {
 
     private int threadNum;
 
+    private Comparable segmentStart;
+
+    private Comparable segmentEnd;
+
+
     private BatchContext batchContext;
 
     public String getStepName() {
@@ -125,5 +130,21 @@ public class JobParam {
 
     public void setAsync(String async) {
         this.async = async;
+    }
+
+    public Comparable getSegmentStart() {
+        return segmentStart;
+    }
+
+    public void setSegmentStart(Comparable segmentStart) {
+        this.segmentStart = segmentStart;
+    }
+
+    public Comparable getSegmentEnd() {
+        return segmentEnd;
+    }
+
+    public void setSegmentEnd(Comparable segmentEnd) {
+        this.segmentEnd = segmentEnd;
     }
 }

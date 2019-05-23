@@ -1,7 +1,7 @@
 package com.dcits.comet.batch;
 
 import com.dcits.comet.batch.processor.Processor;
-import com.dcits.comet.batch.reader.Reader;
+import com.dcits.comet.batch.reader.RowNumReader;
 import com.dcits.comet.batch.writer.Writer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class BatchBeanBuilder implements BeanFactoryPostProcessor {
         for (String name : names) {
 
             //Bean构建
-            BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(Reader.class);
+            BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(RowNumReader.class);
             //向里面的属性注入值，提供get set方法
             readerBuider.addPropertyReference("batchStep",name); //因为实例还未生成，所以只定义引用；
             //todo 把相关配置放在接口中传入

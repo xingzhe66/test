@@ -4,4 +4,25 @@
     <select id="extendSelect" resultMap="BaseResultMap"  parameterType="java.util.Map">
     select * from Sys_Log
     </select>
+    <select id="extendSelect2" resultMap="BaseResultMap"  parameterType="java.util.Map">
+    select * from Sys_Log where id between #{beginIndex} and #{endIndex}
+    </select>
+    <select id="extendSelect3" resultType="java.util.List"  parameterType="java.util.Map">
+    SELECT
+	MIN(KEY_FIELD) START_KEY,
+	MAX(KEY_FIELD) END_KEY,
+	count(1) ROW_COUNT
+    FROM
+        (
+            SELECT
+                KEY_FIELD ,@rownum:=@rownum + 1 AS rownum
+    FROM
+        (select id as key_field from Sys_Log ) t1,
+        (SELECT @rownum := - 1) t
+    ORDER BY
+        t1.key_field
+    ) tt
+    GROUP BY
+        floor(tt.rownum / 10)
+    </select>
 </mapper>

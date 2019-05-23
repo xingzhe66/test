@@ -3,7 +3,10 @@ package com.dcits.comet.batch;
 import static com.dcits.comet.batch.constant.BatchConstant.*;
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.processor.Processor;
-import com.dcits.comet.batch.reader.Reader;
+import com.dcits.comet.batch.reader.IReader;
+import com.dcits.comet.batch.reader.RowNumReader;
+import com.dcits.comet.batch.reader.SegmentReader;
+import com.dcits.comet.batch.step.StepParam;
 import com.dcits.comet.batch.writer.Writer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -40,7 +43,7 @@ public class BatchBeanFactory {
             dbf.destroySingleton(READER_NAME_PEX + name);
         }
         //Bean构建
-        BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(Reader.class);
+        BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(RowNumReader.class);
         //向里面的属性注入值，提供get set方法
         readerBuider.addPropertyReference(BATCH_STEP_NAME, name); //因为实例还未生成，所以只定义引用；
         //todo 把相关配置放在接口中传入
@@ -61,19 +64,37 @@ public class BatchBeanFactory {
     /**
      * 多实例
      */
-    public static ItemReader getNewReader(String stepName, int pageSize, int beginIndex, int endIndex, String node){
-        ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
+    public static ItemReader getNewReader(StepParam stepParam){
 
-        Reader reader=new Reader();
-        reader.setBatchStep((IBStep) context.getBean(stepName));
-        reader.setPageSize(pageSize);
-        reader.setNode(node);
-        if(beginIndex>=0&&endIndex>0) {
-            reader.setBeginIndex(beginIndex);
-            reader.setEndIndex(endIndex);
-            reader.init();
+        int pageSize = stepParam.getPageSize();
+        int beginIndex = (int) stepParam.getBeginIndex();
+        int endIndex = (int) stepParam.getEndIndex();
+        String stepName = stepParam.getStepName();
+        String node = stepParam.getNode();
+
+        ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
+        IStep ibStep=(IStep) context.getBean(stepName);
+
+        if(ibStep instanceof IRowNumStep) {
+            RowNumReader rowNumReader = new RowNumReader();
+            rowNumReader.setBatchStep((IRowNumStep) ibStep);
+            rowNumReader.setPageSize(pageSize);
+            rowNumReader.setNode(node);
+            if (beginIndex >= 0 && endIndex > 0) {
+                rowNumReader.setBeginIndex(beginIndex);
+                rowNumReader.setEndIndex(endIndex);
+                rowNumReader.init();
+            }
+            return rowNumReader;
+        }else if(ibStep instanceof ISegmentStep) {
+            SegmentReader segmentReader = new SegmentReader();
+            segmentReader.setBatchStep((ISegmentStep) ibStep);
+            segmentReader.setStart(stepParam.getSegmentStart());
+            segmentReader.setEnd(stepParam.getSegmentEnd());
+            segmentReader.setNode(node);
+            return segmentReader;
         }
-        return reader;
+        return null;
     }
     public static ItemProcessor getNewProcessor(String stepName){
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();

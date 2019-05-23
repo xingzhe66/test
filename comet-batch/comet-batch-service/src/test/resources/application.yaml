@@ -87,3 +87,20 @@ logging:
 server:
   port: 8089
 
+#spring batch jobRepository 独立数据源
+batch:
+  jdbc:
+    driver: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.7.25.205:3306/ensemble16-cif1
+    user: ac
+    password: 123456
+    testWhileIdle: true
+    validationQuery: select 1;
+  threadPool:
+    corePoolSize: 50
+    maxPoolSize: 50
+    queueCapacity: 10
+    keepAliveSeconds: 60
+    threadNamePrefix: batch-
+    waitForTasksToCompleteOnShutdown: true
+

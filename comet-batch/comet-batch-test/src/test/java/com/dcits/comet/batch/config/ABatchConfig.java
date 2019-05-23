@@ -77,7 +77,7 @@ public class ABatchConfig {
 //    @StepScope
 //    public ItemReader reader_cBatch() {
 //        LOGGER.info("reader_cBatch.......");
-//        Reader reader=new Reader();
+//        RowNumReader reader=new RowNumReader();
 //        reader.setBatch(cBatch);
 //        return reader;
 //    }

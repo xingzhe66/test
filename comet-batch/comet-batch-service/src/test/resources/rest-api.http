@@ -3,7 +3,29 @@ Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
 
-{"stepName": "cBatchStep" ,"exeId": "6" ,"pageSize": "100" ,"chunkSize": "2" ,"beginIndex": "2" ,"endIndex": "7"}
+
+{
+//  "stepName": "simpleTaskletStep",
+  "stepName": "segmentBatchStep",
+  "exeId": "31",
+  "pageSize": "100",
+  "chunkSize": "50",
+  "node": "ds_1",
+  "beginIndex": "-1",
+  "endIndex": "-1",
+  "async": "1",
+  "runType": "2",
+  "threadNum": "30",
+  "segmentStart": "1",
+  "segmentEnd": "11111111111111",
+  "batchContext" : {
+     "params" : {
+
+     }
+  }
+
+}
+
 
 <> 2019-02-20T104055.200.txt
 

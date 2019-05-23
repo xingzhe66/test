@@ -13,7 +13,8 @@
 	</settings>
 
 	<plugins>
-		<plugin interceptor="com.dcits.comet.dao.interceptor.OracleInterceptor" />
+		<plugin interceptor="com.dcits.comet.dao.interceptor.MySqlInterceptor" />
+
 	</plugins>
 	
 

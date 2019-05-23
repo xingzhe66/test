@@ -1,9 +1,6 @@
 package com.dcits.comet.batch.step;
 
-import com.dcits.comet.batch.BatchBeanFactory;
-import com.dcits.comet.batch.IBStep;
-import com.dcits.comet.batch.IStep;
-import com.dcits.comet.batch.ITStep;
+import com.dcits.comet.batch.*;
 import com.dcits.comet.batch.constant.BatchConstant;
 import com.dcits.comet.batch.exception.BatchException;
 import com.dcits.comet.batch.holder.SpringContextHolder;
@@ -39,8 +36,8 @@ public class StepFactory {
 
         int pageSize = stepParam.getPageSize();
         int chunkSize = stepParam.getChunkSize();
-        int beginIndex = stepParam.getBeginIndex();
-        int endIndex = stepParam.getEndIndex();
+        int beginIndex = (Integer) stepParam.getBeginIndex();
+        int endIndex =(Integer) stepParam.getEndIndex();
         int threadNum = stepParam.getThreadNum();
         String stepName = stepParam.getStepName();
         String node = stepParam.getNode();
@@ -55,7 +52,7 @@ public class StepFactory {
         Step step = null;
         if (stepObj instanceof IBStep) {
 
-            ItemReader reader = BatchBeanFactory.getNewReader(stepName, pageSize, beginIndex, endIndex,node);
+            ItemReader reader = BatchBeanFactory.getNewReader(stepParam);
             ItemWriter writer = BatchBeanFactory.getNewWriter(stepName);
             ItemProcessor processor = BatchBeanFactory.getNewProcessor(stepName);
 

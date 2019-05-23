@@ -2,7 +2,7 @@ package com.dcits;
 //
 //import com.dcits.comet.batch.IBStep;
 //import com.dcits.comet.batch.processor.Processor;
-//import com.dcits.comet.batch.reader.Reader;
+//import com.dcits.comet.batch.reader.RowNumReader;
 //import com.dcits.comet.batch.writer.Writer;
 //import com.fasterxml.jackson.core.JsonParseException;
 //import org.springframework.batch.core.*;
@@ -45,7 +45,7 @@ package com.dcits;
 //
 //            for (String name : names) {
 //                //Bean构建
-//                BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(Reader.class);
+//                BeanDefinitionBuilder readerBuider = BeanDefinitionBuilder.genericBeanDefinition(RowNumReader.class);
 //                //向里面的属性注入值，提供get set方法
 //                readerBuider.addPropertyReference("batchStep",name); //因为实例还未生成，所以只定义引用；
 //                //todo 把相关配置放在接口中传入
