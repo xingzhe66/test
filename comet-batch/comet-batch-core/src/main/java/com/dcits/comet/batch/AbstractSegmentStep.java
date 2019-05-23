@@ -15,7 +15,6 @@ public abstract class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
     public List<String> getNodeList(BatchContext batchContext) {
         return null;
     }
-
     @Override
     public List<Segment> getSegmentList(BatchContext batchContext, String node) {
         return null;
@@ -28,13 +27,10 @@ public abstract class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
 
     @Override
     public O process(BatchContext batchContext, T item) {
-        return null;
+        return (O) item;
     }
 
-    @Override
-    public void writeChunk(BatchContext batchContext, List<O> item) {
 
-    }
 
     @Override
     public void afterBatchStep(BatchContext batchContext) {
