@@ -25,6 +25,7 @@ public class DB2Interceptor extends AbstractInterceptor {
     public DB2Interceptor() {
     }
 
+    @Override
     protected String getPagingSql(String querySelect, int pageIndex, int pageSize) {
         StringBuffer pageSql = new StringBuffer();
         pageSql.append("select * from (select tmp_tb.*,ROW_NUMBER() OVER() AS ROWNUM from (");

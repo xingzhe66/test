@@ -24,6 +24,7 @@ public class OracleInterceptor extends AbstractInterceptor {
     public OracleInterceptor() {
     }
 
+    @Override
     protected String getPagingSql(String querySelect, int pageIndex, int pageSize) {
         StringBuffer pageSql = new StringBuffer();
         int i = querySelect.indexOf("*/ ");

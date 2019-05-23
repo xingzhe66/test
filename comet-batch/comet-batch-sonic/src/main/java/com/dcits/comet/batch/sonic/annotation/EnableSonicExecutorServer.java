@@ -27,4 +27,5 @@ import java.lang.annotation.Target;
 @EnableConfigurationProperties({SonicClientProfileConfig.class, SonicRemoteProfileConfig.class, SonicSimpleDbLockFactory.class})
 @Import({SonicExecutorServerRegistrar.class, SoincSpringApplicationContext.class})
 public @interface EnableSonicExecutorServer {
+
 }

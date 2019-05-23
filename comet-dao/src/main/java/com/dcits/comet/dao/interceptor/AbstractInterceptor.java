@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,10 +49,10 @@ public abstract class AbstractInterceptor implements Interceptor {
         RoutingStatementHandler statementHandler = (RoutingStatementHandler) invocation.getTarget();
         Object object = FieldUtils.readField(statementHandler, "delegate", true);
         BaseStatementHandler preparedStatHandler;
-        if(object instanceof SimpleStatementHandler){
-             preparedStatHandler = (SimpleStatementHandler)object;
-        }else{
-             preparedStatHandler = (PreparedStatementHandler)object;
+        if (object instanceof SimpleStatementHandler) {
+            preparedStatHandler = (SimpleStatementHandler) object;
+        } else {
+            preparedStatHandler = (PreparedStatementHandler) object;
         }
         RowBounds rowBounds = (RowBounds) FieldUtils.readField(preparedStatHandler, "rowBounds", true);
         Connection connection = (Connection) invocation.getArgs()[0];
@@ -87,7 +88,6 @@ public abstract class AbstractInterceptor implements Interceptor {
                 pagingSql = this.getCountSql(originalSql);
                 TotalrecordHelper.setTotalrecord(pagingSql, preparedStatHandler, connection);
             }
-
             pagingSql = this.getPagingSql(originalSql, rowBounds.getOffset(), rowBounds.getLimit());
             FieldUtils.writeField(boundSql, "sql", pagingSql, true);
             FieldUtils.writeField(rowBounds, "offset", Integer.valueOf(0), true);
@@ -96,6 +96,13 @@ public abstract class AbstractInterceptor implements Interceptor {
         } else {
             if (SelectForUpdateHelper.isSelectForUpdate()) {
                 originalSql = originalSql + SelectForUpdateHelper.getUpdateSql();
+            }
+            if (SelectSegmentHelper.isSelectSegment()) {
+                String pageSize="200";
+                if(parameter instanceof Map){
+                    pageSize = StringUtils.defaultIfBlank((String) ((Map) parameter).get("PAGE_SIZE"),"200");
+                }
+                originalSql = SelectSegmentHelper.getSelectSegment(getDatabaseProductName(connection), originalSql,pageSize);
             }
             FieldUtils.writeField(boundSql, "sql", originalSql, true);
             return invocation.proceed();
@@ -161,10 +168,16 @@ public abstract class AbstractInterceptor implements Interceptor {
         return count;
     }
 
+    @Override
     public Object plugin(Object target) {
         return Plugin.wrap(target, this);
     }
 
+    @Override
     public void setProperties(Properties properties) {
+    }
+
+    public static String getDatabaseProductName(Connection connection) throws SQLException {
+        return connection.getMetaData().getDatabaseProductName().toLowerCase();
     }
 }

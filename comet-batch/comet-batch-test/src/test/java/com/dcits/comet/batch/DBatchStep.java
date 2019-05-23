@@ -14,16 +14,13 @@ import java.util.List;
 
 
 @Service("dBatchStep")
-//@StepScope
-public class DBatchStep extends AbstractBStep<SysLog, SysLog> {
+public class DBatchStep extends AbstractSegmentStep<SysLog, SysLog> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(DBatchStep.class);
 
     @Resource
     public DaoSupport daoSupport;
 
-
-    @Override
     public List getPageList(BatchContext batchContext,int offset, int pageSize,String node) {
         SysLog sysLog = new SysLog();
         sysLog.setId(2000000000002l);
@@ -46,9 +43,9 @@ public class DBatchStep extends AbstractBStep<SysLog, SysLog> {
         //  LOGGER.info("write D....."+name);
     }
 
+
     @Override
-    public void writeOne(BatchContext batchContext, SysLog item) {
-
+    public List<SysLog> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node) {
+        return null;
     }
-
 }

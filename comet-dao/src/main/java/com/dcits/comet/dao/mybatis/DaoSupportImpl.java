@@ -8,6 +8,7 @@ import com.dcits.comet.commons.utils.PageUtil;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.dao.annotation.TablePkScanner;
 import com.dcits.comet.dao.interceptor.SelectForUpdateHelper;
+import com.dcits.comet.dao.interceptor.SelectSegmentHelper;
 import com.dcits.comet.dao.interceptor.TotalrecordHelper;
 import com.dcits.comet.dao.model.BasePo;
 import com.dcits.comet.dao.model.QueryResult;
@@ -18,7 +19,11 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wangyun
@@ -319,6 +324,18 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
             SelectForUpdateHelper.cancelSelectForUpdate();
         }
 
+        return (List<T>) result;
+    }
+
+    @Override
+    public <T extends BasePo> List<T> selectSegmentList(String statementPostfix, Map<String, Object> parameter) {
+        List<BasePo> result;
+        try {
+            SelectSegmentHelper.setSelectSegment();
+            result = this.selectList(statementPostfix, parameter);
+        } finally {
+            SelectSegmentHelper.cancelSelectSegment();
+        }
         return (List<T>) result;
     }
 

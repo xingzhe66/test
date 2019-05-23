@@ -1,7 +1,8 @@
 package com.dcits.comet.batch.sonic;
 
 import com.alibaba.fastjson.JSON;
-import com.dcits.comet.batch.IBStep;
+import com.dcits.comet.batch.AbstractSegmentStep;
+import com.dcits.comet.batch.Segment;
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
@@ -45,25 +46,26 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
         BatchContext batchContext = new BatchContext();
         batchContext.getParams().putAll(parameters);
         // 生成子分段扩展信息 ...
-        List<Attributes> AttributesList = new ArrayList<>();
-        IBStep bstep = SpringContextHolder.getBean(jobParam.getStepName());
-        List<String> nodes = bstep.getNodeList(batchContext);
-        if(null==nodes||nodes.size()==0){
-            return AttributesList;
+        List<Attributes> attributesList = new ArrayList<>();
+        AbstractSegmentStep segmentStep = SpringContextHolder.getBean(jobParam.getStepName());
+        List<String> nodes = segmentStep.getNodeList(batchContext);
+        if (null == nodes || nodes.size() == 0) {
+            return attributesList;
         }
         for (String node : nodes) {
-            int countNum = bstep.getCountNum(batchContext, node);
-            if (countNum <= 0) {
-                break;
-            }
             Map<String, String> attrMap = new HashMap<>();
-            attrMap.put("beginIndex", "0");
-            attrMap.put("endIndex", countNum + "");
-            attrMap.put("node", node);
-            attrMap.put("pageSize", countNum + "");
-            Attributes segAttributes = new Attributes(attrMap);
-            AttributesList.add(segAttributes);
+            List<Segment> segments = segmentStep.getSegmentList(batchContext, node);
+            if (null != segments && segments.size() != 0) {
+                for (Segment segment : segments) {
+                    attrMap.put("beginIndex", segment.getStartKey());
+                    attrMap.put("endIndex", segment.getEndKey());
+                    attrMap.put("pageSize", String.valueOf(segment.getRowCount()));
+                    attrMap.put("node", node);
+                    Attributes segAttributes = new Attributes(attrMap);
+                    attributesList.add(segAttributes);
+                }
+            }
         }
-        return AttributesList;
+        return attributesList;
     }
 }

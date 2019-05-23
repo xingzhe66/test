@@ -58,4 +58,6 @@ public interface DaoSupport extends BaseDaoSupport {
     <T extends BasePo> List<T> selectListForUpdate(String statementPostfix, T entity);
 
     <T extends BasePo> List<T> selectListForUpdate(T entity);
+
+    <T extends BasePo> List<T> selectSegmentList(String statementPostfix, Map<String, Object> parameter);
 }

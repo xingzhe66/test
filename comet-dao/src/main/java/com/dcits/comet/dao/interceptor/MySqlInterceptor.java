@@ -24,6 +24,7 @@ public class MySqlInterceptor extends AbstractInterceptor {
     public MySqlInterceptor() {
     }
 
+    @Override
     protected String getPagingSql(String querySelect, int pageIndex, int pageSize) {
         StringBuffer pageSql = new StringBuffer();
         pageSql.append(querySelect);

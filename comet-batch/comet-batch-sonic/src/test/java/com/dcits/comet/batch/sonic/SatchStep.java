@@ -21,9 +21,9 @@ import java.util.Map;
  * @version 1.0
  * @date 2019/5/14 16:32
  **/
-@Service("dBatchStep")
+@Service("satchStep")
 @Slf4j
-public class DBatchStep extends AbstractRowNumStep<WorkerNodePo, WorkerNodePo> {
+public class SatchStep extends AbstractRowNumStep<WorkerNodePo, WorkerNodePo> {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
