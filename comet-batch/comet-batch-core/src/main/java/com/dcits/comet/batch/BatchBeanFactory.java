@@ -6,6 +6,7 @@ import com.dcits.comet.batch.processor.Processor;
 import com.dcits.comet.batch.reader.IReader;
 import com.dcits.comet.batch.reader.RowNumReader;
 import com.dcits.comet.batch.reader.SegmentReader;
+import com.dcits.comet.batch.reader.SplitSegmentReader;
 import com.dcits.comet.batch.step.StepParam;
 import com.dcits.comet.batch.writer.Writer;
 import org.springframework.batch.item.ItemProcessor;
@@ -87,10 +88,13 @@ public class BatchBeanFactory {
             }
             return rowNumReader;
         }else if(ibStep instanceof ISegmentStep) {
-            SegmentReader segmentReader = new SegmentReader();
+//            SegmentReader segmentReader = new SegmentReader();
+            SplitSegmentReader segmentReader = new SplitSegmentReader();
             segmentReader.setBatchStep((ISegmentStep) ibStep);
-            segmentReader.setStart(stepParam.getSegmentStart());
-            segmentReader.setEnd(stepParam.getSegmentEnd());
+//            segmentReader.setStart(stepParam.getSegmentStart());
+//            segmentReader.setEnd(stepParam.getSegmentEnd());
+            segmentReader.setBeginIndex(stepParam.getSegmentStart());
+            segmentReader.setEndIndex(stepParam.getSegmentEnd());
             segmentReader.setNode(node);
             return segmentReader;
         }
