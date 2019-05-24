@@ -22,7 +22,7 @@ import java.util.Map;
  * @date 2019/5/23 18:03
  **/
 @Slf4j
-@Service
+@Service("BatchStep")
 public class BatchStep extends AbstractSegmentStep<WorkerNodePo, WorkerNodePo> {
 
     @Autowired
@@ -34,7 +34,7 @@ public class BatchStep extends AbstractSegmentStep<WorkerNodePo, WorkerNodePo> {
         return HintManagerHelper.getNodeList(WorkerNodePo.class);
     }
 
-    @Override
+
     public List<Segment> getSegmentList(BatchContext batchContext, String node) {
         Map<String, Object> map = new HashMap();
         map.put("PORT", 2);

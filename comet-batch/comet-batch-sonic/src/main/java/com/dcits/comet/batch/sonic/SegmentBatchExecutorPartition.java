@@ -7,8 +7,8 @@ import com.dcits.comet.batch.IStep;
 import com.dcits.comet.batch.Segment;
 import com.dcits.comet.batch.exception.BatchException;
 import com.dcits.comet.batch.holder.SpringContextHolder;
-import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
+import com.dcits.comet.batch.partition.PartitionParam;
 import com.dcits.sonic.executor.api.model.Attributes;
 import com.dcits.sonic.executor.step.segment.AbstractStepSegmenter;
 import com.dcits.sonic.executor.step.segment.SegmentRunningStep;
@@ -37,14 +37,15 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
         // 用户自定义拓展参数
         Attributes attributes = segmentRunningStep.getAttributes();
         Map<String, String> parameters = attributes.getAttributeMap();
-        JobParam jobParam = JSON.parseObject(JSON.toJSONString(parameters), JobParam.class);
+        PartitionParam partitionParam = JSON.parseObject(JSON.toJSONString(parameters), PartitionParam.class);
         // 执行分段逻辑，生成子分段扩展参数，生成的每个Attributes则为一个分段
         List<Attributes> attributesList = new LinkedList<>();
         BatchContext batchContext = new BatchContext();
         batchContext.getParams().putAll(parameters);
-        IStep stepObj = SpringContextHolder.getBean(jobParam.getStepName());
+
+        IStep stepObj = SpringContextHolder.getBean(partitionParam.getStepName());
         if (stepObj instanceof AbstractSegmentStep) {
-            attributesList = buildSegment((AbstractSegmentStep) stepObj, batchContext);
+            attributesList = buildSegment((AbstractSegmentStep) stepObj, batchContext, partitionParam);
         } else if (stepObj instanceof AbstractRowNumStep) {
             attributesList = buildRowNum((AbstractRowNumStep) stepObj, batchContext);
         } else {
@@ -77,14 +78,14 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
         return attributesList;
     }
 
-    private List<Attributes> buildSegment(AbstractSegmentStep abstractSegmentStep, BatchContext batchContext) {
+    private List<Attributes> buildSegment(AbstractSegmentStep abstractSegmentStep, BatchContext batchContext, PartitionParam partitionParam) {
         List<Attributes> attributesList = new ArrayList<>();
         List<String> nodes = abstractSegmentStep.getNodeList(batchContext);
         if (null == nodes || nodes.size() == 0) {
             return attributesList;
         }
         for (String node : nodes) {
-            List<Segment> segments = abstractSegmentStep.getSegmentList(batchContext, node);
+            List<Segment> segments = abstractSegmentStep.getSegmentList(batchContext, node, partitionParam.getSegmentSize(), partitionParam.getKeyField(), partitionParam.getStepName());
             if (null != segments && segments.size() != 0) {
                 for (Segment segment : segments) {
                     Map<String, String> attrMap = new HashMap<>();
