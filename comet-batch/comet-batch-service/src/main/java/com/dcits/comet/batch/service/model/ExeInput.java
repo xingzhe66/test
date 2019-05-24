@@ -65,6 +65,8 @@ public class ExeInput implements Serializable {
 
     private String segmentEnd;
 
+    private String keyField;
+
     /**
      上下文
      */
@@ -172,5 +174,13 @@ public class ExeInput implements Serializable {
 
     public void setSegmentEnd(String segmentEnd) {
         this.segmentEnd = segmentEnd;
+    }
+
+    public String getKeyField() {
+        return keyField;
+    }
+
+    public void setKeyField(String keyField) {
+        this.keyField = keyField;
     }
 }

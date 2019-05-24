@@ -11,6 +11,6 @@ public interface ISegmentStep<T,O> extends IBStep<T,O>,ISegmentSplit {
      */
     List<Segment> getThreadSegmentList(BatchContext batchContext, Comparable allStart, Comparable allEnd, String node, Integer pageSize, String keyField, String stepName);
 
-    List<T> getPageList(BatchContext batchContext, Comparable start,Comparable end ,String node);
+    List<T> getPageList(BatchContext batchContext, Comparable start,Comparable end ,String node, String stepName);
 
 }

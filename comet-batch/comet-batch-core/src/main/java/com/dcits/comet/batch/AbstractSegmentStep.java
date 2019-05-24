@@ -2,13 +2,17 @@ package com.dcits.comet.batch;
 
 import com.dcits.comet.batch.helper.HintManagerHelper;
 import com.dcits.comet.batch.param.BatchContext;
+import com.dcits.comet.commons.utils.BeanUtil;
 import com.dcits.comet.dao.DaoSupport;
+import com.dcits.comet.dao.mybatis.DaoSupportImpl;
 import com.dcits.comet.dbsharding.route.Route;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +30,8 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
     public static final String COMET_START = "cometStart";
     public static final String COMET_END = "cometEnd";
 
-    @Autowired
-    private DaoSupport dao;
+    @Resource(name="daoSupportImpl")
+    private DaoSupportImpl dao;
 
 
 //    @Override
@@ -79,14 +83,14 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
     }
 
     @Override
-    public List getPageList(BatchContext batchContext , Comparable start, Comparable end,String node) {
+    public List<T> getPageList(BatchContext batchContext , Comparable start, Comparable end,String node,String stepName) {
         Route route = null;
         try {
             route = HintManagerHelper.getInstance(getTClass(), node);
             Map<String,Object> map1=new HashMap();
             map1.put(COMET_START,start);
             map1.put(COMET_END,end);
-            return dao.selectList(getTClass().getName() + "."+batchContext.getParams().get(STEP_NAME),  map1);
+           return BeanUtil.mapToBean(dao.getSqlSession().selectList(getTClass().getName() + "."+stepName,  map1), getTClass());
         } catch (Exception e) {
             log.error("{}", e);
             return null;

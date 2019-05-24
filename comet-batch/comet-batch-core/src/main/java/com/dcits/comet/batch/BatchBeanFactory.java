@@ -72,7 +72,6 @@ public class BatchBeanFactory {
         int endIndex = (int) stepParam.getEndIndex();
         String stepName = stepParam.getStepName();
         String node = stepParam.getNode();
-        String keyFiled = stepParam.getKeyFiled();
 
         ConfigurableApplicationContext context= (ConfigurableApplicationContext) SpringContextHolder.getApplicationContext();
         IStep ibStep=(IStep) context.getBean(stepName);
@@ -96,7 +95,9 @@ public class BatchBeanFactory {
 //            segmentReader.setEnd(stepParam.getSegmentEnd());
             segmentReader.setBeginIndex(stepParam.getSegmentStart());
             segmentReader.setEndIndex(stepParam.getSegmentEnd());
-            segmentReader.setKeyFiled(keyFiled);
+            segmentReader.setKeyField(stepParam.getKeyField());
+            segmentReader.setPageSize(stepParam.getPageSize());
+            segmentReader.setStepName(stepParam.getStepName());
             segmentReader.setNode(node);
             return segmentReader;
         }

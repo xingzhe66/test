@@ -5,14 +5,17 @@ import com.dcits.comet.batch.ISegmentStep;
 import com.dcits.comet.batch.Segment;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.util.BatchContextTool;
+import com.dcits.comet.commons.utils.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
+import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -36,13 +39,13 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
     private Comparable endIndex;
 
-    private String keyFiled;
+    private String keyField;
 
     private String stepName;
 
     private Integer pageSize;
 
-    private volatile List<Segment> list;
+    private volatile List<Map> list;
 
     private String node;
 
@@ -55,7 +58,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
         synchronized (lock) {
             if(list==null){
                 BatchContext batchContext= BatchContextTool.getBatchContext();
-                list=batchStep.getThreadSegmentList(batchContext, beginIndex,endIndex,node,pageSize,keyFiled,stepName);
+                list=batchStep.getThreadSegmentList(batchContext, beginIndex,endIndex,node,pageSize,keyField,stepName);
             }
             if (results == null  || current >= results.size()) {
 
@@ -63,7 +66,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
                 Segment segment =null;
                 if(currentPage<list.size()) {
-                    segment = list.get(currentPage++);
+                    segment = BeanUtil.mapToBean(list.get(currentPage++),Segment.class);
                 }else{
                     return null;
                 }
@@ -77,7 +80,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
             int next = current++;
 
             if (next < results.size()) {
-                return results.get(next);
+                return (T) results.get(next);
             }
             else {
                 return null;
@@ -93,9 +96,10 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
             results.clear();
         }
         BatchContext batchContext= BatchContextTool.getBatchContext();
-        results.addAll(batchStep.getPageList(batchContext, start,end,node));
+        results.addAll(batchStep.getPageList(batchContext, start,end,node,stepName));
         log.info("doReadPage完毕,results大小为:"+results.size());
     }
+
 
     public void setEndIndex(Comparable endIndex) {
         this.endIndex = endIndex;
@@ -112,9 +116,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
         this.pageSize = pageSize;
     }
 
-    public void setKeyFiled(String keyFiled) {
-        this.keyFiled = keyFiled;
-    }
+
 
     public String getStepName() {
         return stepName;
@@ -122,5 +124,9 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
     public void setStepName(String stepName) {
         this.stepName = stepName;
+    }
+
+    public void setKeyField(String keyField) {
+        this.keyField = keyField;
     }
 }
