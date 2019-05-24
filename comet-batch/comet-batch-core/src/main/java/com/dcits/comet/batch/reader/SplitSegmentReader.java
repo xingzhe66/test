@@ -36,6 +36,11 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
     private Comparable endIndex;
 
+    private String keyFiled;
+
+    private String stepName;
+
+    private Integer pageSize;
 
     private volatile List<Segment> list;
 
@@ -50,7 +55,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
         synchronized (lock) {
             if(list==null){
                 BatchContext batchContext= BatchContextTool.getBatchContext();
-                list=batchStep.getThreadSegmentList(batchContext, beginIndex,endIndex,node);
+                list=batchStep.getThreadSegmentList(batchContext, beginIndex,endIndex,node,pageSize,keyFiled,stepName);
             }
             if (results == null  || current >= results.size()) {
 
@@ -101,5 +106,21 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
     public void setBeginIndex(Comparable beginIndex) {
         this.beginIndex = beginIndex;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public void setKeyFiled(String keyFiled) {
+        this.keyFiled = keyFiled;
+    }
+
+    public String getStepName() {
+        return stepName;
+    }
+
+    public void setStepName(String stepName) {
+        this.stepName = stepName;
     }
 }

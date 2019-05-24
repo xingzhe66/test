@@ -15,6 +15,6 @@ public interface ISegmentSplit {
     /**
      * 获取SegmentList
      */
-    public List<Segment> getSegmentList(BatchContext batchContext, String node);
+    public List<Segment> getSegmentList(BatchContext batchContext, String node, Integer segmentSize,String keyField,String stepName);
 
 }

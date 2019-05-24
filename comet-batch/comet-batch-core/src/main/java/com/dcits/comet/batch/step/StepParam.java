@@ -32,7 +32,7 @@ public class StepParam {
 
     private Comparable segmentEnd;
 
-
+    private String keyFiled;
 
     private BatchContext batchContext;
 
@@ -122,5 +122,13 @@ public class StepParam {
 
     public Comparable getSegmentEnd() {
         return segmentEnd;
+    }
+
+    public String getKeyFiled() {
+        return keyFiled;
+    }
+
+    public void setKeyFiled(String keyFiled) {
+        this.keyFiled = keyFiled;
     }
 }

@@ -13,6 +13,16 @@ public class SegmentListInput {
      step名称
      */
     private String stepName;
+    /**
+     step名称
+     */
+    private Integer segmentSize;
+
+    /**
+     step名称
+     */
+    private String keyField;
+
 
     private BatchContext batchContext;
 

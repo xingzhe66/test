@@ -40,6 +40,7 @@ public class JobParam {
 
     private Comparable segmentEnd;
 
+    private String keyField;
 
     private BatchContext batchContext;
 
@@ -146,5 +147,13 @@ public class JobParam {
 
     public void setSegmentEnd(Comparable segmentEnd) {
         this.segmentEnd = segmentEnd;
+    }
+
+    public String getKeyField() {
+        return keyField;
+    }
+
+    public void setKeyField(String keyField) {
+        this.keyField = keyField;
     }
 }

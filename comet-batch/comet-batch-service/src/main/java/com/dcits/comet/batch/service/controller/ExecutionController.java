@@ -128,9 +128,8 @@ public class ExecutionController {
             if (null == nodes || nodes.size() == 0) {
                 return null;
             }
-
             for (String node : nodes) {
-                List list1=segmentStep.getSegmentList(segmentListInput.getBatchContext(), node);
+                List list1=segmentStep.getSegmentList(segmentListInput.getBatchContext(), node,segmentListInput.getSegmentSize(),segmentListInput.getKeyField(),segmentListInput.getStepName());
                 if(list1!=null) list.addAll(list1);
             }
 
