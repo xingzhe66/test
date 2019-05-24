@@ -1,5 +1,8 @@
 package com.dcits.comet.batch.service.controller;
 
+import com.dcits.comet.batch.ISegmentStep;
+import com.dcits.comet.batch.IStep;
+import com.dcits.comet.batch.Segment;
 import com.dcits.comet.batch.dao.BatchContextDao;
 import com.dcits.comet.batch.launcher.CommonJobLauncher;
 import com.dcits.comet.batch.launcher.JobExeResult;
@@ -7,10 +10,7 @@ import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.service.constant.BatchServiceConstant;
 import com.dcits.comet.batch.service.exception.BatchServiceException;
-import com.dcits.comet.batch.service.model.ExeInput;
-import com.dcits.comet.batch.service.model.ExeOutput;
-import com.dcits.comet.batch.service.model.QueryInput;
-import com.dcits.comet.batch.service.model.QueryOutput;
+import com.dcits.comet.batch.service.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
@@ -25,6 +25,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wangyun
@@ -112,5 +116,28 @@ public class ExecutionController {
 
 
     }
+    @RequestMapping(value = "/getsegmentlist", method = RequestMethod.POST)
+    public SegmentListOutput  getSegmentList(@RequestBody SegmentListInput segmentListInput) {
+        IStep iStep= (IStep) context.getBean(segmentListInput.getStepName());
+        SegmentListOutput segmentListOutput=new SegmentListOutput();
+        if(iStep instanceof ISegmentStep){
+            ISegmentStep segmentStep= ((ISegmentStep) iStep);
+            List<String> nodes = segmentStep.getNodeList(segmentListInput.getBatchContext());
+            if (null == nodes || nodes.size() == 0) {
+                return null;
+            }
 
+            for (String node : nodes) {
+
+                segmentListOutput.setSegmentList(segmentStep.getSegmentList(segmentListInput.getBatchContext(), node));
+
+                return segmentListOutput;
+            }
+
+        }else{
+
+        }
+
+        return segmentListOutput;
+    }
 }

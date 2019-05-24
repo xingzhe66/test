@@ -12,6 +12,7 @@ import io.shardingsphere.shardingjdbc.jdbc.core.ShardingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,10 +44,13 @@ public class HintManagerHelper {
             ShardingContext shardingContext = ShardingDataSourceHelper.getShardingContext();
             ShardingRule shardingRule = shardingContext.getShardingRule();
             ShardingDataSourceNames shardingDataSourceNames = shardingRule.getShardingDataSourceNames();
+
             String defaultDataSourceName = shardingDataSourceNames.getDefaultDataSourceName();
             //3.涉及到level表,返所有库的节点编号
-            if (tableTypes != null && TableTypeEnum.LEVEL.name().equalsIgnoreCase(tableTypes.name())) {
-                return (List<String>) shardingRule.getShardingDataSourceNames().getDataSourceNames();
+            if (tableTypes != null && TableTypeEnum.LEVEL.name().equalsIgnoreCase(tableTypes.value().toString())) {
+                List<String> list1= new ArrayList<>();
+                list1.addAll(shardingDataSourceNames.getDataSourceNames());
+                return list1;
             }
             //1.不涉及到分库分表直接返回默认库
             //2.涉及到up只返回默认库名

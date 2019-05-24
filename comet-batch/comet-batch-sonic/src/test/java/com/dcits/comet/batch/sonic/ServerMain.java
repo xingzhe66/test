@@ -44,10 +44,10 @@ public class ServerMain {
         public String doDemo() {
             BatchContext batchContext = new BatchContext();
             List<String> list = batchStep.getNodeList(batchContext);
-
+            log.info("list{}",list);
             for (String node : list) {
                 List<Segment> segments = batchStep.getSegmentList(batchContext, node);
-                log.info("{}",segments);
+                log.info("segments{}",segments);
             }
             return "";
         }
