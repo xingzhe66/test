@@ -1,6 +1,5 @@
 package com.dcits.comet.dao.param;
 
-import com.dcits.comet.dao.ParamSupport;
 import com.dcits.comet.dao.model.BasePo;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.cache.annotation.CacheEvict;
@@ -10,7 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.dcits.comet.dao.BaseDaoSupport.*;
+import static com.dcits.comet.dao.BaseDaoSupport.POSTFIX_COUNT;
+import static com.dcits.comet.dao.BaseDaoSupport.POSTFIX_DELETE;
+import static com.dcits.comet.dao.BaseDaoSupport.POSTFIX_INSERT;
+import static com.dcits.comet.dao.BaseDaoSupport.POSTFIX_SELECTLIST;
+import static com.dcits.comet.dao.BaseDaoSupport.POSTFIX_SELECTONE;
+import static com.dcits.comet.dao.BaseDaoSupport.POSTFIX_UPDATE;
+import static com.dcits.comet.dao.BaseDaoSupport.POSTFIX_UPDATE_BY_ENTITY;
 
 /**
  * @Author chengliang
@@ -45,31 +50,31 @@ public class ParamDaoSupport extends SqlSessionDaoSupport{
         return this.getSqlSession().selectList(statementPostfix, entity);
     }
 
-    @CacheEvict(value = "param", key = "#cacheKey")
+    @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
     public <T extends BasePo> int insert(T entity, String cacheKey) {
         String className = entity.getClass().getName();
         return this.getSqlSession().insert(className + POSTFIX_INSERT, entity);
     }
 
-    @CacheEvict(value = "param", key = "#cacheKey")
+    @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
     public <T extends BasePo> int insert(List<T> list, String cacheKey) {
         String className = list.get(0).getClass().getName();
         return this.getSqlSession().insert(className + POSTFIX_INSERT, list);
     }
 
-    @CacheEvict(value = "param", key = "#cacheKey")
+    @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
     public <T extends BasePo> int update(T entity,String cacheKey) {
         String className = entity.getClass().getName();
         return this.getSqlSession().update(className + POSTFIX_UPDATE, entity);
     }
 
-    @CacheEvict(value = "param", key = "#cacheKey")
+    @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
     public <T extends BasePo> int delete(T entity, String cacheKey) {
         String className = entity.getClass().getName();
         return this.getSqlSession().delete(className + POSTFIX_DELETE, entity);
     }
 
-    @CacheEvict(value = "param", key = "#cacheKey")
+    @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
     public <T extends BasePo> int update(T setParameter, T whereParameter,String cacheKey) {
         Map<String, Object> parameter = new HashMap(2);
         parameter.put("s", setParameter);
