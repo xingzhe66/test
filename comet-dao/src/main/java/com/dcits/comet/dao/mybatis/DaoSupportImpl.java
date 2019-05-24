@@ -328,10 +328,11 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     }
 
     @Override
-    public <T extends BasePo> List<T> selectSegmentList(String statementPostfix, Map<String, Object> parameter) {
+    public <T extends BasePo> List<T> selectSegmentList(String statementPostfix, Map<String, Object> parameter,int pageSize) {
         List<BasePo> result;
         try {
             SelectSegmentHelper.setSelectSegment();
+            parameter.put("PAGE_SIZE",pageSize);
             result = this.selectList(statementPostfix, parameter);
         } finally {
             SelectSegmentHelper.cancelSelectSegment();

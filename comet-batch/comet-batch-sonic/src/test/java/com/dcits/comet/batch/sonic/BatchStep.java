@@ -37,13 +37,13 @@ public class BatchStep extends AbstractSegmentStep<WorkerNodePo, WorkerNodePo> {
     @Override
     public List<Segment> getSegmentList(BatchContext batchContext, String node) {
         Map<String, Object> map = new HashMap();
-        map.put("PORT",2);
+        map.put("PORT", 2);
         Route route = null;
         try {
             route = HintManagerHelper.getInstance(WorkerNodePo.class, node);
-            return daoSupport.selectSegmentList(WorkerNodePo.class.getName() + ".genPostSelect", map);
+            return daoSupport.selectSegmentList(WorkerNodePo.class.getName() + ".genPostSelect", map, 200);
         } catch (Exception e) {
-            log.error("{}",e);
+            log.error("{}", e);
             return null;
         } finally {
             route.close();

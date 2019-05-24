@@ -46,6 +46,10 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             }
             jobParam.setBeginIndex(Integer.parseInt(segAttributes.getAttribute("beginIndex")));
             jobParam.setEndIndex(Integer.parseInt(segAttributes.getAttribute("endIndex")));
+
+            jobParam.setSegmentStart(segAttributes.getAttribute("beginIndex"));
+            jobParam.setSegmentEnd(segAttributes.getAttribute("endIndex"));
+
             BatchContext batchContext = new BatchContext();
             String params = parameters.get("params");
 
