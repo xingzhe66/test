@@ -50,10 +50,9 @@ public class HintManagerInterceptor implements Interceptor {
                 boundSql = (BoundSql) args[5];
             }
             String originalSql = compress(boundSql.getSql());
-            originalSql = DbpHintManager.getRouteParameters().getProcessingSql()+originalSql;
+            originalSql = DbpHintManager.getRouteParameters().getProcessingSql() + originalSql;
             FieldUtils.writeField(boundSql, "sql", originalSql, true);
             return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
-            //return invocation.proceed();
         }
         return invocation.proceed();
     }
@@ -61,7 +60,7 @@ public class HintManagerInterceptor implements Interceptor {
 
     @Override
     public Object plugin(Object target) {
-        return Plugin.wrap(target, this);
+        return null != DbpHintManager.getRouteParameters() ? Plugin.wrap(target, this) : target;
     }
 
     @Override

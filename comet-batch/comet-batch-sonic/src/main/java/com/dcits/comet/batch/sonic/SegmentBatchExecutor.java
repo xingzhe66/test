@@ -57,6 +57,7 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
                 batchContext.setParams(JsonUtil.jsonToMap(params));
             }
             jobParam.setBatchContext(batchContext);
+            //jobParam.setStepName("BatchStep");
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
             jobLauncher.run(jobParam.getStepName(), jobParam);
         } catch (Exception e) {

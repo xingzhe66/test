@@ -40,7 +40,7 @@ public class ServerMain {
         @Autowired
         BatchStep batchStep;
 
-        @Bean
+        //@Bean
         public String doDemo() {
             BatchContext batchContext = new BatchContext();
             List<String> list = batchStep.getNodeList(batchContext);

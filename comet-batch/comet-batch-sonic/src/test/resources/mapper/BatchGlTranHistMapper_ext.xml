@@ -4,7 +4,7 @@
 <mapper namespace="com.dcits.comet.batch.sonic.entity.WorkerNodePo">
 
     <select id="genPostSelect" parameterType="java.util.Map"
-            resultType="com.dcits.comet.batch.Segment">
+            resultType="hashMap">
       SELECT
         ID AS KEY_FIELD
         FROM WORKER_NODE

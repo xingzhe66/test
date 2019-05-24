@@ -1,6 +1,7 @@
 package com.dcits.comet.batch.sonic.dao;
 
 import com.dcits.comet.dao.interceptor.MySqlInterceptor;
+import com.dcits.comet.dao.interceptor.SegmentResultSetPlugin;
 import com.dcits.comet.dbsharding.interceptor.HintManagerInterceptor;
 import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -23,18 +24,19 @@ public class MybatisConfig {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/**/*.xml"));
-        org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setCacheEnabled(false);
         configuration.setLazyLoadingEnabled(false);
         configuration.setAggressiveLazyLoading(false);
         configuration.setLogImpl(StdOutImpl.class);
         configuration.addInterceptor(new MySqlInterceptor());
         configuration.addInterceptor(new HintManagerInterceptor());
+        configuration.addInterceptor(new SegmentResultSetPlugin());
         //configuration.addInterceptor(new OracleInterceptor());
         //configuration.addInterceptor(new SelectForUpdateHelper());
         bean.setConfiguration(configuration);
         //bean.setConfigLocation(new DefaultResourceLoader().getResource("classpath:mybatis/mybatis-config.xml"));
-       // bean.setConfigLocation(new PathMatchingResourcePatternResolver().getResource("classpath*:META-INF/mybatis/mybatis-config.xml"));
+        // bean.setConfigLocation(new PathMatchingResourcePatternResolver().getResource("classpath*:META-INF/mybatis/mybatis-config.xml"));
 
         return bean.getObject();
     }
