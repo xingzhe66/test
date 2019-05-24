@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +121,7 @@ public class ExecutionController {
     public SegmentListOutput  getSegmentList(@RequestBody SegmentListInput segmentListInput) {
         IStep iStep= (IStep) context.getBean(segmentListInput.getStepName());
         SegmentListOutput segmentListOutput=new SegmentListOutput();
+        List<Segment> list=new ArrayList<>();
         if(iStep instanceof ISegmentStep){
             ISegmentStep segmentStep= ((ISegmentStep) iStep);
             List<String> nodes = segmentStep.getNodeList(segmentListInput.getBatchContext());
@@ -128,15 +130,14 @@ public class ExecutionController {
             }
 
             for (String node : nodes) {
-
-                segmentListOutput.setSegmentList(segmentStep.getSegmentList(segmentListInput.getBatchContext(), node));
-
-                return segmentListOutput;
+                List list1=segmentStep.getSegmentList(segmentListInput.getBatchContext(), node);
+                if(list1!=null) list.addAll(list1);
             }
 
         }else{
 
         }
+        segmentListOutput.setSegmentList(list);
 
         return segmentListOutput;
     }
