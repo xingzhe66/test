@@ -66,7 +66,7 @@ spring:
         data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
     ds-1:
       hikari:
-        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-ac
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/sonic
         driver-class-name: com.mysql.jdbc.Driver
         username: rb
         password: 123456
@@ -80,7 +80,7 @@ spring:
         data-source-properties: {cachePrepStmts: true, prepStmtCacheSize: 250, prepStmtCacheSqlLimit: 2048, useServerPrepStmts: true}
     ds-2:
       hikari:
-        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-ac
+        jdbc-url: jdbc:mysql://10.7.25.205:3306/ensemble16-tae
         driver-class-name: com.mysql.jdbc.Driver
         username: rb
         password: 123456

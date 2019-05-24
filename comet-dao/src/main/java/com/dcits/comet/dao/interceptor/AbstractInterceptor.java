@@ -98,11 +98,11 @@ public abstract class AbstractInterceptor implements Interceptor {
                 originalSql = originalSql + SelectForUpdateHelper.getUpdateSql();
             }
             if (SelectSegmentHelper.isSelectSegment()) {
-                String pageSize="200";
-                if(parameter instanceof Map){
-                    pageSize = StringUtils.defaultIfBlank((String) ((Map) parameter).get("PAGE_SIZE"),"200");
+                String pageSize = "200";
+                if (parameter instanceof Map) {
+                    pageSize = StringUtils.defaultIfBlank(String.valueOf(((Map) parameter).get("PAGE_SIZE")), "200");
                 }
-                originalSql = SelectSegmentHelper.getSelectSegment(getDatabaseProductName(connection), originalSql,pageSize);
+                originalSql = SelectSegmentHelper.getSelectSegment(getDatabaseProductName(connection), originalSql, pageSize);
             }
             FieldUtils.writeField(boundSql, "sql", originalSql, true);
             return invocation.proceed();
