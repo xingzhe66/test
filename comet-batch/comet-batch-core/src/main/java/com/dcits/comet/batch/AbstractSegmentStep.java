@@ -30,9 +30,10 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
     public static final String COMET_START = "cometStart";
     public static final String COMET_END = "cometEnd";
 
-    @Resource(name="daoSupportImpl")
-    private DaoSupportImpl dao;
-
+//    @Resource(name="daoSupportImpl")
+//    private DaoSupportImpl dao;
+    @Autowired
+    private DaoSupport dao;
 
 //    @Override
 //    public List<Segment> getThreadSegmentList(BatchContext batchContext, Comparable allStart,Comparable allEnd, String node){
@@ -90,7 +91,7 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
             Map<String,Object> map1=new HashMap();
             map1.put(COMET_START,start);
             map1.put(COMET_END,end);
-           return BeanUtil.mapToBean(dao.getSqlSession().selectList(getTClass().getName() + "."+stepName,  map1), getTClass());
+           return BeanUtil.mapToBean((List<Map<String, Object>>)dao.selectList(getTClass().getName() + "."+stepName,  map1), getTClass());
         } catch (Exception e) {
             log.error("{}", e);
             return null;

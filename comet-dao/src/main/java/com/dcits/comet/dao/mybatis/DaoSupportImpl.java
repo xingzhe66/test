@@ -222,7 +222,12 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     }
 
     @Override
-    public <T extends BasePo> List<T> selectList(String statementPostfix, Map<String, Object> parameter) {
+    public <T extends BasePo> List<T> selectList(String statementPostfix, Map<String, Object> parameter, T entity) {
+        return this.getSqlSession().selectList(statementPostfix, parameter);
+    }
+
+    @Override
+    public  List selectList(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().selectList(statementPostfix, parameter);
     }
 
