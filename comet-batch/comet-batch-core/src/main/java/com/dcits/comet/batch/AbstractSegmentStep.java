@@ -1,6 +1,7 @@
 package com.dcits.comet.batch;
 
 import com.dcits.comet.batch.helper.HintManagerHelper;
+import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.commons.utils.BeanUtil;
 import com.dcits.comet.dao.DaoSupport;
@@ -8,6 +9,7 @@ import com.dcits.comet.dao.mybatis.DaoSupportImpl;
 import com.dcits.comet.dbsharding.route.Route;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,8 +31,9 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
     public static final String COMET_KEY_FIELD = "cometKeyField";
     public static final String COMET_START = "cometStart";
     public static final String COMET_END = "cometEnd";
+    public static final String COMET_BATCH_CONDITION_MAP = "Comet_Batch_Condition_Map";
 
-//    @Resource(name="daoSupportImpl")
+    //    @Resource(name="daoSupportImpl")
 //    private DaoSupportImpl dao;
     @Autowired
     private DaoSupport dao;
@@ -73,6 +76,10 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
             route = HintManagerHelper.getInstance(getTClass(), node);
             Map<String,Object> map=new HashMap();
             map.put(COMET_KEY_FIELD,keyField);
+            ApplicationContext ap=SpringContextHolder.getApplicationContext();
+            ISegmentConditionMap segmentConditionMap=ap.getBean(ISegmentConditionMap.class);
+            map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            log.info("querySegmentList查询传入参数："+map.toString());
             return dao.selectSegmentList(getTClass().getName() + "."+stepName, map, pageSize);
         } catch (Exception e) {
             log.error("{}", e);
@@ -88,10 +95,15 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
         Route route = null;
         try {
             route = HintManagerHelper.getInstance(getTClass(), node);
-            Map<String,Object> map1=new HashMap();
-            map1.put(COMET_START,start);
-            map1.put(COMET_END,end);
-           return BeanUtil.mapToBean((List<Map<String, Object>>)dao.selectList(getTClass().getName() + "."+stepName,  map1), getTClass());
+            Map<String,Object> map=new HashMap();
+            map.put(COMET_START,start);
+            map.put(COMET_END,end);
+            ApplicationContext ap=SpringContextHolder.getApplicationContext();
+            ISegmentConditionMap segmentConditionMap=ap.getBean(ISegmentConditionMap.class);
+            map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            log.info("getPageList查询传入参数："+map.toString());
+            map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+           return BeanUtil.mapToBean((List<Map<String, Object>>)dao.selectList(getTClass().getName() + "."+stepName,  map), getTClass());
         } catch (Exception e) {
             log.error("{}", e);
             return null;
