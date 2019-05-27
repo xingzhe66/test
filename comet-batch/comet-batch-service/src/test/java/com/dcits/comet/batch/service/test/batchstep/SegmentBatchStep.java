@@ -1,6 +1,5 @@
 package com.dcits.comet.batch.service.test.batchstep;
 
-import com.dcits.comet.batch.AbstractRowNumStep;
 import com.dcits.comet.batch.AbstractSegmentStep;
 import com.dcits.comet.batch.Segment;
 import com.dcits.comet.batch.helper.HintManagerHelper;
@@ -31,7 +30,7 @@ public class SegmentBatchStep extends AbstractSegmentStep<SysLog,SysLog> {
         return HintManagerHelper.getNodeList(SysLog.class);
     }
 
-    @Override
+
     public List<Segment> getSegmentList(BatchContext batchContext, String node) {
         Map<String,Object> map=new HashMap();
         Route route = null;
@@ -50,7 +49,7 @@ public class SegmentBatchStep extends AbstractSegmentStep<SysLog,SysLog> {
         log.info("preBatchStep.......cBatchStep");}
 
 
-    @Override
+
     public List<SysLog> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node) {
         Map<String,Object> map=new HashMap();
         map.put("beginIndex",start);
