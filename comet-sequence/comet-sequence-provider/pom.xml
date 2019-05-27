@@ -124,24 +124,7 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <!-- http://docs.spring.io/spring-boot/docs/current/maven-plugin/usage.html -->
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.2.RELEASE</version>
-                <configuration>
-                    <!-- the target directory in workspace is where the fat jar deploy -->
-                    <outputDirectory>./target</outputDirectory>
-                    <classifier>executable</classifier>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
 </project>
