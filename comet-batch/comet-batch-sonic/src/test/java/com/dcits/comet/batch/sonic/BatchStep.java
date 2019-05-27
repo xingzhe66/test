@@ -57,10 +57,6 @@ public class BatchStep extends AbstractSegmentStep<WorkerNodePo, WorkerNodePo> {
     }
 
 
-    @Override
-    public List<WorkerNodePo> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node) {
-        return null;
-    }
 
 
     @Override

@@ -44,8 +44,4 @@ public class DBatchStep extends AbstractSegmentStep<SysLog, SysLog> {
     }
 
 
-    @Override
-    public List<SysLog> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node) {
-        return null;
-    }
 }
