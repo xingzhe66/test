@@ -318,7 +318,6 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return result;
     }
 
-
     @Override
     public <T extends BasePo> List<T> selectListForUpdate(T entity) {
         List<BasePo> result;
@@ -333,8 +332,8 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     }
 
     @Override
-    public <T extends BasePo> List<T> selectSegmentList(String statementPostfix, Map<String, Object> parameter,int pageSize) {
-        List<BasePo> result;
+    public List selectSegmentList(String statementPostfix, Map<String, Object> parameter, int pageSize) {
+        List result;
         try {
             SelectSegmentHelper.setSelectSegment();
             parameter.put("PAGE_SIZE",pageSize);
@@ -342,7 +341,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         } finally {
             SelectSegmentHelper.cancelSelectSegment();
         }
-        return (List<T>) result;
+        return  result;
     }
 
 
