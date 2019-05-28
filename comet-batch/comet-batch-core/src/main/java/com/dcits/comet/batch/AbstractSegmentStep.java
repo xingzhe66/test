@@ -78,7 +78,9 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
             map.put(COMET_KEY_FIELD,keyField);
             ApplicationContext ap=SpringContextHolder.getApplicationContext();
             ISegmentConditionMap segmentConditionMap=ap.getBean(ISegmentConditionMap.class);
-            map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            if(segmentConditionMap!=null) {
+                map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            }
             log.info("querySegmentList查询传入参数："+map.toString());
             return dao.selectSegmentList(getTClass().getName() + "."+stepName, map, pageSize);
         } catch (Exception e) {
@@ -100,7 +102,9 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
             map.put(COMET_END,end);
             ApplicationContext ap=SpringContextHolder.getApplicationContext();
             ISegmentConditionMap segmentConditionMap=ap.getBean(ISegmentConditionMap.class);
-            map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            if(segmentConditionMap!=null) {
+                map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            }
             log.info("getPageList查询传入参数："+map.toString());
             map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
            return BeanUtil.mapToBean((List<Map<String, Object>>)dao.selectList(getTClass().getName() + "."+stepName,  map), getTClass());
