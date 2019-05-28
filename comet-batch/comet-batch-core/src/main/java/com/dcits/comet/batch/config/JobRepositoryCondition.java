@@ -11,9 +11,11 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  **/
 public class JobRepositoryCondition implements Condition {
 
+    public static final String BATCH_JDBC_DRIVER = "batch.jdbc.driver";
+
     @Override
     public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
         Environment env = conditionContext.getEnvironment();
-        return env.containsProperty("batch.jdbc.driver");
+        return env.containsProperty(BATCH_JDBC_DRIVER);
     }
 }
