@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -26,18 +27,31 @@ public class ConsumerApplicationListener implements ApplicationListener<ContextR
 
     @Autowired
     private DefaultMQPushConsumer defaultMQPushConsumer;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+
+        ApplicationContext eventApplicationContext = event.getApplicationContext();
+        if (eventApplicationContext.getParent() == null) {
+            return;
+        }
+        if (eventApplicationContext.getDisplayName().contains("FeignContext")) {
+            return;
+        }
+        initContainer(eventApplicationContext);
+    }
+
+    private void initContainer(ApplicationContext applicationContext) {
         //初始化容器
-        MQConsumerBeanContainer.initContainer();
-        Map consumerBeanMap =MQConsumerBeanContainer.getConsumerBeanMap();
+        MQConsumerBeanContainer.getInstance().initContainer(applicationContext);
+        Map consumerBeanMap = MQConsumerBeanContainer.getInstance().getConsumerBeanMap();
         //启动consume服务监听
         try {
-          //  String[] topicTagsArr = topics.split(";");
-            Set<String> keySet=consumerBeanMap.keySet();
+            //  String[] topicTagsArr = topics.split(";");
+            Set<String> keySet = consumerBeanMap.keySet();
             for (String topicTags : keySet) {
                 String[] topicTag = topicTags.split("\\|");
-                log.info("topic:"+topicTag[0]+",tag:"+topicTag[1]);
+                log.info("topic:" + topicTag[0] + ",tag:" + topicTag[1]);
                 defaultMQPushConsumer.subscribe(topicTag[0], topicTag[1]);
             }
             defaultMQPushConsumer.start();
