@@ -16,12 +16,14 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
+import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
 import org.springframework.batch.core.scope.JobScope;
 import org.springframework.batch.core.scope.StepScope;
 import org.springframework.batch.support.DatabaseType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -117,14 +119,35 @@ public class BatchConfig {
     }
 
     @Bean(name = "batchTransactionManager")
+    @Conditional(JobRepositoryCondition.class)
     public DataSourceTransactionManager batchTransactionManager(@Qualifier("batchDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
+    @Bean(name = "batchDataSource")
+    @Conditional(JobRepositoryCondition.class)
+    public DataSource dataSource(
+    ) throws Exception {
+
+        BasicDataSource dataSource = new BasicDataSource();
+
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUrl(url);
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
+        dataSource.setTestWhileIdle(Boolean.valueOf(testWhileIdle));
+        dataSource.setValidationQuery(validationQuery);
+
+
+        return dataSource;
+    }
+
     @Bean
+    @Conditional(JobRepositoryCondition.class)
     public JobRepository jobRepository(@Qualifier("batchDataSource") DataSource dataSource,
                                        @Qualifier("batchTransactionManager") PlatformTransactionManager transactionManager)
             throws Exception {
+        //new MapJobRepositoryFactoryBean();
 
         JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
         jobRepositoryFactoryBean.setDataSource(dataSource);
@@ -134,7 +157,14 @@ public class BatchConfig {
         return jobRepositoryFactoryBean.getObject();
 
     }
+    @Bean
+    @Conditional(JobRepositoryCondition.class)
+    public JobRepository jobRepositoryMap()
+            throws Exception {
+        MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean=new MapJobRepositoryFactoryBean();
+        return mapJobRepositoryFactoryBean.getObject();
 
+    }
 //    @Bean
 //    public SimpleJobLauncher jobLauncher(
 //            @Qualifier("jobRepository") JobRepository jobRepository
@@ -204,22 +234,7 @@ public class BatchConfig {
         return jobExplorer;
     }
 
-    @Bean(name = "batchDataSource")
-    public DataSource dataSource(
-    ) throws Exception {
 
-        BasicDataSource dataSource = new BasicDataSource();
-
-        dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(url);
-        dataSource.setUsername(userName);
-        dataSource.setPassword(password);
-        dataSource.setTestWhileIdle(Boolean.valueOf(testWhileIdle));
-        dataSource.setValidationQuery(validationQuery);
-
-
-        return dataSource;
-    }
 
     @Bean(name = "jobParametersConverter")
     public JsrJobParametersConverter jobParametersConverter(
