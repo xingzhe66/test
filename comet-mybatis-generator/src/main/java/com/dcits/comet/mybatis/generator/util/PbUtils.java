@@ -313,10 +313,10 @@ public class PbUtils {
             javaType = "byte[]";
         }else if (type.contains("DATE")) {
             javaType = "java.util.Date";
-        }else if (type.contains("TIME")) {
-            javaType = "java.sql.Time";
-        }else if (type.contains("TIMESTAMP")) {
+        }else if (type.equals("TIMESTAMP")) {
             javaType = "java.sql.Timestamp";
+        }else if (type.equals("TIME")) {
+            javaType = "java.sql.Time";
         }else if (type.contains("INT")) {
             javaType = "Integer";
         }
@@ -346,9 +346,9 @@ public class PbUtils {
             jdbcType = "BINARY";
         }else if (type.contains("DATE")) {
             jdbcType = "DATE";
-        }else if (type.contains("TIME")) {
+        }else if (type.equals("TIME")) {
             jdbcType = "TIME";
-        }else if (type.contains("TIMESTAMP")) {
+        }else if (type.equals("TIMESTAMP")) {
             jdbcType = "TIMESTAMP";
         }else if (type.contains("LONG")) {
              jdbcType = "BIGINT";
