@@ -219,4 +219,13 @@
 		</where>
 	</delete>
 	</#if>
+
+	<sql id="comet_step_column">
+		<if test="cometKeyField != null and cometKeyField.length() > 0"> ${cometKeyField} as KEY_FIELD </if>
+		<if test="cometKeyField == null or cometKeyField.length() == 0"> * </if>
+	</sql>
+	<sql id="comet_step_where">
+		<if test="cometStart != null and cometStart.length() > 0 and cometEnd != null and cometEnd.length() > 0" > and ${cometKeyField} between #{cometStart} and #{cometEnd} </if>
+	</sql>
+
 </mapper>
