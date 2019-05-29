@@ -60,7 +60,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
                 log.debug("Reading page " + currentPage);
 
                 Segment segment = null;
-                if (currentPage < list.size()) {
+                if (list != null && currentPage < list.size()) {
                     segment = list.get(currentPage++);
                 } else {
                     return null;
