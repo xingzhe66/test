@@ -1,17 +1,17 @@
 package com.dcits.comet.flow;
 
 import com.dcits.comet.commons.Context;
-import com.dcits.comet.commons.data.BaseRequest;
-import com.dcits.comet.commons.data.BaseResponse;
-import com.dcits.comet.commons.data.BusinessResult;
-import com.dcits.comet.commons.data.head.SysHead;
-import com.dcits.comet.commons.data.head.SysHeadOut;
 import com.dcits.comet.commons.exception.BusinessException;
 import com.dcits.comet.commons.utils.BusiUtil;
 import com.dcits.comet.commons.utils.SpringContextUtil;
 import com.dcits.comet.commons.utils.StringUtil;
 import com.dcits.comet.flow.service.FlowService;
 import com.dcits.comet.flow.service.MqService;
+import com.dcits.comet.rpc.api.model.BaseRequest;
+import com.dcits.comet.rpc.api.model.BaseResponse;
+import com.dcits.comet.rpc.api.model.BusinessResult;
+import com.dcits.comet.rpc.api.model.head.SysHead;
+import com.dcits.comet.rpc.api.model.head.SysHeadOut;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

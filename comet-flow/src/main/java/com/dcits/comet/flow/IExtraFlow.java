@@ -1,6 +1,5 @@
 package com.dcits.comet.flow;
 
-import com.dcits.comet.commons.data.BaseRequest;
 
 /**
  * <p>Title: IExtraFlow.java</p>

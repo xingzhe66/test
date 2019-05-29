@@ -2,12 +2,12 @@ package com.dcits.comet.flow.service;
 
 import com.alibaba.fastjson.JSON;
 import com.dcits.comet.commons.Context;
-import com.dcits.comet.commons.data.BaseRequest;
-import com.dcits.comet.commons.data.BaseResponse;
 import com.dcits.comet.commons.utils.DateUtil;
 import com.dcits.comet.dao.DaoSupport;
 import com.dcits.comet.flow.constant.FlowStatus;
 import com.dcits.comet.flow.model.FlowInfoPo;
+import com.dcits.comet.rpc.api.model.BaseRequest;
+import com.dcits.comet.rpc.api.model.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +37,7 @@ public class FlowService {
      * @return void
      **/
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void  saveFlowInFo(BaseRequest in,String flowClassName){
+    public void  saveFlowInFo(BaseRequest in, String flowClassName){
         FlowInfoPo flowInfoPo =new FlowInfoPo();
         flowInfoPo.setFlowId(Context.getInstance().getFlowId());
         flowInfoPo.setFlowClassName(flowClassName);
