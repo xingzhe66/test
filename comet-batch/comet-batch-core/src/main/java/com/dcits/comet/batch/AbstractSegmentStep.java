@@ -31,8 +31,6 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
     public static final String COMET_END = "cometEnd";
     public static final String COMET_BATCH_CONDITION_MAP = "Comet_Batch_Condition_Map";
 
-    //    @Resource(name="daoSupportImpl")
-//    private DaoSupportImpl dao;
     @Autowired
     private DaoSupport dao;
 
@@ -82,15 +80,13 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             } catch (NoSuchBeanDefinitionException e) {
                 log.warn("No bean named '{}' available", ISegmentConditionMap.class.getName());
             } finally {
-
             }
-            log.info("querySegmentList查询传入参数：" + map.toString());
+            log.debug("querySegmentList查询传入参数[{}]", map.toString());
             return dao.selectSegmentList(getTClass().getName() + "." + stepName, map, pageSize);
         } catch (Exception e) {
             log.error("{}", e);
             return null;
         } finally {
-            // batchContext.getParams().remove(COMET_KEY_FIELD);
             route.close();
         }
     }
@@ -108,8 +104,7 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             if (segmentConditionMap != null) {
                 map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
             }
-            log.info("getPageList查询传入参数：" + map.toString());
-            map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            log.debug("getPageList查询传入参数 [{}]", map.toString());
             return BeanUtil.mapToBean((List<Map<String, Object>>) dao.selectList(getTClass().getName() + "." + stepName, map), getTClass());
         } catch (Exception e) {
             log.error("{}", e);
