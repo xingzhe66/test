@@ -5,6 +5,7 @@ import com.dcits.comet.batch.sonic.annotation.EnableSonicExecutorServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @version 1.0
  * @date 2019/5/7 10:14
  **/
-@SpringBootApplication(scanBasePackages = "com.dcits.comet", exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = "com.dcits.comet", exclude = {BatchAutoConfiguration.class,DataSourceAutoConfiguration.class})
 @BatchConfiguration
 @EnableTransactionManagement
 @EnableSonicExecutorServer
