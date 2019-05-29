@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface DaoSupport extends BaseDaoSupport {
 
-    String POSTFIX_BATCH_INSERT = ".insert";
+    String POSTFIX_BATCH_INSERT = ".insertBatch";
 
     <T extends BasePo> Integer count(String statementPostfix, T object);
 
