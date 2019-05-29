@@ -91,7 +91,7 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
     }
 
     @Override
-    public List<T> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node, String stepName) {
+    public List<T> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node, String keyField,String stepName) {
         log.info("StepName: [{}] ,DataBaseNode: [{}] SplitKey: [{} -- {}]", stepName, node, start, end);
 
         Route route = null;
@@ -100,6 +100,7 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             Map<String, Object> map = new HashMap();
             map.put(COMET_START, start);
             map.put(COMET_END, end);
+            map.put(COMET_KEY_FIELD, keyField);
             try {
                 ApplicationContext ap = SpringContextHolder.getApplicationContext();
                 ISegmentConditionMap segmentConditionMap = ap.getBean(ISegmentConditionMap.class);

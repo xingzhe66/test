@@ -90,7 +90,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
             results.clear();
         }
         BatchContext batchContext = BatchContextTool.getBatchContext();
-        List list = batchStep.getPageList(batchContext, start, end, node, stepName);
+        List list = batchStep.getPageList(batchContext, start, end, node, keyField, stepName);
         if (null != list && list.size() != 0) {
             results.addAll(list);
         }
