@@ -71,15 +71,7 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             route = HintManagerHelper.getInstance(getTClass(), node);
             Map<String, Object> map = new HashMap();
             map.put(COMET_KEY_FIELD, keyField);
-            try {
-                ApplicationContext ap = SpringContextHolder.getApplicationContext();
-                ISegmentConditionMap segmentConditionMap = ap.getBean(ISegmentConditionMap.class);
-                if (segmentConditionMap != null) {
-                    map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
-                }
-            } catch (NoSuchBeanDefinitionException e) {
-                log.warn("No bean named '{}' available", ISegmentConditionMap.class.getName());
-            }
+            getSegmentCondMap(batchContext, map);
             log.debug("querySegmentList查询传入参数[{}]", map.toString());
             return BeanUtil.mapToBean(dao.selectSegmentList(getTClass().getName() + "." + stepName, map, pageSize), Segment.class);
         } catch (Exception e) {
@@ -87,6 +79,18 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             return null;
         } finally {
             route.close();
+        }
+    }
+
+    private void getSegmentCondMap(BatchContext batchContext, Map<String, Object> map) {
+        try {
+            ApplicationContext ap = SpringContextHolder.getApplicationContext();
+            ISegmentConditionMap segmentConditionMap = ap.getBean(ISegmentConditionMap.class);
+            if (segmentConditionMap != null) {
+                map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            }
+        } catch (NoSuchBeanDefinitionException e) {
+            log.warn("No bean named '{}' available", ISegmentConditionMap.class.getName());
         }
     }
 
@@ -101,15 +105,7 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             map.put(COMET_START, start);
             map.put(COMET_END, end);
             map.put(COMET_KEY_FIELD, keyField);
-            try {
-                ApplicationContext ap = SpringContextHolder.getApplicationContext();
-                ISegmentConditionMap segmentConditionMap = ap.getBean(ISegmentConditionMap.class);
-                if (segmentConditionMap != null) {
-                    map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
-                }
-            } catch (NoSuchBeanDefinitionException e) {
-                log.warn("No bean named '{}' available", ISegmentConditionMap.class.getName());
-            }
+            getSegmentCondMap(batchContext, map);
             log.debug("getPageList查询传入参数 [{}]", map.toString());
             return BeanUtil.mapToBean((List<Map<String, Object>>) dao.selectList(getTClass().getName() + "." + stepName, map), getTClass());
         } catch (Exception e) {
