@@ -24,6 +24,7 @@ import java.util.List;
  **/
 @Component
 @Slf4j
+//todo shardTransactionManager名字不能写死
 @Transactional(transactionManager = "shardTransactionManager",propagation = Propagation.REQUIRES_NEW)
 public class MessageService {
     @Autowired

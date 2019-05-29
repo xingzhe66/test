@@ -33,6 +33,7 @@ import java.util.List;
 @Component
 @Slf4j
 @ConditionalOnProperty(name = "rocketmq.isEnable", havingValue = "true",matchIfMissing = false)
+//todo shardTransactionManager 不能写死
 @Transactional(transactionManager = "shardTransactionManager",propagation = Propagation.REQUIRES_NEW)
 public class MsgServiceImple implements IMsgService {
 
