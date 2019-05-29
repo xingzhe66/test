@@ -64,9 +64,9 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
                     //这里需要强转得到的是实体类类路径
                     output = (OUT) ((Class) types[1]).newInstance();
                 } catch (InstantiationException e) {
-                    e.printStackTrace();
+                    log.error("InstantiationException fail------------------", e);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    log.error("IllegalAccessException fail------------------", e);
                 }
             }
 
@@ -83,6 +83,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             // endHandle
             postHandler(input, output);
         } catch (Exception e) {
+            log.error("execute fail------------------", e);
             if (e instanceof BusinessException) {
                 BusinessException businessException = (BusinessException) e;
                 BusinessResult.error(businessException.getErrorCode(), businessException.getErrorMessage());
@@ -96,8 +97,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
                 }
 
             } catch (Exception e1) {
-                log.info("update  Status  Exception  fail------------------");
-                e1.printStackTrace();
+                log.error("update  Status  Exception  fail------------------", e1);
             }
             throw e;
         } finally {
@@ -116,8 +116,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
         try {
             flowService.saveFlowInFo(input, this.getClass().getSimpleName());
         } catch (Exception e) {
-            log.info("save flow inFo fail-----------------");
-            e.printStackTrace();
+            log.error("save flow inFo fail-----------------", e);
         }
         //getEffectiveTrace
         List<IExtraTrace> traceList = ExtraFactory.getEffectiveExtra(IExtraTrace.class);
@@ -142,8 +141,8 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
                 mqService.mqHandler();
             }
 
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            log.error("postHandler fail-----------------", e);
         }
     }
 
