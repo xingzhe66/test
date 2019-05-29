@@ -15,6 +15,7 @@
     <modules>
         <module>comet-rpc-consumer</module>
         <module>comet-rpc-provider</module>
+        <module>comet-rpc-api</module>
     </modules>
 
 
