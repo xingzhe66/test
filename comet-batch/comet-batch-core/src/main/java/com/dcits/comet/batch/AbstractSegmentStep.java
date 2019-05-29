@@ -82,7 +82,7 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             } finally {
             }
             log.debug("querySegmentList查询传入参数[{}]", map.toString());
-            return dao.selectSegmentList(getTClass().getName() + "." + stepName, map, pageSize);
+            return BeanUtil.mapToBean(dao.selectSegmentList(getTClass().getName() + "." + stepName, map, pageSize),Segment.class);
         } catch (Exception e) {
             log.error("{}", e);
             return null;
