@@ -37,9 +37,9 @@ public class SelectSegmentHelper {
 
             case "mysql":
                 return "SELECT\r\n" +
-                        "	MIN(KEY_FIELD) startKey,\r\n" +
-                        "	MAX(KEY_FIELD) endKey,\r\n" +
-                        "	count(1) rowCount\r\n" +
+                        "	MIN(KEY_FIELD) START_KEY,\r\n" +
+                        "	MAX(KEY_FIELD) END_KEY,\r\n" +
+                        "	count(1) ROW_COUNT\r\n" +
                         "FROM\r\n" +
                         "	(\r\n" +
                         "		SELECT\r\n" +

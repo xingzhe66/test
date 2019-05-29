@@ -22,4 +22,21 @@
     <update id="updateBatch" parameterType="java.util.Map">
         update WORKER_NODE set PORT='3'   where ID = #{id,jdbcType=INTEGER}
     </update>
+
+    <sql id="comet_step_column">
+        <if test="cometKeyField != null and cometKeyField.length() > 0">${cometKeyField} as KEY_FIELD</if>
+        <if test="cometKeyField == null or cometKeyField.length() == 0">*</if>
+    </sql>
+    <sql id="comet_step_where">
+        <if test="cometStart != null and cometStart.length() > 0 and cometEnd != null and cometEnd.length() > 0">and
+            ${cometKeyField} between #{cometStart} and #{cometEnd}
+        </if>
+    </sql>
+
+    <select id="BatchStep" parameterType="java.util.Map" resultType="java.util.Map" useCache="false">
+        select
+        <include refid="comet_step_column"/>
+        from WORKER_NODE WHERE PORT = '2'
+        <include refid="comet_step_where"/>
+    </select>
 </mapper>

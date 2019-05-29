@@ -7,9 +7,9 @@ batch:
     user: ac
     validationQuery: select 1;
   threadPool:
-    corePoolSize: 10
+    corePoolSize: 1
     keepAliveSeconds: 20
-    maxPoolSize: 20
+    maxPoolSize: 1
     queueCapacity: 10
     threadNamePrefix: batch-
     waitForTasksToCompleteOnShutdown: true
@@ -31,6 +31,7 @@ logging:
     com:
       dcits:
         sonic:
+          executor: DEBUG
           remoting: DEBUG
   path: ./logs
 management:
@@ -57,7 +58,7 @@ spring:
         username: rb
         password: 123456
         minimum-idle: 1
-        maximum-pool-size: 10
+        maximum-pool-size: 2
         pool-name: DS0HikariCP
         connection-timeout: 30000
         connection-test-query: select 1
@@ -71,7 +72,7 @@ spring:
         username: rb
         password: 123456
         minimum-idle: 1
-        maximum-pool-size: 10
+        maximum-pool-size: 2
         pool-name: DS1HikariCP
         connection-timeout: 30000
         connection-test-query: select 1
@@ -85,8 +86,8 @@ spring:
         username: rb
         password: 123456
         minimum-idle: 1
-        maximum-pool-size: 10
-        pool-name: DS0HikariCP
+        maximum-pool-size: 2
+        pool-name: DS2HikariCP
         connection-timeout: 30000
         connection-test-query: select 1
         max-lifetime: 600000

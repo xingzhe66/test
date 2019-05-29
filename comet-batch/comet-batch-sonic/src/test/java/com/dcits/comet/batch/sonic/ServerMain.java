@@ -1,19 +1,12 @@
 package com.dcits.comet.batch.sonic;
 
-import com.dcits.comet.batch.Segment;
 import com.dcits.comet.batch.annotation.BatchConfiguration;
-import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.sonic.annotation.EnableSonicExecutorServer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.util.List;
 
 /**
  * @author leijian
@@ -35,23 +28,6 @@ public class ServerMain {
 
     }
 
-    @Configuration
-    class applicationApp {
-        @Autowired
-        BatchStep batchStep;
-
-        //@Bean
-        public String doDemo() {
-            BatchContext batchContext = new BatchContext();
-            List<String> list = batchStep.getNodeList(batchContext);
-            log.info("list{}",list);
-            for (String node : list) {
-                List<Segment> segments = batchStep.getSegmentList(batchContext, node);
-                log.info("segments{}",segments);
-            }
-            return "";
-        }
-    }
 
 }
 
