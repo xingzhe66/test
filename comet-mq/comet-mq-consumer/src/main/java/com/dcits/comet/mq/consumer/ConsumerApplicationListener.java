@@ -5,9 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -23,27 +22,15 @@ import java.util.Set;
 
 @Slf4j
 @Component
-public class ConsumerApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
+public class ConsumerApplicationListener implements ApplicationRunner {
 
     @Autowired
     private DefaultMQPushConsumer defaultMQPushConsumer;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-
-        ApplicationContext eventApplicationContext = event.getApplicationContext();
-        if (eventApplicationContext.getParent() == null) {
-            return;
-        }
-        if (eventApplicationContext.getDisplayName().contains("FeignContext")) {
-            return;
-        }
-        initContainer(eventApplicationContext);
-    }
-
-    private void initContainer(ApplicationContext applicationContext) {
+    public void run(ApplicationArguments args) throws Exception {
         //初始化容器
-        MQConsumerBeanContainer.getInstance().initContainer(applicationContext);
+        MQConsumerBeanContainer.getInstance().initContainer();
         Map consumerBeanMap = MQConsumerBeanContainer.getInstance().getConsumerBeanMap();
         //启动consume服务监听
         try {

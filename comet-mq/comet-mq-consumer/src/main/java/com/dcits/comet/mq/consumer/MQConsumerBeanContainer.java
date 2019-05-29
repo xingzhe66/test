@@ -1,8 +1,8 @@
 package com.dcits.comet.mq.consumer;
 
+import com.dcits.comet.commons.utils.SpringContextUtil;
 import com.dcits.comet.mq.api.IMQConsumer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,9 +33,9 @@ public class MQConsumerBeanContainer {
     private MQConsumerBeanContainer() {
     }
 
-    public void initContainer(ApplicationContext applicationContext) {
+    public void initContainer() {
         //TODO 加载顺序问题
-        Map<String, IMQConsumer> map = applicationContext.getBeansOfType(IMQConsumer.class);
+        Map<String, IMQConsumer> map = SpringContextUtil.getBeansOfType(IMQConsumer.class);
         for (String key : map.keySet()) {
             Class clazz = map.get(key).getClass();
             if (clazz.isAnnotationPresent(RocketMQConsumer.class)) {
