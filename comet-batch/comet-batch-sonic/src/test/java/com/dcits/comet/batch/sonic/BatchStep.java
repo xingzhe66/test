@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,6 +23,14 @@ public class BatchStep extends AbstractSegmentStep<WorkerNodePo, WorkerNodePo> {
 
     @Autowired
     DaoSupport daoSupport;
+
+    @Override
+    public List<String> getNodeList(BatchContext batchContext) {
+        List<String> str = new LinkedList<>();
+        str.add("ds_0");
+        return str;
+    }
+
 
     @Override
     public void preBatchStep(BatchContext batchContext) {

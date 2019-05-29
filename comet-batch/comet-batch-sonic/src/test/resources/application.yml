@@ -28,10 +28,10 @@ com:
         user: ac
 logging:
   level:
+    root: info
     com:
       dcits:
         sonic:
-          executor: DEBUG
           remoting: DEBUG
   path: ./logs
 management:

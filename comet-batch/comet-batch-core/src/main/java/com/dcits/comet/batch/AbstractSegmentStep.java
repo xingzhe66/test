@@ -79,10 +79,9 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
                 }
             } catch (NoSuchBeanDefinitionException e) {
                 log.warn("No bean named '{}' available", ISegmentConditionMap.class.getName());
-            } finally {
             }
             log.debug("querySegmentList查询传入参数[{}]", map.toString());
-            return BeanUtil.mapToBean(dao.selectSegmentList(getTClass().getName() + "." + stepName, map, pageSize),Segment.class);
+            return BeanUtil.mapToBean(dao.selectSegmentList(getTClass().getName() + "." + stepName, map, pageSize), Segment.class);
         } catch (Exception e) {
             log.error("{}", e);
             return null;
@@ -93,7 +92,7 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
 
     @Override
     public List<T> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node, String stepName) {
-        log.info("StepName: [{}] ,DataBaseNode: [{}] SplitKey: [{} -- {}]", stepName, node,start, end);
+        log.info("StepName: [{}] ,DataBaseNode: [{}] SplitKey: [{} -- {}]", stepName, node, start, end);
 
         Route route = null;
         try {
@@ -101,12 +100,16 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
             Map<String, Object> map = new HashMap();
             map.put(COMET_START, start);
             map.put(COMET_END, end);
-            ApplicationContext ap = SpringContextHolder.getApplicationContext();
-            ISegmentConditionMap segmentConditionMap = ap.getBean(ISegmentConditionMap.class);
-            if (segmentConditionMap != null) {
-                map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+            try {
+                ApplicationContext ap = SpringContextHolder.getApplicationContext();
+                ISegmentConditionMap segmentConditionMap = ap.getBean(ISegmentConditionMap.class);
+                if (segmentConditionMap != null) {
+                    map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
+                }
+            } catch (NoSuchBeanDefinitionException e) {
+                log.warn("No bean named '{}' available", ISegmentConditionMap.class.getName());
             }
-           log.debug("getPageList查询传入参数 [{}]", map.toString());
+            log.debug("getPageList查询传入参数 [{}]", map.toString());
             return BeanUtil.mapToBean((List<Map<String, Object>>) dao.selectList(getTClass().getName() + "." + stepName, map), getTClass());
         } catch (Exception e) {
             log.error("{}", e);

@@ -1,6 +1,5 @@
 package com.dcits.comet.batch.reader;
 
-import com.dcits.comet.batch.IBStep;
 import com.dcits.comet.batch.ISegmentStep;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.util.BatchContextTool;
@@ -10,7 +9,6 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -43,13 +41,12 @@ public class SegmentReader<T> implements ItemReader<T> {
     public T read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
         synchronized (lock) {
 
-            if (results == null  ) {
-                    doReadPage();
+            if (results == null) {
+                doReadPage();
             }
             if (current < results.size()) {
                 return results.get(current++);
-            }
-            else {
+            } else {
                 return null;
             }
         }
@@ -61,12 +58,14 @@ public class SegmentReader<T> implements ItemReader<T> {
         } else {
             results.clear();
         }
-        BatchContext batchContext= BatchContextTool.getBatchContext();
+        BatchContext batchContext = BatchContextTool.getBatchContext();
 //        start= (Comparable) batchContext.getParams().get("segment_start");
 //        end= (Comparable) batchContext.getParams().get("segment_end");
-
-        results.addAll(batchStep.getPageList(batchContext, start,end,node,null));
-        log.info("doReadPage完毕,results大小为:"+results.size());
+        List list = batchStep.getPageList(batchContext, start, end, node, null);
+        if (null != list && list.size() != 0) {
+            results.addAll(list);
+        }
+        log.info("doReadPage完毕,results大小为:" + results.size());
     }
 
     public void setNode(String node) {
