@@ -12,9 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BatchContext implements Serializable {
     private static final long serialVersionUID = 324534523453453L;
-//
-//    private String exeId ;
-//    private String jobExecutionId;
     /**
      * 业务自定义参数
      */
