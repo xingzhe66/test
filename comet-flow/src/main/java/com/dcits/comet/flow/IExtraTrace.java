@@ -1,6 +1,7 @@
 package com.dcits.comet.flow;
 
-import com.dcits.comet.commons.data.BaseRequest;
+
+import com.dcits.comet.rpc.api.model.BaseRequest;
 
 /**
  * <p>Title: IExtraTrace.java</p>
