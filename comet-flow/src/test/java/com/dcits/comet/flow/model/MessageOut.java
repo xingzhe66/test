@@ -1,6 +1,6 @@
 package com.dcits.comet.flow.model;
 
-import com.dcits.comet.commons.data.BaseResponse;
+import com.dcits.comet.rpc.api.model.BaseResponse;
 import lombok.Data;
 
 /**
