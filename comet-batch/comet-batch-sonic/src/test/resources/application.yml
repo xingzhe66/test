@@ -31,6 +31,7 @@ logging:
     com:
       dcits:
         sonic:
+          executor: DEBUG
           remoting: DEBUG
   path: ./logs
 management:
@@ -86,7 +87,7 @@ spring:
         password: 123456
         minimum-idle: 1
         maximum-pool-size: 2
-        pool-name: DS0HikariCP
+        pool-name: DS2HikariCP
         connection-timeout: 30000
         connection-test-query: select 1
         max-lifetime: 600000
