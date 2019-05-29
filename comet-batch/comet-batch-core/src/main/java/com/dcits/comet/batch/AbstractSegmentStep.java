@@ -33,8 +33,6 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
     public static final String COMET_END = "cometEnd";
     public static final String COMET_BATCH_CONDITION_MAP = "Comet_Batch_Condition_Map";
 
-    //    @Resource(name="daoSupportImpl")
-//    private DaoSupportImpl dao;
     @Autowired
     private DaoSupport dao;
 
@@ -106,7 +104,6 @@ public class AbstractSegmentStep <T, O> implements ISegmentStep<T, O> {
                 map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
             }
             log.info("getPageList查询传入参数："+map.toString());
-            map.putAll(segmentConditionMap.getSegmentConditionMap(batchContext));
            return BeanUtil.mapToBean((List<Map<String, Object>>)dao.selectList(getTClass().getName() + "."+stepName,  map), getTClass());
         } catch (Exception e) {
             log.error("{}", e);

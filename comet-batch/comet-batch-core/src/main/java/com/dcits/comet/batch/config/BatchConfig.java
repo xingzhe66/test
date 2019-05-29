@@ -43,17 +43,17 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class BatchConfig {
 
 
-    @Value("${batch.jdbc.driver}")
+    @Value("${batch.jdbc.driver:null}")
     String driverClassName;
-    @Value("${batch.jdbc.url}")
+    @Value("${batch.jdbc.url:null}")
     String url;
-    @Value("${batch.jdbc.user}")
+    @Value("${batch.jdbc.user:null}")
     String userName;
-    @Value("${batch.jdbc.password}")
+    @Value("${batch.jdbc.password:null}")
     String password;
-    @Value("${batch.jdbc.testWhileIdle}")
+    @Value("${batch.jdbc.testWhileIdle:null}")
     String testWhileIdle;
-    @Value("${batch.jdbc.validationQuery}")
+    @Value("${batch.jdbc.validationQuery:null}")
     String validationQuery;
 
     @Value("${batch.threadPool.corePoolSize}")
@@ -105,6 +105,7 @@ public class BatchConfig {
         return jobScope;
     }
     @Bean
+    @Conditional(JobRepositoryCondition.class)
     public BatchContextDao batchContextDao(@Qualifier("jdbcTemplate") JdbcTemplate jdbcTemplate) {
         BatchContextDao batchContextDao = new BatchContextDaoImpl();
         ((BatchContextDaoImpl) batchContextDao).setJdbcTemplate(jdbcTemplate);
@@ -112,6 +113,7 @@ public class BatchConfig {
     }
 
     @Bean
+    @Conditional(JobRepositoryCondition.class)
     public JdbcTemplate jdbcTemplate(@Qualifier("batchDataSource") DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource);
@@ -157,8 +159,8 @@ public class BatchConfig {
         return jobRepositoryFactoryBean.getObject();
 
     }
-    @Bean
-    @Conditional(JobRepositoryCondition.class)
+    @Bean(name="jobRepository")
+    @Conditional(MapJobRepositoryCondition.class)
     public JobRepository jobRepositoryMap()
             throws Exception {
         MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean=new MapJobRepositoryFactoryBean();
@@ -188,7 +190,8 @@ public class BatchConfig {
     @Bean(name = "stepBuilders")
     public StepBuilderFactory stepBuilders(
             @Qualifier("jobRepository") JobRepository jobRepository,
-            @Qualifier("batchTransactionManager") DataSourceTransactionManager batchTransactionManager
+          //  @Qualifier("batchTransactionManager") DataSourceTransactionManager batchTransactionManager
+            DataSourceTransactionManager batchTransactionManager
     ) throws Exception {
 
         StepBuilderFactory stepBuilderFactory = new StepBuilderFactory(jobRepository, batchTransactionManager);
@@ -205,38 +208,38 @@ public class BatchConfig {
     }
 
 
-    @Bean(name = "batchJobOperator")
-    public SimpleJobOperator batchJobOperator(
-            @Qualifier("jobExplorer") JobExplorer jobExplorer,
-            @Qualifier("jobLauncher") JobLauncher jobLauncher,
-            @Qualifier("jobRegistry") JobRegistry jobRegistry,
-            @Qualifier("jobRepository") JobRepository jobRepository
-    ) throws Exception {
-
-        SimpleJobOperator batchJobOperator = new SimpleJobOperator();
-        batchJobOperator.setJobExplorer(jobExplorer);
-        batchJobOperator.setJobLauncher(jobLauncher);
-        batchJobOperator.setJobRegistry(jobRegistry);
-        batchJobOperator.setJobRepository(jobRepository);
-
-        return batchJobOperator;
-    }
-
-
-    @Bean(name = "jobExplorer")
-    public JobExplorerFactoryBean jobExplorer(
-            @Qualifier("batchDataSource") DataSource dataSource
-    ) throws Exception {
-
-        JobExplorerFactoryBean jobExplorer = new JobExplorerFactoryBean();
-        jobExplorer.setDataSource(dataSource);
-
-        return jobExplorer;
-    }
+//    @Bean(name = "batchJobOperator")
+//    public SimpleJobOperator batchJobOperator(
+//            @Qualifier("jobExplorer") JobExplorer jobExplorer,
+//            @Qualifier("jobLauncher") JobLauncher jobLauncher,
+//            @Qualifier("jobRegistry") JobRegistry jobRegistry,
+//            @Qualifier("jobRepository") JobRepository jobRepository
+//    ) throws Exception {
+//
+//        SimpleJobOperator batchJobOperator = new SimpleJobOperator();
+//        batchJobOperator.setJobExplorer(jobExplorer);
+//        batchJobOperator.setJobLauncher(jobLauncher);
+//        batchJobOperator.setJobRegistry(jobRegistry);
+//        batchJobOperator.setJobRepository(jobRepository);
+//
+//        return batchJobOperator;
+//    }
 
 
+//    @Bean(name = "jobExplorer")
+//    public JobExplorerFactoryBean jobExplorer(
+//            @Qualifier("batchDataSource") DataSource dataSource
+//    ) throws Exception {
+//
+//        JobExplorerFactoryBean jobExplorer = new JobExplorerFactoryBean();
+//        jobExplorer.setDataSource(dataSource);
+//
+//        return jobExplorer;
+//    }
 
-    @Bean(name = "jobParametersConverter")
+
+
+//    @Bean(name = "jobParametersConverter")
     public JsrJobParametersConverter jobParametersConverter(
             @Qualifier("batchDataSource") DataSource dataSource
     ) throws Exception {

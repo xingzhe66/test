@@ -45,7 +45,7 @@ public class ExecutionController {
     CommonJobLauncher commonJobLauncher;
     @Autowired
     private JobRepository jobRepository;
-    @Autowired
+    @Autowired(required = false)
     private BatchContextDao batchContextDao;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionController.class);

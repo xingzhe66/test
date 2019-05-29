@@ -49,7 +49,7 @@ public class CommonJobLauncher implements IJobLauncher {
 
     @Autowired
     ConfigurableApplicationContext context;
-    @Autowired
+    @Autowired(required = false)
     BatchContextDao batchContextDao;
 
     @Override
@@ -85,12 +85,6 @@ public class CommonJobLauncher implements IJobLauncher {
                     .start(step)
                     .listener(jobListener)
                     .build();
-//            SimpleJob job = new SimpleJob();
-//            job.setName(JOB_PEX + stepName);
-//            job.setJobRepository(jobRepository);
-//            job.addStep(step);
-//            job.setJobExecutionListeners(new JobListener());
-
             CometJobLauncher jobLauncher = (CometJobLauncher) context.getBean(CometJobLauncher.class);
             /**
              * SimpleAsyncTaskExecutor这个实现不重用任何线程，或者说它每次调用都启动一个新线程。

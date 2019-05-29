@@ -31,11 +31,13 @@ public class JobListener implements JobExecutionListener {
     public void afterJob(JobExecution jobExecution) {
         if(ExitStatus.COMPLETED.getExitCode().equals(jobExecution.getExitStatus().getExitCode())) {
             if(BatchStatus.COMPLETED.getBatchStatus().equals(jobExecution.getStatus().getBatchStatus())) {
-                batchContextDao.saveBatchContext(
-                        jobExecution.getJobParameters().getString(EXE_ID),
-                        String.valueOf(jobExecution.getJobId()),
-                        BatchContextManager.getInstance().getBatchContext(jobExecution.getJobParameters().getString(EXE_ID))
-                );
+                if(batchContextDao!=null) {
+                    batchContextDao.saveBatchContext(
+                            jobExecution.getJobParameters().getString(EXE_ID),
+                            String.valueOf(jobExecution.getJobId()),
+                            BatchContextManager.getInstance().getBatchContext(jobExecution.getJobParameters().getString(EXE_ID))
+                    );
+                }
             }
         }
         //清理context

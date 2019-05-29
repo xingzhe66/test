@@ -29,7 +29,9 @@ import static com.dcits.comet.batch.constant.BatchConstant.STEP_PEX;
 public class StepFactory {
     protected static final Log LOGGER = LogFactory.getLog(CommonJobLauncher.class);
     public static final String BATCH_TASK_EXECUTOR = "batchTaskExecutor";
-    public static final String BATCH_TRANSACTION_MANAGER = "batchTransactionManager";
+
+    //todo shardTransactionManager不能写死
+    public static final String BATCH_TRANSACTION_MANAGER = "shardTransactionManager";
 
 
     public static Step build(StepParam stepParam) {
