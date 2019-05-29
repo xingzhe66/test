@@ -13,6 +13,8 @@ import java.util.Map;
 
 public interface DaoSupport extends BaseDaoSupport {
 
+    String POSTFIX_BATCH_INSERT = ".insert";
+
     <T extends BasePo> Integer count(String statementPostfix, T object);
 
     Integer count(String statementPostfix, Map<String, Object> parameter);
@@ -60,6 +62,8 @@ public interface DaoSupport extends BaseDaoSupport {
     <T extends BasePo> List<T> selectListForUpdate(String statementPostfix, T entity);
 
     <T extends BasePo> List<T> selectListForUpdate(T entity);
+
+    <T extends BasePo> int insertBatch(List<T> list);
 
     List selectSegmentList(String statementPostfix, Map<String, Object> parameter,int pageSize);
 }
