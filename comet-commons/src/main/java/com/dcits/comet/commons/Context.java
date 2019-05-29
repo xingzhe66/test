@@ -10,8 +10,8 @@
  */
 package com.dcits.comet.commons;
 
-import com.dcits.comet.commons.data.head.AppHead;
-import com.dcits.comet.commons.data.head.SysHead;
+import com.dcits.comet.rpc.api.model.head.AppHead;
+import com.dcits.comet.rpc.api.model.head.SysHead;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

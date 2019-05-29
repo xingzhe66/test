@@ -1,7 +1,7 @@
 package com.dcits.comet.commons.utils;
 
 import com.dcits.comet.commons.data.RowArgs;
-import com.dcits.comet.commons.data.head.AppHead;
+import com.dcits.comet.rpc.api.model.head.AppHead;
 
 
 /**

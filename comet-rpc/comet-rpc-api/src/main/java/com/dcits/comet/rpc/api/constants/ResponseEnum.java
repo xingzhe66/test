@@ -1,4 +1,4 @@
-package com.dcits.comet.commons.constant;
+package com.dcits.comet.rpc.api.constants;
 
 /**
  * 返回码定义

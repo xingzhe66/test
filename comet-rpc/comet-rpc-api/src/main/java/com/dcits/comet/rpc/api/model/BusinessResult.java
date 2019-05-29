@@ -1,10 +1,10 @@
-package com.dcits.comet.commons.data;
+package com.dcits.comet.rpc.api.model;
 
-import com.dcits.comet.commons.constant.Constants;
-import com.dcits.comet.commons.constant.ResponseEnum;
-import com.dcits.comet.commons.data.head.AppHead;
-import com.dcits.comet.commons.data.head.Result;
-import com.dcits.comet.commons.data.head.SysHeadOut;
+import com.dcits.comet.rpc.api.constants.Constants;
+import com.dcits.comet.rpc.api.constants.ResponseEnum;
+import com.dcits.comet.rpc.api.model.head.AppHead;
+import com.dcits.comet.rpc.api.model.head.Result;
+import com.dcits.comet.rpc.api.model.head.SysHeadOut;
 
 /**
  * 公共返回处理

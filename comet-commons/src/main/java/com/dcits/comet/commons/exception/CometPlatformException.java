@@ -1,7 +1,7 @@
 package com.dcits.comet.commons.exception;
 
 
-import com.dcits.comet.commons.constant.ResponseEnum;
+import com.dcits.comet.rpc.api.constants.ResponseEnum;
 
 /**
  * @author wangyun

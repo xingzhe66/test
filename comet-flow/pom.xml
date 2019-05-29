@@ -24,7 +24,6 @@
             <groupId>com.dcits</groupId>
             <artifactId>comet-commons</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-mq-api</artifactId>

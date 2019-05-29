@@ -1,9 +1,9 @@
 package com.dcits.comet.mvc.handler;
 
-import com.dcits.comet.commons.constant.ResponseEnum;
-import com.dcits.comet.commons.data.BaseResponse;
-import com.dcits.comet.commons.data.BusinessResult;
 import com.dcits.comet.commons.exception.BusinessException;
+import com.dcits.comet.rpc.api.constants.ResponseEnum;
+import com.dcits.comet.rpc.api.model.BaseResponse;
+import com.dcits.comet.rpc.api.model.BusinessResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

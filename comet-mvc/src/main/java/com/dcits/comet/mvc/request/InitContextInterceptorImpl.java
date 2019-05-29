@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.dcits.comet.commons.Context;
 import com.dcits.comet.commons.ThreadLocalManager;
-import com.dcits.comet.commons.data.head.AppHead;
-import com.dcits.comet.commons.data.head.SysHead;
 import com.dcits.comet.mvc.interceptor.request.IBusinessRequestPreInterceptor;
+import com.dcits.comet.rpc.api.model.head.AppHead;
+import com.dcits.comet.rpc.api.model.head.SysHead;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
