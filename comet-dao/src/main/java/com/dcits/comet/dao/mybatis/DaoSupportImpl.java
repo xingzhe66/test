@@ -18,6 +18,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -133,6 +134,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     public <T extends BasePo> int insert(T entity) {
         String className = entity.getClass().getName();
         return this.getSqlSession().insert(className + POSTFIX_INSERT, entity);
+
     }
 
     @Override
@@ -145,6 +147,14 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         }
 
         return i;
+    }
+
+    @Override
+    public <T extends BasePo> int insertBatch(List<T> list) {
+        Assert.isNull(list,"insertBatch list is null");
+        Assert.state(list.size() > 0, "insertBatch list size greater than 1");
+        String className = list.get(0).getClass().getName();
+        return this.getSqlSession().insert(className + POSTFIX_BATCH_INSERT, list);
     }
 
     @Override
@@ -227,7 +237,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
     }
 
     @Override
-    public  List selectList(String statementPostfix, Map<String, Object> parameter) {
+    public List selectList(String statementPostfix, Map<String, Object> parameter) {
         return this.getSqlSession().selectList(statementPostfix, parameter);
     }
 
@@ -331,17 +341,18 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
         return (List<T>) result;
     }
 
+
     @Override
     public List selectSegmentList(String statementPostfix, Map<String, Object> parameter, int pageSize) {
         List result;
         try {
             SelectSegmentHelper.setSelectSegment();
-            parameter.put("PAGE_SIZE",pageSize);
+            parameter.put("PAGE_SIZE", pageSize);
             result = this.selectList(statementPostfix, parameter);
         } finally {
             SelectSegmentHelper.cancelSelectSegment();
         }
-        return  result;
+        return result;
     }
 
 
