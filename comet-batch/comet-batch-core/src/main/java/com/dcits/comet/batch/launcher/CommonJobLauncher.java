@@ -66,8 +66,9 @@ public class CommonJobLauncher implements IJobLauncher {
          * 初始化batchContextInit扩展接口
          */
         IBatchContextInit batchContextInit = context.getBean(IBatchContextInit.class);
-        batchContextInit.init(batchContext);
-
+        if(batchContextInit!=null) {
+            batchContextInit.init(batchContext);
+        }
         try {
             JobParameters jobParameters = createJobParams(exeId, stepName);
             StepParam stepParam = new StepParam();
