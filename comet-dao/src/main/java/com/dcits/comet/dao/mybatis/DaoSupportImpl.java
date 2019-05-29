@@ -151,7 +151,7 @@ public class DaoSupportImpl extends SqlSessionDaoSupport implements DaoSupport {
 
     @Override
     public <T extends BasePo> int insertBatch(List<T> list) {
-        Assert.isNull(list,"insertBatch list is null");
+        Assert.notEmpty(list,"insertBatch list is null");
         Assert.state(list.size() > 0, "insertBatch list size greater than 1");
         String className = list.get(0).getClass().getName();
         return this.getSqlSession().insert(className + POSTFIX_BATCH_INSERT, list);

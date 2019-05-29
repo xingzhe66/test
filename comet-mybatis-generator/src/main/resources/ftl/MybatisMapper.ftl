@@ -57,7 +57,7 @@
 	<sql id="comet_step_where">
 		<if test="cometStart != null and cometStart.length() > 0 and cometEnd != null and cometEnd.length() > 0" > and ${cometKeyField} between #{cometStart} and #{cometEnd} </if>
 	</sql>
-
+    DaoSupportImpl
 	<sql id="Base_Select">
 		SELECT
 		<include refid="Base_Column" />
