@@ -1,21 +1,10 @@
 package com.dcits.comet.gateway.container;
 
 
-import com.dcits.comet.base.scanner.ClasspathPackageScanner;
-import com.dcits.comet.commons.business.ServiceTransfer;
 import com.dcits.comet.commons.utils.YamlUtil;
-import com.dcits.comet.gateway.property.CometYaml;
+import com.dcits.comet.rpc.api.annotation.ServiceTransfer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-import org.yaml.snakeyaml.Yaml;
-
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
