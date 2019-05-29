@@ -93,6 +93,8 @@ public class AbstractSegmentStep<T, O> implements ISegmentStep<T, O> {
 
     @Override
     public List<T> getPageList(BatchContext batchContext, Comparable start, Comparable end, String node, String stepName) {
+        log.info("StepName: [{}] ,DataBaseNode: [{}] SplitKey: [{} -- {}]", stepName, node,start, end);
+
         Route route = null;
         try {
             route = HintManagerHelper.getInstance(getTClass(), node);
