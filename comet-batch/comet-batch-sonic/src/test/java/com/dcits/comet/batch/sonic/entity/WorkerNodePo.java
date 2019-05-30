@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableType(name = "WORKER_NODE", value = TableTypeEnum.LEVEL)
+@TableType(name = "WORKER_NODE", value = TableTypeEnum.UPRIGHT)
 public class WorkerNodePo extends BasePo {
 
     private Long id;
