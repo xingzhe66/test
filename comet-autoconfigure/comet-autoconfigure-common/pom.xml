@@ -9,29 +9,27 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>comet-autoconfigure-online-service</artifactId>
+    <artifactId>comet-autoconfigure-common</artifactId>
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>comet-autoconfigure-common</artifactId>
+            <artifactId>comet-dbsharding</artifactId>
             <version>${comet.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>comet-mvc</artifactId>
+            <artifactId>comet-mq-consumer</artifactId>
             <version>${comet.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-mq-producer</artifactId>
+            <version>${comet.version}</version>
         </dependency>
     </dependencies>
 

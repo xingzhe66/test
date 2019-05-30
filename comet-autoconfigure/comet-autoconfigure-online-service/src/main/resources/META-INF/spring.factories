@@ -1,0 +1,11 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.dctis.comet.autoconfigure.common.dao.DataSourceConfig,\
+  com.dctis.comet.autoconfigure.common.dao.ShardingDataSourceConfig,\
+  com.dctis.comet.autoconfigure.common.dao.MybatisConfig,\
+  com.dctis.comet.autoconfigure.common.dao.DaoConfig,\
+  com.dctis.comet.autoconfigure.common.exception.ExceptionContainerConfig,\
+  com.dcits.comet.autoconfigure.online.service.swagger.Swagger2Config,\
+  com.dcits.comet.autoconfigure.online.service.transaction.TransactionAdviceConfig,\
+  com.dcits.comet.autoconfigure.online.service.validator.ValidatorConfig,\
+  com.dcits.comet.autoconfigure.online.service.webmvc.WebMvcAutoConfig

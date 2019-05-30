@@ -11,5 +11,12 @@
 
     <artifactId>comet-autoconfigure-batch-service</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-autoconfigure-common</artifactId>
+            <version>${comet.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

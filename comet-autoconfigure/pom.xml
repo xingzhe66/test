@@ -15,6 +15,7 @@
         <module>comet-autoconfigure-online-service</module>
         <module>comet-autoconfigure-batch-sonic</module>
         <module>comet-autoconfigure-batch-service</module>
+        <module>comet-autoconfigure-common</module>
     </modules>
 
 
