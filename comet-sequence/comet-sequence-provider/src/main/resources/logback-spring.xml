@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProperty scope="context" name="logging.path" source="logging.path"/>
     <springProperty scope="context" name="logging.level" source="logging.level.com.dcits"/>
-
+    <springProperty scope="context" name="logging.level.root" source="logging.level.root"/>
+    <property name="logging.path" value="./logs"/>
+    <property name="spring.application.name" value="comet-sequence-provider"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -10,26 +11,19 @@
         </encoder>
     </appender>
 
-    <!-- to generate logfile daily -->
     <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
-        <!-- a filter that show green light for object that has a error log level-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>error</level>
         </filter>
-        <!-- log name -->
-        <file>${logging.path}/demo/common-error.log</file>
-        <!-- to generate a log file everyday with a longest lasting of 30 days -->
+        <file>${logging.path}/${spring.application.name}/common-error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- logfile name with daily rolling-->
-            <FileNamePattern>${logging.path}/demo/common-error.log.%d{yyyy-MM-dd}</FileNamePattern>
-            <!-- log perserve days-->
+            <FileNamePattern>${logging.path}/${spring.application.name}/common-error.log.%d{yyyy-MM-dd}
+            </FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!--output format：%d is for date，%thread is for thread name，%-5level：loglevel with 5 character  %msg：log message，%n line breaker-->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} %line - %msg%n</pattern>
-            <!-- encoding -->
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -37,46 +31,35 @@
     <appender name="ROOT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>${logging.level}</level>
+            <level>${logging.level.root}</level>
         </filter>
-        <file>${logging.path}/demo/common-default.log</file>
-        <!-- to generate a log file everyday with a longest lasting of 30 days -->
+        <file>${logging.path}/${spring.application.name}/common-default.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- logfile name with daily rolling-->
-            <FileNamePattern>${logging.path}/demo/common-default.log.%d{yyyy-MM-dd}
+            <FileNamePattern>${logging.path}/${spring.application.name}/common-default.log.%d{yyyy-MM-dd}
             </FileNamePattern>
-            <!-- log perserve days-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!--output format：%d is for date，%thread is for thread name，%-5level：loglevel with 5 character  %msg：log message，%n line breaker-->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} %line - %msg%n</pattern>
-            <!-- encoding -->
             <charset>UTF-8</charset>
         </encoder>
     </appender>
 
-    <!-- tracer mdc example, you can delete it -->
-    <appender name="MDC-EXAMPLE-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="MDC-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>${logging.level}</level>
         </filter>
-        <file>${logging.path}/demo/mdc-example.log</file>
-        <!-- to generate a log file everyday with a longest lasting of 30 days -->
+        <file>${logging.path}/${spring.application.name}/mdc-default.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- logfile name with daily rolling-->
-            <FileNamePattern>${logging.path}/demo/mdc-example.log.%d{yyyy-MM-dd}
+            <FileNamePattern>${logging.path}/${spring.application.name}/mdc-default.log.%d{yyyy-MM-dd}
             </FileNamePattern>
-            <!-- log perserve days-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!--output format：%d is for date，%thread is for thread name，%-5level：loglevel with 5 character  %msg：log message，%n line breaker-->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{SOFA-TraceId},%X{SOFA-SpanId}] %logger{50} -
                 %msg%n
             </pattern>
-            <!-- encoding -->
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -84,15 +67,13 @@
     <logger name="com.dcits" level="${logging.level}" additivity="false">
         <appender-ref ref="ROOT-APPENDER"/>
         <appender-ref ref="ERROR-APPENDER"/>
-        <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="MDC-EXAMPLE" level="${logging.level}" additivity="false">
-        <appender-ref ref="MDC-EXAMPLE-APPENDER"/>
-        <appender-ref ref="STDOUT"/>
+    <logger name="MDC-APPENDER" level="${logging.level}" additivity="false">
+        <appender-ref ref="MDC-APPENDER"/>
     </logger>
 
-    <root level="${logging.level}">
+    <root level="${logging.level.root}">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ROOT-APPENDER"/>
         <appender-ref ref="ERROR-APPENDER"/>
