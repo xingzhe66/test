@@ -137,7 +137,7 @@ public class CommonJobLauncher implements IJobLauncher {
                 jobExeResult.setBatchContext(BatchContextManager.getInstance().getBatchContext(jobParam.getExeId()));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
             throw new BatchException(e.getMessage(), e);
         } finally {
 
