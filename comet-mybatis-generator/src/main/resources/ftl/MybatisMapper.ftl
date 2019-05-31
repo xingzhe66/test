@@ -30,7 +30,11 @@
 	<sql id="Base_Where">
 		<trim suffixOverrides="AND">
 		<#list cloums as c>
-		   <if test="${c.columnName} != null ">
+			<#if c.javaType ?? &&  c.javaType =="String">
+			<if test="${c.columnName} != null and  ${c.columnName} != '' ">
+			<#else>
+			<if test="${c.columnName} != null ">
+			</#if>
 		       ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
 			</if>
 		</#list>
@@ -73,14 +77,22 @@
 		<include refid="Table_Name" />
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 		<#list cloums as c>
+			<#if c.javaType ?? &&  c.javaType =="String">
+			<if test="${c.columnName} != null and  ${c.columnName} != '' ">
+			<#else>
 			<if test="${c.columnName} != null ">
+			</#if>
 		        ${ c.columnNameL},
 			</if>
 		</#list>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<#list cloums as c>
+			<#if c.javaType ?? &&  c.javaType =="String">
+			<if test="${c.columnName} != null and  ${c.columnName} != '' ">
+			<#else>
 			<if test="${c.columnName} != null ">
+			</#if>
 				${r"#{"}${c.columnName}},
 			</if>
 			</#list>
@@ -92,9 +104,13 @@
 		<set>
 		   <#list cloums as c>
 			   <#if c.pkFlag == "N" && c.shardFlag=="N">
-					<if test="${ c.columnName} != null ">
+			   <#if c.javaType ?? &&  c.javaType =="String">
+			    <if test="${c.columnName} != null and  ${c.columnName} != '' ">
+				<#else>
+				<if test="${c.columnName} != null ">
+				</#if>
 					    ${ c.columnNameL} = ${r"#{"}${ c.columnName}},
-					</if>
+				</if>
 			    </#if>
 		   </#list>
 		</set>
@@ -102,9 +118,13 @@
 			<trim suffixOverrides="AND">
 			  <#list cloums as c>
 			     <#if c.pkFlag == "Y" || c.shardFlag=="Y">
-				     <if test="${ c.columnName} != null ">
-			            ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
-					 </if>
+				 <#if c.javaType ?? &&  c.javaType =="String">
+				 <if test="${c.columnName} != null and  ${c.columnName} != '' ">
+				 <#else>
+				 <if test="${c.columnName} != null ">
+				 </#if>
+					 ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+				 </if>
 			    </#if>
 			  </#list>
 			</trim>
@@ -116,18 +136,26 @@
 		<include refid="Table_Name" />
 		<set>
 			<#list cloums as c>
-		    	<if test="s.${c.columnName} != null ">
-			    	${c.columnNameL} = ${r"#{"}s.${ c.columnName}},
-				</if>
+			<#if c.javaType ?? &&  c.javaType =="String">
+			  <if test="s.${c.columnName} != null and s.${c.columnName} != '' ">
+			<#else>
+			  <if test="s.${c.columnName} != null ">
+			</#if>
+			    ${c.columnNameL} = ${r"#{"}s.${ c.columnName}},
+			 </if>
 			</#list>
 		</set>
 		<where>
 			<trim prefix="(" suffix=")" suffixOverrides="AND">
 				<#list cloums as c>
+				<#if c.javaType ?? &&  c.javaType =="String">
+				    <if test="w.${c.columnName} != null and w.${c.columnName} != '' ">
+				<#else>
 					<if test="w.${c.columnName} != null ">
+				</#if>
 					${c.columnNameL} = ${r"#{"}w.${ c.columnName}}
 					AND
-					</if>
+				</if>
 				</#list>
 			</trim>
 		</where>
@@ -173,9 +201,13 @@
 			<trim suffixOverrides="AND">
 		    <#list cloums as c>
 			<#if c.pkFlag == "Y">
-		        <if test="${ c.columnName} != null ">
-				${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
-				</if>
+		    <#if c.javaType ?? &&  c.javaType =="String">
+		      <if test="${c.columnName} != null and  ${c.columnName} != '' ">
+			<#else>
+		      <if test="${c.columnName} != null ">
+			</#if>
+				 ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+			  </if>
 			</#if>
 	        </#list>
 			</trim>
@@ -217,8 +249,12 @@
 			<trim suffixOverrides="AND">
 			<#list cloums as c>
 		    <#if c.pkFlag == "Y">
-		        <if test="${ c.columnName} != null ">
-				${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
+		    <#if c.javaType ?? &&  c.javaType =="String">
+	        	<if test="${c.columnName} != null and  ${c.columnName} != '' ">
+			<#else>
+			   <if test="${c.columnName} != null ">
+			</#if>
+				  ${ c.columnNameL} = ${r"#{"}${ c.columnName}}  AND
 				</if>
 			</#if>
 			</#list>
