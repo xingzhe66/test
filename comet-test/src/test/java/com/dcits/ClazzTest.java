@@ -17,6 +17,7 @@ public class ClazzTest {
 
         try {
             Class c = Class.forName(classname);
+
             Object obj = c.newInstance();
             Method mt = c.getMethod("setId",java.lang.Long.class);
             mt.invoke(obj,1L);
