@@ -40,6 +40,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
     private boolean isEnable;
     @Override
     public OUT handle(String beanName, IN input) {
+        Stopwatch stopwatch = Stopwatch.createStarted();
 
         // preHandle
         preHandler(input);
@@ -47,9 +48,8 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
         //preBusinessHandler
         preBusinessHandler(beanName, input);
 
-        Stopwatch stopwatch = Stopwatch.createStarted();
         OUT output = null;
-        log.info("The [{}] flow elapsedTime is [{}]", beanName, stopwatch.elapsed(TimeUnit.MILLISECONDS));
+
         try {
             output = this.execute(input);
 
@@ -101,7 +101,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
             }
             throw e;
         } finally {
-
+            log.info("The [{}] flow elapsedTime is [{}]", beanName, stopwatch.elapsed(TimeUnit.MILLISECONDS));
         }
         return output;
     }
@@ -130,7 +130,7 @@ public abstract class AbstractFlow<IN extends BaseRequest, OUT extends BaseRespo
 
     private void postHandler(IN input, OUT out) {
         log.info("<===== execute postHandler =====>");
-       // setOriginalSysHead(out.getSysHead(), input.getSysHead());
+        setOriginalSysHead(out.getSysHead(), input.getSysHead());
         //流程执行成功，发送mq
         try {
             //更新流程执行状态  3

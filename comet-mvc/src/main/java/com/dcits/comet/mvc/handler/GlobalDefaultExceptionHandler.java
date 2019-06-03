@@ -20,6 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class GlobalDefaultExceptionHandler {
 
+    @ExceptionHandler(value = BusinessException.class)
+    public BaseResponse businessExceptionHandler(HttpServletRequest request, Exception e) {
+        Throwable throwable = getBusinessException(e);
+        if (e instanceof BusinessException) {
+            BusinessException businessException = (BusinessException) e;
+            return BusinessResult.error(businessException.getErrorCode(), businessException.getErrorMessage());
+        }
+        return BusinessResult.error(ResponseEnum.FAILED.getCode(), ResponseEnum.FAILED.getMessage());
+    }
+
     @ExceptionHandler(value = Exception.class)
     public BaseResponse exceptionHandler(HttpServletRequest request, Exception e) {
         Throwable throwable = getBusinessException(e);
