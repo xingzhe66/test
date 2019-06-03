@@ -44,7 +44,7 @@ public final class DateUtil {
 			return Calendar.getInstance();
 		}
 	};
-	
+
 	/**
 	 * 日期转字符串
 	 * @param date 日期类型
@@ -140,8 +140,8 @@ public final class DateUtil {
 
 		Calendar calst = Calendar.getInstance();;
 		Calendar caled = Calendar.getInstance();
-		calst.setTime(parseDate("yyyyMMdd",date1));
-		caled.setTime(parseDate("yyyyMMdd",date2));
+		calst.setTime(parseDate(date1,PATTERN_SIMPLE_DATE));
+		caled.setTime(parseDate(date2,PATTERN_SIMPLE_DATE));
 		//设置时间为0时
 		calst.set(Calendar.HOUR_OF_DAY, 0);
 		calst.set(Calendar.MINUTE, 0);
@@ -214,7 +214,7 @@ public final class DateUtil {
 		calendar.set(Calendar.DATE, (calendar.get(Calendar.DATE) + 1));
 			return calendar.get(Calendar.DAY_OF_MONTH) == 1;
 	}
-	
+
 	/**
 	 * 计算日期加上天数后得到的日期
 	 * @param date
@@ -276,7 +276,7 @@ public final class DateUtil {
 		}
 		return null;
 	}
-	
+
 
 	/**
 	 * 获取日期的年份
@@ -288,7 +288,7 @@ public final class DateUtil {
 		calendar.setTime(date);
 		return calendar.get(Calendar.YEAR);
 	}
-	
+
 	/**
 	 * 获取日期的月份
 	 * @param date
@@ -299,7 +299,7 @@ public final class DateUtil {
 		calendar.setTime(date);
 		return calendar.get(Calendar.MONTH) + 1;
 	}
-	
+
 	/**
 	 * 获取日期的日
 	 * @param date
@@ -309,10 +309,10 @@ public final class DateUtil {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.DAY_OF_MONTH);
-	} 
-	
+	}
 
-//	
+
+//
 //	/**
 //	 * 根据利率变动周期和利率变更日，计算每段周期的时间段
 //	 * @param rollDate 下一个利率变更日期，需要在startDate和endDate之间
@@ -382,7 +382,7 @@ public final class DateUtil {
 		return DateUtils.addMonths(date, addNo);
 	}
 
-	
+
 	public static Date getYearLastDay(Date date) {
 
 		Calendar calendar = getCalendar();
@@ -406,7 +406,7 @@ public final class DateUtil {
 		calendar.set(calendar.get(Calendar.YEAR), 0, 1);
 		return calendar.getTime();
 	}
-	
+
 	/**
 	 * 返回给定日期所在季的第一天
 	 *
@@ -430,7 +430,7 @@ public final class DateUtil {
 		}
 		return newDate;
 	}
-	
+
 	/**
 	 * 返回给定日期所在季的最后一天
 	 *
