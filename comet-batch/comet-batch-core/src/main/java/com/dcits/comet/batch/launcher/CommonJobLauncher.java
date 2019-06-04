@@ -110,6 +110,8 @@ public class CommonJobLauncher implements IJobLauncher {
                 // ThreadPoolTaskExecutor threadPoolTaskExecutor=new ThreadPoolTaskExecutor();
                 // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
                 jobLauncher.setTaskExecutor(taskExecutor);
+            }else {
+                jobLauncher.setTaskExecutor(null);
             }
 
             try {

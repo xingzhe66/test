@@ -1,0 +1,24 @@
+POST http://localhost:8089/batch/exe
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "stepName": "tstep",
+  "exeId": "32",
+  "async": "0",
+  "runType": "2",
+  "threadNum": "30",
+  "batchContext" : {
+     "params" : {
+
+     }
+  }
+
+}
+
+
+<> 2019-02-20T104055.200.txt
+
+###
+
