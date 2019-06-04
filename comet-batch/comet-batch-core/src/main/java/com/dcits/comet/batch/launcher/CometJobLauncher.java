@@ -28,8 +28,6 @@ public class CometJobLauncher implements  JobLauncher,InitializingBean {
 
     private TaskExecutor taskExecutor;
 
-    private Object lock = new Object();
-
     public JobExecution run(Job job, JobParameters jobParameters,String exeId, BatchContext batchContext) throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 
         checkExeId(job, jobParameters);
@@ -42,7 +40,7 @@ public class CometJobLauncher implements  JobLauncher,InitializingBean {
     }
 
     private void checkExeId(Job job, JobParameters jobParameters) throws JobRestartException, JobExecutionAlreadyRunningException, JobParametersInvalidException {
-        synchronized (lock) {
+
             Assert.notNull(job, "The Job must not be null.");
             Assert.notNull(jobParameters, "The JobParameters must not be null.");
             JobExecution lastExecution = jobRepository.getLastJobExecution(job.getName(), jobParameters);
@@ -71,7 +69,7 @@ public class CometJobLauncher implements  JobLauncher,InitializingBean {
             // Check the validity of the parameters before doing creating anything
             // in the repository...
             job.getJobParametersValidator().validate(jobParameters);
-        }
+
     }
 
 
