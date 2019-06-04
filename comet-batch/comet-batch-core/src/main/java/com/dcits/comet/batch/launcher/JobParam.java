@@ -1,5 +1,6 @@
 package com.dcits.comet.batch.launcher;
 
+import com.dcits.comet.batch.constant.BatchConstant;
 import com.dcits.comet.batch.param.BatchContext;
 
 /**
@@ -18,7 +19,7 @@ public class JobParam {
      1 异步。
 
      */
-    private String async;
+    private String async = BatchConstant.ASYNC_TYPE_SYNC;
     /**
      节点
      */
@@ -32,7 +33,7 @@ public class JobParam {
 
     private int endIndex;
 
-    private String runType;
+    private String runType = BatchConstant.RUN_TYPE_SIMPLE;
 
     private int threadNum;
 
