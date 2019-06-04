@@ -27,6 +27,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -110,6 +111,8 @@ public class CommonJobLauncher implements IJobLauncher {
                 // ThreadPoolTaskExecutor threadPoolTaskExecutor=new ThreadPoolTaskExecutor();
                 // SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
                 jobLauncher.setTaskExecutor(taskExecutor);
+            }else {
+                jobLauncher.setTaskExecutor(new SyncTaskExecutor());
             }
 
             try {
