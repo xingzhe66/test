@@ -18,7 +18,7 @@ public class JobParam {
      1 异步。
 
      */
-    private String async;
+    private String async = "0";
     /**
      节点
      */
