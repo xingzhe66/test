@@ -47,6 +47,14 @@ public class NormalBatchExecutor implements NormalStepExecutor {
             if (StringUtils.isNotEmpty(params)) {
                 batchContext.setParams(JsonUtil.jsonToMap(params));
             }
+            String async = jobParam.getAsync();
+            if (StringUtils.isEmpty(async)) {
+                jobParam.setAsync("0");//默认同步
+            }
+            String runType = jobParam.getRunType();
+            if (StringUtils.isEmpty(runType)) {
+                jobParam.setRunType("1");//默认单线程
+            }
             jobParam.setBatchContext(batchContext);
 
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
