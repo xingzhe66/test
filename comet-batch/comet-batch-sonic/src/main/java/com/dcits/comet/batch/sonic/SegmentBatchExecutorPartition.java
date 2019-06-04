@@ -52,6 +52,7 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
             throw new BatchException("不支持的Step类型");
         }
         // 添加子分段扩展信息，
+        log.info("返回的分段信息大小{}",attributesList.size());
         segmentedStepSender.addBatch(attributesList);
     }
 
