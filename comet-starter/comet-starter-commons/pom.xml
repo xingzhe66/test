@@ -19,6 +19,7 @@
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-commons</artifactId>
+            <version>${comet.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dcits</groupId>
@@ -27,6 +28,7 @@
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-mybatis-generator</artifactId>
+            <version>${comet.version}</version>
         </dependency>
 
     </dependencies>
