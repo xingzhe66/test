@@ -20,6 +20,7 @@ public abstract class AbstractTStep implements ITStep {
         try {
             this.exe(batchContext);
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
             throw new BatchException("批量执行错误！错误信息："+throwable.getMessage());
         }
 
