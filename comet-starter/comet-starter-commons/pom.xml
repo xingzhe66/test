@@ -9,35 +9,25 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>comet-starter-batch-service</artifactId>
+    <artifactId>comet-starter-commons</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>comet-flow</artifactId>
+            <artifactId>comet-cache</artifactId>
         </dependency>
         <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>comet-mvc</artifactId>
+            <artifactId>comet-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>com.dcits</groupId>
-            <artifactId>comet-batch</artifactId>
+            <artifactId>comet-dao</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
+            <groupId>com.dcits</groupId>
+            <artifactId>comet-mybatis-generator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-            <!--<optional>true</optional>-->
-        </dependency>
-
 
     </dependencies>
 
