@@ -14,14 +14,17 @@
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-flow</artifactId>
+            <version>${comet.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-mvc</artifactId>
+            <version>${comet.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dcits</groupId>
             <artifactId>comet-batch</artifactId>
+            <version>${comet.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
