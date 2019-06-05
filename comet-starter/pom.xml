@@ -17,6 +17,9 @@
         <module>comet-starter-batch-service</module>
         <module>comet-starter-mq-consumer</module>
         <module>comet-starter-mq-provider</module>
+        <module>comet-starter-commons</module>
+        <module>comet-starter-gateway</module>
+        <module>comet-starter-api</module>
     </modules>
     <dependencies>
         <dependency>
