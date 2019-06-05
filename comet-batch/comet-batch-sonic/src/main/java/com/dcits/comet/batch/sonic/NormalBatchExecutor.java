@@ -3,6 +3,7 @@ package com.dcits.comet.batch.sonic;
 import com.alibaba.fastjson.JSON;
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.launcher.IJobLauncher;
+import com.dcits.comet.batch.launcher.JobExeResult;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.sonic.exception.BatchServiceException;
@@ -14,6 +15,7 @@ import com.dcits.sonic.executor.step.normal.NormalStepExecutor;
 import com.dcits.sonic.executor.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.batch.core.BatchStatus;
 
 import java.util.Map;
 
@@ -58,7 +60,11 @@ public class NormalBatchExecutor implements NormalStepExecutor {
             jobParam.setBatchContext(batchContext);
 
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
-            jobLauncher.run(jobParam.getStepName(), jobParam);
+            JobExeResult jobExeResult = jobLauncher.run(jobParam.getStepName(), jobParam);
+            if (!BatchStatus.COMPLETED.getBatchStatus().equals(jobExeResult.getJobExecution().getStatus().getBatchStatus())) {
+                log.error("Job:[stepName:{},exeId={}]completed with the following parameters: [jobId={}] and the following status: [{}]", jobParam.getStepName(),jobParam.getExeId(),jobExeResult.getJobExecution().getJobId(), jobExeResult.getJobExecution().getStatus());
+                throw new BatchServiceException("");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new BatchServiceException(e.getMessage(), e);
