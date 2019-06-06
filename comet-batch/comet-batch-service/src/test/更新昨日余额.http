@@ -1,0 +1,27 @@
+POST http://localhost:8089/batch/exe
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "stepName": "tstep",
+  "exeId": "2412",
+  "pageSize": "10",
+  "chunkSize": "10",
+  "keyField": "internal_key",
+  "node": "ds_1",
+  "segmentStart": "1",
+  "segmentEnd": "1000000017",
+  "async": "0",
+  "runType": "1",
+  "threadNum": "1",
+  "batchContext": {
+    "params": {
+      "runDate": "20190509",
+      "clientNo": "20190509"
+    }
+  }
+}
+
+###
+

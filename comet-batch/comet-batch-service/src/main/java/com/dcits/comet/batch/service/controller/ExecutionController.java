@@ -4,6 +4,7 @@ import com.dcits.comet.batch.ISegmentStep;
 import com.dcits.comet.batch.IStep;
 import com.dcits.comet.batch.Segment;
 import com.dcits.comet.batch.dao.BatchContextDao;
+import com.dcits.comet.batch.exception.BatchException;
 import com.dcits.comet.batch.launcher.CommonJobLauncher;
 import com.dcits.comet.batch.launcher.JobExeResult;
 import com.dcits.comet.batch.launcher.JobParam;
@@ -19,6 +20,7 @@ import com.dcits.comet.batch.service.model.SegmentListOutput;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -32,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,13 +83,18 @@ public class ExecutionController {
                 exeOutput.setStartTime(jobExeResult.getJobExecution().getStartTime());
                 exeOutput.setLastUpdated(jobExeResult.getJobExecution().getLastUpdated());
                 exeOutput.setStatus(jobExeResult.getJobExecution().getStatus());
+                if (!BatchStatus.COMPLETED.getBatchStatus().equals(jobExeResult.getJobExecution().getStatus().getBatchStatus())) {
+                    log.error("Job:[stepName:{},exeId={}]completed with the following parameters: [jobId={}] and the following status: [{}]", jobParam.getStepName(), jobParam.getExeId(), jobExeResult.getJobExecution().getJobId(), jobExeResult.getJobExecution().getStatus());
+                    String exceptionMessage = createMessageContent(jobExeResult.getJobExecution());
+                    throw new BatchException(exceptionMessage);
+                }
             }
 
 
         } catch (Exception e) {
             log.error("batch执行异常");
             e.printStackTrace();
-            throw new BatchServiceException(e.getMessage(), e);
+            throw e;
         }
         exeOutput.setServiceStatus(BatchServiceConstant.SERVICE_STATUS_SUCCESS);
         return exeOutput;
@@ -145,5 +154,28 @@ public class ExecutionController {
         segmentListOutput.setSegmentList(list);
 
         return segmentListOutput;
+    }
+
+    private String formatExceptionMessage(Throwable exception) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        exception.printStackTrace(new PrintStream(baos));
+        return baos.toString();
+    }
+
+    public String createMessageContent(JobExecution jobExecution) {
+        List<Throwable> exceptions = jobExecution.getAllFailureExceptions();
+        StringBuilder content = new StringBuilder();
+        content.append("Job execution #");
+        content.append(jobExecution.getId());
+        content.append(" of job instance #");
+        content.append(jobExecution.getJobInstance().getId());
+        content.append(" failed with following exceptions:");
+        for (Throwable exception : exceptions) {
+            content.append("");
+            content.append(formatExceptionMessage(exception));
+        }
+
+        return content.toString();
+
     }
 }
