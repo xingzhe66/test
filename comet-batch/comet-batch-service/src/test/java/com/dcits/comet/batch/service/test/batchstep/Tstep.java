@@ -13,7 +13,7 @@ import java.util.List;
 @Service("tstep")
 public class Tstep extends AbstractTStep {
     @Override
-    public void exe(BatchContext batchContext) throws Throwable {
+    public void exe(BatchContext batchContext) {
         List n=null;
         n.size();
 

@@ -1,11 +1,12 @@
 package com.dcits.comet.batch.sonic;
 
 import com.alibaba.fastjson.JSON;
+import com.dcits.comet.batch.exception.BatchException;
 import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.launcher.IJobLauncher;
+import com.dcits.comet.batch.launcher.JobExeResult;
 import com.dcits.comet.batch.launcher.JobParam;
 import com.dcits.comet.batch.param.BatchContext;
-import com.dcits.comet.batch.sonic.exception.BatchServiceException;
 import com.dcits.sonic.executor.api.ReportCompleted;
 import com.dcits.sonic.executor.api.model.Attributes;
 import com.dcits.sonic.executor.step.StepResult;
@@ -14,7 +15,12 @@ import com.dcits.sonic.executor.step.normal.NormalStepExecutor;
 import com.dcits.sonic.executor.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.JobExecution;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,15 +64,44 @@ public class NormalBatchExecutor implements NormalStepExecutor {
             jobParam.setBatchContext(batchContext);
 
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);
-            jobLauncher.run(jobParam.getStepName(), jobParam);
+            JobExeResult jobExeResult = jobLauncher.run(jobParam.getStepName(), jobParam);
+            if (!BatchStatus.COMPLETED.getBatchStatus().equals(jobExeResult.getJobExecution().getStatus().getBatchStatus())) {
+                log.error("Job:[stepName:{},exeId={}]completed with the following parameters: [jobId={}] and the following status: [{}]", jobParam.getStepName(), jobParam.getExeId(), jobExeResult.getJobExecution().getJobId(), jobExeResult.getJobExecution().getStatus());
+                String exceptionMessage = createMessageContent(jobExeResult.getJobExecution());
+                throw new BatchException(exceptionMessage);
+            }
+        } catch (BatchException e) {
+            e.printStackTrace();
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BatchServiceException(e.getMessage(), e);
+            throw e;
         } finally {
 
         }
         //返回执行结果
         return StepResult.SUCCESS_BLANK;
+    }
+
+    private String formatExceptionMessage(Throwable exception) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        exception.printStackTrace(new PrintStream(baos));
+        return baos.toString();
+    }
+
+    private String createMessageContent(JobExecution jobExecution) {
+        List<Throwable> exceptions = jobExecution.getAllFailureExceptions();
+        StringBuilder content = new StringBuilder();
+        content.append("Job execution #");
+        content.append(jobExecution.getId());
+        content.append(" of job instance #");
+        content.append(jobExecution.getJobInstance().getId());
+        content.append(" failed with following exceptions:");
+        for (Throwable exception : exceptions) {
+            content.append("");
+            content.append(formatExceptionMessage(exception));
+        }
+        return content.toString();
     }
 }
 
