@@ -103,7 +103,8 @@ public class SnowflakeUidGenerator {
         }
         //时间戳改变，毫秒内序列重置
         else {
-            sequence = 0L;
+            //解决尾号总是偶数的问题，随机生成0-9之间的随机数
+            sequence = (int) (Math.random() * 10);
         }
 
         //上次生成ID的时间截
