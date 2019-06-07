@@ -56,13 +56,25 @@ public class SnowflakeUidGenerator {
     /**
      * 构造函数
      *
-     * @param workerId 工作ID
+     * @param workerIds 工作ID
      */
-    public SnowflakeUidGenerator(long workerId) {
+    public SnowflakeUidGenerator(long... workerIds) {
+        if (null != workerIds && workerIds.length > 1) {
+            throw new IllegalArgumentException(String.format("worker Id's size must be  eq 1"));
+        }
+
+        if (null != workerIds) {
+            workerId = workerIds[0];
+        }
+
+        //java -Dworker.id参数优先级较高
+        if (null != System.getProperty("worker.id")) {
+            workerId = Long.valueOf(System.getProperty("worker.id"));
+        }
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
-        this.workerId = workerId;
+
     }
 
     // ==============================Methods==========================================
