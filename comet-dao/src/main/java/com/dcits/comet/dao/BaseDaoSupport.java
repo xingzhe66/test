@@ -99,4 +99,7 @@ public interface BaseDaoSupport {
      * @return
      */
     <T extends BasePo> int update(T setParameter, T whereParameter);
+
+
+    <T extends BasePo> List<T> selectList(String statementPostfix, T entity);
 }

@@ -39,7 +39,7 @@ public interface DaoSupport extends BaseDaoSupport {
 
     int delete(String statementPostfix, Map<String, Object> parameter);
 
-    <T extends BasePo> List<T> selectList(String statementPostfix, T entity);
+//    <T extends BasePo> List<T> selectList(String statementPostfix, T entity);
 
     <T extends BasePo> List<T> selectList(String statementPostfix, Map<String, Object> parameter,T entity);
 
