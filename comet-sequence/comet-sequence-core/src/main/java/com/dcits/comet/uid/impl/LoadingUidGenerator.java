@@ -61,7 +61,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     }
 
     @Override
-    protected synchronized long nextId(final String bizTag) {
+    public synchronized long nextId(final String bizTag) {
         String seqName = null == bizTag ? WorkerIdAssigner.DEF : bizTag;
         if (!WorkerIdAssigner.keys.containsKey(seqName)) {
             workerIdAssigner.assignWorkerId(seqName, className);

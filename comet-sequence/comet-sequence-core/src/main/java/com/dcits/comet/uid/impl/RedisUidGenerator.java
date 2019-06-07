@@ -29,7 +29,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    protected long nextId(String bizTag) {
+    public long nextId(String bizTag) {
         String seqName = null == bizTag ? WorkerIdAssigner.DEF : bizTag;
         String key = "";
         String hashKey = "";

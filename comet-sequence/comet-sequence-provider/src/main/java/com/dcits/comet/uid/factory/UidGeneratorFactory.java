@@ -49,8 +49,6 @@ public class UidGeneratorFactory {
 
     public static UidGenerator createUidGenerator(String name) {
         switch (name) {
-            case "DefaultUidGenerator":
-                return SpringContextUtil.getBean("defaultUidGenerator");
             case "RedisUidGenerator":
                 return SpringContextUtil.getBean("redisUidGenerator");
             case "LoadingUidGenerator":

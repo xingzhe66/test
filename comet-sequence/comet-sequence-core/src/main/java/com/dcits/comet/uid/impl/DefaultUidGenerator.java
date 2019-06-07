@@ -131,7 +131,7 @@ public class DefaultUidGenerator implements UidGenerator/*, InitializingBean*/ {
      * @Date 2019/3/27 10:53
      * @Param []
      **/
-    protected synchronized long nextId(final String bizTag) {
+    public synchronized long nextId(final String bizTag) {
         String seqName = null == bizTag ? WorkerIdAssigner.DEF : bizTag;
         if (!WorkerIdAssigner.keys.containsKey(seqName)) {
             workerIdAssigner.assignWorkerId(seqName, className);

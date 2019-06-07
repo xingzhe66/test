@@ -14,10 +14,6 @@ import java.util.List;
 public interface UidGenerator {
     //redis序列
     String UID_REIDS_BIZTAG = "/uid/redis/{biztag}";
-
-    //default序列
-    String UID_DEF_DEF = "/uid/def/def";
-
     //buffer序列
     String UID_LOAD_BIZTAG = "/uid/load/{biztag}";
 
@@ -70,5 +66,10 @@ public interface UidGenerator {
      * @return Parsed info
      */
     String parseUID(long uid);
+
+
+    default long nextId(final String bizTag) {
+        return 0L;
+    }
 
 }

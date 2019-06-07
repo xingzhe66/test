@@ -108,7 +108,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
 
 
     @Override
-    protected long nextId(String bizTag) {
+    public long nextId(String bizTag) {
         StopWatch sw = null;
         if (log.isDebugEnabled()) {
             sw = new Slf4JStopWatch();
@@ -166,9 +166,9 @@ public class RedisUidGenerator extends DefaultUidGenerator {
                     return value;
                 }
                 {
-                    boolean seqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle())&&cache.get(segment.getBizTag()).getSeqCache()!=0L;
-                    if (seqCycle&&value>cache.get(segment.getBizTag()).getSeqCache()) {
-                        redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag,cache.get(bizTag).getMinSeq());
+                    boolean seqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle()) && cache.get(segment.getBizTag()).getSeqCache() != 0L;
+                    if (seqCycle && value > cache.get(segment.getBizTag()).getSeqCache()) {
+                        redisTemplate.opsForHash().put(NetUtils.getLocalAddress(), bizTag, cache.get(bizTag).getMinSeq());
                         return redisTemplate.opsForHash().increment(NetUtils.getLocalAddress(), bizTag, delta);
                     }
                     isOk = false;
@@ -251,8 +251,7 @@ public class RedisUidGenerator extends DefaultUidGenerator {
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
-
-    @Override
+    
     public void setDisposableWorkerIdAssigner(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
         this.disposableWorkerIdAssigner = disposableWorkerIdAssigner;
     }

@@ -1,7 +1,6 @@
 package com.dcits.comet.uid.config;
 
 import com.dcits.comet.uid.config.convert.UidGeneratorConfigurationConvert;
-import com.dcits.comet.uid.impl.DefaultUidGenerator;
 import com.dcits.comet.uid.impl.LoadingUidGenerator;
 import com.dcits.comet.uid.impl.RedisUidGenerator;
 import com.dcits.comet.uid.repository.WorkerNodePoRepository;
@@ -94,13 +93,5 @@ public class UidGeneratorAutoConfiguration {
         loadingUidGenerator.setDisposableWorkerIdAssigner(disposableWorkerIdAssigner);
         return loadingUidGenerator;
     }
-
-    @Bean(initMethod = "init")
-    public DefaultUidGenerator defaultUidGenerator(@Autowired DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
-        DefaultUidGenerator defaultUidGenerator = new DefaultUidGenerator();
-        defaultUidGenerator.setDisposableWorkerIdAssigner(disposableWorkerIdAssigner);
-        return defaultUidGenerator;
-    }
-
 
 }

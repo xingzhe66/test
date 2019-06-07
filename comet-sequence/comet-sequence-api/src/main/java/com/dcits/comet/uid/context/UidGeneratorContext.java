@@ -10,10 +10,6 @@ public class UidGeneratorContext {
     public static final String UID_APP_NAME = "comet-sequence-provider";
     //default序列
     public static final String UID_REDIS_DEF = "redis";
-
-    //default序列
-    public static final String UID_DEF_DEF = "snow";
-
     //buffer序列
     public static final String UID_LOAD_DEF = "load";
 

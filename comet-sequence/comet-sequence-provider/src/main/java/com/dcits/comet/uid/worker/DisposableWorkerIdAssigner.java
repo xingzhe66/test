@@ -152,35 +152,8 @@ public class DisposableWorkerIdAssigner {
             workerNodePo.setCacheCount(0);
             workerNodePo = workerNodePoRepository.saveAndFlush(workerNodePo);
             dbTags.add(workerNodePo);
-        } else {
-            if (UidGeneratorContext.UID_DEF_DEF.equalsIgnoreCase(type)) {
-                WorkerNodePo needUpdate = dbTags.stream().filter(v -> type.equals(v.getBizTag()) && StringUtils.equals(NetUtils.getLocalAddress(), v.getHostName())).sorted(Comparator.comparing(WorkerNodePo::getMaxSeq).reversed()).findFirst().orElseGet(() -> {
-                    log.info("存在相同的序列类型{}，在{}节点生成新的实例", type, NetUtils.getLocalAddress());
-                    WorkerNodePo workerNodePo1 = new WorkerNodePo();
-                    workerNodePo1.setHostName(NetUtils.getLocalAddress());
-                    workerNodePo1.setPort(System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));
-                    workerNodePo1.setType(type);
-                    workerNodePo1.setLaunchDate(LocalDateTime.now());
-                    workerNodePo1.setCreated(LocalDateTime.now());
-                    workerNodePo1.setBizTag(type);
-                    workerNodePo1.setCurrSeq(0);
-                    workerNodePo1.setCountSeq(0);
-                    workerNodePo1.setMiddleId(UidGeneratorContext.UID_MIDDLEID);
-                    workerNodePo1.setSeqCycle(UidGeneratorContext.UID_NOT_CYCLE);
-                    workerNodePo1.setSeqCache(0);
-                    workerNodePo1.setCacheCount(0);
-                    workerNodePo1.setModified(LocalDateTime.now());
-                    workerNodePo1.setMinSeq(UidGeneratorContext.UID_DEF_MIN_SEQ);
-                    workerNodePo1.setMaxSeq(UidGeneratorContext.UID_DEF_MAX_SEQ);
-                    workerNodePo1.setStep(UidGeneratorContext.UID_DEF_STEP);
-                    return workerNodePo1;
-                });
-                log.info("更新前[{}]的PO节点信息{}", type, needUpdate);
-                WorkerNodePo workerNodePo = workerNodePoRepository.saveAndFlush(needUpdate);
-                log.info("更新前[{}]的PO节点信息{}", type, workerNodePo);
-                dbTags.add(workerNodePo);
-            }
         }
+
         return dbTags;
     }
 

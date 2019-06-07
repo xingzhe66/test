@@ -115,7 +115,7 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
     }
 
     @Override
-    protected synchronized long nextId(final String bizTag) {
+    public synchronized long nextId(final String bizTag) {
         StopWatch sw = null;
         if (log.isDebugEnabled()) {
             sw = new Slf4JStopWatch();
@@ -199,8 +199,8 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
                     return value;
                 }
                 {
-                    boolean seqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle())&&cache.get(segment.getBizTag()).getSeqCache()!=0L;
-                    if (seqCycle&&value>cache.get(segment.getBizTag()).getSeqCache()) {
+                    boolean seqCycle = "Y".equalsIgnoreCase(cache.get(segment.getBizTag()).getSeqCycle()) && cache.get(segment.getBizTag()).getSeqCache() != 0L;
+                    if (seqCycle && value > cache.get(segment.getBizTag()).getSeqCache()) {
                         LongAdder longAdder = new LongAdder();
                         longAdder.add(cache.get(segment.getBizTag()).getMinSeq());
                         segment.setValue(longAdder);
@@ -244,12 +244,10 @@ public class LoadingUidGenerator extends DefaultUidGenerator {
         }
     }
 
-    @Override
     public void setDisposableWorkerIdAssigner(DisposableWorkerIdAssigner disposableWorkerIdAssigner) {
         this.disposableWorkerIdAssigner = disposableWorkerIdAssigner;
     }
 
-    @Override
     public DisposableWorkerIdAssigner getDisposableWorkerIdAssigner() {
         return disposableWorkerIdAssigner;
     }
