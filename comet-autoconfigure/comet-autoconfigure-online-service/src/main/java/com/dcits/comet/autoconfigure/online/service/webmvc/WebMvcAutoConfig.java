@@ -2,7 +2,7 @@ package com.dcits.comet.autoconfigure.online.service.webmvc;
 
 import com.dcits.comet.mvc.filter.HttpServletRequestReplacedFilter;
 import com.dcits.comet.mvc.request.BusinessRequestInterceptorImpl;
-import com.dctis.comet.autoconfigure.common.exception.AutoConfigException;
+import com.dcits.comet.autoconfigure.common.exception.AutoConfigException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -42,6 +42,7 @@
         <module>comet-assembly</module>
         <module>comet-parameter</module>
         <module>comet-autoconfigure</module>
+        <module>comet-file</module>
     </modules>
     <build>
         <plugins>

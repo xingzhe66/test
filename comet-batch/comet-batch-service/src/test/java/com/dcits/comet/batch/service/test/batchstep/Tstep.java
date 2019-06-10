@@ -13,8 +13,9 @@ import java.util.List;
 @Service("tstep")
 public class Tstep extends AbstractTStep {
     @Override
-    public void exe(BatchContext batchContext) {
+    public void exe(BatchContext batchContext) throws InterruptedException {
         List n=null;
+      //  Thread.sleep(100000000);
         n.size();
 
     }

@@ -1,7 +1,7 @@
 # Auto Configure
 #org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-#  com.dctis.comet.autoconfigure.common.dao.DataSourceConfig,\
-#  com.dctis.comet.autoconfigure.common.dao.ShardingDataSourceConfig,\
-#  com.dctis.comet.autoconfigure.common.dao.MybatisConfig,\
-#  com.dctis.comet.autoconfigure.common.dao.DaoConfig,\
-#  com.dctis.comet.autoconfigure.common.exception.ExceptionContainerConfig
+#  DataSourceConfig,\
+#  ShardingDataSourceConfig,\
+#  MybatisConfig,\
+#  DaoConfig,\
+#  ExceptionContainerConfig
