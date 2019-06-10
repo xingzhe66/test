@@ -33,6 +33,10 @@ public class ParamDaoSupport extends SqlSessionDaoSupport{
     }
 
     @Cacheable(value = "param", key = "#cacheKey",unless="#result == null")
+    public <T extends BasePo> Integer count( String statementPostfix,T entity, String cacheKey) {
+        return (Integer) this.getSqlSession().selectOne(statementPostfix, entity);
+    }
+    @Cacheable(value = "param", key = "#cacheKey",unless="#result == null")
     public <T extends BasePo> T selectOne(T entity, String cacheKey) {
         String className = entity.getClass().getName();
         return (T) this.getSqlSession().selectOne(className + POSTFIX_SELECTONE, entity);
@@ -78,7 +82,10 @@ public class ParamDaoSupport extends SqlSessionDaoSupport{
         String className = entity.getClass().getName();
         return this.getSqlSession().update(className + POSTFIX_UPDATE, entity);
     }
-
+    @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
+    public <T extends BasePo> int update(String statementPostfix,T entity,String cacheKey) {
+        return this.getSqlSession().update(statementPostfix, entity);
+    }
     @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
     public <T extends BasePo> int delete(T entity, String cacheKey) {
         String className = entity.getClass().getName();
@@ -93,6 +100,12 @@ public class ParamDaoSupport extends SqlSessionDaoSupport{
         String className = setParameter.getClass().getName();
         return this.getSqlSession().update(className + POSTFIX_UPDATE_BY_ENTITY, parameter);
     }
-
+    @CacheEvict(value = "param", key = "#cacheKey",beforeInvocation=true)
+    public <T extends BasePo> int update(String statementPostfix,T setParameter, T whereParameter,String cacheKey) {
+        Map<String, Object> parameter = new HashMap(2);
+        parameter.put("s", setParameter);
+        parameter.put("w", whereParameter);
+        return this.getSqlSession().update(statementPostfix, parameter);
+    }
 }
 

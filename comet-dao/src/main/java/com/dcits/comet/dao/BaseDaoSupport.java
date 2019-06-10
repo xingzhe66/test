@@ -3,6 +3,7 @@ package com.dcits.comet.dao;
 import com.dcits.comet.dao.model.BasePo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author chengliang
@@ -102,4 +103,18 @@ public interface BaseDaoSupport {
 
 
     <T extends BasePo> List<T> selectList(String statementPostfix, T entity);
+
+
+    <T extends BasePo> Integer count(String statementPostfix, T object);
+
+    <T extends BasePo> T selectOne(String statementPostfix, T parameter);
+
+    <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter);
+
+    <T extends BasePo> int update(String statementPostfix, T entity);
+
+
+
+
+
 }

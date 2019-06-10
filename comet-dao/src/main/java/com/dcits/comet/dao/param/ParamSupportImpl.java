@@ -6,6 +6,7 @@ import com.dcits.comet.dao.model.BasePo;
 import com.dcits.comet.dao.model.QueryResult;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -83,4 +84,40 @@ public class ParamSupportImpl implements ParamSupport {
         String cacheKey = CacheUtil.getCacheKey(entity);
         return paramDaoSupport.selectList(statementPostfix, entity, cacheKey);
     }
+
+    @Override
+    public <T extends BasePo> Integer count(String statementPostfix, T entity) {
+        String cacheKey = CacheUtil.getCacheKey(entity);
+        return paramDaoSupport.count(statementPostfix,entity, cacheKey);
+    }
+
+
+    @Override
+    public <T extends BasePo> T selectOne(String statementPostfix, T parameter) {
+        String cacheKey = CacheUtil.getCacheKey(parameter);
+        return paramDaoSupport.selectOne(statementPostfix,parameter, cacheKey);
+    }
+
+    @Override
+    public <T extends BasePo> int update(String statementPostfix, T setParameter, T whereParameter) {
+        String cacheKey = CacheUtil.getCacheKey(whereParameter);
+        return paramDaoSupport.update(statementPostfix,setParameter, whereParameter, cacheKey);
+    }
+
+    @Override
+    public <T extends BasePo> int update(String statementPostfix, T entity) {
+        String cacheKey = CacheUtil.getCacheKey(entity);
+        return paramDaoSupport.update(statementPostfix,entity, cacheKey);
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
