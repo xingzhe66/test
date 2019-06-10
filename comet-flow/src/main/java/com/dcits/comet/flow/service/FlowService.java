@@ -50,6 +50,7 @@ public class FlowService {
         }
         flowInfoPo.setFlowStatus(FlowStatus.STATUS_START);
         flowInfoPo.setStartTime(DateUtil.getCurrentDate());
+        //todo 业务防重，幂等；如果插入数据库时，渠道编号重复，则报错：交易重复。
         daoSupport.insert(flowInfoPo);
     }
 
