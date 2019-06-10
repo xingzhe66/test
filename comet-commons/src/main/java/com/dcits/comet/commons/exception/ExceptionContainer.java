@@ -96,7 +96,7 @@ public class ExceptionContainer {
 
     private static void init() {
         if (locations == null) {
-            locations = ResourceUtil.getResource(DEFAULT_ERROR_CODE_CONFIG, ResourceUtil.PREFIX_CONFIG);
+            locations = ResourceUtil.getResource(DEFAULT_ERROR_CODE_CONFIG);
         }
         if (locations != null && locations.length > 0) {
             configKeys = new ArrayList<>();

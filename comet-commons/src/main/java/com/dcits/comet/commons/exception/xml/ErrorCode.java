@@ -24,7 +24,7 @@ public class ErrorCode {
     @XmlAttribute(required = true)
     private String outCode;
     @XmlAttribute
-    private String outMessage; // 暂未用到，作保留...2016/12/06
+    private String outMessage;
 
 
     public String getCode() {

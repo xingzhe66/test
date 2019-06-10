@@ -13,10 +13,8 @@ import com.dcits.comet.commons.exception.ConfigException;
 
 public class ResourceUtil {
     private final static Logger LOGGER = LoggerFactory.getLogger(ResourceUtil.class);
-    public final static String PREFIX_CONFIG = "config/";
 
-
-    public static Resource[] getResource(String path, String prefix) {
+    public static Resource[] getResource(String path) {
         Resource[] locations;
         try {
             locations = new PathMatchingResourcePatternResolver().getResources(path);
