@@ -12,9 +12,7 @@
     <artifactId>comet-registry</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>comet-registry-eureka-client</module>
         <module>comet-registry-nacos</module>
-        <module>comet-registry-eureka-server</module>
         <module>comet-registry-eureka</module>
     </modules>
 
