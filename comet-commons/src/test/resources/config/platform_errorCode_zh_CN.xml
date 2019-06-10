@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE comet:errorCode SYSTEM "errorCode.dtd">
 <comet:errorCode xmlns:comet="http://www.dcits.com/comet/" externalSysIndicate="DEFAULT">
-    <errorCode code="AAA" message="FK 的 A" outCode="AAA_OUT" />
-	<errorCode code="BBB" message="FK 的B" outCode="BBB_OUT" /> 
-	<errorCode code="CCC" message="FK 的 C" outCode="CCC_OUT"  /> 
+    <errorCode code="A" message="AAAA" outCode="AAA_OUT" />
+	<errorCode code="B" message="BBBB" outCode="BBB_OUT" />
+	<errorCode code="C" message="CCCC" outCode="CCC_OUT"  />
 </comet:errorCode>

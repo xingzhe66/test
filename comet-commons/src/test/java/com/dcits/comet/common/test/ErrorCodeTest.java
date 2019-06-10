@@ -33,9 +33,9 @@ public class ErrorCodeTest {
 
     @Test
     public void testPrint() {
-        LOGGER.info("==========={}", ExceptionContainer.getErrorMessage("AAA", ""));
-        LOGGER.info("==========={}", ExceptionContainer.getExternalCode("AAA", null));
-        LOGGER.info("==========={}", ExceptionContainer.getInnerCode("AAA_OUT", null));
+        LOGGER.info("==========={}", ExceptionContainer.getErrorMessage("A", ""));
+        LOGGER.info("==========={}", ExceptionContainer.getExternalCode("B", null));
+        LOGGER.info("==========={}", ExceptionContainer.getInnerCode("BBB_OUT", null));
 
     }
 
