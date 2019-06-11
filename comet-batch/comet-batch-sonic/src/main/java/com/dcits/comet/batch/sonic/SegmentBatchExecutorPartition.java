@@ -92,7 +92,10 @@ public class SegmentBatchExecutorPartition extends AbstractStepSegmenter {
                     Map<String, String> attrMap = new HashMap<>();
                     attrMap.put("beginIndex", segment.getStartKey());
                     attrMap.put("endIndex", segment.getEndKey());
-                    attrMap.put("pageSize", String.valueOf(segment.getRowCount()));
+                    //修改 bug，此处的pageSize应该是固定的配置参数，而不是segment里的RowCount
+                    //attrMap.put("pageSize", String.valueOf(segment.getRowCount()));
+                    attrMap.put("pageSize", String.valueOf(partitionParam.getSegmentSize()));
+                    attrMap.put("segmentRowCount", String.valueOf(segment.getRowCount()));
                     attrMap.put("node", node);
                     Attributes segAttributes = new Attributes(attrMap);
                     attributesList.add(segAttributes);

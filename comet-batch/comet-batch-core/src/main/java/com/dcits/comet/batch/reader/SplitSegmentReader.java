@@ -1,7 +1,9 @@
 package com.dcits.comet.batch.reader;
 
+import com.dcits.comet.batch.IBatchContextInit;
 import com.dcits.comet.batch.ISegmentStep;
 import com.dcits.comet.batch.Segment;
+import com.dcits.comet.batch.holder.SpringContextHolder;
 import com.dcits.comet.batch.param.BatchContext;
 import com.dcits.comet.batch.util.BatchContextTool;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,11 +31,15 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
     private volatile int current = 0;
 
+    private volatile int totalNum = 0;
+
     private volatile int currentPage = 0;
 
     private Comparable beginIndex;
 
     private Comparable endIndex;
+
+    private int rowCount=0;
 
     private String keyField;
 
@@ -40,7 +47,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
     private Integer pageSize;
 
-    private volatile List<Segment> list;
+    private volatile List<Segment> segmentList;
 
     private String node;
 
@@ -51,22 +58,33 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
     @Override
     public T read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
         synchronized (lock) {
-            if (list == null) {
-                BatchContext batchContext = BatchContextTool.getBatchContext();
-                list = batchStep.getThreadSegmentList(batchContext, beginIndex, endIndex, node, pageSize, keyField, stepName);
+            BatchContext batchContext = BatchContextTool.getBatchContext();
+            if (segmentList == null) {
+
+                segmentList = batchStep.getThreadSegmentList(batchContext, beginIndex, endIndex, node, pageSize, keyField, stepName);
             }
             if (results == null || current >= results.size()) {
 
                 log.debug("Reading page " + currentPage);
 
-                Segment segment = null;
-                if (list != null && currentPage < list.size()) {
-                    segment = list.get(currentPage++);
+                Segment threadSegment = null;
+                if (segmentList != null && currentPage < segmentList.size()) {
+                    threadSegment = segmentList.get(currentPage++);
                 } else {
                     return null;
                 }
-                doReadPage(segment.getStartKey(), segment.getEndKey());
+                doReadPage(threadSegment.getStartKey(), threadSegment.getEndKey());
 
+                try {
+                    if(rowCount>0) {
+                        //每页更新一次进度条
+                        IPercentageReport percentageReport = SpringContextHolder.getBean(IPercentageReport.class);
+                        percentageReport.report(batchContext, totalNum, rowCount);
+                    }
+
+                } catch (NoSuchBeanDefinitionException e) {
+                    log.warn("No qualifying bean of type '{}' available", IBatchContextInit.class.getName());
+                }
 
                 if (current >= results.size()) {
                     current = 0;
@@ -75,6 +93,7 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
             int next = current++;
 
             if (next < results.size()) {
+                totalNum++;
                 return (T) results.get(next);
             } else {
                 return null;
@@ -125,5 +144,9 @@ public class SplitSegmentReader<T> implements ItemReader<T> {
 
     public void setKeyField(String keyField) {
         this.keyField = keyField;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
     }
 }

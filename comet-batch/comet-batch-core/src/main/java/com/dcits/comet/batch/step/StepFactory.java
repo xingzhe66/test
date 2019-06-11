@@ -37,13 +37,9 @@ public class StepFactory {
 
     public static Step build(StepParam stepParam) {
 
-        int pageSize = stepParam.getPageSize();
         int chunkSize = stepParam.getChunkSize();
-        int beginIndex = (Integer) stepParam.getBeginIndex();
-        int endIndex =(Integer) stepParam.getEndIndex();
         int threadNum = stepParam.getThreadNum();
         String stepName = stepParam.getStepName();
-        String node = stepParam.getNode();
 
         ApplicationContext context = SpringContextHolder.getApplicationContext();
         TaskExecutor taskExecutor= (TaskExecutor) context.getBean(BATCH_TASK_EXECUTOR);

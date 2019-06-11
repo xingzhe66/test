@@ -2,12 +2,14 @@ package com.dcits.comet.batch.launcher;
 
 import com.dcits.comet.batch.constant.BatchConstant;
 import com.dcits.comet.batch.param.BatchContext;
+import lombok.Data;
 
 /**
  * @author wangyun
  * @date 2019/3/21
  * @description
  */
+
 public class JobParam {
 
     private String stepName;
@@ -41,6 +43,8 @@ public class JobParam {
 
     private Comparable segmentEnd;
 
+    private int segmentRowCount=0;
+
     private String keyField;
 
     private BatchContext batchContext;
@@ -61,44 +65,52 @@ public class JobParam {
         this.exeId = exeId;
     }
 
-    public Integer getPageSize() {
+    public String getAsync() {
+        return async;
+    }
+
+    public void setAsync(String async) {
+        this.async = async;
+    }
+
+    public String getNode() {
+        return node;
+    }
+
+    public void setNode(String node) {
+        this.node = node;
+    }
+
+    public int getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(Integer pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
-    public Integer getChunkSize() {
+    public int getChunkSize() {
         return chunkSize;
     }
 
-    public void setChunkSize(Integer chunkSize) {
+    public void setChunkSize(int chunkSize) {
         this.chunkSize = chunkSize;
     }
 
-    public Integer getEndIndex() {
-        return endIndex;
-    }
-
-    public void setEndIndex(Integer endIndex) {
-        this.endIndex = endIndex;
-    }
-
-    public Integer getBeginIndex() {
+    public int getBeginIndex() {
         return beginIndex;
     }
 
-    public void setBeginIndex(Integer beginIndex) {
+    public void setBeginIndex(int beginIndex) {
         this.beginIndex = beginIndex;
     }
 
-    public BatchContext getBatchContext() {
-        return batchContext;
+    public int getEndIndex() {
+        return endIndex;
     }
 
-    public void setBatchContext(BatchContext batchContext) {
-        this.batchContext = batchContext;
+    public void setEndIndex(int endIndex) {
+        this.endIndex = endIndex;
     }
 
     public String getRunType() {
@@ -117,23 +129,6 @@ public class JobParam {
         this.threadNum = threadNum;
     }
 
-
-    public String getNode() {
-        return node;
-    }
-
-    public void setNode(String node) {
-        this.node = node;
-    }
-
-    public String getAsync() {
-        return async;
-    }
-
-    public void setAsync(String async) {
-        this.async = async;
-    }
-
     public Comparable getSegmentStart() {
         return segmentStart;
     }
@@ -150,11 +145,27 @@ public class JobParam {
         this.segmentEnd = segmentEnd;
     }
 
+    public int getSegmentRowCount() {
+        return segmentRowCount;
+    }
+
+    public void setSegmentRowCount(int segmentRowCount) {
+        this.segmentRowCount = segmentRowCount;
+    }
+
     public String getKeyField() {
         return keyField;
     }
 
     public void setKeyField(String keyField) {
         this.keyField = keyField;
+    }
+
+    public BatchContext getBatchContext() {
+        return batchContext;
+    }
+
+    public void setBatchContext(BatchContext batchContext) {
+        this.batchContext = batchContext;
     }
 }

@@ -32,6 +32,9 @@ import java.util.Map;
  **/
 @Slf4j
 public class SegmentBatchExecutor implements SegmentStepExecutor {
+
+    public static final String SEGMENT_RUNNING_STEP = "segmentRunningStep";
+
     @Override
     public ReportCompleted execute(SegmentRunningStep segmentRunningStep) {
         try {
@@ -47,7 +50,7 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             JobParam jobParam = JSON.parseObject(JSON.toJSONString(parameters), JobParam.class);
             jobParam.setExeId(segmentRunningStep.getStepRunId());
             jobParam.setNode(segAttributes.getAttribute("node"));
-            if (null == jobParam.getPageSize() || 0 == jobParam.getPageSize()) {
+            if (0 == jobParam.getPageSize()) {
                 jobParam.setPageSize(Integer.parseInt(segAttributes.getAttribute("pageSize")));
             }
             jobParam.setBeginIndex(Integer.parseInt(segAttributes.getAttribute("beginIndex")));
@@ -55,6 +58,7 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
 
             jobParam.setSegmentStart(segAttributes.getAttribute("beginIndex"));
             jobParam.setSegmentEnd(segAttributes.getAttribute("endIndex"));
+            jobParam.setSegmentRowCount(Integer.parseInt(segAttributes.getAttribute("segmentRowCount")));
 
             BatchContext batchContext = new BatchContext();
             String params = parameters.get("params");
@@ -70,6 +74,7 @@ public class SegmentBatchExecutor implements SegmentStepExecutor {
             if (StringUtils.isEmpty(runType)) {
                 jobParam.setRunType("1");//默认单线程
             }
+            batchContext.getParams().put(SEGMENT_RUNNING_STEP,segmentRunningStep);
             jobParam.setBatchContext(batchContext);
             //jobParam.setStepName("BatchStep");
             IJobLauncher jobLauncher = SpringContextHolder.getBean(IJobLauncher.class);

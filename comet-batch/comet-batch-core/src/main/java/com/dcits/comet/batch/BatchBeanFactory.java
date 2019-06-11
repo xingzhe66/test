@@ -96,6 +96,7 @@ public class BatchBeanFactory {
             segmentReader.setKeyField(stepParam.getKeyField());
             segmentReader.setPageSize(stepParam.getPageSize());
             segmentReader.setStepName(stepParam.getStepName());
+            segmentReader.setRowCount(stepParam.getSegmentRowCount());
             segmentReader.setNode(node);
             return segmentReader;
         }

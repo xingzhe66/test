@@ -88,19 +88,19 @@ public class ExeInput implements Serializable {
         this.exeId = exeId;
     }
 
-    public Integer getPageSize() {
+    public int getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(Integer pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
-    public Integer getChunkSize() {
+    public int getChunkSize() {
         return chunkSize;
     }
 
-    public void setChunkSize(Integer chunkSize) {
+    public void setChunkSize(int chunkSize) {
         this.chunkSize = chunkSize;
     }
 
